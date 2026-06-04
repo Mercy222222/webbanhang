@@ -2,9 +2,9 @@
 
 <div class="container" style="margin-top: 2rem;">
     <div style="display: flex; gap: 2rem; background: var(--surface); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-        <div style="flex: 1; display: flex; justify-content: center; align-items: center; background: #fff; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
+        <div class="zoom-img-container" style="flex: 1; padding: 2rem; border: 1px solid var(--border);">
             <?php $imageUrl = !empty($product->image) ? htmlspecialchars($product->image) : '/webbanhang/public/image/placeholder.png'; ?>
-            <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product->name) ?>" style="max-height: 400px; width: auto; object-fit: contain;">
+            <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product->name) ?>">
         </div>
         <div style="flex: 1; display: flex; flex-direction: column;">
             <h1 style="font-size: 2rem; margin-bottom: 1rem;"><?= htmlspecialchars($product->name) ?></h1>

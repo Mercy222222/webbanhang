@@ -12,6 +12,10 @@
 </head>
 <body>
 
+<div class="ambient-blob ambient-blob-1"></div>
+<div class="ambient-blob ambient-blob-2"></div>
+<div class="ambient-blob ambient-blob-3"></div>
+
 <header class="header">
     <div class="container">
         <div class="header-top">

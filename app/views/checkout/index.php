@@ -104,7 +104,7 @@
                                 <div style="margin-top: 0.5rem; color: var(--primary-light);">Nội dung CK: <b id="bank-memo-text">TS [Số điện thoại của bạn]</b></div>
                             </div>
                         </div>
-                        <div style="text-align: center; background: white; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.1); width: 220px; margin: 0 auto;">
+                        <div class="qr-transition-container" style="text-align: center; background: white; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.1); width: 220px; margin: 0 auto;">
                             <img id="vietqr-img" src="https://img.vietqr.io/image/bidv-0979324949-compact2.png?amount=<?= $final_total ?>&accountName=VO%20HUU%20TRI&addInfo=TS" alt="Mã QR Chuyển khoản" style="width: 100%; aspect-ratio: 1; object-fit: contain; display: block; margin: 0 auto;">
                             <div style="color: #1e293b; font-size: 0.75rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.25rem;"><i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> Quét mã thanh toán nhanh</div>
                         </div>
@@ -122,7 +122,7 @@
                             <div style="margin-top: 0.5rem; color: var(--primary-light);">Nội dung ghi chú: <b id="wallet-memo-text">TS [Số điện thoại]</b></div>
                             <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--secondary);">* Vui lòng chuyển tiền kèm nội dung ghi chú là số điện thoại đặt hàng của bạn.</div>
                         </div>
-                        <div style="text-align: center; background: white; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.1); width: 220px; margin: 0 auto;">
+                        <div class="qr-transition-container" style="text-align: center; background: white; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.1); width: 220px; margin: 0 auto;">
                             <img id="walletqr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fnhantien.momo.vn%2F0979324949%2F<?= $final_total ?>" alt="Mã QR Momo" style="width: 100%; aspect-ratio: 1; object-fit: contain; display: block; margin: 0 auto;">
                             <div style="color: #1e293b; font-size: 0.75rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.25rem;"><i class="fa-solid fa-qrcode" style="color: #a21caf;"></i> Quét mã Momo để trả tiền</div>
                         </div>
@@ -270,15 +270,29 @@ function updateQrCode() {
     document.getElementById('bank-memo-text').innerText = "TS " + phone;
     document.getElementById('wallet-memo-text').innerText = "TS " + phone;
     
-    // Update Bank QR image
+    // Update Bank QR image with loading skeleton transition
     const bankQrImg = document.getElementById('vietqr-img');
     if (bankQrImg) {
+        const qrContainer = bankQrImg.closest('.qr-transition-container');
+        if (qrContainer) qrContainer.classList.add('loading');
+        
+        bankQrImg.onload = () => {
+            if (qrContainer) qrContainer.classList.remove('loading');
+        };
+        
         bankQrImg.src = `https://img.vietqr.io/image/${bank}-0979324949-compact2.png?amount=${amount}&accountName=${accountName}&addInfo=${addInfo}`;
     }
     
-    // Update Wallet QR image
+    // Update Wallet QR image with loading skeleton transition
     const walletQrImg = document.getElementById('walletqr-img');
     if (walletQrImg) {
+        const qrContainer = walletQrImg.closest('.qr-transition-container');
+        if (qrContainer) qrContainer.classList.add('loading');
+        
+        walletQrImg.onload = () => {
+            if (qrContainer) qrContainer.classList.remove('loading');
+        };
+        
         const momoUrl = encodeURIComponent(`https://nhantien.momo.vn/0979324949/${amount}?note=TS ${phone}`);
         walletQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${momoUrl}`;
     }

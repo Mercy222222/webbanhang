@@ -5,9 +5,9 @@
 </div>
 
 <div style="display: flex; gap: 4rem; background: var(--surface); padding: 3rem; border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden;">
-    <div style="flex: 1; display: flex; justify-content: center; align-items: center; background: #fff; padding: 3rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+    <div class="zoom-img-container" style="flex: 1; padding: 3rem; border: 1px solid var(--border);">
         <?php $imageUrl = !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=TechStore'; ?>
-        <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product->name) ?>" style="max-height: 500px; width: 100%; object-fit: contain;">
+        <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product->name) ?>">
     </div>
     <div style="flex: 1; display: flex; flex-direction: column;">
         <div style="font-size: 0.9rem; color: var(--primary-light); font-weight: 700; text-transform: uppercase; margin-bottom: 0.75rem;">Sản phẩm cao cấp</div>

@@ -678,3 +678,158 @@ h1, h2, h3, h4 {
 .product-card:nth-child(7) { animation-delay: 0.35s; }
 .product-card:nth-child(8) { animation-delay: 0.4s; }
 
+/* ==========================================================================
+   Premium Dynamic Animations (New additions)
+   ========================================================================== */
+
+/* Ambient Glow Blobs */
+.ambient-blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(130px);
+    opacity: 0.08;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatBlob 25s infinite alternate ease-in-out;
+    will-change: transform;
+}
+.ambient-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--primary);
+    top: -10%;
+    left: -10%;
+    animation-duration: 30s;
+}
+.ambient-blob-2 {
+    width: 600px;
+    height: 600px;
+    background: #8b5cf6; /* Violet */
+    bottom: -15%;
+    right: -10%;
+    animation-duration: 35s;
+}
+.ambient-blob-3 {
+    width: 400px;
+    height: 400px;
+    background: var(--secondary);
+    top: 35%;
+    left: 45%;
+    animation-duration: 25s;
+}
+
+@keyframes floatBlob {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(120px, 60px) scale(1.15); }
+    100% { transform: translate(-60px, 120px) scale(0.9); }
+}
+
+/* Scroll Reveal animation classes */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+}
+.reveal-item.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 3D Tilt Card & Light Glow border */
+.product-card {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: radial-gradient(
+        circle 180px at var(--mouse-x, 0) var(--mouse-y, 0),
+        rgba(99, 102, 241, 0.5),
+        transparent 80%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+}
+.product-card:hover::before {
+    opacity: 1;
+}
+
+/* QR Code Loader Skeleton & Transitions */
+.qr-transition-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.qr-transition-container.loading {
+    opacity: 0.6;
+    transform: scale(0.98);
+}
+.qr-transition-container.loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.2s infinite;
+}
+@keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Magnetic buttons utility */
+.magnetic-btn {
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+}
+
+/* Detail page Interactive Image Zoom & Pan */
+.zoom-img-container {
+    overflow: hidden;
+    position: relative;
+    cursor: zoom-in;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+}
+.zoom-img-container img {
+    transition: transform 0.15s ease-out;
+    transform-origin: center center;
+    max-height: 500px;
+    width: 100%;
+    object-fit: contain;
+}
+
+/* Header Slide nav link indicator */
+.nav-list a {
+    position: relative;
+}
+.nav-list a::after {
+    height: 3px !important;
+    border-radius: 2px;
+}
+
+
