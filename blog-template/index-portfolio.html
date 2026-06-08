@@ -1,0 +1,2751 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Võ Hữu Trí | Portfolio</title>
+  <meta name="description" content="Trang cá nhân của Võ Hữu Trí — Web Developer & IT Student tại TP. HCM." />
+  
+  <!-- CDNs cho Fonts, Icons và Tiện ích -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
+  
+  <!-- SweetAlert2 & Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Three.js for 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#007bff',
+            'brand-glow': 'rgba(0, 123, 255, 0.4)',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Hiệu ứng chuyển động tùy chỉnh */
+    @keyframes codeFloat1 {
+      0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.6; }
+      25% { transform: translateY(-20px) translateX(10px) rotate(15deg); opacity: 1; }
+      50% { transform: translateY(-30px) translateX(-5px) rotate(-10deg); opacity: 0.8; }
+      75% { transform: translateY(-15px) translateX(8px) rotate(5deg); opacity: 1; }
+    }
+    @keyframes codeFloat2 {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+      50% { transform: translateY(-25px) scale(1.1); opacity: 1; }
+    }
+    @keyframes codeFloat3 {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+      33% { transform: translateY(-10px) rotate(10deg); opacity: 1; }
+      66% { transform: translateY(-20px) rotate(-5deg); opacity: 0.9; }
+    }
+    @keyframes codeSlideIn {
+      0% { opacity: 0; transform: translateX(-30px); }
+      20% { opacity: 1; transform: translateX(0); }
+      80% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 0; transform: translateX(30px); }
+    }
+    @keyframes binaryRain {
+      0% { transform: translateY(-100px); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(250px); opacity: 0; }
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.2; }
+      50% { transform: scale(1.2); opacity: 0.4; }
+    }
+
+    .code-symbol-float {
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+    .code-line-anim {
+      opacity: 0;
+      animation: codeSlideIn 3.5s infinite ease-in-out;
+    }
+    .binary-column-anim {
+      writing-mode: vertical-rl;
+      font-size: 11px;
+      animation: binaryRain 3s infinite linear;
+    }
+    .cursor-blink {
+      animation: blink 1s infinite;
+    }
+    .avatar-glow {
+      position: absolute;
+      width: 130%;
+      height: 130%;
+      background: radial-gradient(circle, rgba(0, 123, 255, 0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 1;
+      animation: pulseGlow 4s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    /* Hiệu ứng chuyển động mượt mà khi cuộn trang */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reveal-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+     /* Chế độ Sáng / Tối */
+    body {
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    /* HUD Viewport Grid Blueprint Background */
+    .hero-hud-viewport::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+      background-size: 16px 16px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .dark .hero-hud-viewport::before {
+      background: linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+    /* Logo Glitch Effect */
+    .cyber-glitch-logo {
+      position: relative;
+    }
+    .cyber-glitch-logo::before,
+    .cyber-glitch-logo::after {
+      content: 'Võ Hữu Trí ✦';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #3b82f6, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .cyber-glitch-logo:hover::before {
+      opacity: 0.85;
+      left: 2px;
+      text-shadow: -1.5px 0 #ff00c1;
+      clip: rect(10px, 9999px, 45px, 0);
+      animation: glitch-anim 0.3s infinite linear alternate-reverse;
+    }
+    .cyber-glitch-logo:hover::after {
+      opacity: 0.85;
+      left: -2px;
+      text-shadow: -1.5px 0 #00fff9, 0 1.5px #00fff9;
+      clip: rect(35px, 9999px, 80px, 0);
+      animation: glitch-anim2 0.3s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim {
+      0% { clip: rect(12px, 9999px, 33px, 0); }
+      20% { clip: rect(45px, 9999px, 12px, 0); }
+      40% { clip: rect(23px, 9999px, 50px, 0); }
+      60% { clip: rect(56px, 9999px, 11px, 0); }
+      80% { clip: rect(10px, 9999px, 42px, 0); }
+      100% { clip: rect(35px, 9999px, 55px, 0); }
+    }
+    @keyframes glitch-anim2 {
+      0% { clip: rect(40px, 9999px, 50px, 0); }
+      20% { clip: rect(10px, 9999px, 45px, 0); }
+      40% { clip: rect(52px, 9999px, 12px, 0); }
+      60% { clip: rect(23px, 9999px, 60px, 0); }
+      80% { clip: rect(65px, 9999px, 11px, 0); }
+      100% { clip: rect(12px, 9999px, 35px, 0); }
+    }
+
+    /* ─── 3D Tilt Card Glare Effect ─── */
+    .card-glare {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+      mix-blend-mode: overlay;
+      border-radius: inherit;
+    }
+
+    /* ─── 3D Card Parallax Tilt Child Offsets ─── */
+    .skill-card,
+    .work-card,
+    .certificate-card,
+    .project-card,
+    .avatar-container,
+    .visual-code-box {
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .skill-card > *,
+    .work-card > *,
+    .certificate-card > *,
+    .project-card > * {
+      transform: translateZ(20px);
+    }
+    
+    .avatar-container img {
+      transform: translateZ(40px);
+    }
+
+    /* ─── Vercel-style Dynamic Border Glow ─── */
+    .skill-card,
+    .work-card,
+    .certificate-card,
+    .project-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.6) !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      overflow: hidden;
+      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s !important;
+    }
+    
+    html.dark .skill-card,
+    html.dark .work-card,
+    html.dark .certificate-card,
+    html.dark .project-card {
+      background: rgba(10, 15, 30, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .skill-card::before,
+    .work-card::before,
+    .certificate-card::before,
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px; /* Border thickness */
+      background: radial-gradient(
+        180px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+        rgba(59, 130, 246, 0.7), /* Blue glow */
+        rgba(16, 185, 129, 0.5) 45%, /* Emerald glow */
+        transparent 90%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+
+    .skill-card:hover::before,
+    .work-card:hover::before,
+    .certificate-card:hover::before,
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    @keyframes orbitPulse1 {
+      0%, 100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
+      50% { border-color: rgba(59, 130, 246, 0.75); box-shadow: 0 0 25px rgba(59, 130, 246, 0.35); }
+    }
+    @keyframes orbitPulse2 {
+      0%, 100% { border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
+      50% { border-color: rgba(16, 185, 129, 0.65); box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+    }
+
+    /* Background overrides for 3D stars */
+    body {
+      background-color: #f8fafc !important;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    html.dark body {
+      background-color: #030712 !important;
+    }
+  </style>
+</head>
+<body class="bg-[#ffffff] text-[#222222] dark:bg-[#181818] dark:text-[#f5f5f5] pt-[70px] overflow-x-hidden font-sans">
+
+  <!-- Interactive 3D Background -->
+  <div id="three-bg-container" style="position:fixed; inset:0; pointer-events:none; z-index:0;"></div>
+  <!-- Interactive Particle Cursor Trail -->
+  <canvas id="cursor-trail-canvas" style="position:fixed; inset:0; pointer-events:none; z-index:9999;"></canvas>
+
+  <!-- ─── HEADER & NAVBAR ─── -->
+  <nav id="navbar" class="fixed top-0 inset-x-0 h-[70px] z-50 transition-all duration-300 bg-white/80 dark:bg-[#181818]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 h-full flex justify-between items-center">
+      <!-- Brand Logo -->
+      <a href="#home" class="cyber-glitch-logo text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent transition hover:opacity-80">
+        Võ Hữu Trí ✦
+      </a>
+
+      <!-- Desktop Nav Menu -->
+      <div class="hidden md:flex items-center gap-6">
+        <div class="flex gap-4 font-semibold text-sm">
+          <a href="#home" data-nav="home" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#about" data-nav="about" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#workExp" data-nav="workExp" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#skills" data-nav="skills" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#certificates" data-nav="certificates" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#projects" data-nav="projects" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#contact" data-nav="contact" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+        </div>
+
+        <div class="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-2"></div>
+
+        <!-- Controls (Lang / Theme) -->
+        <div class="flex items-center gap-4">
+          <!-- Language Button Group -->
+          <div class="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
+            <button id="btn-lang-vi" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300">
+              VI
+            </button>
+            <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300">
+              EN
+            </button>
+          </div>
+          <!-- Theme Toggle -->
+          <button id="btn-theme" onclick="toggleTheme()" class="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-800" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+          </button>
+          <!-- Audio Toggle -->
+          <button id="btn-audio" onclick="toggleMute()" class="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400" title="Toggle Haptic Sounds">
+            <i id="audio-icon" class="fas fa-volume-mute"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hamburger (Mobile) -->
+      <button id="btn-hamburger" onclick="toggleMobileMenu()" class="md:hidden p-2 text-xl text-gray-600 dark:text-gray-300 focus:outline-none" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Nav Menu Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-[70px] left-0 w-full bg-white dark:bg-[#181818] border-b border-gray-200 dark:border-gray-800 flex flex-col gap-3 px-6 py-4 shadow-lg">
+      <a href="#home" onclick="closeMobileMenu()" data-nav="home" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <a href="#about" onclick="closeMobileMenu()" data-nav="about" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <a href="#workExp" onclick="closeMobileMenu()" data-nav="workExp" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <a href="#skills" onclick="closeMobileMenu()" data-nav="skills" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <a href="#certificates" onclick="closeMobileMenu()" data-nav="certificates" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <a href="#projects" onclick="closeMobileMenu()" data-nav="projects" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <a href="#contact" onclick="closeMobileMenu()" data-nav="contact" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
+      <div class="h-px bg-gray-200 dark:bg-gray-800 my-1"></div>
+      <div class="flex items-center justify-between py-1">
+        <!-- Language Button Group -->
+        <div class="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
+          <button id="btn-lang-vi-mobile" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300">
+            VI
+          </button>
+          <button id="btn-lang-en-mobile" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300">
+            EN
+          </button>
+        </div>
+        <button id="btn-theme-mobile" onclick="toggleTheme()" class="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── PAGE BODY WRAPPER ─── -->
+  <main class="max-w-7xl mx-auto px-4 md:px-8 space-y-24 pb-20">
+
+    <!-- ─── HERO & CODE EFFECT SECTION ─── -->
+    <section id="home" class="pt-12 md:pt-20">
+      <!-- Khối Visual Code động -->
+      <div class="visual-code-box relative w-full h-[220px] rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-black/40 overflow-hidden font-mono flex items-center justify-center p-4">
+        <!-- Floating code symbols -->
+        <div class="absolute inset-0 select-none overflow-hidden pointer-events-none" id="code-symbols-container">
+          <!-- Sinh tự động bằng JS -->
+        </div>
+
+        <!-- Dynamic code line display -->
+        <div class="absolute left-6 md:left-12 flex flex-col gap-1.5 z-10 select-none text-xs md:text-sm">
+          <div class="code-line-anim text-[#ff6b6b]" style="animation-delay: 0s;">
+            <span class="font-bold">const</span> <span class="text-[#4ecdc4]">portfolio</span> = <span class="text-[#96ceb4]">'Vo Huu Tri'</span>;
+          </div>
+          <div class="code-line-anim text-[#ff6b6b]" style="animation-delay: 1s;">
+            <span class="font-bold">function</span> <span class="text-[#45b7d1]">createMagic</span>() {
+          </div>
+          <div class="code-line-anim text-[#ff6b6b]" style="animation-delay: 2s;">
+            &nbsp;&nbsp;<span class="font-bold">return</span> <span class="text-[#96ceb4]">'✨ Innovation & Success ✨'</span>;
+          </div>
+        </div>
+
+        <!-- Binary code falling rain on the right -->
+        <div class="absolute right-6 md:right-16 top-0 bottom-0 flex gap-4 pointer-events-none select-none overflow-hidden" id="binary-rain-container">
+          <!-- Sinh tự động bằng JS -->
+        </div>
+
+        <!-- Command prompt line -->
+        <div class="absolute bottom-4 left-6 md:left-12 font-semibold text-xs md:text-sm flex items-center gap-2 text-green-500">
+          <span class="text-yellow-400">$</span>
+          <span class="text-cyan-400">npm run dev</span>
+          <span class="cursor-blink w-2 h-4 bg-green-500 block"></span>
+        </div>
+      </div>
+
+      <!-- Lời chào & Tên -->
+      <div class="mt-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="flex-1 space-y-4 text-center md:text-left">
+          <h2 id="page-greeting-header" class="text-3xl font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
+            <!-- Text sẽ được nạp từ translation -->
+          </h2>
+          <h4 id="hero-greeting" class="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
+            <!-- Text nạp từ translation -->
+          </h4>
+          <div class="flex justify-center md:justify-start gap-4 pt-2">
+            <a href="#projects" id="btn-hero-projects" class="py-2.5 px-6 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-0.5 transition-all">
+              <!-- Projects -->
+            </a>
+            <a href="#contact" id="btn-hero-contact" class="py-2.5 px-6 rounded-md border border-gray-300 dark:border-gray-700 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+              <!-- Contact -->
+            </a>
+          </div>
+        </div>
+
+        <!-- Interactive 3D WebGL Morphing Mesh with Viewport Brackets -->
+        <div id="hero-3d-box" class="hero-hud-viewport flex-shrink-0 w-full md:w-[350px] h-[220px] rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-black/30 flex items-center justify-center shadow-inner relative overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-blue-500/10">
+          <!-- Viewport Corner Brackets -->
+          <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-blue-500/40 pointer-events-none z-10"></div>
+          <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-blue-500/40 pointer-events-none z-10"></div>
+          <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-blue-500/40 pointer-events-none z-10"></div>
+          <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-blue-500/40 pointer-events-none z-10"></div>
+          
+          <div id="hero-three-container" class="absolute inset-0 z-0"></div>
+          <div id="hero-hud-status" class="absolute bottom-2 right-2 font-mono text-[9px] text-gray-400/60 z-10 select-none bg-black/40 px-2 py-0.5 rounded border border-gray-800/40">SYS.CORE // ROTATING</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── ABOUT ME SECTION ─── -->
+    <section id="about" class="reveal-item">
+      <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+        <span id="label-about-title"></span>
+        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+      </h2>
+
+      <div class="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 mt-8">
+        <!-- Circular Avatar with Glow -->
+        <div class="avatar-container relative flex items-center justify-center lg:w-1/2 flex-shrink-0" style="min-height: 280px;">
+          <div class="avatar-glow"></div>
+          <!-- 3D Orbiting Rings -->
+          <div class="absolute w-[240px] h-[240px] md:w-[280px] md:h-[280px] rounded-full border-2 border-dashed border-blue-500/30 pointer-events:none; z-index:5;" style="transform: rotateX(70deg) rotateY(15deg) translateZ(10px); animation: spin 15s linear infinite, orbitPulse1 6s ease-in-out infinite;"></div>
+          <div class="absolute w-[260px] h-[260px] md:w-[300px] md:h-[300px] rounded-full border-2 border-emerald-500/25 pointer-events:none; z-index:5;" style="transform: rotateX(-60deg) rotateY(-20deg) translateZ(-10px); animation: spin 25s linear infinite, orbitPulse2 8s ease-in-out infinite;"></div>
+          <img src="avatar.jpg" alt="Võ Hữu Trí" class="w-[200px] h-[200px] md:w-[240px] md:h-[240px] rounded-full shadow-2xl border-4 border-blue-500 object-cover relative z-10 hover:scale-105 transition-transform duration-500" />
+        </div>
+
+        <!-- Bio & Details -->
+        <div class="lg:w-1/2 space-y-6">
+          <p id="label-about-bio" class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+            <!-- Bio text -->
+          </p>
+
+          <!-- Social link items grid -->
+          <div class="flex flex-col gap-3.5 border-t border-gray-200 dark:border-gray-800 pt-6">
+            <div class="flex items-center gap-3">
+              <i class="fab fa-github text-xl text-[#222222] dark:text-[#f5f5f5]"></i>
+              <span class="font-semibold text-sm w-24">GitHub:</span>
+              <a href="https://github.com/Mercy222222" target="_blank" class="text-blue-500 hover:underline break-all text-sm">github.com/Mercy222222</a>
+            </div>
+            <div class="flex items-center gap-3">
+              <i class="fab fa-facebook text-xl text-[#1877f2]"></i>
+              <span class="font-semibold text-sm w-24">Facebook:</span>
+              <a href="https://www.facebook.com/HUUTRI.USER" target="_blank" class="text-blue-500 hover:underline break-all text-sm">facebook.com/HUUTRI.USER</a>
+            </div>
+            <div class="flex items-center gap-3">
+              <i class="fas fa-comment text-xl text-[#0068ff]"></i>
+              <span class="font-semibold text-sm w-24">Zalo Chat:</span>
+              <a href="https://zalo.me/0979324949" target="_blank" class="text-blue-500 hover:underline break-all text-sm">0979 324 949</a>
+            </div>
+            <div class="flex items-center gap-3">
+              <i class="fab fa-instagram text-xl text-[#e1306c]"></i>
+              <span class="font-semibold text-sm w-24">Instagram:</span>
+              <a href="https://www.instagram.com/prx.mercy/" target="_blank" class="text-blue-500 hover:underline break-all text-sm">@prx.mercy</a>
+            </div>
+            <div class="flex items-center gap-3">
+              <i class="fab fa-youtube text-xl text-[#ff0000]"></i>
+              <span class="font-semibold text-sm w-24">YouTube:</span>
+              <a href="https://www.youtube.com/channel/deoco" target="_blank" class="text-blue-500 hover:underline break-all text-sm">YouTube Channel</a>
+            </div>
+            <div class="flex items-center gap-3">
+              <i class="fas fa-envelope text-xl text-cyan-500"></i>
+              <span class="font-semibold text-sm w-24">Email:</span>
+              <a href="mailto:huutri.user@gmail.com" class="text-blue-500 hover:underline break-all text-sm">huutri.user@gmail.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── WORK EXPERIENCE SECTION ─── -->
+    <section id="workExp" class="reveal-item">
+      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+        <span id="label-work-title"></span>
+        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+      </h2>
+
+      <!-- Lưới chứa dòng thời gian hoặc thẻ -->
+      <div id="experience-list-container" class="space-y-8 mt-6">
+        <!-- Render động bằng JS -->
+      </div>
+    </section>
+
+    <!-- ─── SKILLS SECTION ─── -->
+    <section id="skills" class="reveal-item">
+      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+        <span id="label-skills-title"></span>
+        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+      </h2>
+
+      <!-- Skills Card Grid -->
+      <div id="skills-grid-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        <!-- Dữ liệu được kết xuất từ YS array bằng JS -->
+      </div>
+    </section>
+
+    <!-- ─── CERTIFICATES SECTION ─── -->
+    <section id="certificates" class="reveal-item">
+      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+        <span id="label-certificates-title"></span>
+        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+      </h2>
+
+      <!-- Certificates Cards List Grid -->
+      <div id="certificates-grid-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+        <!-- Render động bằng JS -->
+      </div>
+    </section>
+
+    <!-- ─── PROJECTS SECTION ─── -->
+    <section id="projects" class="reveal-item">
+      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+        <span id="label-projects-title"></span>
+        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+      </h2>
+
+      <!-- Project Cards Grid -->
+      <div id="projects-grid-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+        <!-- Render động bằng JS -->
+      </div>
+    </section>
+
+    <!-- ─── CONTACT SECTION ─── -->
+    <section id="contact" class="reveal-item">
+      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+        <span id="label-contact-title"></span>
+        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+      </h2>
+
+      <div class="flex flex-col lg:flex-row gap-12 mt-6">
+        <!-- Contact Form Card -->
+        <div class="flex-1 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-gray-800 rounded-xl p-6 md:p-8 shadow-sm">
+          <h4 id="label-contact-subtitle" class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">
+            <!-- Fill out form -->
+          </h4>
+
+          <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-5">
+            <!-- Name Input -->
+            <div class="space-y-1.5">
+              <label for="contact-name" id="form-label-name" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
+              <input type="text" id="contact-name" name="name" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white" />
+              <p id="error-name" class="text-xs text-red-500 font-medium hidden"></p>
+            </div>
+
+            <!-- Email Input -->
+            <div class="space-y-1.5">
+              <label for="contact-email" id="form-label-email" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
+              <input type="email" id="contact-email" name="email" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white" />
+              <p id="error-email" class="text-xs text-red-500 font-medium hidden"></p>
+            </div>
+
+            <!-- Phone Input -->
+            <div class="space-y-1.5">
+              <label for="contact-phone" id="form-label-phone" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
+              <input type="tel" id="contact-phone" name="phone" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white" />
+              <p id="error-phone" class="text-xs text-red-500 font-medium hidden"></p>
+            </div>
+
+            <!-- Message Input -->
+            <div class="space-y-1.5">
+              <label for="contact-message" id="form-label-message" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
+              <textarea id="contact-message" name="message" rows="4" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white resize-none"></textarea>
+              <p id="error-message" class="text-xs text-red-500 font-medium hidden"></p>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-contact-submit" class="w-full py-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow-md hover:shadow-blue-500/25 flex justify-center items-center gap-2">
+              <!-- Send -->
+            </button>
+          </form>
+        </div>
+
+        <!-- Contact info widget -->
+        <div class="lg:w-[350px] space-y-6 flex flex-col justify-center">
+          <div class="border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-gray-50/50 dark:bg-black/20 space-y-5">
+            <h4 id="label-contact-infotitle" class="text-lg font-bold text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3"></h4>
+            
+            <div class="flex items-start gap-4">
+              <div class="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 text-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone</p>
+                <a href="tel:0979324949" class="text-sm font-semibold hover:underline">0979 324 949</a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 text-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Email</p>
+                <a href="mailto:huutri.user@gmail.com" class="text-sm font-semibold hover:underline">huutri.user@gmail.com</a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 text-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Location</p>
+                <p class="text-sm font-semibold">TP. Hồ Chí Minh, Việt Nam</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#181818] py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-4">
+      <p id="footer-text-desc" class="max-w-md mx-auto"></p>
+      <div class="flex justify-center gap-4 text-xs font-bold text-gray-400 uppercase">
+        <a href="#home" id="footer-link-home" class="hover:text-blue-500"></a>
+        <span>•</span>
+        <a href="#about" id="footer-link-about" class="hover:text-blue-500"></a>
+        <span>•</span>
+        <a href="#projects" id="footer-link-projects" class="hover:text-blue-500"></a>
+        <span>•</span>
+        <a href="#contact" id="footer-link-contact" class="hover:text-blue-500"></a>
+      </div>
+      <div class="pt-4 border-t border-gray-100 dark:border-gray-900 flex flex-col sm:flex-row justify-between items-center text-xs gap-3">
+        <span id="footer-text-rights"></span>
+        <span class="font-mono opacity-60">v3.0 · Powered by HTML5 & Tailwind</span>
+        <span id="footer-text-madewith"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── JAVASCRIPT LOGIC ─── -->
+  <script>
+    /* ─── DỮ LIỆU ĐA NGÔN NGỮ (VI/EN) CỦA VÕ HỮU TRÍ ─── */
+    const W2 = {
+      en: {
+        "nav.home": "Home",
+        "nav.about": "About",
+        "nav.skills": "Skills",
+        "nav.certificates": "Certificates",
+        "nav.projects": "Projects",
+        "nav.contact": "Contact",
+        "nav.workExp": "Experience",
+        "page.aboutme": "About Me",
+        "page.workExp": "Work Experience",
+        "page.certificate": "Certificate",
+        "page.skills": "My Skills",
+        "page.greeting": "Greeting",
+        "page.contact": "Get In Touch",
+        "contact.title": "Contact Details",
+        "contact.name": "Your Name",
+        "contact.email": "Your Email",
+        "contact.phone": "Your Phone Number",
+        "contact.message": "Your Message",
+        "contact.subtitle": "Please fill out the form below to reach out to me.",
+        "contact.namePlaceholder": "Enter your full name",
+        "contact.emailPlaceholder": "Enter your email address",
+        "contact.phonePlaceholder": "Enter your phone number",
+        "contact.messagePlaceholder": "Enter your message",
+        "contact.send": "Send Message",
+        "contact.sending": "Sending...",
+        "contact.successMessage": "Message sent successfully! I'll get back to you soon.",
+        "contact.errorMessage": "Failed to send message. Please try again later.",
+        "validation.nameMin": "Name must be at least 2 characters",
+        "validation.nameRequired": "Name is required",
+        "validation.emailInvalid": "Invalid email address",
+        "validation.emailRequired": "Email is required",
+        "validation.phoneInvalid": "Invalid phone number (must be digits)",
+        "validation.phoneMin": "Phone number must be at least 10 digits",
+        "validation.phoneRequired": "Phone number is required",
+        "validation.messageMin": "Message must be at least 10 characters",
+        "validation.messageRequired": "Message is required",
+        "page.certificates": "Certificates",
+        "page.projects": "Projects",
+        "footer.description": "Passionate developer creating web services and social media utilities with modern technologies.",
+        "footer.rights": "© 2026 Vo Huu Tri. All rights reserved.",
+        "footer.madeWith": "Made with ❤ in Saigon",
+        "footer.by": "by",
+        certiDetail: "View Detail",
+        greeting: "Hello! Welcome to my portfolio. This is where I share my learning journey, web development products, SMM panel utilities, and technology goals on the path to becoming a professional software engineer.",
+        bio: "My name is Vo Huu Tri. I am currently an IT student in Ho Chi Minh City, originally from Vinh Long, Vietnam. I have a deep passion for fullstack web development (PHP, MySQL, JavaScript) and UI/UX design. I enjoy building responsive digital solutions that add real value to users.",
+        title: "Fullstack Web Developer",
+        name: "Vo Huu Tri",
+        projects: [
+
+          {
+            id: 2,
+            name: "Vo Huu Tri SMM Panel",
+            image: "project_smmpanel.png",
+            description: "An automated social media marketing panel serving likes, follows, and views on demand. Designed with robust order queues, automated providers API synchronizations, and custom transaction records.",
+            technologies: ["HTML5", "CSS3", "JavaScript", "Bootstrap"],
+            demoLink: "index.html",
+            codeLink: "https://github.com/Mercy222222/webbanhang"
+          },
+          {
+            id: 3,
+            name: "Vo Huu Tri Blogs",
+            image: "project_blogs.png",
+            description: "A custom designed personal blog platform. Serves Photoshop PSD design resources, website templates, network tips, and online automation code configurations.",
+            technologies: ["Blogger XML", "HTML", "CSS", "JavaScript"],
+            demoLink: "https://huutriblog.blogspot.com/",
+            codeLink: "https://github.com/Mercy222222"
+          }
+        ],
+        workExperience: [
+          {
+            id: 1,
+            company: "Freelance Web Development",
+            position: "Fullstack Web Developer",
+            duration: "2024 - Present",
+            location: "Ho Chi Minh City, Vietnam",
+            description: "Developing modern landing pages, product order databases, and responsive interfaces for local retail stores and individual buyers.",
+            responsibilities: [
+              "Evaluating clients needs and translating specifications to code layouts",
+              "Constructing fast web backend APIs and optimizing database models",
+              "Ensuring responsive layout patterns for mobile devices"
+            ],
+            achievements: [
+              "Successfully launched over 5 production systems with high uptime",
+              "Designed light-weight CSS variables and modular script workflows"
+            ]
+          },
+          {
+            id: 2,
+            company: "SMM Panel Operations",
+            position: "Systems Administrator",
+            duration: "2023 - Present",
+            location: "Ho Chi Minh City, Vietnam",
+            description: "Operating automatic web service panels, implementing payment portals, API updates, and serving customer transactions.",
+            responsibilities: [
+              "Configuring third-party provider API endpoints and synchronizing pricing",
+              "Debugging transaction script logic and fixing database order table blocks",
+              "Supporting active users with high-priority service delivery requests"
+            ],
+            achievements: [
+              "Handled over 95% of daily transactions completely automatically",
+              "Maintained system order processing speed within seconds"
+            ]
+          }
+        ],
+        certificates: [
+          {
+            id: 1,
+            title: "Google IT Support Professional Certificate",
+            issuer: "Coursera / Google",
+            date: "November 2025",
+            id_code: "Google-ITS-8GX6S"
+          },
+          {
+            id: 2,
+            title: "Responsive Web Design Certification",
+            issuer: "freeCodeCamp",
+            date: "June 2025",
+            id_code: "fcc-RWD-BX4MR"
+          },
+          {
+            id: 3,
+            title: "EF SET English Certificate (B2 Upper)",
+            issuer: "EF Standard English Test",
+            date: "August 2025",
+            id_code: "EFSET-B2-EHQ7N"
+          }
+        ]
+      },
+      vi: {
+        "nav.home": "Trang chủ",
+        "nav.about": "Giới thiệu",
+        "nav.skills": "Kỹ năng",
+        "nav.certificates": "Chứng chỉ",
+        "nav.projects": "Dự án",
+        "nav.contact": "Liên hệ",
+        "nav.link": "Liên kết",
+        "nav.workExp": "Kinh nghiệm",
+        "page.aboutme": "Giới thiệu về tôi",
+        "page.workExp": "Kinh nghiệm làm việc",
+        "page.certificate": "Chứng chỉ",
+        "page.skills": "Kỹ năng của tôi",
+        "page.greeting": "Lời chào",
+        "page.contact": "Kết nối với tôi",
+        "contact.title": "Thông tin liên hệ",
+        "contact.name": "Tên của bạn",
+        "contact.email": "Email của bạn",
+        "contact.phone": "Số điện thoại của bạn",
+        "contact.message": "Tin nhắn của bạn",
+        "contact.subtitle": "Vui lòng điền thông tin vào mẫu dưới đây để liên hệ với tôi.",
+        "contact.namePlaceholder": "Nhập họ và tên của bạn",
+        "contact.emailPlaceholder": "Nhập địa chỉ email của bạn",
+        "contact.phonePlaceholder": "Nhập số điện thoại của bạn",
+        "contact.messagePlaceholder": "Nhập nội dung tin nhắn",
+        "contact.send": "Gửi tin nhắn",
+        "contact.sending": "Đang gửi...",
+        "contact.successMessage": "Gửi tin nhắn thành công! Tôi sẽ phản hồi sớm nhất có thể.",
+        "contact.errorMessage": "Gửi tin nhắn thất bại. Vui lòng thử lại sau.",
+        "validation.nameMin": "Tên phải có ít nhất 2 ký tự",
+        "validation.nameRequired": "Họ và tên là bắt buộc",
+        "validation.emailInvalid": "Địa chỉ email không hợp lệ",
+        "validation.emailRequired": "Email là bắt buộc",
+        "validation.phoneInvalid": "Số điện thoại không hợp lệ (chỉ nhập số)",
+        "validation.phoneMin": "Số điện thoại phải có ít nhất 10 chữ số",
+        "validation.phoneRequired": "Số điện thoại là bắt buộc",
+        "validation.messageMin": "Tin nhắn phải chứa ít nhất 10 ký tự",
+        "validation.messageRequired": "Nội dung tin nhắn là bắt buộc",
+        "page.certificates": "Chứng chỉ",
+        "page.projects": "Dự án",
+        "footer.description": "Nhà phát triển đam mê xây dựng ứng dụng web và các giải pháp hệ thống SMM Panel hiện đại.",
+        "footer.rights": "© 2026 Võ Hữu Trí. Bảo lưu mọi quyền.",
+        "footer.madeWith": "Được tạo với ❤ tại Sài Gòn",
+        "footer.by": "bởi",
+        certiDetail: "Xem chi tiết",
+        greeting: "Xin chào! Chào mừng bạn đến với portfolio cá nhân của mình. Đây là nơi mình chia sẻ hành trình học tập, các sản phẩm web thực tế, hệ thống SMM Panel tiện ích và các định hướng công nghệ trên con đường trở thành lập trình viên chuyên nghiệp.",
+        bio: "Mình tên là Võ Hữu Trí. Hiện tại mình là sinh viên IT tại TP. Hồ Chí Minh, quê quán ở Vĩnh Long. Mình có niềm đam mê lớn với phát triển web fullstack (PHP, MySQL, JavaScript) và thiết kế giao diện UI/UX. Mình thích xây dựng các giải pháp kỹ thuật số có khả năng tương tác tốt và mang lại giá trị thực tế.",
+        title: "Lập trình viên Fullstack",
+        name: "Võ Hữu Trí",
+        projects: [
+
+          {
+            id: 2,
+            name: "Võ Hữu Trí SMM Panel",
+            image: "project_smmpanel.png",
+            description: "Hệ thống dịch vụ mạng xã hội (SMM) tự động giá rẻ. Cho phép người dùng đặt mua các gói tương tác (like, follow, view) tự động trên Facebook, TikTok, Instagram thông qua tích hợp API thông minh.",
+            technologies: ["HTML5", "CSS3", "JavaScript", "Bootstrap"],
+            demoLink: "index.html",
+            codeLink: "https://github.com/Mercy222222/webbanhang"
+          },
+          {
+            id: 3,
+            name: "Võ Hữu Trí Blogs",
+            image: "project_blogs.png",
+            description: "Trang blog cá nhân được tùy biến giao diện Blogger XML. Chia sẻ tài nguyên thiết kế Photoshop PSD, các thủ thuật hệ thống, mẹo tối ưu code và các tiện ích công cụ miễn phí.",
+            technologies: ["Blogger XML", "HTML", "CSS", "JavaScript"],
+            demoLink: "https://huutriblog.blogspot.com/",
+            codeLink: "https://github.com/Mercy222222"
+          }
+        ],
+        workExperience: [
+          {
+            id: 1,
+            company: "Dự án Freelance",
+            position: "Lập trình viên Web Fullstack",
+            duration: "2024 - Hiện tại",
+            location: "Thành phố Hồ Chí Minh, Việt Nam",
+            description: "Nhận thiết kế và lập trình website, trang giới thiệu sản phẩm và các phần mềm bán hàng nhỏ cho chủ shop và khách hàng tự do.",
+            responsibilities: [
+              "Xác định nhu cầu nghiệp vụ của khách hàng để xây dựng bố cục UI/UX",
+              "Phát triển APIs lưu trữ, kết xuất cơ sở dữ liệu nhanh chóng",
+              "Tối ưu giao diện hiển thị di động hoàn hảo chuẩn responsive"
+            ],
+            achievements: [
+              "Bàn giao thành công hơn 5 website thực tế hoạt động mượt mà",
+              "Áp dụng cấu trúc thư viện CSS và JS tối giản, giảm dung lượng tải trang"
+            ]
+          },
+          {
+            id: 2,
+            company: "Vận hành SMM Panel",
+            position: "Quản trị viên Hệ thống",
+            duration: "2023 - Hiện tại",
+            location: "Thành phố Hồ Chí Minh, Việt Nam",
+            description: "Quản trị nền tảng cung cấp dịch vụ mạng xã hội, tích hợp luồng xử lý tự động, theo dõi doanh thu và cấu hình API nhà phân phối.",
+            responsibilities: [
+              "Đồng bộ hóa kết nối API trung gian phân phối dịch vụ tự động",
+              "Xử lý và gỡ rối lỗi nghẽn giao dịch dữ liệu trên cơ sở dữ liệu",
+              "Chăm sóc và giải quyết yêu cầu kỹ thuật trực tiếp cho người dùng"
+            ],
+            achievements: [
+              "Tự động hóa hoàn toàn trên 95% đơn hàng và dòng tiền nạp vào hệ thống",
+              "Duy trì tính ổn định của máy chủ và đảm bảo thời gian xử lý siêu tốc"
+            ]
+          }
+        ],
+        certificates: [
+          {
+            id: 1,
+            title: "Chứng chỉ Hỗ trợ CNTT Chuyên nghiệp Google",
+            issuer: "Coursera / Google",
+            date: "Tháng 11, 2025",
+            id_code: "Google-ITS-8GX6S"
+          },
+          {
+            id: 2,
+            title: "Chứng chỉ Thiết kế Giao diện Responsive",
+            issuer: "freeCodeCamp",
+            date: "Tháng 6, 2025",
+            id_code: "fcc-RWD-BX4MR"
+          },
+          {
+            id: 3,
+            title: "Chứng chỉ Anh ngữ EF SET (B2 Upper)",
+            issuer: "EF Standard English Test",
+            date: "Tháng 8, 2025",
+            id_code: "EFSET-B2-EHQ7N"
+          }
+        ]
+      }
+    };
+
+    /* ─── DANH SÁCH SKILLS (YS ARRAY) ─── */
+    const YS = [
+      { icon: "<i class='devicon-html5-plain colored'></i>", label: "HTML" },
+      { icon: "<i class='devicon-css3-plain colored'></i>", label: "CSS" },
+      { icon: "<i class='devicon-javascript-plain colored'></i>", label: "JavaScript" },
+      { icon: "<i class='devicon-php-plain colored'></i>", label: "PHP" },
+      { icon: "<i class='devicon-mysql-plain colored'></i>", label: "MySQL" },
+      { icon: "<i class='devicon-bootstrap-plain colored'></i>", label: "Bootstrap" },
+      { icon: "<i class='devicon-tailwindcss-plain colored'></i>", label: "TailwindCSS" },
+      { icon: "<i class='devicon-photoshop-plain colored'></i>", label: "Photoshop" },
+      { icon: "<i class='devicon-premiere-plain colored'></i>", label: "Premiere Pro" },
+      { icon: "<i class='devicon-figma-plain colored'></i>", label: "Figma" },
+      { icon: "<i class='devicon-git-plain colored'></i>", label: "Git" },
+      { icon: "<i class='devicon-nodejs-plain colored'></i>", label: "NodeJS" },
+      { icon: "<i class='devicon-express-original colored'></i>", label: "ExpressJS" },
+      { icon: "<i class='devicon-mongodb-plain colored'></i>", label: "MongoDB" }
+    ];
+
+    /* ─── QUẢN LÝ TRẠNG THÁI (STATE MANAGEMENT) ─── */
+    let currentLanguage = localStorage.getItem('portfolio_lang') || 'vi';
+    let currentTheme = localStorage.getItem('portfolio_theme') || 'dark';
+
+    // Hàm lấy chuỗi dịch thuật
+    function t(key) {
+      return W2[currentLanguage][key] || key;
+    }
+
+    /* ─── KHỞI TẠO HIỆU ỨNG GIAO DIỆN (UI EFFECTS) ─── */
+    
+    // 1. Tạo kí tự code bay lơ lửng ở Hero section
+    function initCodeSymbols() {
+      const container = document.getElementById('code-symbols-container');
+      if (!container) return;
+      container.innerHTML = '';
+      const symbols = ["<", ">", "{", "}", "(", ")", ";", "=", "+", "-", "*", "/", "&&", "||", "!="];
+      symbols.forEach((sym, idx) => {
+        const div = document.createElement('div');
+        div.className = 'absolute font-bold code-symbol-float select-none';
+        div.textContent = sym;
+        
+        const size = Math.floor(Math.random() * 12) + 14;
+        const color = Math.random() > 0.5 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(16, 185, 129, 0.4)';
+        const left = Math.random() * 90;
+        const top = Math.random() * 80;
+        const animNum = (idx % 3) + 1;
+        const duration = (3 + Math.random() * 2).toFixed(2);
+        const delay = (Math.random() * 2).toFixed(2);
+
+        div.style.fontSize = `${size}px`;
+        div.style.color = color;
+        div.style.left = `${left}%`;
+        div.style.top = `${top}%`;
+        div.style.animationName = `codeFloat${animNum}`;
+        div.style.animationDuration = `${duration}s`;
+        div.style.animationDelay = `${delay}s`;
+        div.style.animationIterationCount = 'infinite';
+        div.style.animationTimingFunction = 'ease-in-out';
+
+        container.appendChild(div);
+      });
+    }
+
+    // 2. Tạo mưa nhị phân rơi tự do
+    function initBinaryRain() {
+      const container = document.getElementById('binary-rain-container');
+      if (!container) return;
+      container.innerHTML = '';
+      const columns = 8;
+      for (let i = 0; i < columns; i++) {
+        const div = document.createElement('div');
+        div.className = 'absolute binary-column-anim text-emerald-500/30 select-none font-bold';
+        
+        const left = 10 + i * 12;
+        const duration = (2 + Math.random()).toFixed(2);
+        const delay = (Math.random() * 2).toFixed(2);
+        
+        div.style.left = `${left}%`;
+        div.style.animationDuration = `${duration}s`;
+        div.style.animationDelay = `${delay}s`;
+        
+        // chuỗi nhị phân ngẫu nhiên
+        div.textContent = Math.random().toString(2).substring(2, 9);
+        
+        container.appendChild(div);
+      }
+    }
+
+    /* ─── KẾT XUẤT DỮ LIỆU ĐỘNG (DYNAMIC RENDERING) ─── */
+
+    // Render Kỹ năng (Skills Grid)
+    function renderSkills() {
+      const container = document.getElementById('skills-grid-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      YS.forEach((skill) => {
+        const card = document.createElement('div');
+        // Class CSS phối hợp màu viền và nền động khi đổi Theme
+        card.className = `skill-card flex items-center gap-4 px-6 py-4 rounded-xl border transition-all duration-500 transform hover:scale-105 opacity-0 translate-y-[30px] cursor-pointer
+          border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-800 dark:bg-black/40 dark:hover:bg-blue-900/10`;
+        
+        // Thêm sự kiện hover phát sáng viền xanh
+        card.onmouseenter = (e) => {
+          e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 123, 255, 0.25)';
+          e.currentTarget.style.borderColor = '#007bff';
+        };
+        card.onmouseleave = (e) => {
+          e.currentTarget.style.boxShadow = '';
+          e.currentTarget.style.borderColor = '';
+        };
+
+        const iconWrap = document.createElement('span');
+        iconWrap.className = 'text-3xl flex items-center justify-center';
+        iconWrap.innerHTML = skill.icon;
+
+        const label = document.createElement('span');
+        label.className = 'text-base font-semibold tracking-wide';
+        label.textContent = skill.label;
+
+        card.appendChild(iconWrap);
+        card.appendChild(label);
+        container.appendChild(card);
+      });
+      init3DTilt();
+    }
+
+    // Render Kinh nghiệm làm việc (Experience Timeline)
+    function renderExperience() {
+      const container = document.getElementById('experience-list-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const workList = W2[currentLanguage].workExperience || [];
+      if (workList.length === 0) {
+        container.innerHTML = `<p class="text-center py-8 text-gray-500">${currentLanguage === 'vi' ? 'Chưa có kinh nghiệm nào.' : 'No experience listed.'}</p>`;
+        return;
+      }
+
+      const isVisible = document.getElementById('workExp')?.classList.contains('visible');
+      workList.forEach((work) => {
+        const card = document.createElement('div');
+        card.className = `work-card bg-gray-50 dark:bg-black/20 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 md:p-8 hover:shadow-xl transition-all duration-500 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
+        
+        card.onmouseenter = (e) => {
+          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 123, 255, 0.1)';
+          e.currentTarget.style.borderColor = '#007bff';
+        };
+        card.onmouseleave = (e) => {
+          e.currentTarget.style.boxShadow = '';
+          e.currentTarget.style.borderColor = '';
+        };
+
+        const durationBadgeText = (work.duration.includes('Present') || work.duration.includes('Hiện tại')) 
+          ? (currentLanguage === 'vi' ? 'Hiện tại' : 'Current') 
+          : (currentLanguage === 'vi' ? 'Đã hoàn thành' : 'Completed');
+
+        const badgeClass = (work.duration.includes('Present') || work.duration.includes('Hiện tại'))
+          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
+          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+
+        let responsibilitiesHTML = '';
+        work.responsibilities.forEach((resp) => {
+          responsibilitiesHTML += `
+            <li class="flex items-start gap-3">
+              <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></span>
+              <span class="text-sm md:text-base text-gray-600 dark:text-gray-300">${resp}</span>
+            </li>
+          `;
+        });
+
+        let achievementsHTML = '';
+        work.achievements.forEach((ach) => {
+          achievementsHTML += `
+            <li class="flex items-start gap-3">
+              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></span>
+              <span class="text-sm md:text-base text-gray-600 dark:text-gray-300">${ach}</span>
+            </li>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-xl md:text-2xl font-bold mb-1">${work.position}</h3>
+              <h4 class="text-md md:text-lg font-semibold text-blue-500 mb-2">${work.company}</h4>
+              <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt"></i> ${work.duration}</span>
+                <span class="hidden sm:inline">•</span>
+                <span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt"></i> ${work.location}</span>
+              </div>
+            </div>
+            <div class="flex-shrink-0">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${badgeClass}">
+                <span class="w-2 h-2 rounded-full mr-2 ${work.duration.includes('Present') || work.duration.includes('Hiện tại') ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'}"></span>
+                ${durationBadgeText}
+              </span>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">${work.description}</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <div>
+              <h5 class="text-sm font-bold uppercase tracking-wider text-blue-500 mb-3 flex items-center gap-2">
+                <i class="fas fa-tasks"></i> ${currentLanguage === 'vi' ? 'Trách nhiệm chính' : 'Key Responsibilities'}
+              </h5>
+              <ul class="space-y-2.5">${responsibilitiesHTML}</ul>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold uppercase tracking-wider text-emerald-500 mb-3 flex items-center gap-2">
+                <i class="fas fa-trophy"></i> ${currentLanguage === 'vi' ? 'Thành tựu đạt được' : 'Key Achievements'}
+              </h5>
+              <ul class="space-y-2.5">${achievementsHTML}</ul>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+      init3DTilt();
+    }
+
+    // Render Chứng chỉ (Certificates Grid)
+    function renderCertificates() {
+      const container = document.getElementById('certificates-grid-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const certs = W2[currentLanguage].certificates || [];
+      const isVisible = document.getElementById('certificates')?.classList.contains('visible');
+      certs.forEach((cert) => {
+        const card = document.createElement('div');
+        card.className = `certificate-card bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-200 dark:border-gray-800 p-5 flex flex-col justify-between transition-all duration-300 hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
+        
+        card.onmouseenter = (e) => {
+          e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 123, 255, 0.15)';
+          e.currentTarget.style.borderColor = '#007bff';
+        };
+        card.onmouseleave = (e) => {
+          e.currentTarget.style.boxShadow = '';
+          e.currentTarget.style.borderColor = '';
+        };
+
+        card.innerHTML = `
+          <div class="space-y-3">
+            <div class="text-3xl text-blue-500"><i class="fas fa-certificate"></i></div>
+            <h3 class="text-base font-bold tracking-tight">${cert.title}</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold">${cert.issuer} • ${cert.date}</p>
+            <div class="inline-block px-2.5 py-0.5 rounded bg-gray-200 dark:bg-gray-800 text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase">
+              ID: ${cert.id_code}
+            </div>
+          </div>
+          <button onclick="showCertAlert('${cert.title}', '${cert.issuer}', '${cert.date}', '${cert.id_code}')" class="mt-5 w-full py-2 rounded font-semibold text-xs transition border border-gray-300 dark:border-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600">
+            ${t('certiDetail')}
+          </button>
+        `;
+        container.appendChild(card);
+      });
+      init3DTilt();
+    }
+
+    // Popup xem chi tiết chứng chỉ
+    function showCertAlert(title, issuer, date, id_code) {
+      Swal.fire({
+        html: `
+          <div class="relative border-4 border-double border-yellow-600 bg-amber-50/5 dark:bg-slate-900/60 p-6 rounded-xl text-center font-serif text-slate-800 dark:text-slate-100 max-w-full overflow-hidden shadow-2xl mt-4">
+            <!-- Decorative corner flourishes -->
+            <div class="absolute top-2 left-2 text-yellow-600/30 text-xs"><i class="fa-solid fa-feather-pointed"></i></div>
+            <div class="absolute top-2 right-2 text-yellow-600/30 text-xs"><i class="fa-solid fa-feather-pointed"></i></div>
+            <div class="absolute bottom-2 left-2 text-yellow-600/30 text-xs"><i class="fa-solid fa-feather-pointed"></i></div>
+            <div class="absolute bottom-2 right-2 text-yellow-600/30 text-xs"><i class="fa-solid fa-feather-pointed"></i></div>
+
+            <!-- Gold Ribbon Badge -->
+            <div class="absolute top-4 right-4 text-yellow-500 text-3xl opacity-90">
+              <i class="fa-solid fa-certificate"></i>
+            </div>
+            
+            <div class="text-[9px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-sans mb-1">${issuer}</div>
+            <div class="text-sm font-bold tracking-tight text-yellow-600 dark:text-yellow-500 mb-4 font-sans uppercase">${title}</div>
+            
+            <div class="text-[10px] italic text-slate-400 font-sans mb-2">${currentLanguage === 'vi' ? 'Chứng nhận hoàn thành trao cho' : 'This is to certify that'}</div>
+            <div class="text-xl font-bold text-slate-900 dark:text-white font-serif py-1 border-b border-dashed border-slate-300 dark:border-slate-700 max-w-xs mx-auto mb-3">VÕ HỮU TRÍ</div>
+            
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-sans max-w-sm mx-auto mb-5">
+              ${currentLanguage === 'vi' ? 'đã hoàn thành xuất sắc các yêu cầu học tập, kiểm tra chất lượng của khóa học chuyên môn và được hệ thống ghi nhận chính thức.' : 'has successfully fulfilled all academic requirements, tests, and assessments for this professional program.'}
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-left font-sans text-[10px]">
+              <div>
+                <span class="text-slate-400 block">${currentLanguage === 'vi' ? 'Ngày cấp:' : 'Issue Date:'}</span>
+                <strong class="text-slate-600 dark:text-slate-300">${date}</strong>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-400 block">${currentLanguage === 'vi' ? 'Mã số chứng chỉ:' : 'Credential ID:'}</span>
+                <strong class="text-blue-500 dark:text-blue-400 font-mono">${id_code}</strong>
+              </div>
+            </div>
+            
+            <div class="mt-4 text-[9px] text-slate-400 italic">
+              ${currentLanguage === 'vi' ? '* Chứng chỉ được mã hóa xác thực điện tử trực tuyến và bảo mật.' : '* This credential is split-verified and securely registered in our system.'}
+            </div>
+          </div>
+        `,
+        background: currentTheme === 'dark' ? 'rgba(15, 23, 42, 0.98)' : '#ffffff',
+        color: currentTheme === 'dark' ? '#f8fafc' : '#0f172a',
+        showConfirmButton: true,
+        confirmButtonText: currentLanguage === 'vi' ? 'Xác nhận Đóng' : 'Close',
+        confirmButtonColor: '#b45309', // gold/amber color
+        width: '460px'
+      });
+    }
+
+    // Render Dự án (Projects Grid)
+    function renderProjects() {
+      const container = document.getElementById('projects-grid-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const list = W2[currentLanguage].projects || [];
+      const isVisible = document.getElementById('projects')?.classList.contains('visible');
+      list.forEach((project) => {
+        const card = document.createElement('div');
+        card.className = `project-card rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col overflow-hidden transition-all duration-300 hover:scale-105 bg-gray-50 dark:bg-black/20 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
+        
+        card.onmouseenter = (e) => {
+          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 123, 255, 0.15)';
+          e.currentTarget.style.borderColor = '#007bff';
+        };
+        card.onmouseleave = (e) => {
+          e.currentTarget.style.boxShadow = '';
+          e.currentTarget.style.borderColor = '';
+        };
+
+        let techBadges = '';
+        project.technologies.forEach((tech) => {
+          techBadges += `
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border border-blue-500/30 bg-blue-500/10 text-blue-500">
+              ${tech}
+            </span>
+          `;
+        });
+
+        card.innerHTML = `
+
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <h3 class="text-lg font-bold tracking-tight text-gray-800 dark:text-white">${project.name}</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">${project.description}</p>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="flex flex-wrap gap-1">${techBadges}</div>
+              <div class="flex gap-3 pt-2">
+                <a href="${project.demoLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-xs font-bold border border-blue-500 hover:bg-blue-600 hover:text-white transition-colors duration-200">
+                  <i class="fas fa-external-link-alt mr-1"></i> Demo
+                </a>
+                <a href="${project.codeLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-xs font-bold border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200">
+                  <i class="fab fa-github mr-1"></i> GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+      init3DTilt();
+    }
+
+    /* ─── DỊCH THUẬT VÀ THAY ĐỔI NGÔN NGỮ (I18N) ─── */
+    function updateLanguageUI() {
+      // 1. Cập nhật nhãn Navbar
+      document.querySelectorAll('.nav-link-item').forEach((link) => {
+        const key = `nav.${link.dataset.nav}`;
+        link.textContent = t(key);
+      });
+
+      // 2. Nút ngôn ngữ Navbar (Cập nhật class Active/Inactive)
+      const activeClass = "bg-blue-600 text-white shadow-sm";
+      const inactiveClass = "text-gray-500 dark:text-gray-400 hover:text-blue-500";
+      
+      const btnVi = document.getElementById('btn-lang-vi');
+      const btnEn = document.getElementById('btn-lang-en');
+      const btnViMob = document.getElementById('btn-lang-vi-mobile');
+      const btnEnMob = document.getElementById('btn-lang-en-mobile');
+
+      if (currentLanguage === 'vi') {
+        if (btnVi) btnVi.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${activeClass}`;
+        if (btnEn) btnEn.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${inactiveClass}`;
+        if (btnViMob) btnViMob.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${activeClass}`;
+        if (btnEnMob) btnEnMob.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${inactiveClass}`;
+      } else {
+        if (btnVi) btnVi.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${inactiveClass}`;
+        if (btnEn) btnEn.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${activeClass}`;
+        if (btnViMob) btnViMob.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${inactiveClass}`;
+        if (btnEnMob) btnEnMob.className = `px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300 ${activeClass}`;
+      }
+
+      // 3. Greeting và Hero Section
+      document.getElementById('page-greeting-header').innerHTML = `
+        ${t('page.greeting')}
+        <span class="flex-1 border-b-2 border-blue-500 ml-4 max-w-[200px]"></span>
+      `;
+      document.getElementById('hero-greeting').textContent = t('greeting');
+      document.getElementById('btn-hero-projects').textContent = t('nav.projects');
+      document.getElementById('btn-hero-contact').textContent = t('nav.contact');
+
+      // 4. About Me
+      document.getElementById('label-about-title').textContent = t('page.aboutme');
+      document.getElementById('label-about-bio').textContent = t('bio');
+
+      // 5. Work Experience
+      document.getElementById('label-work-title').textContent = t('page.workExp');
+      renderExperience();
+
+      // 6. Skills
+      document.getElementById('label-skills-title').textContent = t('page.skills');
+
+      // 7. Certificates
+      document.getElementById('label-certificates-title').textContent = t('page.certificates');
+      renderCertificates();
+
+      // 8. Projects
+      document.getElementById('label-projects-title').textContent = t('page.projects');
+      renderProjects();
+
+      // 9. Contact Section
+      document.getElementById('label-contact-title').textContent = t('page.contact');
+      document.getElementById('label-contact-subtitle').textContent = t('contact.subtitle');
+      document.getElementById('form-label-name').textContent = t('contact.name');
+      document.getElementById('form-label-email').textContent = t('contact.email');
+      document.getElementById('form-label-phone').textContent = t('contact.phone');
+      document.getElementById('form-label-message').textContent = t('contact.message');
+      
+      document.getElementById('contact-name').placeholder = t('contact.namePlaceholder');
+      document.getElementById('contact-email').placeholder = t('contact.emailPlaceholder');
+      document.getElementById('contact-phone').placeholder = t('contact.phonePlaceholder');
+      document.getElementById('contact-message').placeholder = t('contact.messagePlaceholder');
+      document.getElementById('btn-contact-submit').textContent = t('contact.send');
+      document.getElementById('label-contact-infotitle').textContent = t('contact.title');
+
+      // 10. Footer Section
+      document.getElementById('footer-text-desc').textContent = t('footer.description');
+      document.getElementById('footer-link-home').textContent = t('nav.home');
+      document.getElementById('footer-link-about').textContent = t('nav.about');
+      document.getElementById('footer-link-projects').textContent = t('nav.projects');
+      document.getElementById('footer-link-contact').textContent = t('nav.contact');
+      document.getElementById('footer-text-rights').textContent = t('footer.rights');
+      
+      document.getElementById('footer-text-madewith').innerHTML = `
+        ${t('footer.madeWith')} ${t('footer.by')} <strong>${t('name')}</strong>
+      `;
+    }
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('portfolio_lang', currentLanguage);
+      updateLanguageUI();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'vi' ? 'en' : 'vi';
+      localStorage.setItem('portfolio_lang', currentLanguage);
+      updateLanguageUI();
+    }
+
+    /* ─── PROCEDURAL HUD AUDIO SYNTHESIZER (WEB AUDIO API) ─── */
+    let audioCtx = null;
+    let isAudioMuted = true;
+
+    function initAudio() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function toggleMute() {
+      initAudio();
+      isAudioMuted = !isAudioMuted;
+      
+      const icon = document.getElementById('audio-icon');
+      const btn = document.getElementById('btn-audio');
+      
+      if (isAudioMuted) {
+        icon.className = 'fas fa-volume-mute';
+        btn.classList.add('text-gray-400');
+        btn.classList.remove('text-blue-500');
+      } else {
+        icon.className = 'fas fa-volume-up';
+        btn.classList.remove('text-gray-400');
+        btn.classList.add('text-blue-500', 'border-blue-500/50');
+        
+        // Play wake-up chime
+        playChime();
+      }
+    }
+
+    function playTick() {
+      if (isAudioMuted || !audioCtx) return;
+      
+      // Short hover click sound
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.04);
+      
+      gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+      
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.04);
+    }
+
+    function playPulse() {
+      if (isAudioMuted || !audioCtx) return;
+      
+      // Short click sweep
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(240, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.12);
+      
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+      
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12);
+    }
+
+    function playChime() {
+      if (isAudioMuted || !audioCtx) return;
+      
+      const now = audioCtx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        
+        gain.gain.setValueAtTime(0.0, now + idx * 0.06);
+        gain.gain.linearRampToValueAtTime(0.04, now + idx * 0.06 + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.22);
+        
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.23);
+      });
+    }
+
+    // Play a premium arpeggiated welcoming chime chord
+    function playWelcomeChime() {
+      if (isAudioMuted || !audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      // Ascending C Major chord arpeggio: C4 (261.63Hz), E4 (329.63Hz), G4 (392.00Hz), C5 (523.25Hz), E5 (659.25Hz), G5 (783.99Hz), C6 (1046.50Hz)
+      const freqs = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+      
+      freqs.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.type = 'triangle'; // triangle wave gives a warm synthesizer tone
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        
+        gain.gain.setValueAtTime(0.0, now + idx * 0.08);
+        gain.gain.linearRampToValueAtTime(0.05, now + idx * 0.08 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.8);
+        
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.9);
+      });
+    }
+
+    // Speak a welcoming message using Web Speech API Synthesis
+    function speakWelcomeMessage() {
+      if (isAudioMuted || !window.speechSynthesis) return;
+      
+      // Cancel any current speech
+      window.speechSynthesis.cancel();
+      
+      let text = '';
+      let lang = '';
+      
+      if (currentLanguage === 'vi') {
+        text = 'Chào mừng bạn đến với danh mục hồ sơ năng lực của Võ Hữu Trí!';
+        lang = 'vi-VN';
+      } else {
+        text = 'Welcome to the portfolio of Vo Huu Tri!';
+        lang = 'en-US';
+      }
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = 0.95; // Slightly slower pace for clarity and professionalism
+      utterance.pitch = 1.0;
+      utterance.volume = 0.7;
+      
+      // Auto-select standard regional voice if possible
+      const voices = window.speechSynthesis.getVoices();
+      const matchVoice = voices.find(v => v.lang.startsWith(lang.split('-')[0])) || voices[0];
+      if (matchVoice) {
+        utterance.voice = matchVoice;
+      }
+      
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Trigger welcoming audio arpeggio & speech on first user click/tap
+    let welcomed = false;
+    window.addEventListener('click', () => {
+      if (!welcomed) {
+        welcomed = true;
+        
+        // Initialize Audio context on user gesture (browser standard policy)
+        initAudio();
+        isAudioMuted = false;
+        
+        // Update Mute/Audio Button styling to Unmuted
+        const icon = document.getElementById('audio-icon');
+        const btn = document.getElementById('btn-audio');
+        if (icon && btn) {
+          icon.className = 'fas fa-volume-up';
+          btn.classList.remove('text-gray-400');
+          btn.classList.add('text-blue-500', 'border-blue-500/50');
+        }
+        
+        // Play the chime arpeggio and speak the welcome message
+        playWelcomeChime();
+        setTimeout(speakWelcomeMessage, 500); // Small offset after arpeggio arpeggiates
+      }
+    });
+
+    /* ─── CYBERPUNK SCRAMBLE TEXT EFFECT ─── */
+    function scrambleText(element, targetText) {
+      if (!element) return;
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*()_-+=[]{}';
+      let frame = 0;
+      const totalFrames = 25;
+      const originalText = targetText || element.innerText;
+      
+      function update() {
+        let output = '';
+        let complete = true;
+        
+        for (let i = 0; i < originalText.length; i++) {
+          if (originalText[i] === ' ') {
+            output += ' ';
+            continue;
+          }
+          
+          const trigger = (totalFrames / originalText.length) * i;
+          if (frame >= trigger) {
+            output += originalText[i];
+          } else {
+            output += chars[Math.floor(Math.random() * chars.length)];
+            complete = false;
+          }
+        }
+        
+        element.innerText = output;
+        
+        if (!complete && frame < totalFrames) {
+          frame++;
+          requestAnimationFrame(update);
+        } else {
+          element.innerText = originalText;
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+
+    /* ─── THAY ĐỔI GIAO DIỆN (THEME SWITCHER) ─── */
+    function initTheme() {
+      if (currentTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('btn-theme').innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
+        document.getElementById('btn-theme-mobile').innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('btn-theme').innerHTML = '<i class="fas fa-moon"></i>';
+        document.getElementById('btn-theme-mobile').innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('portfolio_theme', currentTheme);
+      initTheme();
+    }
+
+    /* ─── HAMBURGER MENU CHO DI ĐỘNG ─── */
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const burgerIcon = document.querySelector('#btn-hamburger i');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        burgerIcon.className = 'fas fa-times';
+      } else {
+        menu.classList.add('hidden');
+        burgerIcon.className = 'fas fa-bars';
+      }
+    }
+
+    function closeMobileMenu() {
+      document.getElementById('mobile-menu').classList.add('hidden');
+      document.querySelector('#btn-hamburger i').className = 'fas fa-bars';
+    }
+
+    /* ─── XỬ LÝ BIỂU MẪU LIÊN HỆ & KIỂM TRA LỖI (CONTACT FORM VALIDATION) ─── */
+    function handleContactSubmit(event) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const phone = form.phone.value.trim();
+      const message = form.message.value.trim();
+      
+      let isValid = true;
+
+      // 1. Kiểm tra Tên
+      const errorName = document.getElementById('error-name');
+      if (!name) {
+        errorName.textContent = t('validation.nameRequired');
+        errorName.classList.remove('hidden');
+        isValid = false;
+      } else if (name.length < 2) {
+        errorName.textContent = t('validation.nameMin');
+        errorName.classList.remove('hidden');
+        isValid = false;
+      } else {
+        errorName.classList.add('hidden');
+      }
+
+      // 2. Kiểm tra Email
+      const errorEmail = document.getElementById('error-email');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email) {
+        errorEmail.textContent = t('validation.emailRequired');
+        errorEmail.classList.remove('hidden');
+        isValid = false;
+      } else if (!emailRegex.test(email)) {
+        errorEmail.textContent = t('validation.emailInvalid');
+        errorEmail.classList.remove('hidden');
+        isValid = false;
+      } else {
+        errorEmail.classList.add('hidden');
+      }
+
+      // 3. Kiểm tra Số điện thoại
+      const errorPhone = document.getElementById('error-phone');
+      const phoneRegex = /^[0-9]+$/;
+      if (!phone) {
+        errorPhone.textContent = t('validation.phoneRequired');
+        errorPhone.classList.remove('hidden');
+        isValid = false;
+      } else if (!phoneRegex.test(phone)) {
+        errorPhone.textContent = t('validation.phoneInvalid');
+        errorPhone.classList.remove('hidden');
+        isValid = false;
+      } else if (phone.length < 10) {
+        errorPhone.textContent = t('validation.phoneMin');
+        errorPhone.classList.remove('hidden');
+        isValid = false;
+      } else {
+        errorPhone.classList.add('hidden');
+      }
+
+      // 4. Kiểm tra Tin nhắn
+      const errorMessage = document.getElementById('error-message');
+      if (!message) {
+        errorMessage.textContent = t('validation.messageRequired');
+        errorMessage.classList.remove('hidden');
+        isValid = false;
+      } else if (message.length < 10) {
+        errorMessage.textContent = t('validation.messageMin');
+        errorMessage.classList.remove('hidden');
+        isValid = false;
+      } else {
+        errorMessage.classList.add('hidden');
+      }
+
+      if (!isValid) return;
+
+      // Hiệu ứng gửi tin nhắn thành công
+      const submitBtn = document.getElementById('btn-contact-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = t('contact.sending');
+
+      setTimeout(() => {
+        // Bắn pháo hoa Confetti chúc mừng
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+
+        // Báo thành công bằng SweetAlert2
+        Swal.fire({
+          title: '🎉 Send Success!',
+          text: t('contact.successMessage'),
+          icon: 'success',
+          background: currentTheme === 'dark' ? 'rgba(24, 24, 24, 0.95)' : '#ffffff',
+          color: currentTheme === 'dark' ? '#f5f5f5' : '#222222',
+          confirmButtonColor: '#007bff'
+        });
+
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.textContent = t('contact.send');
+      }, 1500);
+    }
+
+    /* ─── SCROLL REVEAL ANIMATIONS (INTERSECTION OBSERVER) ─── */
+    function initScrollReveal() {
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            
+            // Scramble title text when entering viewport
+            const titleSpan = entry.target.querySelector('span[id^="label-"]');
+            if (titleSpan) {
+              setTimeout(() => {
+                scrambleText(titleSpan, titleSpan.innerText);
+              }, 150);
+            }
+            
+            // Nếu là mục skills-grid, kích hoạt thêm hiệu ứng xuất hiện tuần tự cho các thẻ con
+            if (entry.target.id === 'skills') {
+              const cards = entry.target.querySelectorAll('.skill-card');
+              cards.forEach((card, idx) => {
+                setTimeout(() => {
+                  card.classList.remove('opacity-0', 'translate-y-[30px]');
+                }, idx * 100);
+              });
+            }
+
+            // Kinh nghiệm làm việc xuất hiện tuần tự
+            if (entry.target.id === 'workExp') {
+              const cards = entry.target.querySelectorAll('.work-card');
+              cards.forEach((card, idx) => {
+                setTimeout(() => {
+                  card.classList.remove('opacity-0', 'translate-y-[30px]');
+                }, idx * 200);
+              });
+            }
+
+            // Chứng chỉ
+            if (entry.target.id === 'certificates') {
+              const cards = entry.target.querySelectorAll('.certificate-card');
+              cards.forEach((card, idx) => {
+                setTimeout(() => {
+                  card.classList.remove('opacity-0', 'translate-y-[30px]');
+                }, idx * 200);
+              });
+            }
+
+            // Dự án
+            if (entry.target.id === 'projects') {
+              const cards = entry.target.querySelectorAll('.project-card');
+              cards.forEach((card, idx) => {
+                setTimeout(() => {
+                  card.classList.remove('opacity-0', 'translate-y-[30px]');
+                }, idx * 150);
+              });
+            }
+
+            observer.unobserve(entry.target); // Ngừng theo dõi khi đã xuất hiện
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.reveal-item').forEach((item) => {
+        observer.observe(item);
+      });
+    }
+
+    // Shrink navbar and track active section on scroll
+    let activeSectionName = 'home';
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 40) {
+        nav.classList.add('h-[60px]', 'shadow-md');
+        nav.classList.remove('h-[70px]');
+      } else {
+        nav.classList.add('h-[70px]');
+        nav.classList.remove('h-[60px]', 'shadow-md');
+      }
+
+      // Track active section for background wave color shifting
+      const scrollPos = window.scrollY + 250;
+      const sections = ['home', 'about', 'workExp', 'skills', 'certificates', 'projects', 'contact'];
+      for (const sect of sections) {
+        const el = document.getElementById(sect);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            activeSectionName = sect;
+            break;
+          }
+        }
+      }
+    });
+
+    /* ─── KHỞI CHẠY HỆ THỐNG KHI LOAD TRANG ─── */
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      updateLanguageUI();
+      initCodeSymbols();
+      initBinaryRain();
+      renderSkills();
+      initScrollReveal();
+      
+      // Initialize Three.js 3D Background
+      initThreeJS();
+      animateThree();
+
+      // Initialize 3D Hero Visual Box (Torus Knot)
+      initHeroThree();
+      animateHeroThree();
+      
+      // Initialize 3D Card Tilt
+      init3DTilt();
+
+      // Initialize Interactive Particle Cursor Trail
+      initCursorTrail();
+
+      // Initialize Magnetic Hover Buttons
+      initMagneticButtons();
+    });
+
+    /* ─── DYNAMIC 3D THREE.JS UNDULATING TERRAIN GRID WAVE ─── */
+    let ripples = [];
+    const sectionColors = {
+      home: { c1: '#3b82f6', c2: '#10b981' },
+      about: { c1: '#10b981', c2: '#06b6d4' },
+      workExp: { c1: '#06b6d4', c2: '#6366f1' },
+      skills: { c1: '#6366f1', c2: '#a855f7' },
+      certificates: { c1: '#a855f7', c2: '#ec4899' },
+      projects: { c1: '#ec4899', c2: '#f43f5e' },
+      contact: { c1: '#f43f5e', c2: '#3b82f6' }
+    };
+    let currentC1 = new THREE.Color('#3b82f6');
+    let currentC2 = new THREE.Color('#10b981');
+
+    let scene, camera, renderer, terrainMesh, terrainPoints, starField;
+    let targetX = 0, targetY = 0;
+    let windowHalfX = window.innerWidth / 2;
+    let windowHalfY = window.innerHeight / 2;
+
+    function initThreeJS() {
+      const container = document.getElementById('three-bg-container');
+      if (!container) return;
+
+      scene = new THREE.Scene();
+      
+      // Perspective camera looking slightly downwards at the wave landscape
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 4000);
+      camera.position.set(0, 450, 1100);
+
+      const isMobile = window.innerWidth < 768;
+      const gridSegments = isMobile ? 30 : 65;
+      const gridWidth = 3200;
+      const gridDepth = 3200;
+
+      // PlaneGeometry placed horizontally
+      const geometry = new THREE.PlaneGeometry(gridWidth, gridDepth, gridSegments, gridSegments);
+      geometry.rotateX(-Math.PI / 2);
+
+      // Add color attribute to plane geometry
+      const positionAttribute = geometry.attributes.position;
+      const colors = [];
+      const color1 = new THREE.Color('#3b82f6'); // Electric Blue
+      
+      for (let i = 0; i < positionAttribute.count; i++) {
+        colors.push(color1.r, color1.g, color1.b);
+      }
+      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+      // Wireframe Grid Mesh
+      const meshMaterial = new THREE.MeshBasicMaterial({
+        color: 0x3b82f6,
+        wireframe: true,
+        transparent: true,
+        opacity: currentTheme === 'dark' ? 0.15 : 0.08,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      terrainMesh = new THREE.Mesh(geometry, meshMaterial);
+      scene.add(terrainMesh);
+
+      // Glowing Point Intersections
+      const canvas = document.createElement('canvas');
+      canvas.width = 16;
+      canvas.height = 16;
+      const ctx = canvas.getContext('2d');
+      const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+      gradient.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 16, 16);
+      const texture = new THREE.CanvasTexture(canvas);
+
+      const pointsMaterial = new THREE.PointsMaterial({
+        size: isMobile ? 10 : 7,
+        map: texture,
+        vertexColors: true,
+        transparent: true,
+        opacity: currentTheme === 'dark' ? 0.85 : 0.35,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      terrainPoints = new THREE.Points(geometry, pointsMaterial);
+      scene.add(terrainPoints);
+
+      // Space Starfield Backdrop
+      const starsGeometry = new THREE.BufferGeometry();
+      const starsCount = 200;
+      const starPositions = new Float32Array(starsCount * 3);
+      for (let i = 0; i < starsCount * 3; i += 3) {
+        starPositions[i] = (Math.random() - 0.5) * 3200;
+        starPositions[i + 1] = Math.random() * 500 - 50;
+        starPositions[i + 2] = (Math.random() - 0.5) * 3200;
+      }
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+      
+      const starCanvas = document.createElement('canvas');
+      starCanvas.width = 16;
+      starCanvas.height = 16;
+      const starCtx = starCanvas.getContext('2d');
+      const starGrad = starCtx.createRadialGradient(8, 8, 0, 8, 8, 8);
+      starGrad.addColorStop(0, 'rgba(255,255,255,1)');
+      starGrad.addColorStop(0.3, 'rgba(255,255,255,0.7)');
+      starGrad.addColorStop(1, 'rgba(255,255,255,0)');
+      starCtx.fillStyle = starGrad;
+      starCtx.fillRect(0, 0, 16, 16);
+      const starTexture = new THREE.CanvasTexture(starCanvas);
+
+      const starsMaterial = new THREE.PointsMaterial({
+        size: isMobile ? 6 : 9,
+        map: starTexture,
+        transparent: true,
+        opacity: currentTheme === 'dark' ? 0.6 : 0.25,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      starField = new THREE.Points(starsGeometry, starsMaterial);
+      scene.add(starField);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      container.appendChild(renderer.domElement);
+
+      document.addEventListener('mousemove', onThreeMouseMove);
+      window.addEventListener('resize', onThreeWindowResize);
+
+      // Click event for interactive wave ripples
+      window.addEventListener('click', (e) => {
+        // Play click sound
+        playPulse();
+        
+        // Map page click position to grid world space coordinates
+        const worldX = ((e.clientX / window.innerWidth) - 0.5) * 2600;
+        const worldZ = ((e.clientY / window.innerHeight) - 0.5) * 2600;
+        
+        ripples.push({
+          x: worldX,
+          z: worldZ,
+          startTime: performance.now() * 0.001,
+          maxRadius: 1000,
+          speed: 480, // units per second
+          amplitude: 70
+        });
+        
+        if (ripples.length > 5) ripples.shift();
+      });
+    }
+
+    function onThreeMouseMove(event) {
+      targetX = (event.clientX - windowHalfX) * 0.15;
+      targetY = (event.clientY - windowHalfY) * 0.15;
+    }
+
+    function onThreeWindowResize() {
+      windowHalfX = window.innerWidth / 2;
+      windowHalfY = window.innerHeight / 2;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    let lastTime = 0;
+    const colorLerpTarget = new THREE.Color();
+
+    function animateThree(time = 0) {
+      requestAnimationFrame(animateThree);
+      
+      const delta = time - lastTime;
+      const speedMultiplier = lastTime === 0 ? 1 : Math.min(delta / 16.67, 4);
+      lastTime = time;
+
+      const timeSec = time * 0.0012;
+
+      // Color interpolation based on activeSectionName
+      const targetColors = sectionColors[activeSectionName] || sectionColors.home;
+      const tColor1 = new THREE.Color(targetColors.c1);
+      const tColor2 = new THREE.Color(targetColors.c2);
+      
+      currentC1.lerp(tColor1, 0.025 * speedMultiplier);
+      currentC2.lerp(tColor2, 0.025 * speedMultiplier);
+
+      // Update terrain mesh/points material color dynamically
+      if (terrainMesh && terrainPoints) {
+        terrainMesh.material.color.copy(currentC1);
+        terrainPoints.material.color.copy(currentC2);
+      }
+
+      if (terrainMesh && terrainPoints) {
+        const geometry = terrainMesh.geometry;
+        const positionAttribute = geometry.attributes.position;
+        const colorAttribute = geometry.attributes.color;
+
+        // Animate grid heights and apply ripples
+        for (let i = 0; i < positionAttribute.count; i++) {
+          const x = positionAttribute.getX(i);
+          const z = positionAttribute.getZ(i);
+
+          // Base waves
+          let y = Math.sin(x * 0.0018 + timeSec) * 75 +
+                    Math.cos(z * 0.0018 + timeSec * 0.8) * 75 +
+                    Math.sin((x + z) * 0.0009 + timeSec * 0.5) * 35;
+
+          // Apply click ripples
+          for (let r = 0; r < ripples.length; r++) {
+            const ripple = ripples[r];
+            const age = timeSec - ripple.startTime;
+            const currentRadius = age * ripple.speed;
+            
+            if (currentRadius < ripple.maxRadius) {
+              const dx = x - ripple.x;
+              const dz = z - ripple.z;
+              const dist = Math.sqrt(dx*dx + dz*dz);
+              
+              const distToWavefront = Math.abs(dist - currentRadius);
+              
+              if (distToWavefront < 180) {
+                const decay = Math.max(0, 1 - dist / ripple.maxRadius) * Math.max(0, 1 - age / 2.0);
+                const waveFactor = Math.sin((distToWavefront / 180) * Math.PI) * ripple.amplitude * decay;
+                y += waveFactor;
+              }
+            }
+          }
+
+          positionAttribute.setY(i, y);
+
+          // Dynamically change point colors based on height and current color gradient
+          const ratio = Math.max(0, Math.min(1, (y + 185) / 370));
+          colorLerpTarget.lerpColors(currentC1, currentC2, ratio);
+          colorAttribute.setXYZ(i, colorLerpTarget.r, colorLerpTarget.g, colorLerpTarget.b);
+        }
+
+        positionAttribute.needsUpdate = true;
+        colorAttribute.needsUpdate = true;
+
+        // Theme adjustments
+        if (currentTheme === 'dark') {
+          terrainMesh.material.opacity = 0.15;
+          terrainPoints.material.opacity = 0.85;
+        } else {
+          terrainMesh.material.opacity = 0.08;
+          terrainPoints.material.opacity = 0.35;
+        }
+      }
+
+      if (starField) {
+        starField.rotation.y = timeSec * 0.012;
+        if (currentTheme === 'dark') {
+          starField.material.opacity = 0.6;
+        } else {
+          starField.material.opacity = 0.25;
+        }
+      }
+
+      // Parallax effect on camera
+      const targetCamX = targetX * 1.8;
+      const targetCamY = 450 - targetY * 1.8;
+      
+      camera.position.x += (targetCamX - camera.position.x) * 0.05 * speedMultiplier;
+      camera.position.y += (targetCamY - camera.position.y) * 0.05 * speedMultiplier;
+      camera.lookAt(new THREE.Vector3(0, -80, 0));
+
+      renderer.render(scene, camera);
+    }
+
+    /* ─── DYNAMIC 3D HERO VISUAL BOX (Torus Knot Morphing Mesh) ─── */
+    let heroScene, heroCamera, heroRenderer, heroMesh, heroPoints;
+    let heroRing1, heroRing2;
+    let heroTargetSpeed = 0.005;
+    let heroCurrentSpeed = 0.005;
+    let heroTargetGlow = 1.5;
+    let heroCurrentGlow = 1.5;
+    let heroMouseX = 0, heroMouseY = 0;
+    let heroTargetMouseX = 0, heroTargetMouseY = 0;
+    let heroHoverVal = 0.0, heroHoverTarget = 0.0;
+
+    // GLSL Shader Code
+    const heroVertexShader = `
+      uniform float uTime;
+      uniform float uNoiseStrength;
+      uniform float uHover;
+      varying vec3 vNormal;
+      varying vec3 vPosition;
+      varying float vNoise;
+
+      // GLSL Simplex 3D Noise code
+      vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+      vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+      vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+      vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+      
+      float snoise(vec3 v) {
+        const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+        const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+        vec3 i  = floor(v + dot(v, C.yyy));
+        vec3 x0 = v - i + dot(i, C.xxx);
+        vec3 g = step(x0.yzx, x0.xyz);
+        vec3 l = 1.0 - g;
+        vec3 i1 = min(g.xyz, l.zxy);
+        vec3 i2 = max(g.xyz, l.zxy);
+        vec3 x1 = x0 - i1 + C.xxx;
+        vec3 x2 = x0 - i2 + C.yyy;
+        vec3 x3 = x0 - D.yyy;
+        i = mod289(i);
+        vec4 p = permute(permute(permute(
+                   i.z + vec4(0.0, i1.z, i2.z, 1.0))
+                 + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+                 + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+        float n_ = 0.142857142857;
+        vec3 ns = n_ * D.wyz - D.xzx;
+        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+        vec4 x_ = floor(j * ns.z);
+        vec4 y_ = floor(j - 7.0 * x_);
+        vec4 x = x_ *ns.x + ns.yyyy;
+        vec4 y = y_ *ns.x + ns.yyyy;
+        vec4 h = 1.0 - abs(x) - abs(y);
+        vec4 b0 = vec4(x.xy, y.xy);
+        vec4 b1 = vec4(x.zw, y.zw);
+        vec4 s0 = floor(b0)*2.0 + 1.0;
+        vec4 s1 = floor(b1)*2.0 + 1.0;
+        vec4 sh = -step(h, vec4(0.0));
+        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+        vec3 p0 = vec3(a0.xy, h.x);
+        vec3 p1 = vec3(a0.zw, h.y);
+        vec3 p2 = vec3(a1.xy, h.z);
+        vec3 p3 = vec3(a1.zw, h.w);
+        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+        p0 *= norm.x;
+        p1 *= norm.y;
+        p2 *= norm.z;
+        p3 *= norm.w;
+        vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+        m = m * m;
+        return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+      }
+
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vPosition = position;
+        
+        // Deform geometry coordinates
+        vec3 noisePos = position * 0.12 + vec3(0.0, 0.0, uTime * 0.6);
+        float noise = snoise(noisePos);
+        vNoise = noise;
+        
+        float strength = uNoiseStrength + uHover * 1.5;
+        vec3 displacedPosition = position + normal * noise * strength;
+        
+        vec4 modelViewPosition = modelViewMatrix * vec4(displacedPosition, 1.0);
+        gl_Position = projectionMatrix * modelViewPosition;
+      }
+    `;
+
+    const heroFragmentShader = `
+      uniform float uTime;
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform float uGlowIntensity;
+      uniform float uHover;
+      varying vec3 vNormal;
+      varying vec3 vPosition;
+      varying float vNoise;
+
+      void main() {
+        vec3 viewDirection = normalize(vec3(0.0, 0.0, 1.0));
+        float fresnel = pow(1.0 - max(dot(vNormal, viewDirection), 0.0), 3.0);
+        
+        float mixFactor = (vNoise + 1.0) * 0.5;
+        vec3 baseColor = mix(uColor1, uColor2, mixFactor);
+        
+        float pulse = sin(uTime * 2.5) * 0.08 + 0.92;
+        float glow = uGlowIntensity + uHover * 2.0;
+        vec3 finalColor = baseColor + (baseColor * fresnel * glow * pulse);
+        
+        float alpha = 0.18 + fresnel * 0.65 + uHover * 0.15;
+        gl_FragColor = vec4(finalColor, alpha);
+      }
+    `;
+
+    const heroPointsFragmentShader = `
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform float uHover;
+      varying float vNoise;
+
+      void main() {
+        vec2 coord = gl_PointCoord - vec2(0.5);
+        float dist = length(coord);
+        if (dist > 0.5) discard;
+        
+        float alpha = smoothstep(0.5, 0.0, dist);
+        float mixFactor = (vNoise + 1.0) * 0.5;
+        vec3 baseColor = mix(uColor1, uColor2, mixFactor);
+        
+        vec3 finalColor = baseColor * (1.6 + uHover * 2.2);
+        gl_FragColor = vec4(finalColor, alpha * (0.8 + uHover * 0.2));
+      }
+    `;
+
+    let heroUniforms = {
+      uTime: { value: 0 },
+      uNoiseStrength: { value: 0.6 },
+      uColor1: { value: new THREE.Color('#3b82f6') },
+      uColor2: { value: new THREE.Color('#10b981') },
+      uGlowIntensity: { value: 2.5 },
+      uHover: { value: 0.0 }
+    };
+
+    function initHeroThree() {
+      const container = document.getElementById('hero-three-container');
+      const box = document.getElementById('hero-3d-box');
+      if (!container || !box) return;
+
+      const width = container.clientWidth || 350;
+      const height = container.clientHeight || 220;
+
+      heroScene = new THREE.Scene();
+      heroCamera = new THREE.PerspectiveCamera(40, width / height, 1, 1000);
+      heroCamera.position.z = 35;
+
+      // Create Torus Knot Geometry (with higher resolution segments)
+      const geometry = new THREE.TorusKnotGeometry(7.5, 2.3, 140, 18, 2, 3);
+
+      // Shader Material for Mesh
+      const meshMaterial = new THREE.ShaderMaterial({
+        vertexShader: heroVertexShader,
+        fragmentShader: heroFragmentShader,
+        uniforms: heroUniforms,
+        wireframe: true,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      heroMesh = new THREE.Mesh(geometry, meshMaterial);
+      heroScene.add(heroMesh);
+
+      // Shader Material for Points
+      const pointsMaterial = new THREE.ShaderMaterial({
+        vertexShader: heroVertexShader,
+        fragmentShader: heroPointsFragmentShader,
+        uniforms: heroUniforms,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      heroPoints = new THREE.Points(geometry, pointsMaterial);
+      heroScene.add(heroPoints);
+
+      // Gyroscope Rings
+      const ring1Geo = new THREE.RingGeometry(13, 13.15, 64);
+      const ring1Mat = new THREE.MeshBasicMaterial({
+        color: 0x3b82f6,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: currentTheme === 'dark' ? 0.3 : 0.15,
+        blending: THREE.AdditiveBlending
+      });
+      heroRing1 = new THREE.Mesh(ring1Geo, ring1Mat);
+      heroRing1.rotation.x = Math.PI / 2;
+      heroScene.add(heroRing1);
+
+      const ring2Geo = new THREE.RingGeometry(11, 11.15, 64);
+      const ring2Mat = new THREE.MeshBasicMaterial({
+        color: 0x10b981,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: currentTheme === 'dark' ? 0.25 : 0.12,
+        blending: THREE.AdditiveBlending
+      });
+      heroRing2 = new THREE.Mesh(ring2Geo, ring2Mat);
+      heroRing2.rotation.y = Math.PI / 4;
+      heroScene.add(heroRing2);
+
+      heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      heroRenderer.setSize(width, height);
+      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(heroRenderer.domElement);
+
+      // Hover and mousemove
+      box.addEventListener('mouseenter', () => {
+        heroTargetSpeed = 0.018;
+        heroTargetGlow = 3.5;
+        heroHoverTarget = 1.0;
+      });
+
+      box.addEventListener('mouseleave', () => {
+        heroTargetSpeed = 0.005;
+        heroTargetGlow = 1.5;
+        heroHoverTarget = 0.0;
+        heroTargetMouseX = 0;
+        heroTargetMouseY = 0;
+      });
+
+      box.addEventListener('mousemove', (e) => {
+        const rect = box.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        heroTargetMouseX = (x / rect.width) * 2 - 1;
+        heroTargetMouseY = (y / rect.height) * -2 + 1;
+      });
+
+      // Resize event
+      window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        heroCamera.aspect = w / h;
+        heroCamera.updateProjectionMatrix();
+        heroRenderer.setSize(w, h);
+      });
+
+      // Status HUD log rotator
+      const hudStatuses = [
+        "SYS.CORE // ACTIVE",
+        "GEOM: TORUS_KNOT",
+        "NOISE: SIMPLEX_3D",
+        "RENDER: WebGL 2.0",
+        "CORE_TEMP: 32°C // OK",
+        "SHADERS: GLSL 3.0",
+        "FPS: 60.0 // AUTO",
+        "HUD-3D // STATUS_OK"
+      ];
+      let hudIndex = 0;
+      setInterval(() => {
+        const el = document.getElementById('hero-hud-status');
+        if (el) {
+          hudIndex = (hudIndex + 1) % hudStatuses.length;
+          el.textContent = hudStatuses[hudIndex];
+        }
+      }, 3000);
+    }
+
+    function animateHeroThree(time = 0) {
+      requestAnimationFrame(animateHeroThree);
+
+      const timeSec = time * 0.001;
+
+      if (heroMesh && heroPoints) {
+        // Interpolate rotation speed, hover intensity, and mouse position
+        heroCurrentSpeed += (heroTargetSpeed - heroCurrentSpeed) * 0.08;
+        heroHoverVal += (heroHoverTarget - heroHoverVal) * 0.08;
+        heroMouseX += (heroTargetMouseX - heroMouseX) * 0.1;
+        heroMouseY += (heroTargetMouseY - heroMouseY) * 0.1;
+
+        // Update uniforms
+        heroUniforms.uTime.value = timeSec;
+        heroUniforms.uHover.value = heroHoverVal;
+
+        // Base rotation
+        heroMesh.rotation.y += heroCurrentSpeed;
+        heroMesh.rotation.x += heroCurrentSpeed * 0.5;
+        heroPoints.rotation.copy(heroMesh.rotation);
+
+        // Gyro rings rotation & mouse response
+        if (heroRing1) {
+          heroRing1.rotation.z += 0.006;
+          heroRing1.rotation.x = Math.PI / 2 + heroMouseY * 0.35;
+          heroRing1.rotation.y = heroMouseX * 0.35;
+        }
+        if (heroRing2) {
+          heroRing2.rotation.z -= 0.008;
+          heroRing2.rotation.x = heroMouseY * 0.25;
+          heroRing2.rotation.y = Math.PI / 4 + heroMouseX * 0.25;
+        }
+
+        // Camera tilt response
+        heroCamera.position.x += (heroMouseX * 4 - heroCamera.position.x) * 0.1;
+        heroCamera.position.y += (heroMouseY * 4 - heroCamera.position.y) * 0.1;
+        heroCamera.lookAt(0, 0, 0);
+
+        // Theme adjustments
+        if (currentTheme === 'dark') {
+          heroUniforms.uColor1.value.setHex(0x3b82f6); // neon blue
+          heroUniforms.uColor2.value.setHex(0x10b981); // neon green
+          if (heroRing1 && heroRing2) {
+            heroRing1.material.opacity = 0.3;
+            heroRing2.material.opacity = 0.25;
+          }
+        } else {
+          heroUniforms.uColor1.value.setHex(0x1d4ed8); // darker blue
+          heroUniforms.uColor2.value.setHex(0x059669); // darker green
+          if (heroRing1 && heroRing2) {
+            heroRing1.material.opacity = 0.15;
+            heroRing2.material.opacity = 0.12;
+          }
+        }
+      }
+
+      if (heroRenderer && heroScene && heroCamera) {
+        heroRenderer.render(heroScene, heroCamera);
+      }
+    }
+
+    /* ─── INTERACTIVE 3D PARALLAX TILT ─── */
+    function init3DTilt() {
+      const cards = document.querySelectorAll('.skill-card, .work-card, .certificate-card, .project-card, .avatar-container, .visual-code-box');
+      
+      cards.forEach(card => {
+        if (card.dataset.tiltInitialized) return;
+        card.dataset.tiltInitialized = 'true';
+
+        const parent = card.parentElement;
+        if (parent) {
+          parent.style.perspective = '1200px';
+        }
+        
+        card.style.transformStyle = 'preserve-3d';
+        card.style.willChange = 'transform';
+        
+        let glare = card.querySelector('.card-glare');
+        if (!glare) {
+          glare = document.createElement('div');
+          glare.className = 'card-glare';
+          glare.style.position = 'absolute';
+          glare.style.inset = '0';
+          glare.style.pointerEvents = 'none';
+          glare.style.opacity = '0';
+          glare.style.transition = 'opacity 0.3s ease';
+          glare.style.zIndex = '10';
+          glare.style.mixBlendMode = 'overlay';
+          glare.style.borderRadius = 'inherit';
+          card.appendChild(glare);
+        }
+
+        let rect = card.getBoundingClientRect();
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        let isHovered = false;
+        let animFrameId = null;
+
+        function updateCardPosition() {
+          if (!isHovered) {
+            currentX += (0 - currentX) * 0.1;
+            currentY += (0 - currentY) * 0.1;
+            
+            let glareOpacity = parseFloat(glare.style.opacity) || 0;
+            glareOpacity += (0 - glareOpacity) * 0.1;
+            glare.style.opacity = glareOpacity;
+            
+            if (Math.abs(currentX) < 0.01 && Math.abs(currentY) < 0.01) {
+              card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+              glare.style.opacity = '0';
+              animFrameId = null;
+              return;
+            }
+          } else {
+            currentX += (targetX - currentX) * 0.12;
+            currentY += (targetY - currentY) * 0.12;
+            glare.style.opacity = '1';
+          }
+
+          card.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg) scale3d(1.02, 1.02, 1.02)`;
+          animFrameId = requestAnimationFrame(updateCardPosition);
+        }
+
+        card.addEventListener('mouseenter', () => {
+          isHovered = true;
+          playTick();
+          rect = card.getBoundingClientRect();
+          if (!animFrameId) {
+            animFrameId = requestAnimationFrame(updateCardPosition);
+          }
+        });
+
+        card.addEventListener('mousemove', (e) => {
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const w = rect.width;
+          const h = rect.height;
+          
+          targetY = ((x / w) - 0.5) * 16; 
+          targetX = (0.5 - (y / h)) * 16;
+          
+          const glareX = (x / w) * 100;
+          const glareY = (y / h) * 100;
+          glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+
+          // Dynamic Vercel Card Border Glow coordinates
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          isHovered = false;
+        });
+
+        window.addEventListener('resize', () => { rect = card.getBoundingClientRect(); });
+        window.addEventListener('scroll', () => { rect = card.getBoundingClientRect(); });
+      });
+    }
+
+    /* ─── TACTILE ELASTIC MAGNETIC HOVER BUTTONS ─── */
+    function initMagneticButtons() {
+      // Targets CTA buttons, theme/audio togglers, and navigation links
+      const targets = document.querySelectorAll('#btn-hero-projects, #btn-hero-contact, #btn-theme, #btn-audio, .nav-link-item, #btn-hamburger');
+      
+      targets.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          // Pull the element towards the mouse by 35% of the distance
+          el.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px) scale(1.05)`;
+          el.style.transition = 'none';
+          el.style.boxShadow = '0 10px 30px rgba(59, 130, 246, 0.2)';
+        });
+        
+        el.addEventListener('mouseenter', () => {
+          playTick();
+        });
+        
+        el.addEventListener('click', () => {
+          playPulse();
+        });
+        
+        el.addEventListener('mouseleave', () => {
+          // Snap back smoothly
+          el.style.transform = 'translate(0px, 0px) scale(1)';
+          el.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease';
+          el.style.boxShadow = '';
+        });
+      });
+
+      // Bind link text scramble on hover for all nav link items
+      document.querySelectorAll('.nav-link-item').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          scrambleText(el, el.innerText);
+        });
+      });
+    }
+
+    /* ─── INTERACTIVE PARTICLE CURSOR TRAIL ─── */
+    function initCursorTrail() {
+      if (window.innerWidth < 768) return; // Disable on mobile devices for battery saving
+      
+      const canvas = document.getElementById('cursor-trail-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let trailParticles = [];
+      const codeSymbols = ["{", "}", "<", ">", "++", "[]", "const", "0", "1", "=>", "()", ";"];
+      let mouse = { x: null, y: null };
+      
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+
+        // Spawn glowing code particles on mouse movements
+        for (let i = 0; i < 2; i++) {
+          trailParticles.push({
+            x: e.clientX,
+            y: e.clientY,
+            text: codeSymbols[Math.floor(Math.random() * codeSymbols.length)],
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5 - 0.4, // float upwards
+            size: Math.floor(Math.random() * 5) + 10, // Font size 10px to 15px
+            color: Math.random() > 0.5 ? '#3b82f6' : '#10b981', // electric blue or emerald green
+            alpha: 1.0,
+            decay: Math.random() * 0.015 + 0.012,
+            angle: Math.random() * Math.PI * 2,
+            angularVelocity: (Math.random() - 0.5) * 0.06
+          });
+        }
+      });
+
+      window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Draw connecting web lines (Constellation Effect)
+        for (let i = 0; i < trailParticles.length; i++) {
+          const p1 = trailParticles[i];
+          
+          // Connection to mouse cursor
+          if (mouse.x !== null && mouse.y !== null) {
+            const dx = p1.x - mouse.x;
+            const dy = p1.y - mouse.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = p1.color;
+              ctx.globalAlpha = (1 - dist / 100) * p1.alpha * 0.28;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+
+          // Connections between nearby particles
+          for (let j = i + 1; j < trailParticles.length; j++) {
+            const p2 = trailParticles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 80) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = p1.color;
+              ctx.globalAlpha = (1 - dist / 80) * Math.min(p1.alpha, p2.alpha) * 0.22;
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
+          }
+        }
+        
+        // 2. Update and draw code character particles
+        for (let i = trailParticles.length - 1; i >= 0; i--) {
+          const p = trailParticles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.angle += p.angularVelocity;
+          p.alpha -= p.decay;
+          
+          if (p.alpha <= 0) {
+            trailParticles.splice(i, 1);
+            continue;
+          }
+          
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = p.color;
+          ctx.font = `bold ${p.size}px Fira Code, monospace`;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillText(p.text, -p.size/2, p.size/2);
+          ctx.restore();
+        }
+      }
+      animate();
+    }
+  </script>
+</body>
+</html>
