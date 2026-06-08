@@ -4,3 +4,9 @@
 *.db
 .beads-credential-key
 .beads/proxieddb/
+
+# Agent & GSD directories
+.agent/
+.gemini/
+.agents/
+get-shit-done/
