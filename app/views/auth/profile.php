@@ -32,7 +32,7 @@
         <?php if (empty($orders)): ?>
             <div style="text-align: center; padding: 5rem 0; background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border);">
                 <i class="fa-solid fa-cart-shopping" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 2rem;"></i>
-                <h4 style="color: var(--text-muted); margin: 0;">Bạn chưa đặt đơn hàng nào tại TechStore.</h4>
+                <h4 style="color: var(--text-muted); margin: 0;">Bạn chưa đặt đơn hàng nào tại GEARVN.</h4>
                 <a href="index.php" class="btn btn-primary" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 2rem;">Mua sắm ngay</a>
             </div>
         <?php else: ?>
@@ -148,7 +148,7 @@
                             <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.5rem;">
                                 <?php foreach ($order['items'] as $item): ?>
                                     <li style="display: flex; gap: 1.5rem; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 1.5rem;">
-                                        <img src="<?= !empty($item['image']) ? htmlspecialchars($item['image']) : 'https://placehold.co/600x400/1e293b/white?text=TechStore' ?>" alt="" style="width: 60px; height: 60px; object-fit: contain; background: white; border-radius: 6px; padding: 2px;">
+                                        <img src="<?= !empty($item['image']) ? htmlspecialchars($item['image']) : 'https://placehold.co/600x400/1e293b/white?text=GEARVN' ?>" alt="" style="width: 60px; height: 60px; object-fit: contain; background: white; border-radius: 6px; padding: 2px;">
                                         <div style="flex: 1;">
                                             <h4 style="margin: 0; color: white; font-size: 1.05rem; font-weight: 600;"><?= htmlspecialchars($item['product_name']) ?></h4>
                                             <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Số lượng: <?= $item['quantity'] ?> &times; <?= number_format($item['price'], 0, ',', '.') ?> ₫</div>

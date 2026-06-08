@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm danh mục - TechStore</title>
+    <title>Thêm danh mục - GEARVN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="public/css/style.css">
@@ -12,7 +12,7 @@
 
 <aside class="admin-sidebar">
     <div class="admin-sidebar-header">
-        <i class="fa-solid fa-bolt" style="color: var(--primary-light);"></i> TechStore Admin
+        <i class="fa-solid fa-gamepad" style="color: var(--primary-light);"></i> GEARVN Admin
     </div>
     <nav class="admin-nav">
         <a href="index.php?url=admin"><i class="fa-solid fa-gauge"></i> Dashboard</a>

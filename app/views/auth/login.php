@@ -4,7 +4,7 @@
     <div style="text-align: center; margin-bottom: 2.5rem;">
         <i class="fa-solid fa-lock" style="font-size: 2.5rem; color: var(--primary-light); margin-bottom: 1rem;"></i>
         <h1 style="margin-bottom: 0.5rem;">Đăng nhập</h1>
-        <p style="color: var(--text-muted);">Chào mừng bạn quay lại TechStore</p>
+        <p style="color: var(--text-muted);">Chào mừng bạn quay lại GEARVN</p>
     </div>
 
     <?php if (isset($error)): ?>

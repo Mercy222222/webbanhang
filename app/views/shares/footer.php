@@ -5,10 +5,10 @@
         <div class="footer-grid">
             <div>
                 <a href="index.php" class="logo" style="margin-bottom: 1.5rem;">
-                    <i class="fa-solid fa-bolt"></i> TECHSTORE
+                    <i class="fa-solid fa-gamepad"></i> GEARVN
                 </a>
                 <p style="color: var(--text-muted); font-size: 0.9rem;">
-                    TechStore là cửa hàng bán lẻ các sản phẩm công nghệ uy tín hàng đầu. Chúng tôi cung cấp những cái tên mới nhất trong thế giới Smartphone, Laptop và Phụ kiện.
+                    GEARVN là hệ thống cửa hàng Hi-End Gaming Gear & Laptop hàng đầu Việt Nam. Chúng tôi cung cấp máy tính chơi game, linh kiện, màn hình và gaming gear chính hãng.
                 </p>
                 <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                     <a href="https://www.facebook.com/HUUTRI.USER" target="_blank" class="btn btn-outline" style="width: 40px; height: 40px; padding: 0; border-radius: 50%;"><i class="fa-brands fa-facebook-f"></i></a>
@@ -41,13 +41,13 @@
                 <ul class="footer-links">
                     <li style="color: var(--text-muted);"><i class="fa-solid fa-location-dot" style="margin-right: 0.5rem; color: var(--primary-light);"></i> 123 Đường Công Nghệ, TP. HCM</li>
                     <li style="color: var(--text-muted);"><i class="fa-solid fa-phone" style="margin-right: 0.5rem; color: var(--primary-light);"></i> 0979 324 949</li>
-                    <li style="color: var(--text-muted);"><i class="fa-solid fa-envelope" style="margin-right: 0.5rem; color: var(--primary-light);"></i> support@techstore.com</li>
+                    <li style="color: var(--text-muted);"><i class="fa-solid fa-envelope" style="margin-right: 0.5rem; color: var(--primary-light);"></i> support@gearvn.com</li>
                 </ul>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2024 TechStore. All rights reserved. Designed with ❤️ by Antigravity.</p>
+            <p>&copy; 2024 GEARVN. All rights reserved. Designed with ❤️ by Antigravity.</p>
         </div>
     </div>
 </footer>

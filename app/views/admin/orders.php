@@ -12,7 +12,7 @@
 
 <aside class="admin-sidebar">
     <div class="admin-sidebar-header">
-        <i class="fa-solid fa-bolt" style="color: var(--primary-light);"></i> TechStore Admin
+        <i class="fa-solid fa-gamepad" style="color: var(--primary-light);"></i> GEARVN Admin
     </div>
     <nav class="admin-nav">
         <a href="index.php?url=admin"><i class="fa-solid fa-gauge"></i> Dashboard</a>

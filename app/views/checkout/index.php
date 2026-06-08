@@ -101,11 +101,11 @@
                             </div>
                             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.05);">
                                 <div>Số tiền thanh toán: <b style="color: var(--secondary); font-size: 1.1rem;"><?= number_format($final_total, 0, ',', '.') ?> ₫</b></div>
-                                <div style="margin-top: 0.5rem; color: var(--primary-light);">Nội dung CK: <b id="bank-memo-text">TS [Số điện thoại của bạn]</b></div>
+                                <div style="margin-top: 0.5rem; color: var(--primary-light);">Nội dung CK: <b id="bank-memo-text">GV [Số điện thoại của bạn]</b></div>
                             </div>
                         </div>
                         <div class="qr-transition-container" style="text-align: center; background: white; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.1); width: 220px; margin: 0 auto;">
-                            <img id="vietqr-img" src="https://img.vietqr.io/image/bidv-0979324949-compact2.png?amount=<?= $final_total ?>&accountName=VO%20HUU%20TRI&addInfo=TS" alt="Mã QR Chuyển khoản" style="width: 100%; aspect-ratio: 1; object-fit: contain; display: block; margin: 0 auto;">
+                            <img id="vietqr-img" src="https://img.vietqr.io/image/bidv-0979324949-compact2.png?amount=<?= $final_total ?>&accountName=VO%20HUU%20TRI&addInfo=GV" alt="Mã QR Chuyển khoản" style="width: 100%; aspect-ratio: 1; object-fit: contain; display: block; margin: 0 auto;">
                             <div style="color: #1e293b; font-size: 0.75rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.25rem;"><i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> Quét mã thanh toán nhanh</div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                             <div>Số điện thoại ví: <b style="color: var(--secondary); font-size: 1.1rem;">0979324949</b></div>
                             <div>Chủ ví: <b>VÕ HỮU TRÍ</b></div>
                             <div style="margin-top: 0.5rem;">Số tiền: <b style="color: var(--secondary); font-size: 1.1rem;"><?= number_format($final_total, 0, ',', '.') ?> ₫</b></div>
-                            <div style="margin-top: 0.5rem; color: var(--primary-light);">Nội dung ghi chú: <b id="wallet-memo-text">TS [Số điện thoại]</b></div>
+                            <div style="margin-top: 0.5rem; color: var(--primary-light);">Nội dung ghi chú: <b id="wallet-memo-text">GV [Số điện thoại]</b></div>
                             <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--secondary);">* Vui lòng chuyển tiền kèm nội dung ghi chú là số điện thoại đặt hàng của bạn.</div>
                         </div>
                         <div class="qr-transition-container" style="text-align: center; background: white; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.1); width: 220px; margin: 0 auto;">
@@ -164,7 +164,7 @@
         <ul style="margin-bottom: 2rem; max-height: 250px; overflow-y: auto;">
             <?php foreach ($checkout_items as $item): ?>
                 <li style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-                    <img src="<?= !empty($item['image']) ? htmlspecialchars($item['image']) : 'https://placehold.co/600x400/1e293b/white?text=TechStore' ?>" alt="" style="width: 50px; height: 50px; object-fit: contain; background: white; border-radius: 5px; padding: 2px;">
+                    <img src="<?= !empty($item['image']) ? htmlspecialchars($item['image']) : 'https://placehold.co/600x400/1e293b/white?text=GEARVN' ?>" alt="" style="width: 50px; height: 50px; object-fit: contain; background: white; border-radius: 5px; padding: 2px;">
                     <div style="flex: 1;">
                         <div style="font-weight: 600; font-size: 0.95rem; color: white; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;"><?= htmlspecialchars($item['name']) ?></div>
                         <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; margin-top: 0.25rem;">
@@ -259,7 +259,7 @@ function updateQrCode() {
     const phone = phoneInput ? phoneInput.value.trim() || '[Số điện thoại]' : '[Số điện thoại]';
     const amount = <?= $final_total ?>;
     const accountName = encodeURIComponent("VO HUU TRI");
-    const addInfo = encodeURIComponent("TS " + phone);
+    const addInfo = encodeURIComponent("GV " + phone);
     
     // Show correct bank details
     document.getElementById('bank-details-bidv').style.display = bank === 'bidv' ? 'block' : 'none';
@@ -267,8 +267,8 @@ function updateQrCode() {
     document.getElementById('bank-details-vietinbank').style.display = bank === 'vietinbank' ? 'block' : 'none';
     
     // Update texts
-    document.getElementById('bank-memo-text').innerText = "TS " + phone;
-    document.getElementById('wallet-memo-text').innerText = "TS " + phone;
+    document.getElementById('bank-memo-text').innerText = "GV " + phone;
+    document.getElementById('wallet-memo-text').innerText = "GV " + phone;
     
     // Update Bank QR image with loading skeleton transition
     const bankQrImg = document.getElementById('vietqr-img');
@@ -293,7 +293,7 @@ function updateQrCode() {
             if (qrContainer) qrContainer.classList.remove('loading');
         };
         
-        const momoUrl = encodeURIComponent(`https://nhantien.momo.vn/0979324949/${amount}?note=TS ${phone}`);
+        const momoUrl = encodeURIComponent(`https://nhantien.momo.vn/0979324949/${amount}?note=GV ${phone}`);
         walletQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${momoUrl}`;
     }
 }

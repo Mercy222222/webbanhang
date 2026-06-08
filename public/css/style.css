@@ -1,25 +1,25 @@
 /* ==========================================================================
-   Premium TechStore Styles
+   Premium GEARVN Styles
    ========================================================================== */
 
 :root {
-    --primary: #6366f1; /* Indigo 500 */
-    --primary-light: #818cf8;
-    --primary-dark: #4f46e5;
-    --secondary: #10b981; /* Emerald 500 */
+    --primary: #e30019; /* GearVN Red */
+    --primary-light: #ff3b4e;
+    --primary-dark: #b50012;
+    --secondary: #ff4d4d; 
     --accent: #f59e0b; /* Amber 500 */
-    --background: #0f172a; /* Slate 900 */
-    --surface: #1e293b; /* Slate 800 */
-    --surface-light: #334155;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --border: rgba(255, 255, 255, 0.1);
+    --background: #0a0a0a; /* Dark background */
+    --surface: #151515; /* Dark grey surface cards */
+    --surface-light: #222222;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --border: rgba(255, 255, 255, 0.08);
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-    --glass: rgba(30, 41, 59, 0.7);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+    --glass: rgba(21, 21, 21, 0.85);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -135,7 +135,7 @@ h1, h2, h3, h4 {
     outline: none;
     background: rgba(255, 255, 255, 0.1);
     border-color: var(--primary-light);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 0 4px rgba(227, 0, 25, 0.2);
 }
 
 .search-bar button {
@@ -239,7 +239,7 @@ h1, h2, h3, h4 {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    background: linear-gradient(135deg, #e30019, #151515);
     color: white;
     border-radius: var(--radius-lg);
     padding: 5rem 3rem;
@@ -305,7 +305,7 @@ h1, h2, h3, h4 {
 .product-card:hover {
     transform: translateY(-8px);
     border-color: var(--primary-light);
-    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.25), 0 10px 10px -5px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(227, 0, 25, 0.25), 0 10px 10px -5px rgba(227, 0, 25, 0.2);
 }
 
 .product-card:hover .product-img {
@@ -372,7 +372,7 @@ h1, h2, h3, h4 {
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 14px rgba(227, 0, 25, 0.4);
     position: relative;
     overflow: hidden;
 }
@@ -403,7 +403,7 @@ h1, h2, h3, h4 {
 .btn-primary:hover {
     background: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 6px 20px rgba(227, 0, 25, 0.5);
 }
 
 .btn-outline {
@@ -553,7 +553,7 @@ h1, h2, h3, h4 {
 }
 
 .admin-nav a:hover, .admin-nav a.active {
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(227, 0, 25, 0.1);
     color: var(--primary-light);
 }
 
@@ -657,9 +657,9 @@ h1, h2, h3, h4 {
 }
 
 @keyframes pulseBadge {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
-    70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(99, 102, 241, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(227, 0, 25, 0.7); }
+    70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(227, 0, 25, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(227, 0, 25, 0); }
 }
 
 @keyframes floatTitle {
@@ -751,7 +751,7 @@ h1, h2, h3, h4 {
     padding: 1.5px;
     background: radial-gradient(
         circle 180px at var(--mouse-x, 0) var(--mouse-y, 0),
-        rgba(99, 102, 241, 0.5),
+        rgba(227, 0, 25, 0.5),
         transparent 80%
     );
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);

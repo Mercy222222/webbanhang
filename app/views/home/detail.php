@@ -6,7 +6,7 @@
 
 <div style="display: flex; gap: 4rem; background: var(--surface); padding: 3rem; border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden;">
     <div class="zoom-img-container" style="flex: 1; padding: 3rem; border: 1px solid var(--border);">
-        <?php $imageUrl = !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=TechStore'; ?>
+        <?php $imageUrl = !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=GEARVN'; ?>
         <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product->name) ?>">
     </div>
     <div style="flex: 1; display: flex; flex-direction: column;">
@@ -52,7 +52,7 @@
             <tbody>
                 <tr>
                     <td style="width: 30%; color: var(--text-muted); font-weight: 600;">Thương hiệu</td>
-                    <td>Chính hãng TechStore</td>
+                    <td>Chính hãng GEARVN</td>
                 </tr>
                 <tr>
                     <td style="color: var(--text-muted); font-weight: 600;">Tình trạng</td>

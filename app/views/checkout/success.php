@@ -5,7 +5,7 @@
         <i class="fa-solid fa-check"></i>
     </div>
     <h1 style="margin-bottom: 1rem;">Đặt hàng thành công!</h1>
-    <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2.5rem;">Cảm ơn bạn đã tin tưởng lựa chọn TechStore. Đơn hàng của bạn đã được ghi nhận và sẽ được xử lý trong thời gian sớm nhất.</p>
+    <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2.5rem;">Cảm ơn bạn đã tin tưởng lựa chọn GEARVN. Đơn hàng của bạn đã được ghi nhận và sẽ được xử lý trong thời gian sớm nhất.</p>
     
     <?php if (isset($payment_method) && ($payment_method == 'bank' || $payment_method == 'wallet')): ?>
         <!-- High prominence warning reminder -->
@@ -14,7 +14,7 @@
             <div>
                 <h4 style="color: white; margin: 0 0 0.5rem 0; font-weight: 700;">⚠️ Nhắc nhở thanh toán chuyển khoản:</h4>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0; line-height: 1.6;">
-                    Hệ thống đã tiếp nhận đơn hàng của bạn ở trạng thái <b>Chờ xử lý</b>. Vui lòng đảm bảo bạn **đã quét mã và hoàn tất chuyển khoản** để nhân viên TechStore có thể kiểm duyệt và xác nhận đơn hàng thành công nhanh nhất.
+                    Hệ thống đã tiếp nhận đơn hàng của bạn ở trạng thái <b>Chờ xử lý</b>. Vui lòng đảm bảo bạn **đã quét mã và hoàn tất chuyển khoản** để nhân viên GEARVN có thể kiểm duyệt và xác nhận đơn hàng thành công nhanh nhất.
                 </p>
             </div>
         </div>

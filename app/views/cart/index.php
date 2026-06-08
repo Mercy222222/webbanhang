@@ -35,7 +35,7 @@
                                         <input type="checkbox" name="selected_items[]" value="<?= $item['id'] ?>" class="cart-item-checkbox" checked onchange="updateCartSummary()" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary);">
                                     </td>
                                     <td>
-                                        <?php $img = !empty($item['image']) ? $item['image'] : 'https://placehold.co/600x400/1e293b/white?text=TechStore'; ?>
+                                        <?php $img = !empty($item['image']) ? $item['image'] : 'https://placehold.co/600x400/1e293b/white?text=GEARVN'; ?>
                                         <img src="<?= htmlspecialchars($img) ?>" alt="" style="width: 80px; height: 80px; object-fit: contain; background: white; border-radius: 8px; padding: 5px;">
                                     </td>
                                     <td style="vertical-align: middle;">

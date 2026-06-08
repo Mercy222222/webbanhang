@@ -55,8 +55,8 @@ class DefaultController
             foreach ($explore_keywords as $ek) {
                 if (stripos($keyword, $ek) !== false) {
                     $matching_pages[] = [
-                        'title' => 'Khám phá TechStore',
-                        'desc' => 'Tin tức công nghệ mới nhất, các chương trình ưu đãi đặc quyền và khuyến mãi tại TechStore.',
+                        'title' => 'Khám phá GEARVN',
+                        'desc' => 'Tin tức công nghệ mới nhất, các chương trình ưu đãi đặc quyền và khuyến mãi tại GEARVN.',
                         'url' => 'index.php?url=default/explore'
                     ];
                     break;
@@ -68,7 +68,7 @@ class DefaultController
             foreach ($support_keywords as $sk) {
                 if (stripos($keyword, $sk) !== false) {
                     $matching_pages[] = [
-                        'title' => 'Hỗ trợ khách hàng TechStore',
+                        'title' => 'Hỗ trợ khách hàng GEARVN',
                         'desc' => 'Hướng dẫn mua hàng trực tuyến, chính sách đổi trả hàng hóa, chính sách bảo hành chính hãng.',
                         'url' => 'index.php?url=default/support'
                     ];

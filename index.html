@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TechStore | Siêu Thị Công Nghệ Cao Cấp</title>
+  <title>GEARVN | Hệ Thống Hi-End PC & Gaming Gear</title>
   
   <!-- CDNs -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="index.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -21,8 +22,34 @@
       theme: {
         extend: {
           colors: {
-            brand: '#4f46e5',
-            'brand-glow': 'rgba(79, 70, 229, 0.4)',
+            brand: '#e30019',
+            'brand-glow': 'rgba(227, 0, 25, 0.4)',
+            indigo: {
+              50: '#fff5f5',
+              100: '#ffe3e3',
+              200: '#ffc9c9',
+              300: '#ffa8a8',
+              400: '#ff8787',
+              500: '#ff6b6b',
+              600: '#e30019', // GearVN Red
+              700: '#c30013',
+              800: '#9f000f',
+              900: '#7e0009',
+              950: '#4a0003',
+            },
+            slate: {
+              50: '#fafafa',
+              100: '#f5f5f5',
+              200: '#e5e5e5',
+              300: '#d4d4d4',
+              400: '#a3a3a3',
+              500: '#737373',
+              600: '#525252',
+              700: '#404040',
+              800: '#1f1f23', // Dark grey surface
+              900: '#121214', // Very dark surface
+              950: '#0a0a0c', // Pure dark background
+            }
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
@@ -45,7 +72,7 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: #4f46e5;
+      background: #e30019;
       border-radius: 99px;
     }
     /* Neon glow effect on hover */
@@ -60,19 +87,19 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
     .tilt-effect:hover {
-      box-shadow: 0 0 25px rgba(79, 70, 229, 0.25);
-      border-color: #4f46e5;
+      box-shadow: 0 0 25px rgba(227, 0, 25, 0.25);
+      border-color: #e30019;
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-[#0f172a] dark:text-slate-200 min-h-screen font-sans flex flex-col">
+<body class="bg-[#0a0a0c] text-slate-200 min-h-screen font-sans flex flex-col">
 
   <!-- ─── HEADER / NAVBAR ─── -->
-  <header class="sticky top-0 z-40 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+  <header class="sticky top-0 z-40 bg-[#0a0a0c]/70 backdrop-blur-md border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 md:px-8 h-16 flex justify-between items-center">
       <!-- Logo -->
-      <a href="#" onclick="switchTab('store')" class="text-2xl font-black tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent flex items-center gap-2">
-        <i class="fa-solid fa-laptop-code"></i> TechStore
+      <a href="#" onclick="switchTab('store')" class="text-2xl font-black tracking-tight text-[#e30019] hover:text-[#ff3b4e] transition flex items-center gap-2">
+        <i class="fa-solid fa-gamepad"></i> GEARVN
       </a>
 
       <!-- Desktop Nav -->
@@ -96,12 +123,42 @@
         <button onclick="openCart()" class="relative p-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20 transition flex items-center gap-2">
           <i class="fa-solid fa-cart-shopping"></i>
           <span id="cart-count" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-500 text-white rounded-full text-xs font-bold flex items-center justify-center">0</span>
-        </button>
+                  </button>
+          <div id="nav-auth-section" class="ml-4"></div>
       </div>
     </div>
   </header>
 
-  <!-- ─── MAIN APP CONTENT ─── -->
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/30 flex items-center justify-center hidden">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-80 relative">
+        <h2 id="auth-modal-title" class="text-xl font-bold mb-4">Đăng nhập</h2>
+        <div class="space-y-4">
+          <div id="auth-name-group" class="hidden">
+            <label class="block text-sm font-medium">Họ và Tên</label>
+            <input type="text" id="auth-name" class="w-full border rounded px-2 py-1" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Tên đăng nhập</label>
+            <input type="text" id="auth-username" class="w-full border rounded px-2 py-1" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Mật khẩu</label>
+            <input type="password" id="auth-password" class="w-full border rounded px-2 py-1" />
+          </div>
+        </div>
+        <div class="mt-4 flex justify-between items-center">
+          <button id="auth-submit-btn" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" onclick="handleAuthSubmit()">Đăng nhập</button>
+          <a href="javascript:void(0)" id="auth-toggle-link" class="text-sm text-indigo-600 hover:underline" data-mode="register">Chưa có tài khoản? Đăng ký</a>
+        </div>
+        <button class="absolute top-2 right-2 text-gray-500" onclick="hideAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <!-- Auth script -->
+    <script src="auth.js"></script>
+
+    <!-- ─── MAIN APP CONTENT ─── -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-8">
 
     <!-- ========================================= -->
@@ -111,18 +168,18 @@
       
       <!-- Banner / Hero -->
       <div class="relative rounded-2xl overflow-hidden glass-card p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border">
-        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent pointer-events-none"></div>
         <div class="space-y-4 max-w-lg text-center md:text-left z-10">
-          <span class="inline-block px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider rounded-full">Chào mừng đến với TechStore</span>
+          <span class="inline-block px-3 py-1 bg-red-100 dark:bg-red-950/30 text-[#e30019] text-xs font-bold uppercase tracking-wider rounded-full">Chào mừng đến với GEARVN</span>
           <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-none">
-            Trải nghiệm Công nghệ <span class="bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">Đỉnh Cao</span>
+            Trải nghiệm Gaming <span class="bg-gradient-to-r from-red-500 to-amber-500 bg-clip-text text-transparent">Đỉnh Cao</span>
           </h1>
           <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base">
-            Cung cấp các thiết bị điện thoại, máy tính xách tay và phụ kiện chất lượng cao với dịch vụ hỗ trợ chu đáo nhất.
+            Hệ thống cửa hàng Hi-End Gaming Gear & Laptop hàng đầu Việt Nam. Cung cấp máy tính chơi game, linh kiện, màn hình cơ, chuột gaming chính hãng.
           </p>
         </div>
-        <div class="relative w-72 h-44 rounded-xl overflow-hidden shadow-2xl shadow-indigo-500/10 z-10">
-          <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="Hero" />
+        <div class="relative w-72 h-44 rounded-xl overflow-hidden shadow-2xl shadow-indigo-600/10 z-10">
+          <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="Hero" />
         </div>
       </div>
 
@@ -131,11 +188,13 @@
         <!-- Filter Categories tabs -->
         <div class="flex flex-wrap gap-2" id="category-filter-tabs">
           <button onclick="filterCategory(0)" class="cat-tab-btn active px-4 py-2 rounded-xl border text-sm font-semibold bg-indigo-600 text-white border-indigo-600 shadow-md transition-all">Tất cả</button>
-          <button onclick="filterCategory(1)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Điện thoại</button>
-          <button onclick="filterCategory(2)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Laptop</button>
-          <button onclick="filterCategory(3)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Chuột</button>
-          <button onclick="filterCategory(4)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Bàn phím</button>
-          <button onclick="filterCategory(5)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Tai nghe</button>
+          <button onclick="filterCategory(1)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Laptop Gaming</button>
+          <button onclick="filterCategory(2)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">PC GEARVN</button>
+          <button onclick="filterCategory(3)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Linh Kiện</button>
+          <button onclick="filterCategory(4)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Màn Hình</button>
+          <button onclick="filterCategory(5)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Bàn Phím Cơ</button>
+          <button onclick="filterCategory(6)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Chuột Gaming</button>
+          <button onclick="filterCategory(7)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Tai Nghe</button>
         </div>
 
         <!-- Search input -->
@@ -179,7 +238,7 @@
         <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div class="space-y-1">
             <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sản phẩm</p>
-            <h3 class="text-2xl font-black">7</h3>
+            <h3 class="text-2xl font-black">9</h3>
           </div>
           <div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-950/30 text-cyan-500 flex items-center justify-center text-xl"><i class="fa-solid fa-cubes"></i></div>
         </div>
@@ -230,7 +289,7 @@
 
   <!-- ─── FOOTER ─── -->
   <footer class="border-t border-slate-200 dark:border-slate-800 py-8 text-center text-sm text-slate-400 dark:text-slate-500 bg-white dark:bg-[#0f172a]">
-    <p>© 2026 TechStore - Mock-SPA. Powered by HTML5 & Tailwind CSS.</p>
+    <p>© 2026 GEARVN - Mock-SPA. Powered by HTML5 & Tailwind CSS.</p>
   </footer>
 
   <!-- ========================================= -->
@@ -377,129 +436,156 @@
     const PRODUCTS = [
       {
         id: 1,
-        name: 'iPhone 15 Pro Max 256GB',
-        desc: 'Màn hình 6.7 inch, Chip A17 Pro, Camera 48MP Zoom 5x quang học.',
-        price: 30990000,
+        name: 'Laptop Gaming ASUS ROG Strix G16 (2024)',
+        desc: 'CPU Intel Core i7-13650HX, GPU RTX 4060 8GB, RAM 16GB DDR5, SSD 512GB PCIe, Màn hình 16" FHD+ IPS 165Hz.',
+        price: 35990000,
         cat_id: 1,
-        image: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=400&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=400&auto=format&fit=crop',
         rating: 4.8,
-        reviews: 24,
+        reviews: 15,
         specs: {
-          'Kích thước màn hình': '6.7 inches',
-          'Độ phân giải': '1290 x 2796 pixels',
-          'Chipset': 'Apple A17 Pro (3 nm)',
-          'RAM': '8 GB',
-          'Bộ nhớ trong': '256 GB',
-          'Dung lượng Pin': '4441 mAh'
+          'Bộ vi xử lý': 'Intel Core i7-13650HX',
+          'Card màn hình': 'RTX 4060 8GB',
+          'RAM': '16GB DDR5',
+          'Bộ nhớ trong': '512GB PCIe SSD',
+          'Màn hình': '16" FHD+ IPS 165Hz'
         }
       },
       {
         id: 2,
-        name: 'Samsung Galaxy S24 Ultra 256GB',
-        desc: 'Màn hình 6.8 inch QHD+, Chip Snapdragon 8 Gen 3, Camera 200MP cùng Bút S-Pen tiện lợi.',
-        price: 27490000,
+        name: 'Laptop Gaming Acer Predator Helios Neo 16',
+        desc: 'CPU Intel Core i7-14700HX, GPU RTX 4060 8GB, RAM 16GB DDR5, SSD 512GB PCIe, Màn hình 16" WQXGA 240Hz.',
+        price: 37490000,
         cat_id: 1,
-        image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=400&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=400&auto=format&fit=crop',
         rating: 4.9,
-        reviews: 18,
+        reviews: 22,
         specs: {
-          'Kích thước màn hình': '6.8 inches',
-          'Độ phân giải': '1440 x 3120 pixels',
-          'Chipset': 'Snapdragon 8 Gen 3 for Galaxy',
-          'RAM': '12 GB',
-          'Bộ nhớ trong': '256 GB',
-          'Dung lượng Pin': '5000 mAh'
+          'Bộ vi xử lý': 'Intel Core i7-14700HX',
+          'Card màn hình': 'RTX 4060 8GB',
+          'RAM': '16GB DDR5',
+          'Bộ nhớ trong': '512GB PCIe SSD',
+          'Màn hình': '16" WQXGA 240Hz'
         }
       },
       {
         id: 3,
-        name: 'MacBook Air M3 13 inch 8GB/256GB',
-        desc: 'Chip Apple M3 mạnh mẽ bậc nhất thế giới cho dòng ultrabook, thiết kế nhôm nguyên khối siêu mỏng nhẹ, pin sử dụng lên đến 18 tiếng.',
-        price: 27990000,
+        name: 'PC GEARVN G-Shield Intel (14th Gen)',
+        desc: 'Case máy tính GEARVN tối ưu hóa hiệu năng chơi game, Intel Core i5-14400F, RAM 16GB, SSD 512GB, RTX 4060.',
+        price: 19990000,
         cat_id: 2,
-        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=400&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?q=80&w=400&auto=format&fit=crop',
         rating: 4.7,
-        reviews: 32,
+        reviews: 34,
         specs: {
-          'Kích thước màn hình': '13.6 inches',
-          'Bộ vi xử lý': 'Apple M3 (8-core CPU / 8-core GPU)',
-          'RAM': '8 GB',
-          'Bộ nhớ trong': '256 GB SSD',
-          'Trọng lượng': '1.24 kg'
+          'Bộ vi xử lý': 'Intel Core i5-14400F',
+          'Card màn hình': 'GeForce RTX 4060',
+          'RAM': '16GB DDR5',
+          'Bộ nhớ trong': '512GB SSD',
+          'Vỏ case': 'GEARVN G-Shield Gaming'
         }
       },
       {
         id: 4,
-        name: 'Dell XPS 13 Plus 9320',
-        desc: 'Màn hình OLED 3.5K siêu sắc nét, CPU Intel Core i7 thế hệ 13, RAM 16GB, dòng máy cao cấp bật nhất cho doanh nhân.',
-        price: 39990000,
-        cat_id: 2,
-        image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=400&auto=format&fit=crop',
-        rating: 4.6,
-        reviews: 14,
+        name: 'Card Màn Hình ASUS ROG Strix GeForce RTX 4070 Ti Super 16GB',
+        desc: 'Card đồ họa đỉnh cao với thiết kế hầm hố triple-fan Axial-tech, led Aura Sync RGB, 16GB VRAM GDDR6X.',
+        price: 26890000,
+        cat_id: 3,
+        image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400&auto=format&fit=crop',
+        rating: 4.9,
+        reviews: 18,
         specs: {
-          'Kích thước màn hình': '13.4 inches OLED 3.5K',
-          'Bộ vi xử lý': 'Intel Core i7-1360P (up to 5.0 GHz)',
-          'RAM': '16 GB LPDDR5',
-          'Bộ nhớ trong': '512 GB SSD PCIe',
-          'Trọng lượng': '1.23 kg'
+          'VRAM': '16GB GDDR6X',
+          'Cổng kết nối': '3 x DisplayPort 1.4a, 2 x HDMI 2.1a',
+          'Tản nhiệt': '3 quạt Axial-tech',
+          'Đèn LED': 'Aura Sync RGB'
         }
       },
       {
         id: 5,
-        name: 'Logitech MX Master 3S',
-        desc: 'Chuột công thái học cao cấp dành cho lập trình viên và thiết kế, cảm biến 8000 DPI, các nút bấm click chống ồn và bánh cuộn MagSpeed siêu tốc.',
-        price: 2490000,
+        name: 'Bộ vi xử lý Intel Core i9-14900K',
+        desc: 'CPU cao cấp thế hệ 14 Raptor Lake Refresh, 24 Cores (8 P-cores + 16 E-cores), 32 Threads, Max Turbo 6.0 GHz.',
+        price: 15490000,
         cat_id: 3,
-        image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=400&auto=format&fit=crop',
-        rating: 4.9,
-        reviews: 41,
+        image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400&auto=format&fit=crop', // Reusing matching core chip view image
+        rating: 4.8,
+        reviews: 25,
         specs: {
-          'Cảm biến': 'Darkfield high precision',
-          'Độ phân giải': '200 - 8000 DPI',
-          'Kết nối': 'Bluetooth Low Energy & Logi Bolt',
-          'Số nút bấm': '7 nút',
-          'Dung lượng Pin': 'Sạc lại được (Li-Po 500 mAh)'
+          'Số nhân/luồng': '24 Cores / 32 Threads',
+          'Xung nhịp': 'Max Turbo 6.0 GHz',
+          'Bộ nhớ đệm': '36MB Intel Smart Cache',
+          'Socket': 'LGA 1700'
         }
       },
       {
         id: 6,
-        name: 'Bàn phím cơ Keychron K8 Pro',
-        desc: 'Bàn phím cơ không dây, hỗ trợ Hotswap nóng, trang bị hệ thống LED RGB đa màu, sử dụng switch Gateron bền bỉ.',
-        price: 2290000,
+        name: 'Màn Hình Gaming ASUS ROG Swift PG27AQDM OLED 2K 240Hz',
+        desc: 'Màn hình chơi game OLED 27 inch sắc nét, độ phân giải 2K QHD (2560x1440), tần số quét siêu cao 240Hz, phản hồi 0.03ms.',
+        price: 21990000,
         cat_id: 4,
-        image: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop',
-        rating: 4.8,
-        reviews: 29,
+        image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=400&auto=format&fit=crop',
+        rating: 4.9,
+        reviews: 41,
         specs: {
-          'Layout': 'TKL (Tenkeyless)',
-          'Số nút bấm': '87 phím',
-          'Switch': 'Gateron G Pro Mechanical',
-          'Kết nối': 'Bluetooth 5.1 & Type-C',
-          'Dung lượng Pin': '4000 mAh'
+          'Kích thước': '27 inches',
+          'Tấm nền': 'OLED QHD (2560x1440)',
+          'Tần số quét': '240Hz',
+          'Thời gian phản hồi': '0.03ms'
         }
       },
       {
         id: 7,
-        name: 'Tai nghe chụp tai Sony WH-1000XM5',
-        desc: 'Tai nghe chống ồn chủ động (ANC) đỉnh cao thế giới, hỗ trợ âm thanh chất lượng Hi-Res kết nối không dây bluetooth 5.2.',
-        price: 7490000,
+        name: 'Bàn phím cơ không dây ASUS ROG Azoth OLED',
+        desc: 'Bàn phím cơ Custom 75% cao cấp, màn hình hiển thị OLED, núm xoay đa năng, Hotswap switch ROG NX, kết nối 3 chế độ.',
+        price: 5990000,
         cat_id: 5,
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop',
         rating: 4.8,
-        reviews: 35,
+        reviews: 29,
         specs: {
-          'Màng loa': '30 mm',
-          'Kết nối': 'Bluetooth 5.2 & dây 3.5mm',
-          'Thời lượng Pin': 'Lên tới 30 giờ (bật ANC)',
-          'Công nghệ': 'Chống ồn ANC thông minh kép'
+          'Layout': '75%',
+          'Switch': 'ROG NX Mechanical (Hotswap)',
+          'Kết nối': 'Bluetooth, 2.4GHz Wireless, Type-C',
+          'Tính năng': 'Màn hình OLED, Núm xoay'
+        }
+      },
+      {
+        id: 8,
+        name: 'Chuột chơi game không dây Logitech G502 X Plus Wireless',
+        desc: 'Chuột chơi game huyền thoại nâng cấp, công nghệ switch lai LIGHTFORCE, cảm biến HERO 25K cực nhạy, led LIGHTSYNC RGB.',
+        price: 3590000,
+        cat_id: 6,
+        image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=400&auto=format&fit=crop',
+        rating: 4.8,
+        reviews: 56,
+        specs: {
+          'Cảm biến': 'HERO 25K',
+          'Độ phân giải': '100 - 25,600 DPI',
+          'Switch': 'LIGHTFORCE Hybrid',
+          'Tính năng': 'LIGHTSYNC RGB, POWERPLAY'
+        }
+      },
+      {
+        id: 9,
+        name: 'Tai nghe chơi game không dây Razer BlackShark V2 Pro (2023)',
+        desc: 'Tai nghe Esports chụp tai, kết nối HyperSpeed Wireless, màng loa TriForce Titanium 50mm, mic tháo rời Super Wideband.',
+        price: 4690000,
+        cat_id: 7,
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop',
+        rating: 4.7,
+        reviews: 38,
+        specs: {
+          'Màng loa': 'TriForce Titanium 50mm',
+          'Kết nối': 'HyperSpeed Wireless, Bluetooth, 3.5mm',
+          'Micro': 'Razer HyperClear Super Wideband',
+          'Tính năng': 'Âm thanh vòm THX Spatial Audio'
         }
       }
     ];
 
     /* ─── STATE MANAGEMENT ─── */
-    let cart = JSON.parse(localStorage.getItem('techstore_cart')) || [];
-    let orders = JSON.parse(localStorage.getItem('techstore_orders')) || [
+    let cart = JSON.parse(localStorage.getItem('gearvn_cart')) || [];
+    let orders = JSON.parse(localStorage.getItem('gearvn_orders')) || [
       {
         id: 'DH9842',
         name: 'Lê Minh Quân',
@@ -529,7 +615,7 @@
     let currentTab = 'store';
     let currentCategory = 0;
     let currentSearch = '';
-    let currentTheme = localStorage.getItem('techstore_theme') || 'dark';
+    let currentTheme = localStorage.getItem('gearvn_theme') || 'dark';
     let activeCoupon = null;
     let currentDetailProduct = null;
 
@@ -550,7 +636,7 @@
     }
     function toggleTheme() {
       currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('techstore_theme', currentTheme);
+      localStorage.setItem('gearvn_theme', currentTheme);
       initTheme();
     }
 
@@ -686,7 +772,7 @@
       } else {
         cart.push({ product_id: productId, quantity: 1 });
       }
-      localStorage.setItem('techstore_cart', JSON.stringify(cart));
+      localStorage.setItem('gearvn_cart', JSON.stringify(cart));
       renderCart();
 
       // Show tiny success alert
@@ -708,7 +794,7 @@
       if (cart[idx].quantity <= 0) {
         cart.splice(idx, 1);
       }
-      localStorage.setItem('techstore_cart', JSON.stringify(cart));
+      localStorage.setItem('gearvn_cart', JSON.stringify(cart));
       renderCart();
     }
 
@@ -942,13 +1028,13 @@
       };
 
       orders.unshift(newOrder);
-      localStorage.setItem('techstore_orders', JSON.stringify(orders));
+      localStorage.setItem('gearvn_orders', JSON.stringify(orders));
 
       // Reset cart
       cart = [];
       activeCoupon = null;
       document.getElementById('coupon-input').value = '';
-      localStorage.setItem('techstore_cart', JSON.stringify(cart));
+      localStorage.setItem('gearvn_cart', JSON.stringify(cart));
       renderCart();
 
       // Close drawers
@@ -989,7 +1075,7 @@
         title: '🎉 Đặt hàng thành công!',
         html: `
           <div class="space-y-2.5 text-sm">
-            <p>Cảm ơn bạn đã lựa chọn mua hàng tại <strong>TechStore</strong>.</p>
+            <p>Cảm ơn bạn đã lựa chọn mua hàng tại <strong>GEARVN</strong>.</p>
             <p>Mã đơn hàng của bạn là: <strong class="bg-indigo-100 dark:bg-slate-800 px-2 py-0.5 rounded font-mono text-indigo-500">${orderId}</strong></p>
             ${billingDetails}
           </div>
@@ -1010,7 +1096,7 @@
       const idx = orders.findIndex(o => o.id === orderId);
       if (idx !== -1) {
         orders[idx].status = 'completed';
-        localStorage.setItem('techstore_orders', JSON.stringify(orders));
+        localStorage.setItem('gearvn_orders', JSON.stringify(orders));
         renderAdmin();
 
         // Broadcast a simulated payment alert

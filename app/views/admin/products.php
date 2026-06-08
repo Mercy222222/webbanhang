@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý sản phẩm - TechStore</title>
+    <title>Quản lý sản phẩm - GEARVN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="public/css/style.css">
@@ -12,7 +12,7 @@
 
 <aside class="admin-sidebar">
     <div class="admin-sidebar-header">
-        <i class="fa-solid fa-bolt" style="color: var(--primary-light);"></i> TechStore Admin
+        <i class="fa-solid fa-gamepad" style="color: var(--primary-light);"></i> GEARVN Admin
     </div>
     <nav class="admin-nav">
         <a href="index.php?url=admin"><i class="fa-solid fa-gauge"></i> Dashboard</a>
@@ -45,7 +45,7 @@
                 <?php foreach ($products as $product): ?>
                 <tr>
                     <td>
-                        <img src="<?= !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=TechStore' ?>" 
+                        <img src="<?= !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=GEARVN' ?>" 
                              alt="<?= htmlspecialchars($product->name) ?>" 
                              style="width: 50px; height: 50px; object-fit: contain; border-radius: 5px; background: white;">
                     </td>

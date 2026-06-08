@@ -4,7 +4,7 @@
     <div style="text-align: center; margin-bottom: 2.5rem;">
         <i class="fa-solid fa-user-plus" style="font-size: 2.5rem; color: var(--primary-light); margin-bottom: 1rem;"></i>
         <h1 style="margin-bottom: 0.5rem;">Tạo tài khoản</h1>
-        <p style="color: var(--text-muted);">Trở thành thành viên của cộng đồng TechStore</p>
+        <p style="color: var(--text-muted);">Trở thành thành viên của cộng đồng GEARVN</p>
     </div>
 
     <?php if (isset($error)): ?>

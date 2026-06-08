@@ -48,11 +48,13 @@ TRUNCATE TABLE `category`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO `category` (`name`, `description`) VALUES
-('Điện thoại', 'Các dòng điện thoại thông minh'),
-('Laptop', 'Máy tính xách tay các hãng'),
-('Chuột', 'Chuột máy tính không dây, có dây'),
-('Bàn phím', 'Bàn phím cơ, bàn phím văn phòng'),
-('Tai nghe', 'Tai nghe bluetooth, tai nghe chụp tai');
+('Laptop Gaming', 'Laptop chơi game cao cấp, cấu hình khủng'),
+('PC GEARVN', 'Máy tính để bàn GEARVN cấu hình tối ưu'),
+('Linh Kiện Máy Tính', 'CPU, Ram, VGA, SSD, Mainboard chính hãng'),
+('Màn Hình Máy Tính', 'Màn hình gaming tần số quét cao, siêu nét'),
+('Bàn Phím Cơ', 'Bàn phím cơ cao cấp, hotswap, keycap đẹp'),
+('Chuột Gaming', 'Chuột gaming độ nhạy cao, công thái học'),
+('Tai Nghe Gaming', 'Tai nghe chơi game âm thanh vòm, chống ồn chủ động');
 
 -- Table structure for table `product`
 CREATE TABLE IF NOT EXISTS `product` (

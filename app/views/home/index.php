@@ -2,8 +2,8 @@
 
 <?php if (!isset($current_category) && empty($_GET['keyword'])): ?>
     <section class="hero">
-        <h1>Bứt Phá Giới Hạn Công Nghệ</h1>
-        <p>Đón đầu xu hướng với những siêu phẩm Smartphone, Laptop và Phụ kiện đẳng cấp nhất hiện nay. Trải nghiệm không gian mua sắm tương lai ngay tại TechStore.</p>
+        <h1>GEARVN - HI-END PC & GAMING GEAR</h1>
+        <p>Đại lý ủy quyền chính thức các thương hiệu Hi-End Gaming Gear & Laptop hàng đầu Việt Nam. Trải nghiệm không gian mua sắm tối tân ngay tại GEARVN.</p>
         <div style="display: flex; gap: 1.5rem; justify-content: center;">
             <a href="#products" class="btn btn-primary" style="padding: 1rem 2.5rem;">Săn Deal Ngay</a>
             <a href="#products" class="btn btn-outline" style="padding: 1rem 2.5rem;">Xem Sản Phẩm <i class="fa-solid fa-arrow-down"></i></a>
@@ -59,7 +59,7 @@
             <div class="product-card">
                 <?php
                     // Fallback to placeholder image if empty
-                    $imageUrl = !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=TechStore';
+                    $imageUrl = !empty($product->image) ? htmlspecialchars($product->image) : 'https://placehold.co/600x400/1e293b/white?text=GEARVN';
                 ?>
                 <div style="position: relative; overflow: hidden;">
                     <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product->name) ?>" class="product-img">
@@ -93,7 +93,7 @@
 
 <section style="margin-top: 8rem; padding: 5rem 3rem; background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); text-align: center;">
     <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Đăng ký nhận ưu đãi</h2>
-    <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 3rem;">Nhận thông tin về các dòng sản phẩm mới nhất và các chương trình khuyến mãi sớm nhất từ TechStore.</p>
+    <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 3rem;">Nhận thông tin về các dòng sản phẩm mới nhất và các chương trình khuyến mãi sớm nhất từ GEARVN.</p>
     <form style="display: flex; max-width: 500px; margin: 0 auto; gap: 1rem;">
         <input type="email" class="form-control" placeholder="Email của bạn..." required>
         <button type="button" class="btn btn-primary" style="padding: 0 2rem;">Gửi ngay</button>
