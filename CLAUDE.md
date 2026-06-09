@@ -153,3 +153,16 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 | Date | Change | Target | Reason |
 |------|--------|--------|--------|
 | 2026-06-09 | Initial Harness setup | All | Configure developer agent team (backend-dev, frontend-dev, qa-tester) and skills. |
+
+---
+
+## Harness: web-dev
+
+**Goal:** Coordinate the designer, frontend, backend, and QA agents in a Next.js pipeline to develop, test, and deploy React web applications.
+
+**Trigger:** Use `web-dev-orchestrator` skill for wireframing, Next.js page development, REST/GraphQL API modifications, E2E tests, or staging deployment tasks.
+
+**Changelog:**
+| Date | Change | Target | Reason |
+|------|--------|--------|--------|
+| 2026-06-09 | Initial Next.js Harness setup | All | Configure developer agent team (designer, frontend-dev-next, backend-api-dev, qa-tester-next) and skills. |
