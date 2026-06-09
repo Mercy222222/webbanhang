@@ -2035,6 +2035,106 @@
     let windowHalfX = window.innerWidth / 2;
     let windowHalfY = window.innerHeight / 2;
 
+    // GPU Shader Definitions for Terrain
+    const terrainVertexShader = `
+      uniform float uTime;
+      uniform vec4 uRipples[5];
+      varying float vHeight;
+      varying vec3 vWorldPosition;
+      
+      void main() {
+        vec3 pos = position;
+        
+        // Base undulating waves (Sine & Cosine combinatorics)
+        float height = sin(pos.x * 0.0018 + uTime) * 75.0 +
+                       cos(pos.z * 0.0018 + uTime * 0.8) * 75.0 +
+                       sin((pos.x + pos.z) * 0.0009 + uTime * 0.5) * 35.0;
+        
+        // Apply dynamic mouse-click ripples
+        for (int i = 0; i < 5; i++) {
+          vec4 ripple = uRipples[i];
+          float rX = ripple.x;
+          float rZ = ripple.y;
+          float rRadius = ripple.z;
+          float rAmp = ripple.w;
+          
+          if (rAmp > 0.0) {
+            float dx = pos.x - rX;
+            float dz = pos.z - rZ;
+            float dist = sqrt(dx * dx + dz * dz);
+            float distToWavefront = abs(dist - rRadius);
+            
+            if (distToWavefront < 180.0) {
+              float decay = max(0.0, 1.0 - dist / 1200.0) * rAmp;
+              float waveFactor = sin((distToWavefront / 180.0) * 3.14159265) * decay;
+              height += waveFactor;
+            }
+          }
+        }
+        
+        pos.y = height;
+        vHeight = height;
+        vWorldPosition = pos;
+        
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `;
+
+    const terrainFragmentShader = `
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform float uOpacity;
+      varying float vHeight;
+      
+      void main() {
+        float ratio = clamp((vHeight + 185.0) / 370.0, 0.0, 1.0);
+        vec3 finalColor = mix(uColor1, uColor2, ratio);
+        gl_FragColor = vec4(finalColor, uOpacity);
+      }
+    `;
+
+    const terrainPointsFragmentShader = `
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform float uOpacity;
+      varying float vHeight;
+      
+      void main() {
+        float ratio = clamp((vHeight + 185.0) / 370.0, 0.0, 1.0);
+        vec3 finalColor = mix(uColor1, uColor2, ratio);
+        
+        // Draw custom high-performance glow points directly in GLSL
+        vec2 coord = gl_PointCoord - vec2(0.5);
+        float dist = length(coord);
+        float alpha = smoothstep(0.5, 0.0, dist) * uOpacity;
+        if (alpha < 0.01) discard;
+        
+        gl_FragColor = vec4(finalColor, alpha);
+      }
+    `;
+
+    let terrainUniforms = {
+      uTime: { value: 0 },
+      uColor1: { value: currentC1 },
+      uColor2: { value: currentC2 },
+      uOpacity: { value: 0.15 },
+      uRipples: { value: [
+        new THREE.Vector4(0, 0, 0, 0),
+        new THREE.Vector4(0, 0, 0, 0),
+        new THREE.Vector4(0, 0, 0, 0),
+        new THREE.Vector4(0, 0, 0, 0),
+        new THREE.Vector4(0, 0, 0, 0)
+      ]}
+    };
+
+    let terrainPointsUniforms = {
+      uTime: { value: 0 },
+      uColor1: { value: currentC1 },
+      uColor2: { value: currentC2 },
+      uOpacity: { value: 0.85 },
+      uRipples: { value: terrainUniforms.uRipples.value }
+    };
+
     function initThreeJS() {
       const container = document.getElementById('three-bg-container');
       if (!container) return;
@@ -2046,7 +2146,8 @@
       camera.position.set(0, 450, 1100);
 
       const isMobile = window.innerWidth < 768;
-      const gridSegments = isMobile ? 30 : 65;
+      // Drastically increased segments thanks to GPU computing (150x150 segments on desktop!)
+      const gridSegments = isMobile ? 60 : 150;
       const gridWidth = 3200;
       const gridDepth = 3200;
 
@@ -2054,48 +2155,25 @@
       const geometry = new THREE.PlaneGeometry(gridWidth, gridDepth, gridSegments, gridSegments);
       geometry.rotateX(-Math.PI / 2);
 
-      // Add color attribute to plane geometry
-      const positionAttribute = geometry.attributes.position;
-      const colors = [];
-      const color1 = new THREE.Color('#3b82f6'); // Electric Blue
-      
-      for (let i = 0; i < positionAttribute.count; i++) {
-        colors.push(color1.r, color1.g, color1.b);
-      }
-      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-      // Wireframe Grid Mesh
-      const meshMaterial = new THREE.MeshBasicMaterial({
-        color: 0x3b82f6,
+      // Wireframe Grid Mesh using Custom GPU Shaders
+      const meshMaterial = new THREE.ShaderMaterial({
+        vertexShader: terrainVertexShader,
+        fragmentShader: terrainFragmentShader,
+        uniforms: terrainUniforms,
         wireframe: true,
         transparent: true,
-        opacity: currentTheme === 'dark' ? 0.15 : 0.08,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
       terrainMesh = new THREE.Mesh(geometry, meshMaterial);
       scene.add(terrainMesh);
 
-      // Glowing Point Intersections
-      const canvas = document.createElement('canvas');
-      canvas.width = 16;
-      canvas.height = 16;
-      const ctx = canvas.getContext('2d');
-      const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
-      gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
-      gradient.addColorStop(0.5, 'rgba(255,255,255,0.2)');
-      gradient.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 16, 16);
-      const texture = new THREE.CanvasTexture(canvas);
-
-      const pointsMaterial = new THREE.PointsMaterial({
-        size: isMobile ? 10 : 7,
-        map: texture,
-        vertexColors: true,
+      // Glowing Point Intersections using Custom GPU Shaders
+      const pointsMaterial = new THREE.ShaderMaterial({
+        vertexShader: terrainVertexShader,
+        fragmentShader: terrainPointsFragmentShader,
+        uniforms: terrainPointsUniforms,
         transparent: true,
-        opacity: currentTheme === 'dark' ? 0.85 : 0.35,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
@@ -2137,7 +2215,7 @@
       scene.add(starField);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
       container.appendChild(renderer.domElement);
 
@@ -2146,7 +2224,6 @@
 
       // Click event for interactive wave ripples
       window.addEventListener('click', (e) => {
-        // Play click sound
         playPulse();
         
         // Map page click position to grid world space coordinates
@@ -2189,7 +2266,7 @@
       const speedMultiplier = lastTime === 0 ? 1 : Math.min(delta / 16.67, 4);
       lastTime = time;
 
-      const timeSec = time * 0.0012;
+      const timeSec = time * 0.001;
 
       // Color interpolation based on activeSectionName
       const targetColors = sectionColors[activeSectionName] || sectionColors.home;
@@ -2199,66 +2276,41 @@
       currentC1.lerp(tColor1, 0.025 * speedMultiplier);
       currentC2.lerp(tColor2, 0.025 * speedMultiplier);
 
-      // Update terrain mesh/points material color dynamically
+      // Update terrain mesh/points shader uniforms dynamically on the GPU
       if (terrainMesh && terrainPoints) {
-        terrainMesh.material.color.copy(currentC1);
-        terrainPoints.material.color.copy(currentC2);
-      }
+        terrainUniforms.uTime.value = timeSec;
+        terrainPointsUniforms.uTime.value = timeSec;
+        
+        terrainUniforms.uColor1.value.copy(currentC1);
+        terrainUniforms.uColor2.value.copy(currentC2);
+        terrainPointsUniforms.uColor1.value.copy(currentC1);
+        terrainPointsUniforms.uColor2.value.copy(currentC2);
 
-      if (terrainMesh && terrainPoints) {
-        const geometry = terrainMesh.geometry;
-        const positionAttribute = geometry.attributes.position;
-        const colorAttribute = geometry.attributes.color;
-
-        // Animate grid heights and apply ripples
-        for (let i = 0; i < positionAttribute.count; i++) {
-          const x = positionAttribute.getX(i);
-          const z = positionAttribute.getZ(i);
-
-          // Base waves
-          let y = Math.sin(x * 0.0018 + timeSec) * 75 +
-                    Math.cos(z * 0.0018 + timeSec * 0.8) * 75 +
-                    Math.sin((x + z) * 0.0009 + timeSec * 0.5) * 35;
-
-          // Apply click ripples
-          for (let r = 0; r < ripples.length; r++) {
-            const ripple = ripples[r];
-            const age = timeSec - ripple.startTime;
-            const currentRadius = age * ripple.speed;
-            
-            if (currentRadius < ripple.maxRadius) {
-              const dx = x - ripple.x;
-              const dz = z - ripple.z;
-              const dist = Math.sqrt(dx*dx + dz*dz);
-              
-              const distToWavefront = Math.abs(dist - currentRadius);
-              
-              if (distToWavefront < 180) {
-                const decay = Math.max(0, 1 - dist / ripple.maxRadius) * Math.max(0, 1 - age / 2.0);
-                const waveFactor = Math.sin((distToWavefront / 180) * Math.PI) * ripple.amplitude * decay;
-                y += waveFactor;
-              }
-            }
-          }
-
-          positionAttribute.setY(i, y);
-
-          // Dynamically change point colors based on height and current color gradient
-          const ratio = Math.max(0, Math.min(1, (y + 185) / 370));
-          colorLerpTarget.lerpColors(currentC1, currentC2, ratio);
-          colorAttribute.setXYZ(i, colorLerpTarget.r, colorLerpTarget.g, colorLerpTarget.b);
+        // Theme opacity adjustments
+        if (currentTheme === 'dark') {
+          terrainUniforms.uOpacity.value = 0.15;
+          terrainPointsUniforms.uOpacity.value = 0.85;
+        } else {
+          terrainUniforms.uOpacity.value = 0.08;
+          terrainPointsUniforms.uOpacity.value = 0.35;
         }
 
-        positionAttribute.needsUpdate = true;
-        colorAttribute.needsUpdate = true;
-
-        // Theme adjustments
-        if (currentTheme === 'dark') {
-          terrainMesh.material.opacity = 0.15;
-          terrainPoints.material.opacity = 0.85;
-        } else {
-          terrainMesh.material.opacity = 0.08;
-          terrainPoints.material.opacity = 0.35;
+        // Animate ripples in uniforms
+        for (let r = 0; r < ripples.length; r++) {
+          const ripple = ripples[r];
+          const age = timeSec - ripple.startTime;
+          const currentRadius = age * ripple.speed;
+          
+          if (currentRadius < ripple.maxRadius) {
+            const decay = Math.max(0, 1 - age / 2.0);
+            const amplitude = ripple.amplitude * decay;
+            terrainUniforms.uRipples.value[r].set(ripple.x, ripple.z, currentRadius, amplitude);
+          } else {
+            terrainUniforms.uRipples.value[r].set(0, 0, 0, 0);
+          }
+        }
+        for (let r = ripples.length; r < 5; r++) {
+          terrainUniforms.uRipples.value[r].set(0, 0, 0, 0);
         }
       }
 
@@ -2283,8 +2335,8 @@
     }
 
     /* ─── DYNAMIC 3D HERO VISUAL BOX (Torus Knot Morphing Mesh) ─── */
-    let heroScene, heroCamera, heroRenderer, heroMesh, heroPoints;
-    let heroRing1, heroRing2;
+    let heroScene, heroCamera, heroRenderer, heroMesh, heroPoints, heroDust;
+    let heroRing1, heroRing2, heroRing3;
     let heroTargetSpeed = 0.005;
     let heroCurrentSpeed = 0.005;
     let heroTargetGlow = 1.5;
@@ -2390,9 +2442,15 @@
         
         float pulse = sin(uTime * 2.5) * 0.08 + 0.92;
         float glow = uGlowIntensity + uHover * 2.0;
-        vec3 finalColor = baseColor + (baseColor * fresnel * glow * pulse);
         
-        float alpha = 0.18 + fresnel * 0.65 + uHover * 0.15;
+        // Holographic scanlines
+        float scanline = sin(vPosition.y * 1.5 - uTime * 8.0) * 0.08 + 0.92;
+        // Light wave pulsing along the Torus Knot's length (using local coordinates)
+        float wave = sin(vPosition.x * 0.25 + vPosition.y * 0.25 + vPosition.z * 0.25 + uTime * 3.5) * 0.2 + 0.8;
+        
+        vec3 finalColor = baseColor + (baseColor * fresnel * glow * pulse * wave);
+        float alpha = (0.18 + fresnel * 0.65 + uHover * 0.18) * scanline * wave;
+        
         gl_FragColor = vec4(finalColor, alpha);
       }
     `;
@@ -2477,6 +2535,13 @@
       uDashes: { value: 12.0 }
     };
 
+    let ring3Uniforms = {
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color('#3b82f6') },
+      uSpeed: { value: 1.2 },
+      uDashes: { value: 4.0 }
+    };
+
     let heroUniforms = {
       uTime: { value: 0 },
       uNoiseStrength: { value: 0.6 },
@@ -2485,6 +2550,10 @@
       uGlowIntensity: { value: 2.5 },
       uHover: { value: 0.0 }
     };
+
+    let dustMaterial;
+    let dustCount = 120;
+    let dustOffsets = [];
 
     function initHeroThree() {
       const container = document.getElementById('hero-three-container');
@@ -2554,6 +2623,56 @@
       heroRing2 = new THREE.Mesh(ring2Geo, ring2Mat);
       heroRing2.rotation.y = Math.PI / 4;
       heroScene.add(heroRing2);
+
+      // Outer Target Gimbal Ring (Ring 3)
+      const ring3Geo = new THREE.RingGeometry(15, 15.12, 64);
+      const ring3Mat = new THREE.ShaderMaterial({
+        vertexShader: ringVertexShader,
+        fragmentShader: ringFragmentShader,
+        uniforms: ring3Uniforms,
+        side: THREE.DoubleSide,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      heroRing3 = new THREE.Mesh(ring3Geo, ring3Mat);
+      heroRing3.rotation.x = Math.PI / 3;
+      heroRing3.rotation.y = -Math.PI / 6;
+      heroScene.add(heroRing3);
+
+      // Volumetric Space Dust Particles
+      const dustGeometry = new THREE.BufferGeometry();
+      const dustPositions = new Float32Array(dustCount * 3);
+      dustOffsets = [];
+      
+      for (let i = 0; i < dustCount; i++) {
+        const r = 8.0 + Math.random() * 10.0;
+        const theta = Math.random() * Math.PI * 2.0;
+        const phi = Math.acos((Math.random() * 2.0) - 1.0);
+        
+        dustPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+        dustPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        dustPositions[i * 3 + 2] = r * Math.cos(phi);
+        
+        dustOffsets.push({
+          x: Math.random() * Math.PI * 2.0,
+          y: Math.random() * Math.PI * 2.0,
+          z: Math.random() * Math.PI * 2.0
+        });
+      }
+      
+      dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+      
+      dustMaterial = new THREE.PointsMaterial({
+        size: 0.25,
+        transparent: true,
+        opacity: currentTheme === 'dark' ? 0.6 : 0.3,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      
+      heroDust = new THREE.Points(dustGeometry, dustMaterial);
+      heroScene.add(heroDust);
 
       heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       heroRenderer.setSize(width, height);
@@ -2631,6 +2750,7 @@
         
         ring1Uniforms.uTime.value = timeSec;
         ring2Uniforms.uTime.value = timeSec;
+        ring3Uniforms.uTime.value = timeSec;
 
         const scrollOffset = window.scrollY;
 
@@ -2650,6 +2770,32 @@
           heroRing2.rotation.x = heroMouseY * 0.25;
           heroRing2.rotation.y = Math.PI / 4 + heroMouseX * 0.25;
         }
+        if (heroRing3) {
+          heroRing3.rotation.z = timeSec * 0.15 - scrollOffset * 0.0005;
+          heroRing3.rotation.x = Math.PI / 3 + heroMouseY * 0.15;
+          heroRing3.rotation.y = -Math.PI / 6 + heroMouseX * 0.15;
+        }
+
+        // Volumetric dust float drift
+        if (heroDust && dustMaterial) {
+          heroDust.rotation.y = timeSec * 0.05;
+          heroDust.rotation.x = timeSec * 0.02;
+          
+          const positions = heroDust.geometry.attributes.position.array;
+          for (let i = 0; i < dustCount; i++) {
+            const idx = i * 3;
+            positions[idx + 1] += Math.sin(timeSec * 0.5 + dustOffsets[i].y) * 0.005;
+          }
+          heroDust.geometry.attributes.position.needsUpdate = true;
+          
+          if (currentTheme === 'dark') {
+            dustMaterial.color.copy(currentC1).lerp(currentC2, 0.5);
+            dustMaterial.opacity = 0.6;
+          } else {
+            dustMaterial.color.copy(currentC1).lerp(currentC2, 0.5).multiplyScalar(0.7);
+            dustMaterial.opacity = 0.3;
+          }
+        }
 
         // Camera tilt response
         heroCamera.position.x += (heroMouseX * 4 - heroCamera.position.x) * 0.1;
@@ -2660,16 +2806,18 @@
         if (currentTheme === 'dark') {
           heroUniforms.uColor1.value.copy(currentC1);
           heroUniforms.uColor2.value.copy(currentC2);
-          if (heroRing1 && heroRing2) {
+          if (heroRing1 && heroRing2 && heroRing3) {
             ring1Uniforms.uColor.value.copy(currentC1);
             ring2Uniforms.uColor.value.copy(currentC2);
+            ring3Uniforms.uColor.value.copy(currentC1).lerp(currentC2, 0.5);
           }
         } else {
           heroUniforms.uColor1.value.copy(currentC1).multiplyScalar(0.7);
           heroUniforms.uColor2.value.copy(currentC2).multiplyScalar(0.7);
-          if (heroRing1 && heroRing2) {
+          if (heroRing1 && heroRing2 && heroRing3) {
             ring1Uniforms.uColor.value.copy(currentC1).multiplyScalar(0.7);
             ring2Uniforms.uColor.value.copy(currentC2).multiplyScalar(0.7);
+            ring3Uniforms.uColor.value.copy(currentC1).lerp(currentC2, 0.5).multiplyScalar(0.7);
           }
         }
       }
@@ -2773,9 +2921,6 @@
         card.addEventListener('mouseleave', () => {
           isHovered = false;
         });
-
-        window.addEventListener('resize', () => { rect = card.getBoundingClientRect(); });
-        window.addEventListener('scroll', () => { rect = card.getBoundingClientRect(); });
       });
     }
 
