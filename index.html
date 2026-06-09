@@ -585,6 +585,18 @@
 
     /* ─── STATE MANAGEMENT ─── */
     let cart = JSON.parse(localStorage.getItem('gearvn_cart')) || [];
+    let MOCK_REVIEWS = JSON.parse(localStorage.getItem('gearvn_reviews')) || [
+      { id: 1, product_id: 1, name: "Trần Anh Tuấn", rating: 5, comment: "Máy dùng cực mượt, nhiệt độ khi chơi game tầm 75 độ cực mát. Xứng đáng đồng tiền bát gạo!", date: "2026-06-05" },
+      { id: 2, product_id: 1, name: "Nguyễn Minh Hùng", rating: 4, comment: "Cấu hình mạnh mẽ, màn hình 165Hz chơi game bắn súng cực phê. Điểm trừ duy nhất là cục sạc hơi nặng.", date: "2026-06-03" },
+      { id: 3, product_id: 2, name: "Hoàng Gia Bảo", rating: 5, comment: "Predator Helios Neo năm nay thiết kế đẹp hơn hẳn. Card 4060 cân tốt mọi game AAA hiện tại.", date: "2026-06-07" },
+      { id: 4, product_id: 3, name: "Lê Văn Thịnh", rating: 5, comment: "PC đóng gói cẩn thận, đi dây gọn gàng. Nhân viên hỗ trợ cài đặt win và game rất nhiệt tình.", date: "2026-06-04" },
+      { id: 5, product_id: 4, name: "Võ Hoàng Nam", rating: 5, comment: "Bản Strix mát lạnh, chạy êm ru không nghe tiếng ồn. VRAM 16GB làm đồ họa 3D rất tốt.", date: "2026-06-08" },
+      { id: 6, product_id: 5, name: "Nguyễn Tiến Đạt", rating: 5, comment: "CPU 14900KS cực kỳ mạnh mẽ, xử lý render video 4K cực nhanh.", date: "2026-06-02" },
+      { id: 7, product_id: 6, name: "Phạm Minh Đức", rating: 5, comment: "Màn hình OLED 240Hz màu sắc rực rỡ, độ trễ gần như bằng 0. Trải nghiệm tuyệt đỉnh!", date: "2026-06-06" },
+      { id: 8, product_id: 7, name: "Đỗ Gia Khánh", rating: 4, comment: "Bàn phím gõ êm, màn hình OLED nhỏ gọn hiển thị nhiều thông tin hữu ích.", date: "2026-06-05" },
+      { id: 9, product_id: 8, name: "Vũ Hải Đăng", rating: 5, comment: "Form cầm vừa tay, switch quang lai bấm rất nảy và nhạy. Pin dùng cực trâu.", date: "2026-06-08" },
+      { id: 10, product_id: 9, name: "Trịnh Gia Huy", rating: 4, comment: "Âm thanh vòm định vị chân thực, micro thu tiếng rất trong và ấm.", date: "2026-06-01" }
+    ];
     let orders = JSON.parse(localStorage.getItem('gearvn_orders')) || [
       {
         id: 'DH9842',
@@ -933,6 +945,79 @@
         `;
       }
 
+      // Render reviews HTML
+      const productReviews = MOCK_REVIEWS.filter(r => r.product_id === productId);
+      let reviewsHTML = '';
+      if (productReviews.length === 0) {
+        reviewsHTML = `
+          <div class="text-center py-6 bg-slate-50 dark:bg-slate-800/20 rounded-xl border border-slate-100 dark:border-slate-800 text-xs text-slate-400">
+            Chưa có đánh giá nào cho sản phẩm này. Hãy là người đầu tiên đánh giá!
+          </div>
+        `;
+      } else {
+        productReviews.forEach(r => {
+          let stars = '';
+          for (let i = 1; i <= 5; i++) {
+            stars += `<i class="fa-solid fa-star ${i <= r.rating ? 'text-yellow-400' : 'text-slate-600'} text-[10px]"></i>`;
+          }
+          reviewsHTML += `
+            <div class="bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800 rounded-xl p-3 space-y-1">
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="font-bold text-slate-200">${r.name}</span>
+                <span class="text-slate-500">${r.date}</span>
+              </div>
+              <div class="flex gap-0.5">${stars}</div>
+              <p class="text-[11px] text-slate-400 leading-relaxed">${r.comment}</p>
+            </div>
+          `;
+        });
+      }
+
+      // Check current user state using getCurrentUser from auth.js
+      const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+      let reviewFormHTML = '';
+      if (user) {
+        reviewFormHTML = `
+          <form id="add-review-form" class="space-y-3 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800 rounded-xl p-4">
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-semibold text-slate-400">Chọn số sao đánh giá:</label>
+              <div class="flex gap-1 text-slate-600 text-base cursor-pointer" id="form-star-selector">
+                <i class="fa-solid fa-star text-yellow-400 star-btn" data-val="1"></i>
+                <i class="fa-solid fa-star text-yellow-400 star-btn" data-val="2"></i>
+                <i class="fa-solid fa-star text-yellow-400 star-btn" data-val="3"></i>
+                <i class="fa-solid fa-star text-yellow-400 star-btn" data-val="4"></i>
+                <i class="fa-solid fa-star text-yellow-400 star-btn" data-val="5"></i>
+              </div>
+              <input type="hidden" id="review-rating-input" value="5" />
+            </div>
+            
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-semibold text-slate-400" for="review-comment-input">Bình luận của bạn:</label>
+              <textarea 
+                id="review-comment-input" 
+                rows="3" 
+                placeholder="Nhập nhận xét của bạn về sản phẩm..." 
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg py-2 px-3 text-[11px] text-white focus:outline-none focus:border-indigo-500 placeholder-zinc-600"
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-[11px] shadow-md transition">
+              Gửi đánh giá
+            </button>
+          </form>
+        `;
+      } else {
+        reviewFormHTML = `
+          <div class="bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800 rounded-xl p-4 text-center space-y-2">
+            <p class="text-xs text-slate-400">Bạn cần đăng nhập để gửi đánh giá cho sản phẩm này.</p>
+            <button type="button" onclick="closeDetail(); showAuthModal('login');" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition">
+              Đăng nhập ngay
+            </button>
+          </div>
+        `;
+      }
+
       container.innerHTML = `
         <div class="relative h-56 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border">
           <img src="${p.image}" class="w-full h-full object-cover" alt="${p.name}" />
@@ -959,13 +1044,87 @@
           <span class="text-xs uppercase font-bold text-slate-400">Đơn giá sản phẩm:</span>
           <span class="text-lg font-black text-indigo-600 dark:text-indigo-400">${p.price.toLocaleString('vi-VN')} đ</span>
         </div>
+
+        <!-- Reviews Section -->
+        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-indigo-500 flex items-center gap-1.5"><i class="fa-solid fa-comments"></i> Đánh giá từ khách hàng</h4>
+          <div class="space-y-2.5">
+            ${reviewsHTML}
+          </div>
+        </div>
+
+        <!-- Add Review Form -->
+        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800 pb-6">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-indigo-500 flex items-center gap-1.5"><i class="fa-solid fa-pen-to-square"></i> Viết đánh giá</h4>
+          ${reviewFormHTML}
+        </div>
       `;
 
-      // Set event for button
+      // Set event for add-to-cart button
       document.getElementById('detail-add-btn').onclick = () => {
         addToCart(p.id);
         closeDetail();
       };
+
+      // Set event for star selector and form submission
+      if (user) {
+        const starSelector = document.getElementById('form-star-selector');
+        if (starSelector) {
+          const starBtns = starSelector.querySelectorAll('.star-btn');
+          const ratingInput = document.getElementById('review-rating-input');
+          starBtns.forEach(btn => {
+            btn.onclick = (e) => {
+              const val = parseInt(e.target.dataset.val);
+              ratingInput.value = val;
+              starBtns.forEach(s => {
+                const sVal = parseInt(s.dataset.val);
+                if (sVal <= val) {
+                  s.className = "fa-solid fa-star text-yellow-400 star-btn";
+                } else {
+                  s.className = "fa-solid fa-star text-slate-600 star-btn";
+                }
+              });
+            };
+          });
+        }
+
+        const reviewForm = document.getElementById('add-review-form');
+        if (reviewForm) {
+          reviewForm.onsubmit = (e) => {
+            e.preventDefault();
+            const ratingInput = document.getElementById('review-rating-input');
+            const commentInput = document.getElementById('review-comment-input');
+            const rating = parseInt(ratingInput.value);
+            const comment = commentInput.value.trim();
+            if (!comment) return;
+
+            // Add new review
+            const newReview = {
+              id: MOCK_REVIEWS.length + 1,
+              product_id: productId,
+              name: user.name,
+              rating: rating,
+              comment: comment,
+              date: new Date().toISOString().split('T')[0]
+            };
+            MOCK_REVIEWS.push(newReview);
+            localStorage.setItem('gearvn_reviews', JSON.stringify(MOCK_REVIEWS));
+
+            // Recalculate average rating & count
+            const allProdReviews = MOCK_REVIEWS.filter(r => r.product_id === productId);
+            p.reviews = allProdReviews.length;
+            p.rating = parseFloat((allProdReviews.reduce((sum, r) => sum + r.rating, 0) / p.reviews).toFixed(1));
+
+            // Re-render product catalog and current detail view
+            renderProducts();
+            openDetail(productId);
+
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({ icon: 'success', title: 'Cảm ơn bạn đã đánh giá!', timer: 1500, showConfirmButton: false });
+            }
+          };
+        }
+      }
 
       const overlay = document.getElementById('detail-drawer-overlay');
       const drawer = document.getElementById('detail-drawer');
