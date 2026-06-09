@@ -2406,16 +2406,76 @@
       void main() {
         vec2 coord = gl_PointCoord - vec2(0.5);
         float dist = length(coord);
-        if (dist > 0.5) discard;
         
-        float alpha = smoothstep(0.5, 0.0, dist);
+        // 1. Tech ring glow
+        float thickness = 0.05 + uHover * 0.03;
+        float radius = 0.28;
+        float ring = smoothstep(thickness, 0.0, abs(dist - radius));
+        
+        // 2. Center dot glow
+        float centerDot = smoothstep(0.08, 0.0, dist) * 1.5;
+        
+        // 3. Crosshair lines (horizontal and vertical ticks)
+        float lineThickness = 0.012;
+        float lineLength = 0.4;
+        float tick = 0.0;
+        if (abs(coord.x) < lineThickness && abs(coord.y) < lineLength && abs(coord.y) > 0.1) {
+          tick = 1.0;
+        }
+        if (abs(coord.y) < lineThickness && abs(coord.x) < lineLength && abs(coord.x) > 0.1) {
+          tick = 1.0;
+        }
+        
+        float alpha = max(max(ring, centerDot), tick * 0.7);
+        if (alpha < 0.05) discard;
+        
         float mixFactor = (vNoise + 1.0) * 0.5;
         vec3 baseColor = mix(uColor1, uColor2, mixFactor);
         
-        vec3 finalColor = baseColor * (1.6 + uHover * 2.2);
-        gl_FragColor = vec4(finalColor, alpha * (0.8 + uHover * 0.2));
+        // Boost brightness on hover
+        vec3 finalColor = baseColor * (1.8 + uHover * 2.5);
+        gl_FragColor = vec4(finalColor, alpha * (0.85 + uHover * 0.15));
       }
     `;
+
+    // Gyro Rings shaders
+    const ringVertexShader = `
+      varying vec3 vPosition;
+      void main() {
+        vPosition = position;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
+
+    const ringFragmentShader = `
+      uniform float uTime;
+      uniform vec3 uColor;
+      uniform float uSpeed;
+      uniform float uDashes;
+      varying vec3 vPosition;
+      void main() {
+        float angle = atan(vPosition.y, vPosition.x);
+        float dash = step(0.4, sin(angle * uDashes + uTime * uSpeed));
+        if (dash < 0.1) discard;
+        
+        float pulse = sin(uTime * 2.0) * 0.15 + 0.85;
+        gl_FragColor = vec4(uColor * pulse, 0.38 * pulse);
+      }
+    `;
+
+    let ring1Uniforms = {
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color('#3b82f6') },
+      uSpeed: { value: 2.0 },
+      uDashes: { value: 8.0 }
+    };
+
+    let ring2Uniforms = {
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color('#10b981') },
+      uSpeed: { value: -2.5 },
+      uDashes: { value: 12.0 }
+    };
 
     let heroUniforms = {
       uTime: { value: 0 },
@@ -2466,26 +2526,30 @@
       heroPoints = new THREE.Points(geometry, pointsMaterial);
       heroScene.add(heroPoints);
 
-      // Gyroscope Rings
+      // Gyroscope Rings (using advanced dash shader)
       const ring1Geo = new THREE.RingGeometry(13, 13.15, 64);
-      const ring1Mat = new THREE.MeshBasicMaterial({
-        color: 0x3b82f6,
+      const ring1Mat = new THREE.ShaderMaterial({
+        vertexShader: ringVertexShader,
+        fragmentShader: ringFragmentShader,
+        uniforms: ring1Uniforms,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: currentTheme === 'dark' ? 0.3 : 0.15,
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
       });
       heroRing1 = new THREE.Mesh(ring1Geo, ring1Mat);
       heroRing1.rotation.x = Math.PI / 2;
       heroScene.add(heroRing1);
 
       const ring2Geo = new THREE.RingGeometry(11, 11.15, 64);
-      const ring2Mat = new THREE.MeshBasicMaterial({
-        color: 0x10b981,
+      const ring2Mat = new THREE.ShaderMaterial({
+        vertexShader: ringVertexShader,
+        fragmentShader: ringFragmentShader,
+        uniforms: ring2Uniforms,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: currentTheme === 'dark' ? 0.25 : 0.12,
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
       });
       heroRing2 = new THREE.Mesh(ring2Geo, ring2Mat);
       heroRing2.rotation.y = Math.PI / 4;
@@ -2564,20 +2628,25 @@
         // Update uniforms
         heroUniforms.uTime.value = timeSec;
         heroUniforms.uHover.value = heroHoverVal;
+        
+        ring1Uniforms.uTime.value = timeSec;
+        ring2Uniforms.uTime.value = timeSec;
 
-        // Base rotation
-        heroMesh.rotation.y += heroCurrentSpeed;
-        heroMesh.rotation.x += heroCurrentSpeed * 0.5;
+        const scrollOffset = window.scrollY;
+
+        // Base rotation + parallax scroll rotation
+        heroMesh.rotation.y = timeSec * 0.35 + scrollOffset * 0.0015;
+        heroMesh.rotation.x = timeSec * 0.18 + scrollOffset * 0.0008;
         heroPoints.rotation.copy(heroMesh.rotation);
 
-        // Gyro rings rotation & mouse response
+        // Gyro rings rotation & mouse & scroll response
         if (heroRing1) {
-          heroRing1.rotation.z += 0.006;
+          heroRing1.rotation.z = timeSec * 0.35 + scrollOffset * 0.001;
           heroRing1.rotation.x = Math.PI / 2 + heroMouseY * 0.35;
           heroRing1.rotation.y = heroMouseX * 0.35;
         }
         if (heroRing2) {
-          heroRing2.rotation.z -= 0.008;
+          heroRing2.rotation.z = -timeSec * 0.45 - scrollOffset * 0.0012;
           heroRing2.rotation.x = heroMouseY * 0.25;
           heroRing2.rotation.y = Math.PI / 4 + heroMouseX * 0.25;
         }
@@ -2587,20 +2656,20 @@
         heroCamera.position.y += (heroMouseY * 4 - heroCamera.position.y) * 0.1;
         heroCamera.lookAt(0, 0, 0);
 
-        // Theme adjustments
+        // Theme adjustments & sync with dynamic section colors (from background terrain)
         if (currentTheme === 'dark') {
-          heroUniforms.uColor1.value.setHex(0x3b82f6); // neon blue
-          heroUniforms.uColor2.value.setHex(0x10b981); // neon green
+          heroUniforms.uColor1.value.copy(currentC1);
+          heroUniforms.uColor2.value.copy(currentC2);
           if (heroRing1 && heroRing2) {
-            heroRing1.material.opacity = 0.3;
-            heroRing2.material.opacity = 0.25;
+            ring1Uniforms.uColor.value.copy(currentC1);
+            ring2Uniforms.uColor.value.copy(currentC2);
           }
         } else {
-          heroUniforms.uColor1.value.setHex(0x1d4ed8); // darker blue
-          heroUniforms.uColor2.value.setHex(0x059669); // darker green
+          heroUniforms.uColor1.value.copy(currentC1).multiplyScalar(0.7);
+          heroUniforms.uColor2.value.copy(currentC2).multiplyScalar(0.7);
           if (heroRing1 && heroRing2) {
-            heroRing1.material.opacity = 0.15;
-            heroRing2.material.opacity = 0.12;
+            ring1Uniforms.uColor.value.copy(currentC1).multiplyScalar(0.7);
+            ring2Uniforms.uColor.value.copy(currentC2).multiplyScalar(0.7);
           }
         }
       }
