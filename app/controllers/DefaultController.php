@@ -1,18 +1,21 @@
 <?php
 require_once 'app/models/ProductModel.php';
 require_once 'app/models/CategoryModel.php';
+require_once 'app/models/ReviewModel.php';
 require_once 'app/config/database.php';
 
 class DefaultController
 {
     private $productModel;
     private $categoryModel;
+    private $reviewModel;
 
     public function __construct()
     {
         $db = new Database();
         $this->productModel = new ProductModel($db->getConnection());
         $this->categoryModel = new CategoryModel($db->getConnection());
+        $this->reviewModel = new ReviewModel($db->getConnection());
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -89,6 +92,7 @@ class DefaultController
             exit();
         }
         $categories = $this->categoryModel->getCategories();
+        $reviews = $this->reviewModel->getReviewsByProductId($id);
         require_once 'app/views/home/detail.php';
     }
 
@@ -114,6 +118,32 @@ class DefaultController
     {
         $categories = $this->categoryModel->getCategories();
         require_once 'app/views/home/support.php';
+    }
+
+    public function addReview()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: index.php?url=auth/login');
+            exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $product_id = $_POST['product_id'] ?? 0;
+            $rating = $_POST['rating'] ?? 5;
+            $comment = $_POST['comment'] ?? '';
+            $user_id = $_SESSION['user_id'];
+
+            if ($product_id > 0 && $rating >= 1 && $rating <= 5 && !empty(trim($comment))) {
+                $this->reviewModel->addReview($product_id, $user_id, $rating, $comment);
+            }
+
+            header('Location: index.php?url=default/detail/' . $product_id);
+            exit();
+        }
     }
 }
 ?>

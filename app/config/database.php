@@ -26,6 +26,20 @@ class Database {
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
 
+            $this->conn->exec("CREATE TABLE IF NOT EXISTS `reviews` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `product_id` int(11) NOT NULL,
+              `user_id` int(11) NOT NULL,
+              `rating` int(11) NOT NULL,
+              `comment` text NOT NULL,
+              `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              KEY `product_id` (`product_id`),
+              KEY `user_id` (`user_id`),
+              CONSTRAINT `fk_review_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
+              CONSTRAINT `fk_review_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+
             // Check and add missing columns in orders table
             $stmt = $this->conn->query("SHOW COLUMNS FROM `orders` LIKE 'payment_method'");
             if ($stmt->rowCount() == 0) {
