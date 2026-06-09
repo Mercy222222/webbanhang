@@ -2016,8 +2016,9 @@
       initTerminalHUD();
     });
 
-    /* ─── DYNAMIC 3D THREE.JS UNDULATING TERRAIN GRID WAVE ─── */
-    let ripples = [];
+    /* ─── DYNAMIC 3D THREE.JS CYBERNETIC FLOW FIELD SWARM ─── */
+    let rawMouseX = window.innerWidth / 2;
+    let rawMouseY = window.innerHeight / 2;
     const sectionColors = {
       home: { c1: '#3b82f6', c2: '#10b981' },
       about: { c1: '#10b981', c2: '#06b6d4' },
@@ -2030,110 +2031,19 @@
     let currentC1 = new THREE.Color('#3b82f6');
     let currentC2 = new THREE.Color('#10b981');
 
-    let scene, camera, renderer, terrainMesh, terrainPoints, starField;
+    let scene, camera, renderer, starField;
     let targetX = 0, targetY = 0;
     let windowHalfX = window.innerWidth / 2;
     let windowHalfY = window.innerHeight / 2;
 
-    // GPU Shader Definitions for Terrain
-    const terrainVertexShader = `
-      uniform float uTime;
-      uniform vec4 uRipples[5];
-      varying float vHeight;
-      varying vec3 vWorldPosition;
-      
-      void main() {
-        vec3 pos = position;
-        
-        // Base undulating waves (Sine & Cosine combinatorics)
-        float height = sin(pos.x * 0.0018 + uTime) * 75.0 +
-                       cos(pos.z * 0.0018 + uTime * 0.8) * 75.0 +
-                       sin((pos.x + pos.z) * 0.0009 + uTime * 0.5) * 35.0;
-        
-        // Apply dynamic mouse-click ripples
-        for (int i = 0; i < 5; i++) {
-          vec4 ripple = uRipples[i];
-          float rX = ripple.x;
-          float rZ = ripple.y;
-          float rRadius = ripple.z;
-          float rAmp = ripple.w;
-          
-          if (rAmp > 0.0) {
-            float dx = pos.x - rX;
-            float dz = pos.z - rZ;
-            float dist = sqrt(dx * dx + dz * dz);
-            float distToWavefront = abs(dist - rRadius);
-            
-            if (distToWavefront < 180.0) {
-              float decay = max(0.0, 1.0 - dist / 1200.0) * rAmp;
-              float waveFactor = sin((distToWavefront / 180.0) * 3.14159265) * decay;
-              height += waveFactor;
-            }
-          }
-        }
-        
-        pos.y = height;
-        vHeight = height;
-        vWorldPosition = pos;
-        
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `;
-
-    const terrainFragmentShader = `
-      uniform vec3 uColor1;
-      uniform vec3 uColor2;
-      uniform float uOpacity;
-      varying float vHeight;
-      
-      void main() {
-        float ratio = clamp((vHeight + 185.0) / 370.0, 0.0, 1.0);
-        vec3 finalColor = mix(uColor1, uColor2, ratio);
-        gl_FragColor = vec4(finalColor, uOpacity);
-      }
-    `;
-
-    const terrainPointsFragmentShader = `
-      uniform vec3 uColor1;
-      uniform vec3 uColor2;
-      uniform float uOpacity;
-      varying float vHeight;
-      
-      void main() {
-        float ratio = clamp((vHeight + 185.0) / 370.0, 0.0, 1.0);
-        vec3 finalColor = mix(uColor1, uColor2, ratio);
-        
-        // Draw custom high-performance glow points directly in GLSL
-        vec2 coord = gl_PointCoord - vec2(0.5);
-        float dist = length(coord);
-        float alpha = smoothstep(0.5, 0.0, dist) * uOpacity;
-        if (alpha < 0.01) discard;
-        
-        gl_FragColor = vec4(finalColor, alpha);
-      }
-    `;
-
-    let terrainUniforms = {
-      uTime: { value: 0 },
-      uColor1: { value: currentC1 },
-      uColor2: { value: currentC2 },
-      uOpacity: { value: 0.15 },
-      uRipples: { value: [
-        new THREE.Vector4(0, 0, 0, 0),
-        new THREE.Vector4(0, 0, 0, 0),
-        new THREE.Vector4(0, 0, 0, 0),
-        new THREE.Vector4(0, 0, 0, 0),
-        new THREE.Vector4(0, 0, 0, 0)
-      ]}
-    };
-
-    let terrainPointsUniforms = {
-      uTime: { value: 0 },
-      uColor1: { value: currentC1 },
-      uColor2: { value: currentC2 },
-      uOpacity: { value: 0.85 },
-      uRipples: { value: terrainUniforms.uRipples.value }
-    };
+    // Flow field particle structures
+    const flowParticleCount = 2500;
+    let flowGeometry, flowMaterial, flowPointsObj;
+    let flowPositions = new Float32Array(flowParticleCount * 3);
+    let flowVelocities = new Float32Array(flowParticleCount * 3);
+    let flowSpeeds = new Float32Array(flowParticleCount);
+    let flowOffsets = [];
+    let flowColors = new Float32Array(flowParticleCount * 3);
 
     function initThreeJS() {
       const container = document.getElementById('three-bg-container');
@@ -2141,73 +2051,106 @@
 
       scene = new THREE.Scene();
       
-      // Perspective camera looking slightly downwards at the wave landscape
-      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 4000);
-      camera.position.set(0, 450, 1100);
+      // Full screen perspective camera pointing directly at the center
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+      camera.position.set(0, 0, 600);
 
-      const isMobile = window.innerWidth < 768;
-      // Drastically increased segments thanks to GPU computing (150x150 segments on desktop!)
-      const gridSegments = isMobile ? 60 : 150;
-      const gridWidth = 3200;
-      const gridDepth = 3200;
+      // Initialize flow particles
+      flowGeometry = new THREE.BufferGeometry();
+      const boxW = window.innerWidth * 1.5;
+      const boxH = window.innerHeight * 1.5;
+      const boxD = 800;
 
-      // PlaneGeometry placed horizontally
-      const geometry = new THREE.PlaneGeometry(gridWidth, gridDepth, gridSegments, gridSegments);
-      geometry.rotateX(-Math.PI / 2);
+      for (let i = 0; i < flowParticleCount; i++) {
+        flowPositions[i * 3] = (Math.random() - 0.5) * boxW;
+        flowPositions[i * 3 + 1] = (Math.random() - 0.5) * boxH;
+        flowPositions[i * 3 + 2] = (Math.random() - 0.5) * boxD - 200;
 
-      // Wireframe Grid Mesh using Custom GPU Shaders
-      const meshMaterial = new THREE.ShaderMaterial({
-        vertexShader: terrainVertexShader,
-        fragmentShader: terrainFragmentShader,
-        uniforms: terrainUniforms,
-        wireframe: true,
+        flowVelocities[i * 3] = 0;
+        flowVelocities[i * 3 + 1] = 0;
+        flowVelocities[i * 3 + 2] = 0;
+
+        flowSpeeds[i] = 0.5 + Math.random() * 1.5;
+
+        flowOffsets.push({
+          x: Math.random() * Math.PI * 2.0,
+          y: Math.random() * Math.PI * 2.0,
+          z: Math.random() * Math.PI * 2.0
+        });
+
+        flowColors[i * 3] = currentC1.r;
+        flowColors[i * 3 + 1] = currentC1.g;
+        flowColors[i * 3 + 2] = currentC1.b;
+      }
+
+      flowGeometry.setAttribute('position', new THREE.BufferAttribute(flowPositions, 3));
+      flowGeometry.setAttribute('color', new THREE.BufferAttribute(flowColors, 3));
+
+      // GPU Shader for high-performance glowing particles
+      const flowVertexShader = `
+        attribute vec3 color;
+        varying vec3 vColor;
+        void main() {
+          vColor = color;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = (12.0 * (300.0 / -mvPosition.z));
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `;
+
+      const flowFragmentShader = `
+        varying vec3 vColor;
+        uniform float uOpacity;
+        void main() {
+          vec2 coord = gl_PointCoord - vec2(0.5);
+          float dist = length(coord);
+          float alpha = smoothstep(0.5, 0.0, dist) * uOpacity;
+          if (alpha < 0.02) discard;
+          gl_FragColor = vec4(vColor, alpha);
+        }
+      `;
+
+      flowMaterial = new THREE.ShaderMaterial({
+        vertexShader: flowVertexShader,
+        fragmentShader: flowFragmentShader,
+        uniforms: {
+          uOpacity: { value: currentTheme === 'dark' ? 0.65 : 0.35 }
+        },
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
-      terrainMesh = new THREE.Mesh(geometry, meshMaterial);
-      scene.add(terrainMesh);
 
-      // Glowing Point Intersections using Custom GPU Shaders
-      const pointsMaterial = new THREE.ShaderMaterial({
-        vertexShader: terrainVertexShader,
-        fragmentShader: terrainPointsFragmentShader,
-        uniforms: terrainPointsUniforms,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      terrainPoints = new THREE.Points(geometry, pointsMaterial);
-      scene.add(terrainPoints);
+      flowPointsObj = new THREE.Points(flowGeometry, flowMaterial);
+      scene.add(flowPointsObj);
 
-      // Space Starfield Backdrop
+      // Deep space static starfield
       const starsGeometry = new THREE.BufferGeometry();
-      const starsCount = 200;
+      const starsCount = 150;
       const starPositions = new Float32Array(starsCount * 3);
       for (let i = 0; i < starsCount * 3; i += 3) {
         starPositions[i] = (Math.random() - 0.5) * 3200;
-        starPositions[i + 1] = Math.random() * 500 - 50;
-        starPositions[i + 2] = (Math.random() - 0.5) * 3200;
+        starPositions[i + 1] = (Math.random() - 0.5) * 2000;
+        starPositions[i + 2] = -800;
       }
       starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
       
       const starCanvas = document.createElement('canvas');
-      starCanvas.width = 16;
-      starCanvas.height = 16;
+      starCanvas.width = 8;
+      starCanvas.height = 8;
       const starCtx = starCanvas.getContext('2d');
-      const starGrad = starCtx.createRadialGradient(8, 8, 0, 8, 8, 8);
+      const starGrad = starCtx.createRadialGradient(4, 4, 0, 4, 4, 4);
       starGrad.addColorStop(0, 'rgba(255,255,255,1)');
-      starGrad.addColorStop(0.3, 'rgba(255,255,255,0.7)');
       starGrad.addColorStop(1, 'rgba(255,255,255,0)');
       starCtx.fillStyle = starGrad;
-      starCtx.fillRect(0, 0, 16, 16);
+      starCtx.fillRect(0, 0, 8, 8);
       const starTexture = new THREE.CanvasTexture(starCanvas);
 
       const starsMaterial = new THREE.PointsMaterial({
-        size: isMobile ? 6 : 9,
+        size: 4,
         map: starTexture,
         transparent: true,
-        opacity: currentTheme === 'dark' ? 0.6 : 0.25,
+        opacity: currentTheme === 'dark' ? 0.4 : 0.15,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
@@ -2222,28 +2165,40 @@
       document.addEventListener('mousemove', onThreeMouseMove);
       window.addEventListener('resize', onThreeWindowResize);
 
-      // Click event for interactive wave ripples
+      // Click event for interactive flow blast
       window.addEventListener('click', (e) => {
         playPulse();
         
-        // Map page click position to grid world space coordinates
-        const worldX = ((e.clientX / window.innerWidth) - 0.5) * 2600;
-        const worldZ = ((e.clientY / window.innerHeight) - 0.5) * 2600;
+        const rect = renderer.domElement.getBoundingClientRect();
+        const clickX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const clickY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         
-        ripples.push({
-          x: worldX,
-          z: worldZ,
-          startTime: performance.now() * 0.001,
-          maxRadius: 1000,
-          speed: 480, // units per second
-          amplitude: 70
-        });
-        
-        if (ripples.length > 5) ripples.shift();
+        const worldX = clickX * (window.innerWidth / 2) * 1.2;
+        const worldY = clickY * (window.innerHeight / 2) * 1.2;
+
+        const positions = flowGeometry.attributes.position.array;
+        for (let i = 0; i < flowParticleCount; i++) {
+          const idx = i * 3;
+          const px = positions[idx];
+          const py = positions[idx + 1];
+          
+          const dx = px - worldX;
+          const dy = py - worldY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 250) {
+            const force = (250 - dist) / 250;
+            const angle = Math.atan2(dy, dx);
+            flowVelocities[idx] += Math.cos(angle) * force * 15.0;
+            flowVelocities[idx + 1] += Math.sin(angle) * force * 15.0;
+          }
+        }
       });
     }
 
     function onThreeMouseMove(event) {
+      rawMouseX = event.clientX;
+      rawMouseY = event.clientY;
       targetX = (event.clientX - windowHalfX) * 0.15;
       targetY = (event.clientY - windowHalfY) * 0.15;
     }
@@ -2276,60 +2231,101 @@
       currentC1.lerp(tColor1, 0.025 * speedMultiplier);
       currentC2.lerp(tColor2, 0.025 * speedMultiplier);
 
-      // Update terrain mesh/points shader uniforms dynamically on the GPU
-      if (terrainMesh && terrainPoints) {
-        terrainUniforms.uTime.value = timeSec;
-        terrainPointsUniforms.uTime.value = timeSec;
+      // Update flow particle positions and vortex swirls
+      if (flowPointsObj) {
+        const positions = flowGeometry.attributes.position.array;
+        const colors = flowGeometry.attributes.color.array;
         
-        terrainUniforms.uColor1.value.copy(currentC1);
-        terrainUniforms.uColor2.value.copy(currentC2);
-        terrainPointsUniforms.uColor1.value.copy(currentC1);
-        terrainPointsUniforms.uColor2.value.copy(currentC2);
+        const boxW = window.innerWidth * 1.5;
+        const boxH = window.innerHeight * 1.5;
+        const boxD = 800;
+        
+        flowMaterial.uniforms.uOpacity.value = currentTheme === 'dark' ? 0.65 : 0.35;
 
-        // Theme opacity adjustments
-        if (currentTheme === 'dark') {
-          terrainUniforms.uOpacity.value = 0.15;
-          terrainPointsUniforms.uOpacity.value = 0.85;
-        } else {
-          terrainUniforms.uOpacity.value = 0.08;
-          terrainPointsUniforms.uOpacity.value = 0.35;
-        }
+        // Map mouse screen coords to 3D world space
+        const worldMouseX = ((rawMouseX / window.innerWidth) - 0.5) * window.innerWidth * 1.2;
+        const worldMouseY = -((rawMouseY / window.innerHeight) - 0.5) * window.innerHeight * 1.2;
 
-        // Animate ripples in uniforms
-        for (let r = 0; r < ripples.length; r++) {
-          const ripple = ripples[r];
-          const age = timeSec - ripple.startTime;
-          const currentRadius = age * ripple.speed;
+        for (let i = 0; i < flowParticleCount; i++) {
+          const idx = i * 3;
+          let px = positions[idx];
+          let py = positions[idx + 1];
+          let pz = positions[idx + 2];
           
-          if (currentRadius < ripple.maxRadius) {
-            const decay = Math.max(0, 1 - age / 2.0);
-            const amplitude = ripple.amplitude * decay;
-            terrainUniforms.uRipples.value[r].set(ripple.x, ripple.z, currentRadius, amplitude);
-          } else {
-            terrainUniforms.uRipples.value[r].set(0, 0, 0, 0);
+          let vx = flowVelocities[idx];
+          let vy = flowVelocities[idx + 1];
+          let vz = flowVelocities[idx + 2];
+          
+          // 1. Curl mathematical flow field vectors
+          vx += Math.sin(pz * 0.005 + timeSec) * 0.12 * flowSpeeds[i];
+          vy += Math.cos(px * 0.005 + timeSec * 0.8) * 0.12 * flowSpeeds[i];
+          vz += Math.sin(py * 0.005 + timeSec * 1.2) * 0.08 * flowSpeeds[i];
+          
+          // 2. Interactive mouse gravity vortex swirl
+          const dx = px - worldMouseX;
+          const dy = py - worldMouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 350) {
+            const force = (350 - dist) / 350;
+            const swirlSpeed = 4.5 * force;
+            vx += (-dy / dist) * swirlSpeed;
+            vy += (dx / dist) * swirlSpeed;
+            vx -= (dx / dist) * force * 1.2;
+            vy -= (dy / dist) * force * 1.2;
           }
+          
+          // Damping & speed caps
+          vx *= 0.95;
+          vy *= 0.95;
+          vz *= 0.95;
+          
+          px += vx;
+          py += vy;
+          pz += vz;
+          
+          // Wrap bounds when escaping boundary box
+          if (Math.abs(px) > boxW / 2) px = (Math.random() - 0.5) * boxW;
+          if (Math.abs(py) > boxH / 2) py = (Math.random() - 0.5) * boxH;
+          if (pz < -boxD / 2 || pz > boxD / 2) pz = (Math.random() - 0.5) * boxD - 200;
+          
+          positions[idx] = px;
+          positions[idx + 1] = py;
+          positions[idx + 2] = pz;
+          
+          flowVelocities[idx] = vx;
+          flowVelocities[idx + 1] = vy;
+          flowVelocities[idx + 2] = vz;
+          
+          // Color based on height and dynamics
+          const ratio = Math.max(0, Math.min(1, (py + boxH / 4) / (boxH / 2)));
+          colorLerpTarget.lerpColors(currentC1, currentC2, ratio);
+          
+          colors[idx] = colorLerpTarget.r;
+          colors[idx + 1] = colorLerpTarget.g;
+          colors[idx + 2] = colorLerpTarget.b;
         }
-        for (let r = ripples.length; r < 5; r++) {
-          terrainUniforms.uRipples.value[r].set(0, 0, 0, 0);
-        }
+        
+        flowGeometry.attributes.position.needsUpdate = true;
+        flowGeometry.attributes.color.needsUpdate = true;
       }
 
       if (starField) {
         starField.rotation.y = timeSec * 0.012;
         if (currentTheme === 'dark') {
-          starField.material.opacity = 0.6;
+          starField.material.opacity = 0.4;
         } else {
-          starField.material.opacity = 0.25;
+          starField.material.opacity = 0.15;
         }
       }
 
       // Parallax effect on camera
-      const targetCamX = targetX * 1.8;
-      const targetCamY = 450 - targetY * 1.8;
+      const targetCamX = targetX * 0.8;
+      const targetCamY = -targetY * 0.8;
       
       camera.position.x += (targetCamX - camera.position.x) * 0.05 * speedMultiplier;
       camera.position.y += (targetCamY - camera.position.y) * 0.05 * speedMultiplier;
-      camera.lookAt(new THREE.Vector3(0, -80, 0));
+      camera.lookAt(new THREE.Vector3(0, 0, 0));
 
       renderer.render(scene, camera);
     }
