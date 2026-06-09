@@ -40,7 +40,7 @@ interface OrderDetailData {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "orders">("overview");
-  const [apiBase, setApiBase] = useState<string>("http://localhost:8080/webbanhang/index.php?url=");
+  const [apiBase, setApiBase] = useState<string>("http://localhost/webbanhang/index.php?url=");
   const [customApiUrl, setCustomApiUrl] = useState<string>("");
   const [showSettings, setShowSettings] = useState<boolean>(false);
 
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
                     value={customApiUrl || apiBase}
                     onChange={(e) => setCustomApiUrl(e.target.value)}
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:border-blue-500"
-                    placeholder="http://localhost:8080/webbanhang/index.php?url="
+                    placeholder="http://localhost/webbanhang/index.php?url="
                     required
                   />
                 </div>
