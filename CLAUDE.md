@@ -180,3 +180,17 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 |------|--------|--------|--------|
 | 2026-06-09 | Initial Quant Harness setup | All | Configure developer agent team (quant-dev, agent-architect, quant-qa) and skills. |
 
+---
+
+## Harness: elite-dev
+
+**Goal:** Coordinate a 5-member elite team (Architect, UI/WebGL Designer, Full-Stack Developer, Quant Developer, and QA Tester) to design, style, implement, and verify complex full-stack features and AI financial models across the entire workspace.
+
+**Trigger:** Use `elite-orchestrator` skill for any multi-component feature implementation, WebGL/Three.js visual design, PHP backend/Next.js frontend integrations, or Python hedge fund agent modifications.
+
+**Changelog:**
+| Date | Change | Target | Reason |
+|------|--------|--------|--------|
+| 2026-06-09 | Initial 5-member Elite Harness setup | All | Configure unified workspace-wide elite team and hybrid orchestrator skill. |
+
+
