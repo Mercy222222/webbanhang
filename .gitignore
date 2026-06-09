@@ -11,3 +11,10 @@
 .agents/
 get-shit-done/
 taste-skill/
+
+# Dependencies & Subprojects
+node_modules/
+Understand-Anything/
+andrej-karpathy-skills/
+package-lock.json
+*.log

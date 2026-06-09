@@ -1,0 +1,67 @@
+/* style.css */
+/* Dark mode neon theme */
+:root {
+  --bg-color: #0a0a0a;
+  --primary-neon: #00ffea;
+  --secondary-neon: #ff00d4;
+  --text-color: #e0e0e0;
+}
+
+/* Global styles */
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+canvas#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Neon accent utilities */
+.neon-text {
+  color: var(--primary-neon);
+  text-shadow:
+    0 0 4px var(--primary-neon),
+    0 0 8px var(--primary-neon),
+    0 0 12px var(--secondary-neon);
+}
+
+.neon-border {
+  border: 2px solid var(--primary-neon);
+  box-shadow: 0 0 8px var(--primary-neon);
+}
+
+/* Transition for theme changes */
+* {
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Example hero styling */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}

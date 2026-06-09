@@ -1,0 +1,39 @@
+/* extra.css */
+/* Gradient overlay */
+#gradient-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(45deg, #00ffea, #ff00d4, #00ffea);
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+  animation: hueShift 12s infinite linear;
+  z-index: 0;
+}
+
+@keyframes hueShift {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Neon pulse on hover (applied to body) */
+body:hover {
+  box-shadow: 0 0 30px var(--primary-neon), 0 0 60px var(--secondary-neon);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Rain particle waterfall */
+.rain-drop {
+  position: absolute;
+  width: 2px;
+  height: 15px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 1px;
+  animation: fall 1.2s linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-100vh); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
