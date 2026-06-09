@@ -166,3 +166,17 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 | Date | Change | Target | Reason |
 |------|--------|--------|--------|
 | 2026-06-09 | Initial Next.js Harness setup | All | Configure developer agent team (designer, frontend-dev-next, backend-api-dev, qa-tester-next) and skills. |
+
+---
+
+## Harness: quant-dev
+
+**Goal:** Coordinate the quant developer, agent architect, and QA tester to build, update, and backtest the Python-based hedge fund simulator.
+
+**Trigger:** Use `quant-dev-orchestrator` skill for adding investor agents, modifying valuation math, configuring risk limits, or running backtest validation suites.
+
+**Changelog:**
+| Date | Change | Target | Reason |
+|------|--------|--------|--------|
+| 2026-06-09 | Initial Quant Harness setup | All | Configure developer agent team (quant-dev, agent-architect, quant-qa) and skills. |
+
