@@ -48,9 +48,16 @@ class AuthController
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
+            $confirm_password = $_POST['confirm_password'] ?? '';
 
-            if (empty($name) || empty($email) || empty($password)) {
+            if (empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
                 $error = "Vui lòng nhập đầy đủ thông tin.";
+                require_once 'app/views/auth/register.php';
+                return;
+            }
+
+            if ($password !== $confirm_password) {
+                $error = "Mật khẩu xác nhận không khớp.";
                 require_once 'app/views/auth/register.php';
                 return;
             }

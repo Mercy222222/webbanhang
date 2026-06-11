@@ -15,6 +15,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Three.js for 3D graphics -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -63,6 +65,7 @@
   <style>
     body {
       transition: background-color 0.3s ease, color 0.3s ease;
+      position: relative;
     }
     /* Smooth Scrollbar */
     ::-webkit-scrollbar {
@@ -86,13 +89,88 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
+    
+    /* Premium Hover & Sweep Shimmer Effect */
+    .tilt-effect {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .tilt-effect::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 30%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.15) 30%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .tilt-effect:hover::after {
+      left: 130%;
+      opacity: 1;
+    }
     .tilt-effect:hover {
-      box-shadow: 0 0 25px rgba(227, 0, 25, 0.25);
-      border-color: #e30019;
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(227, 0, 25, 0.2);
+      border-color: rgba(227, 0, 25, 0.6) !important;
+    }
+
+    /* Ambient animated backdrops */
+    @keyframes pulse-slow {
+      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+      50% { transform: scale(1.1) translate(3%, 3%); opacity: 1; }
+    }
+    @keyframes pulse-slow-reverse {
+      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+      50% { transform: scale(1.08) translate(-3%, -3%); opacity: 1; }
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-8%, 8%); }
+    }
+    .animate-pulse-slow {
+      animation: pulse-slow 15s ease-in-out infinite;
+    }
+    .animate-pulse-slow-reverse {
+      animation: pulse-slow-reverse 18s ease-in-out infinite;
+    }
+    .animate-drift {
+      animation: drift 20s ease-in-out infinite;
+    }
+
+    /* Drawer smooth bounciness */
+    #cart-drawer, #checkout-drawer, #detail-drawer {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* Badge micro-animation */
+    @keyframes badge-pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+    .badge-animate {
+      animation: badge-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
   </style>
 </head>
-<body class="bg-[#0a0a0c] text-slate-200 min-h-screen font-sans flex flex-col">
+<body class="bg-[#0a0a0c] text-slate-200 min-h-screen font-sans flex flex-col overflow-x-hidden">
+
+  <!-- ─── AMBIENT BACKGROUND GLOWS ─── -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-red-600/5 to-transparent blur-[120px] animate-pulse-slow"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tl from-indigo-600/5 to-transparent blur-[120px] animate-pulse-slow-reverse"></div>
+    <div class="absolute top-[30%] right-[10%] w-[35vw] h-[35vw] rounded-full bg-gradient-to-bl from-amber-600/3 to-transparent blur-[100px] animate-drift"></div>
+  </div>
 
   <!-- ─── HEADER / NAVBAR ─── -->
   <header class="sticky top-0 z-40 bg-[#0a0a0c]/70 backdrop-blur-md border-b border-slate-800">
@@ -105,7 +183,8 @@
       <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
         <button onclick="switchTab('store')" class="nav-btn-item text-indigo-600 dark:text-indigo-400">Cửa hàng</button>
-        <button onclick="switchTab('admin')" class="nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400">Trang quản trị (Mock)</button>
+        <button onclick="switchTab('orders')" class="nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400 flex items-center gap-1"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử ĐH</button>
+        <button id="admin-nav-btn" onclick="switchTab('admin')" class="nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400 hidden">Trang quản trị (Mock)</button>
         <a href="blog-template/index-portfolio.html" class="text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400 flex items-center gap-1">
           <i class="fa-solid fa-arrow-left"></i> Portfolio
         </a>
@@ -168,7 +247,9 @@
       
       <!-- Banner / Hero -->
       <div class="relative rounded-2xl overflow-hidden glass-card p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border">
-        <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent pointer-events-none"></div>
+        <!-- Three.js Ambient background canvas -->
+        <canvas id="hero-3d-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent pointer-events-none z-10"></div>
         <div class="space-y-4 max-w-lg text-center md:text-left z-10">
           <span class="inline-block px-3 py-1 bg-red-100 dark:bg-red-950/30 text-[#e30019] text-xs font-bold uppercase tracking-wider rounded-full">Chào mừng đến với GEARVN</span>
           <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-none">
@@ -211,59 +292,102 @@
     </div>
 
     <!-- ========================================= -->
+    <!-- ORDERS TAB CONTENT (CUSTOMER HISTORY)     -->
+    <!-- ========================================= -->
+    <div id="tab-orders" class="hidden space-y-8">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight text-[#e30019] flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng của bạn</h2>
+        <span class="px-3 py-1 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-bold uppercase tracking-wider">Hóa đơn mua hàng</span>
+      </div>
+
+      <div class="glass-card border rounded-2xl p-6 shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                <th class="py-3 px-4">Mã ĐH</th>
+                <th class="py-3 px-4">Ngày mua</th>
+                <th class="py-3 px-4">Họ tên / SĐT</th>
+                <th class="py-3 px-4">Địa chỉ giao hàng</th>
+                <th class="py-3 px-4 font-semibold text-right">Tổng cộng</th>
+                <th class="py-3 px-4">Phương thức</th>
+                <th class="py-3 px-4 text-center">Trạng thái</th>
+                <th class="py-3 px-4 text-center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="customer-orders-list">
+              <!-- Dynamic rows filled by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================= -->
     <!-- ADMIN TAB CONTENT                         -->
     <!-- ========================================= -->
     <div id="tab-admin" class="hidden space-y-8">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold tracking-tight">Mock Admin Dashboard</h2>
-        <span class="px-3 py-1 bg-rose-500 text-white rounded text-xs font-bold uppercase tracking-wider">Simulated Console</span>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight flex items-center gap-2"><i class="fa-solid fa-gauge-high"></i> Dashboard quản trị GEARVN</h2>
+          <p class="text-slate-400 text-xs mt-1">Trang quản trị toàn diện hệ thống e-commerce.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Sub Navigation Tabs -->
+          <div class="flex bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1 gap-1">
+            <button onclick="switchAdminSubTab('dashboard')" id="btn-admin-subtab-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow">Tổng quan</button>
+            <button onclick="switchAdminSubTab('orders')" id="btn-admin-subtab-orders" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Đơn hàng</button>
+            <button onclick="switchAdminSubTab('products')" id="btn-admin-subtab-products" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Sản phẩm</button>
+            <button onclick="switchAdminSubTab('coupons')" id="btn-admin-subtab-coupons" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Mã giảm giá</button>
+          </div>
+        </div>
       </div>
 
       <!-- Admin stats cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Doanh số</p>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Doanh số thực tế</p>
             <h3 id="admin-sales" class="text-2xl font-black">0 đ</h3>
           </div>
           <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-xl"><i class="fa-solid fa-coins"></i></div>
         </div>
         <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Đơn hàng</p>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Tổng đơn hàng</p>
             <h3 id="admin-orders-count" class="text-2xl font-black">0</h3>
           </div>
           <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950/30 text-indigo-500 flex items-center justify-center text-xl"><i class="fa-solid fa-box"></i></div>
         </div>
         <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sản phẩm</p>
-            <h3 class="text-2xl font-black">9</h3>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Tổng sản phẩm</p>
+            <h3 id="admin-products-count" class="text-2xl font-black">9</h3>
           </div>
           <div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-950/30 text-cyan-500 flex items-center justify-center text-xl"><i class="fa-solid fa-cubes"></i></div>
         </div>
         <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Khách hàng</p>
-            <h3 class="text-2xl font-black">1</h3>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Người dùng hệ thống</p>
+            <h3 id="admin-users-count" class="text-2xl font-black">2</h3>
           </div>
           <div class="w-12 h-12 rounded-xl bg-violet-100 dark:bg-violet-950/30 text-violet-500 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
         </div>
       </div>
 
-      <!-- Charts & Order Table -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- SUBTAB: OVERVIEW -->
+      <div id="admin-subtab-dashboard" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Sales chart card -->
         <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-1 space-y-4">
-          <h4 class="font-bold">Cơ cấu doanh mục sản phẩm</h4>
+          <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-chart-pie text-cyan-500"></i> Phân loại danh mục</h4>
           <div class="relative h-64">
             <canvas id="categoryChart"></canvas>
           </div>
         </div>
 
-        <!-- Orders Table Card -->
+        <!-- Recent Orders Table Card -->
         <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-2 space-y-4 overflow-hidden flex flex-col">
-          <h4 class="font-bold">Danh sách đơn hàng vừa đặt</h4>
+          <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-clock text-indigo-500"></i> Đơn hàng vừa đặt mới nhất</h4>
           <div class="flex-1 overflow-x-auto">
             <table class="w-full text-left text-sm">
               <thead>
@@ -271,16 +395,155 @@
                   <th class="py-2.5">Mã ĐH</th>
                   <th class="py-2.5">Thời gian</th>
                   <th class="py-2.5">Họ tên / SĐT</th>
-                  <th class="py-2.5">Tổng tiền</th>
+                  <th class="py-2.5 text-right">Tổng tiền</th>
                   <th class="py-2.5">Phương thức</th>
                   <th class="py-2.5 text-center">Trạng thái</th>
                 </tr>
               </thead>
-              <tbody id="admin-orders-list">
-                <!-- Dynamic rows filled by JS -->
+              <tbody id="admin-recent-orders-list">
+                <!-- Filled dynamically by JS -->
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <!-- SUBTAB: ORDERS -->
+      <div id="admin-subtab-orders" class="hidden glass-card border rounded-2xl p-6 shadow-sm space-y-4">
+        <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-cart-flatbed text-indigo-500"></i> Quản lý đơn hàng</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                <th class="py-2.5">Mã ĐH</th>
+                <th class="py-2.5">Thời gian</th>
+                <th class="py-2.5">Khách hàng</th>
+                <th class="py-2.5">Địa chỉ nhận hàng</th>
+                <th class="py-2.5 text-right">Tổng thanh toán</th>
+                <th class="py-2.5">Thanh toán</th>
+                <th class="py-2.5 text-center">Trạng thái</th>
+                <th class="py-2.5 text-center">Cập nhật trạng thái</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-list-full">
+              <!-- Filled dynamically by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUBTAB: PRODUCTS -->
+      <div id="admin-subtab-products" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Products list -->
+        <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-2 space-y-4 flex flex-col">
+          <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-cubes text-cyan-500"></i> Danh sách sản phẩm kho</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                  <th class="py-2.5">Hình ảnh</th>
+                  <th class="py-2.5">Tên sản phẩm</th>
+                  <th class="py-2.5">Mô tả</th>
+                  <th class="py-2.5 text-right">Đơn giá</th>
+                  <th class="py-2.5 text-center">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-list-table">
+                <!-- Filled dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add product form -->
+        <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-1 space-y-4">
+          <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-plus text-emerald-500"></i> Thêm sản phẩm mới</h4>
+          <form id="admin-add-product-form" onsubmit="handleAddProductSubmit(event)" class="space-y-4">
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-400 uppercase">Tên sản phẩm</label>
+              <input type="text" id="admin-prod-name" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white" placeholder="Ví dụ: VGA ASUS ROG RTX 4080" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-400 uppercase">Mô tả ngắn</label>
+              <textarea id="admin-prod-desc" required rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white resize-none" placeholder="Thông số kỹ thuật sơ bộ..."></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-slate-400 uppercase">Đơn giá (đ)</label>
+                <input type="number" id="admin-prod-price" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white" placeholder="25000000" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-slate-400 uppercase">Danh mục</label>
+                <select id="admin-prod-cat" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white">
+                  <option value="1">Laptop Gaming</option>
+                  <option value="2">PC GEARVN</option>
+                  <option value="3">Linh Kiện</option>
+                  <option value="4">Màn Hình</option>
+                  <option value="5">Bàn Phím Cơ</option>
+                  <option value="6">Chuột Gaming</option>
+                  <option value="7">Tai Nghe</option>
+                </select>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-400 uppercase">Đường dẫn hình ảnh</label>
+              <input type="url" id="admin-prod-image" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400&auto=format&fit=crop" />
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs shadow-md transition"><i class="fa-solid fa-circle-check"></i> Lưu sản phẩm</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- SUBTAB: COUPONS -->
+      <div id="admin-subtab-coupons" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Coupons list -->
+        <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-2 space-y-4 flex flex-col">
+          <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-tags text-violet-500"></i> Danh sách mã giảm giá</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                  <th class="py-2.5">Mã Coupon</th>
+                  <th class="py-2.5">Loại giảm</th>
+                  <th class="py-2.5 text-right">Giá trị</th>
+                  <th class="py-2.5">Ngày hết hạn</th>
+                  <th class="py-2.5 text-center">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="admin-coupons-list-table">
+                <!-- Filled dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add coupon form -->
+        <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-1 space-y-4">
+          <h4 class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-plus text-emerald-500"></i> Tạo mã giảm giá</h4>
+          <form id="admin-add-coupon-form" onsubmit="handleAddCouponSubmit(event)" class="space-y-4">
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-400 uppercase">Mã giảm giá (Code)</label>
+              <input type="text" id="admin-coupon-code" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white" placeholder="VÍ DỤ: GEARVN50" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-slate-400 uppercase">Loại giảm</label>
+                <select id="admin-coupon-type" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white">
+                  <option value="percentage">Phần trăm (%)</option>
+                  <option value="fixed">Số tiền cố định (đ)</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-slate-400 uppercase">Giá trị giảm</label>
+                <input type="number" id="admin-coupon-value" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white" placeholder="Ví dụ: 10 hoặc 50000" />
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-400 uppercase">Hạn sử dụng</label>
+              <input type="date" id="admin-coupon-expiry" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none dark:text-white" />
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs shadow-md transition"><i class="fa-solid fa-circle-check"></i> Lưu mã coupon</button>
+          </form>
         </div>
       </div>
     </div>
@@ -427,6 +690,30 @@
           <i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Persistent Full-Screen Lock Overlay -->
+  <div id="security-lock-overlay" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center hidden">
+    <div class="max-w-md w-full mx-4 glass-card border border-red-500/30 p-8 rounded-3xl shadow-2xl shadow-red-500/10 text-center space-y-6">
+      <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center text-4xl mx-auto animate-pulse border border-red-500/20">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-2xl font-black text-white tracking-tight uppercase">Hệ thống bị khóa tạm thời</h3>
+        <p class="text-red-500 text-xs font-bold uppercase tracking-widest">Yêu cầu hoàn tất quy trình kiểm định</p>
+      </div>
+      <p class="text-slate-400 text-sm leading-relaxed" id="security-lock-msg">
+        Đơn hàng của bạn đã được xác nhận giao thành công. Để bảo vệ quyền lợi người tiêu dùng và tuân thủ quy trình kiểm định chất lượng sản phẩm của GEARVN, tất cả các chức năng mua sắm và quản lý khác đã bị khóa tạm thời.
+      </p>
+      <div class="border border-dashed border-red-500/20 bg-red-950/10 p-4 rounded-xl text-left space-y-1">
+        <p class="text-[11px] text-slate-400">Đơn hàng khóa: <strong class="text-white" id="security-lock-order-id">-</strong></p>
+        <p class="text-[11px] text-slate-400">Thời gian khóa: <strong class="text-white" id="security-lock-time">-</strong></p>
+        <p class="text-[11px] text-slate-400">Trạng thái: <span class="px-2 py-0.5 bg-red-500/20 text-red-400 rounded text-[9px] font-bold">LOCKED</span></p>
+      </div>
+      <button onclick="triggerSecurityReturn()" class="w-full py-3.5 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white font-extrabold rounded-xl shadow-lg shadow-red-600/20 transition flex justify-center items-center gap-2">
+        <i class="fa-solid fa-arrow-rotate-left"></i> Gửi Yêu Cầu Trả Hàng (Mở Khóa)
+      </button>
     </div>
   </div>
 
@@ -706,6 +993,11 @@
 
         grid.appendChild(card);
       });
+      
+      // Bind 3D Hover Tilt Effect
+      if (typeof apply3DTiltEffect === 'function') {
+        apply3DTiltEffect();
+      }
     }
 
     function renderCart() {
@@ -773,7 +1065,18 @@
       document.getElementById('summary-subtotal').innerText = `${subtotal.toLocaleString('vi-VN')} đ`;
       document.getElementById('summary-discount').innerText = `-${discount.toLocaleString('vi-VN')} đ`;
       document.getElementById('summary-total').innerText = `${total.toLocaleString('vi-VN')} đ`;
-      document.getElementById('cart-count').innerText = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+
+      // Animate badge when count changes
+      const cartCount = document.getElementById('cart-count');
+      const newCount = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+      if (cartCount) {
+        if (parseInt(cartCount.innerText) !== newCount) {
+          cartCount.innerText = newCount;
+          cartCount.classList.remove('badge-animate');
+          void cartCount.offsetWidth; // Force reflow
+          cartCount.classList.add('badge-animate');
+        }
+      }
     }
 
     /* ─── INTERACTIVE CART LOGIC ─── */
@@ -821,14 +1124,26 @@
         return;
       }
 
-      if (code === 'GIAM10') {
-        activeCoupon = { code: 'GIAM10', type: 'percentage', value: 10 };
-        feedback.innerText = 'Áp dụng mã giảm 10% thành công!';
-        feedback.className = 'text-xs font-semibold text-emerald-500 block';
-      } else if (code === 'TECH50K') {
-        activeCoupon = { code: 'TECH50K', type: 'fixed', value: 50000 };
-        feedback.innerText = 'Áp dụng mã giảm 50.000 đ thành công!';
-        feedback.className = 'text-xs font-semibold text-emerald-500 block';
+      if (typeof COUPONS === 'undefined') {
+        COUPONS = [
+          { code: 'GIAM10', type: 'percentage', value: 10, expiry: '2026-12-31' },
+          { code: 'TECH50K', type: 'fixed', value: 50000, expiry: '2026-12-31' }
+        ];
+      }
+
+      const coupon = COUPONS.find(c => c.code === code);
+      if (coupon) {
+        // Expiry check
+        if (new Date(coupon.expiry) < new Date().setHours(0,0,0,0)) {
+          activeCoupon = null;
+          feedback.innerText = 'Mã giảm giá đã hết hạn.';
+          feedback.className = 'text-xs font-semibold text-rose-500 block';
+        } else {
+          activeCoupon = { code: coupon.code, type: coupon.type, value: coupon.value };
+          const valText = coupon.type === 'percentage' ? `${coupon.value}%` : `${coupon.value.toLocaleString('vi-VN')} đ`;
+          feedback.innerText = `Áp dụng mã giảm ${valText} thành công!`;
+          feedback.className = 'text-xs font-semibold text-emerald-500 block';
+        }
       } else {
         activeCoupon = null;
         feedback.innerText = 'Mã giảm giá không hợp lệ.';
@@ -1019,8 +1334,14 @@
       }
 
       container.innerHTML = `
-        <div class="relative h-56 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border">
-          <img src="${p.image}" class="w-full h-full object-cover" alt="${p.name}" />
+        <div class="grid grid-cols-2 gap-4">
+          <div class="relative h-44 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border">
+            <img src="${p.image}" class="w-full h-full object-cover" alt="${p.name}" />
+          </div>
+          <div id="product-3d-viewport" class="w-full h-44 rounded-xl border border-slate-800 bg-[#070709] relative overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing">
+            <canvas id="product-3d-canvas" class="w-full h-full"></canvas>
+            <span class="absolute bottom-2 right-2 text-[9px] text-slate-500 pointer-events-none flex items-center gap-1"><i class="fa-solid fa-arrows-up-down-left-right animate-pulse"></i> Kéo để xoay 3D</span>
+          </div>
         </div>
         
         <div class="space-y-2">
@@ -1131,6 +1452,10 @@
       overlay.classList.remove('hidden');
       setTimeout(() => {
         drawer.classList.remove('translate-x-full');
+        // Render Three.js product hologram mesh
+        if (typeof initProduct3D === 'function') {
+          initProduct3D(p.cat_id);
+        }
       }, 50);
     }
 
@@ -1257,6 +1582,8 @@
         orders[idx].status = 'completed';
         localStorage.setItem('gearvn_orders', JSON.stringify(orders));
         renderAdmin();
+        renderCustomerOrders();
+        checkOrderLockState();
 
         // Broadcast a simulated payment alert
         Swal.fire({
@@ -1276,22 +1603,37 @@
       
       const tabStore = document.getElementById('tab-store');
       const tabAdmin = document.getElementById('tab-admin');
+      const tabOrders = document.getElementById('tab-orders');
       const buttons = document.querySelectorAll('.nav-btn-item');
 
       buttons.forEach(btn => {
-        if (btn.innerText.toLowerCase().includes(tab === 'store' ? 'cửa hàng' : 'quản trị')) {
+        const text = btn.innerText.toLowerCase();
+        if (tab === 'store' && text.includes('cửa hàng')) {
+          btn.className = "nav-btn-item text-indigo-600 dark:text-indigo-400";
+        } else if (tab === 'orders' && text.includes('lịch sử')) {
+          btn.className = "nav-btn-item text-indigo-600 dark:text-indigo-400 flex items-center gap-1";
+        } else if (tab === 'admin' && text.includes('quản trị')) {
           btn.className = "nav-btn-item text-indigo-600 dark:text-indigo-400";
         } else {
-          btn.className = "nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400";
+          if (text.includes('lịch sử')) {
+            btn.className = "nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400 flex items-center gap-1";
+          } else {
+            btn.className = "nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400";
+          }
         }
       });
 
+      tabStore.classList.add('hidden');
+      tabAdmin.classList.add('hidden');
+      tabOrders.classList.add('hidden');
+
       if (tab === 'store') {
         tabStore.classList.remove('hidden');
-        tabAdmin.classList.add('hidden');
         renderProducts();
-      } else {
-        tabStore.classList.add('hidden');
+      } else if (tab === 'orders') {
+        tabOrders.classList.remove('hidden');
+        renderCustomerOrders();
+      } else if (tab === 'admin') {
         tabAdmin.classList.remove('hidden');
         renderAdmin();
       }
@@ -1317,6 +1659,207 @@
       renderProducts();
     }
 
+    /* ─── CUSTOMER ORDERS LIST RENDERER ─── */
+    function renderCustomerOrders() {
+      const user = getCurrentUser();
+      const container = document.getElementById('customer-orders-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!user) {
+        container.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-12 text-slate-400">
+              <p class="mb-3 font-semibold">Vui lòng đăng nhập để xem lịch sử đơn hàng</p>
+              <button onclick="showAuthModal('login')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition">Đăng nhập ngay</button>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Filter user orders: match by name, username or default admin role
+      const userOrders = orders.filter(o => o.name === user.name || o.username === user.username || user.username === 'admin');
+
+      if (userOrders.length === 0) {
+        container.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-12 text-slate-400 font-semibold">
+              Bạn chưa có đơn hàng nào.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      userOrders.forEach(o => {
+        const row = document.createElement('tr');
+        row.className = "border-b border-slate-100 dark:border-slate-850 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 text-xs text-slate-600 dark:text-slate-300";
+
+        let statusBadge = '';
+        let actionBtn = '';
+
+        if (o.status === 'completed') {
+          statusBadge = '<span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600 rounded text-[10px] font-bold">Thành công / Đã giao</span>';
+          actionBtn = `<button onclick="confirmReturn('${o.id}')" class="px-2.5 py-1 bg-rose-600/10 hover:bg-rose-600 text-rose-500 hover:text-white rounded text-[10px] font-bold transition">Yêu cầu trả hàng</button>`;
+        } else if (o.status === 'shipping') {
+          statusBadge = '<span class="px-2 py-0.5 bg-cyan-100 dark:bg-cyan-950/30 text-cyan-600 rounded text-[10px] font-bold">Đang giao hàng</span>';
+          actionBtn = `<button onclick="confirmDelivered('${o.id}')" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold transition shadow-lg shadow-indigo-600/20">Xác nhận đã giao</button>`;
+        } else if (o.status === 'pending') {
+          statusBadge = '<span class="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-600 rounded text-[10px] font-bold">Đang chờ xử lý</span>';
+          actionBtn = '<span class="text-slate-500 font-medium">Đang chờ duyệt</span>';
+        } else if (o.status === 'return_requested') {
+          statusBadge = '<span class="px-2 py-0.5 bg-orange-100 dark:bg-orange-950/30 text-orange-500 rounded text-[10px] font-bold">Trả hàng</span>';
+          actionBtn = '<span class="text-orange-500 font-bold">Chờ mở khóa/xử lý</span>';
+        } else {
+          statusBadge = '<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded text-[10px]">Đã hủy</span>';
+          actionBtn = '-';
+        }
+
+        const dateStr = new Date(o.date).toLocaleDateString('vi-VN') + ' ' + new Date(o.date).toLocaleTimeString('vi-VN');
+
+        row.innerHTML = `
+          <td class="py-4 px-4 font-mono font-bold text-indigo-500">${o.id}</td>
+          <td class="py-4 px-4 opacity-70">${dateStr}</td>
+          <td class="py-4 px-4">
+            <p class="font-bold text-slate-800 dark:text-slate-200">${o.name}</p>
+            <p class="text-[10px] opacity-75">${o.phone}</p>
+          </td>
+          <td class="py-4 px-4 max-w-[150px] truncate" title="${o.address}">${o.address}</td>
+          <td class="py-4 px-4 font-bold text-right text-indigo-600 dark:text-indigo-400">${o.total.toLocaleString('vi-VN')} đ</td>
+          <td class="py-4 px-4 uppercase font-semibold text-[10px]">${o.payment === 'bank' ? 'Chuyển khoản' : 'COD'}</td>
+          <td class="py-4 px-4 text-center">${statusBadge}</td>
+          <td class="py-4 px-4 text-center">${actionBtn}</td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function confirmDelivered(orderId) {
+      Swal.fire({
+        title: 'Xác nhận nhận hàng',
+        text: 'Bạn xác nhận đã nhận đơn hàng này và sản phẩm hoạt động tốt chứ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Đúng, tôi đã nhận hàng',
+        cancelButtonText: 'Chưa',
+        confirmButtonColor: '#4f46e5'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const idx = orders.findIndex(o => o.id === orderId);
+          if (idx !== -1) {
+            orders[idx].status = 'completed';
+            localStorage.setItem('gearvn_orders', JSON.stringify(orders));
+            renderCustomerOrders();
+            renderAdmin();
+            checkOrderLockState();
+          }
+        }
+      });
+    }
+
+    function confirmReturn(orderId) {
+      Swal.fire({
+        title: 'Yêu cầu trả hàng',
+        text: 'Bạn muốn gửi yêu cầu trả hàng cho đơn hàng này?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Gửi yêu cầu',
+        cancelButtonText: 'Hủy',
+        confirmButtonColor: '#ef4444'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const idx = orders.findIndex(o => o.id === orderId);
+          if (idx !== -1) {
+            orders[idx].status = 'return_requested';
+            localStorage.setItem('gearvn_orders', JSON.stringify(orders));
+            renderCustomerOrders();
+            renderAdmin();
+            checkOrderLockState();
+            Swal.fire('Đã gửi yêu cầu', 'Yêu cầu trả hàng đã được ghi nhận.', 'success');
+          }
+        }
+      });
+    }
+
+    /* ─── SECURITY DELIVERY LOCK SCREEN LOGIC ─── */
+    let activeLockOrderId = null;
+
+    function checkOrderLockState() {
+      const user = getCurrentUser();
+      
+      // Admins are exempt from system locks
+      if (user && user.username === 'admin') {
+        document.getElementById('security-lock-overlay').classList.add('hidden');
+        return;
+      }
+
+      // Find any completed order that requires return confirmation to unlock
+      const userCompletedOrder = orders.find(o => o.status === 'completed' && (!user || o.name === user.name || o.username === user.username));
+      if (userCompletedOrder) {
+        activeLockOrderId = userCompletedOrder.id;
+        document.getElementById('security-lock-order-id').innerText = userCompletedOrder.id;
+        document.getElementById('security-lock-time').innerText = new Date(userCompletedOrder.date).toLocaleString('vi-VN');
+        document.getElementById('security-lock-overlay').classList.remove('hidden');
+      } else {
+        activeLockOrderId = null;
+        document.getElementById('security-lock-overlay').classList.add('hidden');
+      }
+    }
+
+    function triggerSecurityReturn() {
+      if (!activeLockOrderId) return;
+      const orderId = activeLockOrderId;
+      const idx = orders.findIndex(o => o.id === orderId);
+      if (idx !== -1) {
+        orders[idx].status = 'return_requested';
+        localStorage.setItem('gearvn_orders', JSON.stringify(orders));
+        
+        // Success Alert and unlock
+        Swal.fire({
+          icon: 'success',
+          title: 'Mở khóa thành công',
+          text: 'Yêu cầu trả hàng đã được gửi đi. Hệ thống đã mở khóa!',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        
+        activeLockOrderId = null;
+        document.getElementById('security-lock-overlay').classList.add('hidden');
+        renderCustomerOrders();
+        renderAdmin();
+      }
+    }
+
+    /* ─── ADMIN SUBTAB NAVIGATION LOGIC ─── */
+    let currentAdminSubTab = 'dashboard';
+    function switchAdminSubTab(subtab) {
+      currentAdminSubTab = subtab;
+      
+      const subtabs = ['dashboard', 'orders', 'products', 'coupons'];
+      subtabs.forEach(t => {
+        const panel = document.getElementById(`admin-subtab-${t}`);
+        const btn = document.getElementById(`btn-admin-subtab-${t}`);
+        if (t === subtab) {
+          if (panel) panel.classList.remove('hidden');
+          if (btn) btn.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow";
+        } else {
+          if (panel) panel.classList.add('hidden');
+          if (btn) btn.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200";
+        }
+      });
+
+      if (subtab === 'dashboard') {
+        renderAdmin();
+      } else if (subtab === 'orders') {
+        renderAdminOrdersListFull();
+      } else if (subtab === 'products') {
+        renderAdminProductsListTable();
+      } else if (subtab === 'coupons') {
+        renderAdminCouponsListTable();
+      }
+    }
+
     /* ─── ADMIN DASHBOARD LOGIC ─── */
     let categoryChart = null;
     function renderAdmin() {
@@ -1329,12 +1872,13 @@
       document.getElementById('admin-sales').innerText = `${totalSales.toLocaleString('vi-VN')} đ`;
       document.getElementById('admin-orders-count').innerText = orders.length;
 
-      // 2. Render Order List Table
-      const container = document.getElementById('admin-orders-list');
+      // 2. Render Recent Orders List Table
+      const container = document.getElementById('admin-recent-orders-list');
       if (!container) return;
       container.innerHTML = '';
 
-      orders.forEach(o => {
+      const recentOrders = orders.slice(0, 5); // show top 5
+      recentOrders.forEach(o => {
         const row = document.createElement('tr');
         row.className = `border-b border-slate-100 dark:border-slate-850 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 text-xs text-slate-600 dark:text-slate-300`;
         
@@ -1342,6 +1886,7 @@
         if (o.status === 'completed') statusBadge = '<span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600 rounded text-[10px] font-bold">Thành công</span>';
         else if (o.status === 'shipping') statusBadge = '<span class="px-2 py-0.5 bg-cyan-100 dark:bg-cyan-950/30 text-cyan-600 rounded text-[10px] font-bold">Giao hàng</span>';
         else if (o.status === 'pending') statusBadge = '<span class="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-600 rounded text-[10px] font-bold">Đang chờ</span>';
+        else if (o.status === 'return_requested') statusBadge = '<span class="px-2 py-0.5 bg-orange-100 dark:bg-orange-950/30 text-orange-500 rounded text-[10px] font-bold">Trả hàng</span>';
         else statusBadge = '<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded text-[10px]">Hủy bỏ</span>';
 
         const dateStr = new Date(o.date).toLocaleTimeString('vi-VN') + ' ' + new Date(o.date).toLocaleDateString('vi-VN');
@@ -1353,7 +1898,7 @@
             <p class="font-bold">${o.name}</p>
             <p class="text-[10px] opacity-75">${o.phone}</p>
           </td>
-          <td class="py-3 font-bold text-indigo-600 dark:text-indigo-400">${o.total.toLocaleString('vi-VN')} đ</td>
+          <td class="py-3 font-bold text-right text-indigo-600 dark:text-indigo-400">${o.total.toLocaleString('vi-VN')} đ</td>
           <td class="py-3 uppercase font-semibold text-[10px]">${o.payment === 'bank' ? 'Chuyển khoản (QR)' : 'Thanh toán COD'}</td>
           <td class="py-3 text-center">${statusBadge}</td>
         `;
@@ -1361,20 +1906,239 @@
         container.appendChild(row);
       });
 
-      // 3. Render Chart.js categories structural report
       renderAdminCharts();
     }
 
-    function renderAdminCharts() {
-      // Compute categories distribution
-      const catCount = [0, 0, 0, 0, 0]; // phones, laptops, mice, keyb, headph
+    function renderAdminOrdersListFull() {
+      const container = document.getElementById('admin-orders-list-full');
+      if (!container) return;
+      container.innerHTML = '';
+
       orders.forEach(o => {
-        // Just mock some categories distribution representing realistic purchases structure
-        if (o.total > 30000000) catCount[1]++; // laptop
-        else if (o.total > 15000000) catCount[0]++; // phone
-        else if (o.total > 5000000) catCount[4]++; // headph
-        else if (o.total > 2000000) catCount[3]++; // keyboard
-        else catCount[2]++; // mice
+        const row = document.createElement('tr');
+        row.className = "border-b border-slate-100 dark:border-slate-850 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 text-xs text-slate-600 dark:text-slate-300";
+
+        let statusBadge = '';
+        if (o.status === 'completed') statusBadge = '<span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600 rounded text-[10px] font-bold">Thành công</span>';
+        else if (o.status === 'shipping') statusBadge = '<span class="px-2 py-0.5 bg-cyan-100 dark:bg-cyan-950/30 text-cyan-600 rounded text-[10px] font-bold">Giao hàng</span>';
+        else if (o.status === 'pending') statusBadge = '<span class="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-600 rounded text-[10px] font-bold">Đang chờ</span>';
+        else if (o.status === 'return_requested') statusBadge = '<span class="px-2 py-0.5 bg-orange-100 dark:bg-orange-950/30 text-orange-500 rounded text-[10px] font-bold">Trả hàng</span>';
+        else statusBadge = '<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded text-[10px]">Hủy bỏ</span>';
+
+        const dateStr = new Date(o.date).toLocaleDateString('vi-VN') + ' ' + new Date(o.date).toLocaleTimeString('vi-VN');
+
+        row.innerHTML = `
+          <td class="py-3 font-mono font-bold text-indigo-500">${o.id}</td>
+          <td class="py-3 opacity-60">${dateStr}</td>
+          <td class="py-3">
+            <p class="font-bold">${o.name}</p>
+            <p class="text-[10px] opacity-75">${o.phone}</p>
+          </td>
+          <td class="py-3 max-w-[150px] truncate" title="${o.address}">${o.address}</td>
+          <td class="py-3 font-bold text-right text-indigo-600 dark:text-indigo-400">${o.total.toLocaleString('vi-VN')} đ</td>
+          <td class="py-3 uppercase font-semibold text-[10px]">${o.payment === 'bank' ? 'Chuyển khoản' : 'COD'}</td>
+          <td class="py-3 text-center">${statusBadge}</td>
+          <td class="py-3 text-center">
+            <select onchange="updateOrderStatus('${o.id}', this.value)" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 rounded px-1.5 py-1 text-[11px] focus:outline-none dark:text-white">
+              <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Đang chờ</option>
+              <option value="shipping" ${o.status === 'shipping' ? 'selected' : ''}>Giao hàng</option>
+              <option value="completed" ${o.status === 'completed' ? 'selected' : ''}>Thành công</option>
+              <option value="return_requested" ${o.status === 'return_requested' ? 'selected' : ''}>Trả hàng</option>
+              <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Hủy bỏ</option>
+            </select>
+          </td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+      const idx = orders.findIndex(o => o.id === orderId);
+      if (idx !== -1) {
+        orders[idx].status = newStatus;
+        localStorage.setItem('gearvn_orders', JSON.stringify(orders));
+        
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: `Đã cập nhật trạng thái đơn ${orderId} thành ${newStatus}`,
+          showConfirmButton: false,
+          timer: 1500
+        });
+        
+        renderAdmin();
+        renderAdminOrdersListFull();
+        renderCustomerOrders();
+        checkOrderLockState();
+      }
+    }
+
+    /* ─── ADMIN PRODUCTS MANAGEMENT ─── */
+    function renderAdminProductsListTable() {
+      const container = document.getElementById('admin-products-list-table');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      document.getElementById('admin-products-count').innerText = PRODUCTS.length;
+
+      PRODUCTS.forEach((p) => {
+        const row = document.createElement('tr');
+        row.className = "border-b border-slate-100 dark:border-slate-850 text-xs text-slate-600 dark:text-slate-300";
+
+        row.innerHTML = `
+          <td class="py-2.5"><img src="${p.image}" class="w-10 h-10 rounded object-cover" /></td>
+          <td class="py-2.5 font-bold text-slate-800 dark:text-slate-200">${p.name}</td>
+          <td class="py-2.5 max-w-[200px] truncate" title="${p.desc}">${p.desc}</td>
+          <td class="py-2.5 font-bold text-right text-indigo-600 dark:text-indigo-400">${p.price.toLocaleString('vi-VN')} đ</td>
+          <td class="py-2.5 text-center">
+            <button onclick="deleteProduct(${p.id})" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white rounded transition"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function deleteProduct(productId) {
+      Swal.fire({
+        title: 'Xác nhận xóa?',
+        text: 'Bạn chắc chắn muốn xóa sản phẩm này khỏi kho hàng?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+        confirmButtonColor: '#ef4444'
+      }).then(res => {
+        if (res.isConfirmed) {
+          const idx = PRODUCTS.findIndex(p => p.id === productId);
+          if (idx !== -1) {
+            PRODUCTS.splice(idx, 1);
+            renderProducts();
+            renderAdminProductsListTable();
+            Swal.fire('Đã xóa', 'Sản phẩm đã bị xóa.', 'success');
+          }
+        }
+      });
+    }
+
+    function handleAddProductSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('admin-prod-name').value.trim();
+      const desc = document.getElementById('admin-prod-desc').value.trim();
+      const price = parseInt(document.getElementById('admin-prod-price').value);
+      const catId = parseInt(document.getElementById('admin-prod-cat').value);
+      const image = document.getElementById('admin-prod-image').value.trim();
+
+      const newProduct = {
+        id: PRODUCTS.length > 0 ? Math.max(...PRODUCTS.map(p => p.id)) + 1 : 1,
+        name,
+        desc,
+        price,
+        cat_id: catId,
+        image,
+        rating: 5.0,
+        reviews: 0,
+        specs: {
+          'Hãng sản xuất': 'Chính hãng',
+          'Bảo hành': '24 tháng'
+        }
+      };
+
+      PRODUCTS.push(newProduct);
+      
+      // Reset form
+      document.getElementById('admin-prod-name').value = '';
+      document.getElementById('admin-prod-desc').value = '';
+      document.getElementById('admin-prod-price').value = '';
+      
+      renderProducts();
+      renderAdminProductsListTable();
+
+      Swal.fire('Thành công', 'Đã thêm sản phẩm mới vào danh mục.', 'success');
+    }
+
+    /* ─── ADMIN COUPONS MANAGEMENT ─── */
+    let COUPONS = JSON.parse(localStorage.getItem('gearvn_coupons')) || [
+      { code: 'GIAM10', type: 'percentage', value: 10, expiry: '2026-12-31' },
+      { code: 'TECH50K', type: 'fixed', value: 50000, expiry: '2026-12-31' }
+    ];
+
+    function renderAdminCouponsListTable() {
+      const container = document.getElementById('admin-coupons-list-table');
+      if (!container) return;
+      container.innerHTML = '';
+
+      COUPONS.forEach((c, idx) => {
+        const row = document.createElement('tr');
+        row.className = "border-b border-slate-100 dark:border-slate-850 text-xs text-slate-600 dark:text-slate-300";
+
+        const valText = c.type === 'percentage' ? `${c.value}%` : `${c.value.toLocaleString('vi-VN')} đ`;
+        const typeText = c.type === 'percentage' ? 'Phần trăm' : 'Cố định';
+
+        row.innerHTML = `
+          <td class="py-2.5 font-mono font-bold text-indigo-500">${c.code}</td>
+          <td class="py-2.5">${typeText}</td>
+          <td class="py-2.5 font-bold text-right text-indigo-600 dark:text-indigo-400">${valText}</td>
+          <td class="py-2.5">${c.expiry}</td>
+          <td class="py-2.5 text-center">
+            <button onclick="deleteCoupon(${idx})" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white rounded transition"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function deleteCoupon(idx) {
+      Swal.fire({
+        title: 'Xác nhận xóa?',
+        text: 'Bạn muốn xóa mã coupon này chứ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+        confirmButtonColor: '#ef4444'
+      }).then(res => {
+        if (res.isConfirmed) {
+          COUPONS.splice(idx, 1);
+          localStorage.setItem('gearvn_coupons', JSON.stringify(COUPONS));
+          renderAdminCouponsListTable();
+          Swal.fire('Đã xóa', 'Mã coupon đã bị xóa.', 'success');
+        }
+      });
+    }
+
+    function handleAddCouponSubmit(e) {
+      e.preventDefault();
+      const code = document.getElementById('admin-coupon-code').value.trim().toUpperCase();
+      const type = document.getElementById('admin-coupon-type').value;
+      const value = parseInt(document.getElementById('admin-coupon-value').value);
+      const expiry = document.getElementById('admin-coupon-expiry').value;
+
+      if (COUPONS.find(c => c.code === code)) {
+        Swal.fire('Lỗi', 'Mã coupon này đã tồn tại.', 'error');
+        return;
+      }
+
+      COUPONS.push({ code, type, value, expiry });
+      localStorage.setItem('gearvn_coupons', JSON.stringify(COUPONS));
+
+      // Reset form
+      document.getElementById('admin-coupon-code').value = '';
+      document.getElementById('admin-coupon-value').value = '';
+      document.getElementById('admin-coupon-expiry').value = '';
+
+      renderAdminCouponsListTable();
+      Swal.fire('Thành công', 'Đã tạo mã coupon mới.', 'success');
+    }
+
+    function renderAdminCharts() {
+      const catCount = [0, 0, 0, 0, 0];
+      orders.forEach(o => {
+        if (o.total > 30000000) catCount[1]++;
+        else if (o.total > 15000000) catCount[0]++;
+        else if (o.total > 5000000) catCount[4]++;
+        else if (o.total > 2000000) catCount[3]++;
+        else catCount[2]++;
       });
 
       const ctx = document.getElementById('categoryChart');
@@ -1389,13 +2153,13 @@
         data: {
           labels: ['Điện thoại', 'Laptop', 'Chuột', 'Bàn phím', 'Tai nghe'],
           datasets: [{
-            data: catCount.map(v => v === 0 ? 1 : v), // ensure drawing is solid mock data
+            data: catCount.map(v => v === 0 ? 1 : v),
             backgroundColor: [
-              '#6366f1', // Indigo
-              '#06b6d4', // Cyan
-              '#10b981', // Emerald
-              '#eab308', // Amber
-              '#a855f7'  // Purple
+              '#6366f1',
+              '#06b6d4',
+              '#10b981',
+              '#eab308',
+              '#a855f7'
             ],
             borderWidth: 0
           }]
@@ -1416,11 +2180,299 @@
       });
     }
 
+    /* ─── ADVANCED THREE.JS 3D RENDERERS ─── */
+    let heroScene, heroCamera, heroRenderer, heroMeshes = [];
+    
+    function initHero3D() {
+      const canvas = document.getElementById('hero-3d-canvas');
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      
+      heroScene = new THREE.Scene();
+      heroCamera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
+      heroCamera.position.z = 15;
+      
+      heroRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      heroRenderer.setSize(rect.width, rect.height);
+      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+      heroScene.add(ambientLight);
+      
+      const pointLight1 = new THREE.PointLight(0xe30019, 1.8, 30);
+      pointLight1.position.set(5, 5, 5);
+      heroScene.add(pointLight1);
+      
+      const pointLight2 = new THREE.PointLight(0x6366f1, 1.8, 30);
+      pointLight2.position.set(-5, -5, 5);
+      heroScene.add(pointLight2);
+      
+      const geometries = [
+        new THREE.TorusGeometry(1.5, 0.4, 16, 64),
+        new THREE.BoxGeometry(1.5, 1.5, 1.5),
+        new THREE.ConeGeometry(1, 1.8, 4),
+        new THREE.OctahedronGeometry(1.2)
+      ];
+      
+      const materials = [
+        new THREE.MeshStandardMaterial({ color: 0xe30019, wireframe: true }),
+        new THREE.MeshStandardMaterial({ color: 0x6366f1, wireframe: true }),
+        new THREE.MeshStandardMaterial({ color: 0xffaa00, wireframe: true }),
+        new THREE.MeshStandardMaterial({ color: 0x06b6d4, wireframe: true })
+      ];
+      
+      for (let i = 0; i < 6; i++) {
+        const geom = geometries[i % geometries.length];
+        const mat = materials[i % materials.length];
+        const mesh = new THREE.Mesh(geom, mat);
+        
+        mesh.position.x = (Math.random() - 0.5) * 12;
+        mesh.position.y = (Math.random() - 0.5) * 6;
+        mesh.position.z = (Math.random() - 0.5) * 4;
+        
+        mesh.rotation.x = Math.random() * Math.PI;
+        mesh.rotation.y = Math.random() * Math.PI;
+        
+        const scale = 0.5 + Math.random() * 0.8;
+        mesh.scale.set(scale, scale, scale);
+        
+        mesh.userData = {
+          rotSpeedX: 0.003 + Math.random() * 0.006,
+          rotSpeedY: 0.003 + Math.random() * 0.006,
+          floatSpeed: 0.001 + Math.random() * 0.002,
+          floatRange: 0.3 + Math.random() * 0.6,
+          baseY: mesh.position.y
+        };
+        
+        heroScene.add(mesh);
+        heroMeshes.push(mesh);
+      }
+      
+      function animate(time) {
+        requestAnimationFrame(animate);
+        
+        heroMeshes.forEach(mesh => {
+          mesh.rotation.x += mesh.userData.rotSpeedX;
+          mesh.rotation.y += mesh.userData.rotSpeedY;
+          mesh.position.y = mesh.userData.baseY + Math.sin(time * mesh.userData.floatSpeed) * mesh.userData.floatRange;
+        });
+        
+        heroRenderer.render(heroScene, heroCamera);
+      }
+      requestAnimationFrame(animate);
+      
+      window.addEventListener('resize', () => {
+        if (!canvas) return;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        heroCamera.aspect = width / height;
+        heroCamera.updateProjectionMatrix();
+        heroRenderer.setSize(width, height);
+      });
+    }
+
+    let productScene, productCamera, productRenderer, productMesh;
+    
+    function initProduct3D(catId) {
+      const canvas = document.getElementById('product-3d-canvas');
+      if (!canvas) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      productScene = new THREE.Scene();
+      
+      productCamera = new THREE.PerspectiveCamera(40, rect.width / rect.height, 0.1, 100);
+      productCamera.position.z = 5;
+      
+      productRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      productRenderer.setSize(rect.width, rect.height);
+      productRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      productScene.add(ambientLight);
+      
+      const dirLight1 = new THREE.DirectionalLight(0xe30019, 1.8);
+      dirLight1.position.set(2, 4, 3);
+      productScene.add(dirLight1);
+      
+      const dirLight2 = new THREE.DirectionalLight(0x6366f1, 1.8);
+      dirLight2.position.set(-2, -4, 3);
+      productScene.add(dirLight2);
+      
+      let material = new THREE.MeshStandardMaterial({
+        color: 0x6366f1,
+        wireframe: true,
+        roughness: 0.1,
+        metalness: 0.8
+      });
+      
+      const group = new THREE.Group();
+      
+      if (catId === 1) { // Laptop Gaming
+        const base = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.1, 1.4), material);
+        base.position.y = -0.3;
+        group.add(base);
+        const screen = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.2, 0.08), material);
+        screen.position.set(0, 0.35, -0.6);
+        screen.rotation.x = -0.2;
+        group.add(screen);
+      } else if (catId === 2) { // PC Case
+        const caseMesh = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.8, 1.6), material);
+        group.add(caseMesh);
+        const fanGeom = new THREE.TorusGeometry(0.3, 0.05, 8, 32);
+        const fan1 = new THREE.Mesh(fanGeom, new THREE.MeshBasicMaterial({ color: 0xe30019, wireframe: true }));
+        fan1.position.set(0, 0.4, 0.81);
+        group.add(fan1);
+        const fan2 = new THREE.Mesh(fanGeom, new THREE.MeshBasicMaterial({ color: 0x6366f1, wireframe: true }));
+        fan2.position.set(0, -0.4, 0.81);
+        group.add(fan2);
+      } else if (catId === 3) { // GPU
+        const board = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.9, 0.2), material);
+        group.add(board);
+        const fanGeom = new THREE.TorusGeometry(0.3, 0.04, 8, 24);
+        const fan1 = new THREE.Mesh(fanGeom, material);
+        fan1.position.set(-0.5, 0, 0.11);
+        group.add(fan1);
+        const fan2 = new THREE.Mesh(fanGeom, material);
+        fan2.position.set(0.5, 0, 0.11);
+        group.add(fan2);
+      } else if (catId === 4) { // Monitor
+        const monitor = new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.4, 0.1), material);
+        group.add(monitor);
+        const stand = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.7, 0.2), material);
+        stand.position.set(0, -0.9, -0.2);
+        group.add(stand);
+        const feet = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.05, 0.6), material);
+        feet.position.set(0, -1.2, 0);
+        group.add(feet);
+      } else if (catId === 5) { // Keyboard
+        const base = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.15, 0.9), material);
+        group.add(base);
+        const keyGeom = new THREE.BoxGeometry(0.15, 0.1, 0.15);
+        for (let x = -1.0; x <= 1.0; x += 0.4) {
+          for (let z = -0.3; z <= 0.3; z += 0.3) {
+            const key = new THREE.Mesh(keyGeom, new THREE.MeshBasicMaterial({ color: 0xe30019, wireframe: true }));
+            key.position.set(x, 0.1, z);
+            group.add(key);
+          }
+        }
+      } else if (catId === 6) { // Mouse
+        const mouse = new THREE.Mesh(new THREE.SphereGeometry(0.9, 16, 16), material);
+        mouse.scale.set(0.7, 0.6, 1.3);
+        group.add(mouse);
+        const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.03, 8, 16), new THREE.MeshBasicMaterial({ color: 0xe30019 }));
+        wheel.position.set(0, 0.3, 0.5);
+        wheel.rotation.y = Math.PI / 2;
+        group.add(wheel);
+      } else { // Headset
+        const headband = new THREE.Mesh(new THREE.TorusGeometry(1.0, 0.08, 8, 32, Math.PI), material);
+        headband.rotation.x = Math.PI / 2;
+        group.add(headband);
+        const cupGeom = new THREE.CylinderGeometry(0.4, 0.4, 0.4, 16);
+        const cup1 = new THREE.Mesh(cupGeom, material);
+        cup1.position.set(-1.0, -0.3, 0);
+        cup1.rotation.z = Math.PI / 2;
+        group.add(cup1);
+        const cup2 = new THREE.Mesh(cupGeom, material);
+        cup2.position.set(1.0, -0.3, 0);
+        cup2.rotation.z = Math.PI / 2;
+        group.add(cup2);
+      }
+      
+      productScene.add(group);
+      productMesh = group;
+      
+      let isDragging = false;
+      let prevMouseX = 0;
+      let prevMouseY = 0;
+      
+      const viewDiv = document.getElementById('product-3d-viewport');
+      if (viewDiv) {
+        viewDiv.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          prevMouseX = e.clientX;
+          prevMouseY = e.clientY;
+        });
+        
+        window.addEventListener('mouseup', () => {
+          isDragging = false;
+        });
+        
+        viewDiv.addEventListener('mousemove', (e) => {
+          if (!isDragging || !productMesh) return;
+          const deltaX = e.clientX - prevMouseX;
+          const deltaY = e.clientY - prevMouseY;
+          
+          productMesh.rotation.y += deltaX * 0.01;
+          productMesh.rotation.x += deltaY * 0.01;
+          
+          prevMouseX = e.clientX;
+          prevMouseY = e.clientY;
+        });
+      }
+      
+      function animate() {
+        if (!canvas) return;
+        requestAnimationFrame(animate);
+        
+        if (!isDragging && productMesh) {
+          productMesh.rotation.y += 0.01;
+          productMesh.position.y = Math.sin(Date.now() * 0.0015) * 0.1;
+        }
+        
+        productRenderer.render(productScene, productCamera);
+      }
+      animate();
+    }
+
+    /* ─── 3D INTERACTIVE CARD TILT EFFECT ─── */
+    function apply3DTiltEffect() {
+      const cards = document.querySelectorAll('.tilt-effect');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          const angleX = -(yc - y) / 10;
+          const angleY = (xc - x) / 10;
+          
+          card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.03)`;
+        });
+        
+        card.style.transition = 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)';
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
+      });
+    }
+
     /* ─── INITIALIZATION ─── */
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
       renderProducts();
       updateCartSummary();
+      checkOrderLockState();
+      
+      // Initialize Three.js hero scene
+      initHero3D();
+
+      // Cursor ambient halo effect
+      const glow = document.createElement('div');
+      glow.className = 'fixed w-[300px] h-[300px] rounded-full pointer-events-none blur-[90px] z-50 transition-opacity duration-500 opacity-0 bg-red-500/5 dark:bg-red-500/5';
+      glow.style.transform = 'translate(-50%, -50%)';
+      document.body.appendChild(glow);
+      
+      document.addEventListener('mousemove', (e) => {
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+        glow.style.opacity = '1';
+      });
+      
+      document.addEventListener('mouseleave', () => {
+        glow.style.opacity = '0';
+      });
     });
   </script>
 </body>

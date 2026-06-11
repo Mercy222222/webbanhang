@@ -23,7 +23,7 @@ class AdminController
         
         // Ensure user is admin
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-            header('Location: /webbanhang/index.php?url=auth/login');
+            header('Location: index.php?url=auth/login');
             exit();
         }
     }

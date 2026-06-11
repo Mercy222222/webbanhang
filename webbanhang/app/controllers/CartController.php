@@ -31,7 +31,7 @@ class CartController
     public function add($id)
     {
         if (empty($id)) {
-            header('Location: /webbanhang/index.php');
+            header('Location: index.php');
             exit;
         }
 
@@ -49,7 +49,7 @@ class CartController
                 ];
             }
         }
-        header('Location: /webbanhang/index.php?url=cart');
+        header('Location: index.php?url=cart');
         exit();
     }
 
@@ -57,14 +57,14 @@ class CartController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['quantities'])) {
             foreach ($_POST['quantities'] as $id => $quantity) {
-                if ($quantity > 0) {
+                if ($quantity > 0 && isset($_SESSION['cart'][$id])) {
                     $_SESSION['cart'][$id]['quantity'] = $quantity;
-                } else {
+                } elseif ($quantity <= 0) {
                     unset($_SESSION['cart'][$id]);
                 }
             }
         }
-        header('Location: /webbanhang/index.php?url=cart');
+        header('Location: index.php?url=cart');
         exit();
     }
 
@@ -73,8 +73,9 @@ class CartController
         if (isset($_SESSION['cart'][$id])) {
             unset($_SESSION['cart'][$id]);
         }
-        header('Location: /webbanhang/index.php?url=cart');
+        header('Location: index.php?url=cart');
         exit();
     }
 }
 ?>
+

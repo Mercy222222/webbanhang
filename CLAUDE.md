@@ -57,15 +57,41 @@ This protocol applies when ending a Beads implementation workflow. It is subordi
 - If a required sync or push is blocked, stop and report the exact command and error.
 <!-- END BEADS INTEGRATION -->
 
+## 🧭 Vibe Coding Guidelines
+
+This project enforces strict **Vibe Coding Best Practices**. AI agents must review and align with these resources:
+* **Guidelines**: [.agents/vibe-coding/VIBE_CODING.md](file:///d:/webbanhang/.agents/vibe-coding/VIBE_CODING.md)
+* **Templates**: [.agents/vibe-coding/templates/](file:///d:/webbanhang/.agents/vibe-coding/templates/)
+
+### Core Workflow for Agents:
+1. **Plan Mode First**: Use `/plan` (or `Shift + Tab` twice) to present an implementation plan before editing files. List all assumptions and risks.
+2. **Context Management**: Run `/clear` between tasks to avoid context bleed. Use `/compact` when context is near full.
+3. **Diff & Risk Review**: Prior to task completion, run a risk review summarizing changed files, deleted files, and new dependencies.
+4. **Off-Limits Zones**: Do not modify `/src/auth/`, `/src/payments/`, database migration files, or configuration files without explicit confirmation.
 
 ## Build & Test
 
-_Add your build and test commands here_
+This workspace contains multiple sub-projects. Run verification commands in their respective directories:
+
+### 1. PHP/MySQL E-commerce (`webbanhang` or root)
+* Validate PHP syntax: `php -l <filename>`
+* Setup database: `php setup_db.php`
+
+### 2. Next.js React App (`app`)
+* Run dev server: `npm run dev` or `pnpm dev`
+* Run typecheck: `pnpm typecheck` or `npm run typecheck`
+* Run tests: `pnpm test` or `npm test`
+
+### 3. Hedge Fund Simulator (`ai-hedge-fund`)
+* Run tests: `pytest`
+
+### 4. GSD Workflow Tool (`get-shit-done`)
+* Run tests: `npm test` or `vitest`
 
 ```bash
-# Example:
-# npm install
-# npm test
+# Example verification:
+# php -l index.php
+# pnpm typecheck
 ```
 
 ## Architecture Overview
@@ -193,4 +219,15 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 |------|--------|--------|--------|
 | 2026-06-09 | Initial 5-member Elite Harness setup | All | Configure unified workspace-wide elite team and hybrid orchestrator skill. |
 
+---
 
+## Harness: deca-dev
+
+**Goal:** Coordinate a 10-member workspace-wide developer team to design, build, test, and deploy features across PHP MVC e-commerce, Next.js admin dashboard, WebGL Three.js UI, Python quant hedge fund, and GSD workflows.
+
+**Trigger:** Use `deca-orchestrator` skill for complex features, workspace-wide changes, refactoring, or multi-component updates.
+
+**Changelog:**
+| Date | Change | Target | Reason |
+|------|--------|--------|--------|
+| 2026-06-10 | Initial 10-member Deca Harness setup | All | Configure unified 10-member workspace-wide team and hybrid orchestrator skill. |

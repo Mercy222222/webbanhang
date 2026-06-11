@@ -31,7 +31,7 @@ class CartController
     public function add($id)
     {
         if (empty($id)) {
-            header('Location: /webbanhang/index.php');
+            header('Location: index.php');
             exit;
         }
 

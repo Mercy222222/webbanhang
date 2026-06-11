@@ -214,15 +214,22 @@
       will-change: transform;
     }
 
-    .skill-card > *,
-    .work-card > *,
-    .certificate-card > *,
-    .project-card > * {
-      transform: translateZ(20px);
+    .parallax-low {
+      transform: translateZ(10px) translateX(calc(var(--tilt-y, 0) * -0.15px)) translateY(calc(var(--tilt-x, 0) * 0.15px));
+      transition: transform 0.15s ease-out;
+    }
+    .parallax-mid {
+      transform: translateZ(25px) translateX(calc(var(--tilt-y, 0) * -0.35px)) translateY(calc(var(--tilt-x, 0) * 0.35px));
+      transition: transform 0.15s ease-out;
+    }
+    .parallax-high {
+      transform: translateZ(45px) translateX(calc(var(--tilt-y, 0) * -0.65px)) translateY(calc(var(--tilt-x, 0) * 0.65px));
+      transition: transform 0.15s ease-out;
     }
     
     .avatar-container img {
-      transform: translateZ(40px);
+      transform: translateZ(55px) translateX(calc(var(--tilt-y, 0) * -0.8px)) translateY(calc(var(--tilt-x, 0) * 0.8px));
+      transition: transform 0.15s ease-out;
     }
 
     /* ─── Vercel-style Dynamic Border Glow ─── */
@@ -1164,11 +1171,11 @@
         };
 
         const iconWrap = document.createElement('span');
-        iconWrap.className = 'text-3xl flex items-center justify-center';
+        iconWrap.className = 'text-3xl flex items-center justify-center parallax-high';
         iconWrap.innerHTML = skill.icon;
 
         const label = document.createElement('span');
-        label.className = 'text-base font-semibold tracking-wide';
+        label.className = 'text-base font-semibold tracking-wide parallax-mid';
         label.textContent = skill.label;
 
         card.appendChild(iconWrap);
@@ -1234,16 +1241,16 @@
 
         card.innerHTML = `
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <div>
+            <div class="parallax-high">
               <h3 class="text-xl md:text-2xl font-bold mb-1">${work.position}</h3>
               <h4 class="text-md md:text-lg font-semibold text-blue-500 mb-2">${work.company}</h4>
-              <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+              <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium parallax-low">
                 <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt"></i> ${work.duration}</span>
                 <span class="hidden sm:inline">•</span>
                 <span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt"></i> ${work.location}</span>
               </div>
             </div>
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0 parallax-mid">
               <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${badgeClass}">
                 <span class="w-2 h-2 rounded-full mr-2 ${work.duration.includes('Present') || work.duration.includes('Hiện tại') ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'}"></span>
                 ${durationBadgeText}
@@ -1251,11 +1258,11 @@
             </div>
           </div>
 
-          <div class="mb-6">
+          <div class="mb-6 parallax-low">
             <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">${work.description}</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-200 dark:border-gray-800 parallax-mid">
             <div>
               <h5 class="text-sm font-bold uppercase tracking-wider text-blue-500 mb-3 flex items-center gap-2">
                 <i class="fas fa-tasks"></i> ${currentLanguage === 'vi' ? 'Trách nhiệm chính' : 'Key Responsibilities'}
@@ -1299,14 +1306,14 @@
 
         card.innerHTML = `
           <div class="space-y-3">
-            <div class="text-3xl text-blue-500"><i class="fas fa-certificate"></i></div>
-            <h3 class="text-base font-bold tracking-tight">${cert.title}</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold">${cert.issuer} • ${cert.date}</p>
-            <div class="inline-block px-2.5 py-0.5 rounded bg-gray-200 dark:bg-gray-800 text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase">
+            <div class="text-3xl text-blue-500 parallax-high"><i class="fas fa-certificate"></i></div>
+            <h3 class="text-base font-bold tracking-tight parallax-mid">${cert.title}</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold parallax-low">${cert.issuer} • ${cert.date}</p>
+            <div class="inline-block px-2.5 py-0.5 rounded bg-gray-200 dark:bg-gray-800 text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase parallax-low">
               ID: ${cert.id_code}
             </div>
           </div>
-          <button onclick="showCertAlert('${cert.title}', '${cert.issuer}', '${cert.date}', '${cert.id_code}')" class="mt-5 w-full py-2 rounded font-semibold text-xs transition border border-gray-300 dark:border-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600">
+          <button onclick="showCertAlert('${cert.title}', '${cert.issuer}', '${cert.date}', '${cert.id_code}')" class="mt-5 w-full py-2 rounded font-semibold text-xs transition border border-gray-300 dark:border-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 parallax-high">
             ${t('certiDetail')}
           </button>
         `;
@@ -1397,16 +1404,15 @@
         });
 
         card.innerHTML = `
-
           <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
             <div class="space-y-2">
-              <h3 class="text-lg font-bold tracking-tight text-gray-800 dark:text-white">${project.name}</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">${project.description}</p>
+              <h3 class="text-lg font-bold tracking-tight text-gray-800 dark:text-white parallax-high">${project.name}</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed parallax-low">${project.description}</p>
             </div>
             
             <div class="space-y-4">
-              <div class="flex flex-wrap gap-1">${techBadges}</div>
-              <div class="flex gap-3 pt-2">
+              <div class="flex flex-wrap gap-1 parallax-mid">${techBadges}</div>
+              <div class="flex gap-3 pt-2 parallax-high">
                 <a href="${project.demoLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-xs font-bold border border-blue-500 hover:bg-blue-600 hover:text-white transition-colors duration-200">
                   <i class="fas fa-external-link-alt mr-1"></i> Demo
                 </a>
@@ -2035,6 +2041,8 @@
     let targetX = 0, targetY = 0;
     let windowHalfX = window.innerWidth / 2;
     let windowHalfY = window.innerHeight / 2;
+    let blackHoleSingularity, blackHoleHalo;
+    let diskRotX = 0, diskRotZ = 0;
 
     // Flow field particle structures
     const flowParticleCount = 2500;
@@ -2044,6 +2052,40 @@
     let flowSpeeds = new Float32Array(flowParticleCount);
     let flowOffsets = [];
     let flowColors = new Float32Array(flowParticleCount * 3);
+
+    function createCodeTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgba(0,0,0,0)';
+      ctx.clearRect(0, 0, 256, 256);
+      
+      ctx.font = 'bold 38px Fira Code, Courier New, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffffff';
+      
+      const chars = [
+        '0', '1', '{', '}', 
+        '<', '>', '(', ')', 
+        '[', ']', ';', '++', 
+        '=>', '?', '$', '&&'
+      ];
+      
+      for (let i = 0; i < 16; i++) {
+        const row = Math.floor(i / 4);
+        const col = i % 4;
+        const x = col * 64 + 32;
+        const y = row * 64 + 32;
+        ctx.fillText(chars[i], x, y);
+      }
+      
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.NearestFilter;
+      texture.magFilter = THREE.NearestFilter;
+      return texture;
+    }
 
     function initThreeJS() {
       const container = document.getElementById('three-bg-container');
@@ -2055,16 +2097,18 @@
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
       camera.position.set(0, 0, 600);
 
-      // Initialize flow particles
+      // Initialize flow particles in an Accretion Disk layout
       flowGeometry = new THREE.BufferGeometry();
-      const boxW = window.innerWidth * 1.5;
-      const boxH = window.innerHeight * 1.5;
-      const boxD = 800;
+      const txIndices = new Float32Array(flowParticleCount);
 
       for (let i = 0; i < flowParticleCount; i++) {
-        flowPositions[i * 3] = (Math.random() - 0.5) * boxW;
-        flowPositions[i * 3 + 1] = (Math.random() - 0.5) * boxH;
-        flowPositions[i * 3 + 2] = (Math.random() - 0.5) * boxD - 200;
+        // Flat disk layout (XZ plane) with slight Y thickness
+        const r = 80 + Math.random() * 450;
+        const theta = Math.random() * Math.PI * 2.0;
+
+        flowPositions[i * 3] = r * Math.cos(theta); // X
+        flowPositions[i * 3 + 1] = (Math.random() - 0.5) * 35; // Y (height thickness)
+        flowPositions[i * 3 + 2] = r * Math.sin(theta); // Z
 
         flowVelocities[i * 3] = 0;
         flowVelocities[i * 3 + 1] = 0;
@@ -2081,40 +2125,54 @@
         flowColors[i * 3] = currentC1.r;
         flowColors[i * 3 + 1] = currentC1.g;
         flowColors[i * 3 + 2] = currentC1.b;
+
+        txIndices[i] = Math.floor(Math.random() * 16);
       }
 
       flowGeometry.setAttribute('position', new THREE.BufferAttribute(flowPositions, 3));
       flowGeometry.setAttribute('color', new THREE.BufferAttribute(flowColors, 3));
+      flowGeometry.setAttribute('aTxIndex', new THREE.BufferAttribute(txIndices, 1));
 
       // GPU Shader for high-performance glowing particles
       const flowVertexShader = `
         attribute vec3 color;
+        attribute float aTxIndex;
         varying vec3 vColor;
+        varying float vTxIndex;
         void main() {
           vColor = color;
+          vTxIndex = aTxIndex;
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = (12.0 * (300.0 / -mvPosition.z));
+          gl_PointSize = (18.0 * (300.0 / -mvPosition.z));
           gl_Position = projectionMatrix * mvPosition;
         }
       `;
 
       const flowFragmentShader = `
         varying vec3 vColor;
+        varying float vTxIndex;
+        uniform sampler2D uTexture;
         uniform float uOpacity;
         void main() {
-          vec2 coord = gl_PointCoord - vec2(0.5);
-          float dist = length(coord);
-          float alpha = smoothstep(0.5, 0.0, dist) * uOpacity;
-          if (alpha < 0.02) discard;
-          gl_FragColor = vec4(vColor, alpha);
+          float row = floor(vTxIndex / 4.0);
+          float col = mod(vTxIndex, 4.0);
+          vec2 uv = gl_PointCoord / 4.0 + vec2(col / 4.0, row / 4.0);
+          
+          vec4 texColor = texture2D(uTexture, uv);
+          if (texColor.a < 0.15) discard;
+          
+          gl_FragColor = vec4(vColor * texColor.rgb, texColor.a * uOpacity);
         }
       `;
+
+      const codeTexture = createCodeTexture();
 
       flowMaterial = new THREE.ShaderMaterial({
         vertexShader: flowVertexShader,
         fragmentShader: flowFragmentShader,
         uniforms: {
-          uOpacity: { value: currentTheme === 'dark' ? 0.65 : 0.35 }
+          uOpacity: { value: currentTheme === 'dark' ? 0.65 : 0.35 },
+          uTexture: { value: codeTexture }
         },
         transparent: true,
         blending: THREE.AdditiveBlending,
@@ -2123,6 +2181,24 @@
 
       flowPointsObj = new THREE.Points(flowGeometry, flowMaterial);
       scene.add(flowPointsObj);
+
+      // Create central black hole singularity (pure black sphere)
+      const singularityGeo = new THREE.SphereGeometry(30, 32, 32);
+      const singularityMat = new THREE.MeshBasicMaterial({ color: 0x010103 });
+      blackHoleSingularity = new THREE.Mesh(singularityGeo, singularityMat);
+      scene.add(blackHoleSingularity);
+
+      // Create glowing accretion disk event horizon halo (gravitational lensing simulation)
+      const haloGeo = new THREE.RingGeometry(30, 36, 64);
+      const haloMat = new THREE.MeshBasicMaterial({
+        color: 0xffa044, // glowing hot accretion orange
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending
+      });
+      blackHoleHalo = new THREE.Mesh(haloGeo, haloMat);
+      scene.add(blackHoleHalo);
 
       // Deep space static starfield
       const starsGeometry = new THREE.BufferGeometry();
@@ -2231,6 +2307,28 @@
       currentC1.lerp(tColor1, 0.025 * speedMultiplier);
       currentC2.lerp(tColor2, 0.025 * speedMultiplier);
 
+      // Interpolate disk 3D tilt based on section state and mouse movement
+      let targetDiskRotX = 0;
+      let targetDiskRotZ = 0;
+      if (activeSectionName === 'about') {
+        targetDiskRotX = heroMouseY * 0.45;
+        targetDiskRotZ = heroMouseX * 0.45;
+      }
+      diskRotX += (targetDiskRotX - diskRotX) * 0.06 * speedMultiplier;
+      diskRotZ += (targetDiskRotZ - diskRotZ) * 0.06 * speedMultiplier;
+
+      if (flowPointsObj && blackHoleSingularity && blackHoleHalo) {
+        flowPointsObj.rotation.x = diskRotX;
+        flowPointsObj.rotation.z = diskRotZ;
+        blackHoleSingularity.rotation.x = diskRotX;
+        blackHoleSingularity.rotation.z = diskRotZ;
+        blackHoleHalo.rotation.x = diskRotX;
+        blackHoleHalo.rotation.z = diskRotZ;
+        
+        // Event horizon spin
+        blackHoleHalo.rotation.z = timeSec * 0.6;
+      }
+
       // Update flow particle positions and vortex swirls
       if (flowPointsObj) {
         const positions = flowGeometry.attributes.position.array;
@@ -2256,23 +2354,78 @@
           let vy = flowVelocities[idx + 1];
           let vz = flowVelocities[idx + 2];
           
-          // 1. Curl mathematical flow field vectors
-          vx += Math.sin(pz * 0.005 + timeSec) * 0.12 * flowSpeeds[i];
-          vy += Math.cos(px * 0.005 + timeSec * 0.8) * 0.12 * flowSpeeds[i];
-          vz += Math.sin(py * 0.005 + timeSec * 1.2) * 0.08 * flowSpeeds[i];
+          const R = Math.sqrt(px * px + pz * pz) || 1.0;
+
+          // SCROLLING STATE MACHINE BEHAVIORS (Cosmic Black Hole Dynamics)
+          if (activeSectionName === 'about') {
+            // Space Warp: Stable Keplerian Accretion disk, but parent object is rotated in 3D by mouse
+            const speed = 4.5 / Math.sqrt(R);
+            vx += (-pz / R) * speed - (px / R) * 0.05;
+            vz += (px / R) * speed - (pz / R) * 0.05;
+            vy += (-py) * 0.08;
+          } else if (activeSectionName === 'workExp') {
+            // Relativistic Spaghettification Columns (Vertical spiral streams entering black hole)
+            const speed = 3.8 / Math.sqrt(R);
+            const pull = 0.6 * flowSpeeds[i];
+            vx += (-px / R) * pull - (pz / R) * speed;
+            vz += (-pz / R) * pull + (px / R) * speed;
+            vy += (Math.sin(R * 0.04 - timeSec * 3.5) * 12.0 - py) * 0.08;
+          } else if (activeSectionName === 'skills') {
+            // Polar Energy Jets (particles ejecting vertically from poles)
+            const speed = 0.12 * flowSpeeds[i];
+            const isNorth = (i % 2 === 0);
+            vy += (isNorth ? 8.5 : -8.5) * flowSpeeds[i];
+            vx += (-px) * 0.08; // confine horizontally
+            vz += (-pz) * 0.08;
+            // spiral rotation
+            vx += -pz * speed;
+            vz += px * speed;
+          } else if (activeSectionName === 'certificates') {
+            // Event Horizon Ring (Fast orbit band concentrated at R = 50)
+            const targetR = 50;
+            const pull = (targetR - R) * 0.08;
+            const orbitSpeed = 7.5;
+            vx += (px / R) * pull - (pz / R) * orbitSpeed * flowSpeeds[i];
+            vz += (pz / R) * pull + (px / R) * orbitSpeed * flowSpeeds[i];
+            vy += (-py) * 0.1;
+          } else if (activeSectionName === 'projects') {
+            // Gravitational Waves (Keplerian disk with concentric ripples)
+            const speed = 4.5 / Math.sqrt(R);
+            vx += (-pz / R) * speed - (px / R) * 0.05;
+            vz += (px / R) * speed - (pz / R) * 0.05;
+            
+            const rippleRadius = ((timeSec * 0.4) % 1.0) * 550;
+            if (Math.abs(R - rippleRadius) < 70) {
+              const strength = (1.0 - Math.abs(R - rippleRadius) / 70) * 5.0;
+              vy += Math.sin((R - rippleRadius) * 0.12) * strength;
+            } else {
+              vy += (-py) * 0.08;
+            }
+          } else if (activeSectionName === 'contact') {
+            // Singularity Collapse (Sucked in directly)
+            const pull = 2.8 * flowSpeeds[i];
+            vx += (-px / R) * pull;
+            vz += (-pz / R) * pull;
+            vy += (-py) * 0.1;
+          } else {
+            // Home: Stable Keplerian Accretion Disk
+            const speed = 4.5 / Math.sqrt(R);
+            vx += (-pz / R) * speed - (px / R) * 0.05;
+            vz += (px / R) * speed - (pz / R) * 0.05;
+            vy += (-py) * 0.08;
+          }
           
-          // 2. Interactive mouse gravity vortex swirl
-          const dx = px - worldMouseX;
-          const dy = py - worldMouseY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 350) {
-            const force = (350 - dist) / 350;
-            const swirlSpeed = 4.5 * force;
-            vx += (-dy / dist) * swirlSpeed;
-            vy += (dx / dist) * swirlSpeed;
-            vx -= (dx / dist) * force * 1.2;
-            vy -= (dy / dist) * force * 1.2;
+          // Event Horizon absorption
+          // If the particle gets swallowed by the singularity (R < 32)
+          // or escapes far away (e.g. in Polar Jets, when |Y| > boxH/2)
+          if (R < 32 || (activeSectionName === 'skills' && Math.abs(py) > boxH / 2)) {
+            // Respawn at the outer edge of the accretion disk
+            const r = 250 + Math.random() * 200;
+            const theta = Math.random() * Math.PI * 2.0;
+            px = r * Math.cos(theta);
+            pz = r * Math.sin(theta);
+            py = (Math.random() - 0.5) * 15;
+            vx = 0; vy = 0; vz = 0;
           }
           
           // Damping & speed caps
@@ -2284,7 +2437,7 @@
           py += vy;
           pz += vz;
           
-          // Wrap bounds when escaping boundary box
+          // Wrap bounds when escaping boundary box (if not recently swallowed by black hole)
           if (Math.abs(px) > boxW / 2) px = (Math.random() - 0.5) * boxW;
           if (Math.abs(py) > boxH / 2) py = (Math.random() - 0.5) * boxH;
           if (pz < -boxD / 2 || pz > boxD / 2) pz = (Math.random() - 0.5) * boxD - 200;
@@ -2297,9 +2450,10 @@
           flowVelocities[idx + 1] = vy;
           flowVelocities[idx + 2] = vz;
           
-          // Color based on height and dynamics
-          const ratio = Math.max(0, Math.min(1, (py + boxH / 4) / (boxH / 2)));
-          colorLerpTarget.lerpColors(currentC1, currentC2, ratio);
+          // Relativistic Doppler Beaming color shift:
+          // Left side (px > 0) is blue-shifted, right side (px < 0) is red/orange shifted
+          const dopplerRatio = Math.max(0.0, Math.min(1.0, (px + 300.0) / 600.0));
+          colorLerpTarget.lerpColors(currentC1, currentC2, dopplerRatio);
           
           colors[idx] = colorLerpTarget.r;
           colors[idx + 1] = colorLerpTarget.g;
@@ -2340,6 +2494,7 @@
     let heroMouseX = 0, heroMouseY = 0;
     let heroTargetMouseX = 0, heroTargetMouseY = 0;
     let heroHoverVal = 0.0, heroHoverTarget = 0.0;
+    let heroCamTheta = 0, heroCamPhi = Math.PI / 2;
 
     // GLSL Shader Code
     const heroVertexShader = `
@@ -2411,8 +2566,10 @@
         float noise = snoise(noisePos);
         vNoise = noise;
         
-        float strength = uNoiseStrength + uHover * 1.5;
-        vec3 displacedPosition = position + normal * noise * strength;
+        // Organic ripple wave along coordinates
+        float wave = sin(position.x * 0.35 + uTime * 2.5) * cos(position.y * 0.35 + uTime * 2.5);
+        float strength = uNoiseStrength + uHover * 1.8;
+        vec3 displacedPosition = position + normal * (noise * 0.65 + wave * 0.35) * strength;
         
         vec4 modelViewPosition = modelViewMatrix * vec4(displacedPosition, 1.0);
         gl_Position = projectionMatrix * modelViewPosition;
@@ -2434,7 +2591,14 @@
         float fresnel = pow(1.0 - max(dot(vNormal, viewDirection), 0.0), 3.0);
         
         float mixFactor = (vNoise + 1.0) * 0.5;
-        vec3 baseColor = mix(uColor1, uColor2, mixFactor);
+        
+        // Iridescent neon color shift
+        vec3 iridescence = vec3(
+          sin(vPosition.x * 0.12 + uTime) * 0.15 + 0.85,
+          sin(vPosition.y * 0.12 + uTime + 2.0) * 0.15 + 0.85,
+          sin(vPosition.z * 0.12 + uTime + 4.0) * 0.15 + 0.85
+        );
+        vec3 baseColor = mix(uColor1, uColor2, mixFactor) * iridescence;
         
         float pulse = sin(uTime * 2.5) * 0.08 + 0.92;
         float glow = uGlowIntensity + uHover * 2.0;
@@ -2793,9 +2957,17 @@
           }
         }
 
-        // Camera tilt response
-        heroCamera.position.x += (heroMouseX * 4 - heroCamera.position.x) * 0.1;
-        heroCamera.position.y += (heroMouseY * 4 - heroCamera.position.y) * 0.1;
+        // Spherical camera orbit with mouse inertia
+        const radius = 35;
+        const targetTheta = heroMouseX * 0.45; // Max 25 degrees horizontal
+        const targetPhi = Math.PI / 2 + heroMouseY * 0.4; // Tilt up/down
+        
+        heroCamTheta += (targetTheta - heroCamTheta) * 0.05; // Smooth lag
+        heroCamPhi += (targetPhi - heroCamPhi) * 0.05;
+        
+        heroCamera.position.x = radius * Math.sin(heroCamPhi) * Math.sin(heroCamTheta);
+        heroCamera.position.y = radius * Math.cos(heroCamPhi);
+        heroCamera.position.z = radius * Math.sin(heroCamPhi) * Math.cos(heroCamTheta);
         heroCamera.lookAt(0, 0, 0);
 
         // Theme adjustments & sync with dynamic section colors (from background terrain)
@@ -2873,6 +3045,8 @@
             
             if (Math.abs(currentX) < 0.01 && Math.abs(currentY) < 0.01) {
               card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+              card.style.setProperty('--tilt-x', '0');
+              card.style.setProperty('--tilt-y', '0');
               glare.style.opacity = '0';
               animFrameId = null;
               return;
@@ -2884,6 +3058,8 @@
           }
 
           card.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg) scale3d(1.02, 1.02, 1.02)`;
+          card.style.setProperty('--tilt-x', currentX);
+          card.style.setProperty('--tilt-y', currentY);
           animFrameId = requestAnimationFrame(updateCardPosition);
         }
 
@@ -2983,8 +3159,11 @@
         mouse.x = e.clientX;
         mouse.y = e.clientY;
 
+        // Throttled spawning (cap max active particles)
+        if (trailParticles.length >= 60) return;
+
         // Spawn glowing code particles on mouse movements
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 1; i++) {
           trailParticles.push({
             x: e.clientX,
             y: e.clientY,
@@ -3004,7 +3183,8 @@
       window.addEventListener('click', (e) => {
         // Spawn ring of exploding neon particles
         const burstSymbols = ["✦", "✨", "0", "1", "<>", "{}", "*/", "++", ";", "{", "}", "[", "]", "()"];
-        for (let i = 0; i < 20; i++) {
+        const count = Math.min(12, 60 - trailParticles.length);
+        for (let i = 0; i < count; i++) {
           const speed = Math.random() * 5 + 3;
           const angle = Math.random() * Math.PI * 2;
           trailParticles.push({

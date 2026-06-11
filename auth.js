@@ -89,6 +89,11 @@ function handleAuthSubmit() {
       updateNavbarAuth();
       hideAuthModal();
       Swal.fire({ icon: 'success', title: 'Đăng nhập thành công', timer: 1500, showConfirmButton: false });
+      if (username === 'admin' && typeof switchTab === 'function') {
+        switchTab('admin');
+      } else if (typeof switchTab === 'function') {
+        switchTab('store');
+      }
     } else {
       Swal.fire({ icon: 'error', title: 'Lỗi', text: res.msg });
     }
@@ -104,18 +109,37 @@ function handleAuthSubmit() {
   }
 }
 
+function handleLogout() {
+  logout();
+  updateNavbarAuth();
+  if (typeof switchTab === 'function') {
+    switchTab('store');
+  }
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({ icon: 'success', title: 'Đã đăng xuất', timer: 1500, showConfirmButton: false });
+  }
+}
+
 function updateNavbarAuth() {
   const user = getCurrentUser();
   const nav = document.getElementById('nav-auth-section');
+  const adminBtn = document.getElementById('admin-nav-btn');
   if (user) {
     nav.innerHTML = `
       <span class="text-sm font-medium mr-2">Xin chào, ${user.name}</span>
-      <button onclick="logout(); updateNavbarAuth();" class="px-3 py-1 bg-rose-500 text-white rounded hover:bg-rose-600 transition">Đăng xuất</button>
+      <button onclick="handleLogout()" class="px-3 py-1 bg-rose-500 text-white rounded hover:bg-rose-600 transition">Đăng xuất</button>
     `;
+    if (user.username === 'admin') {
+      if (adminBtn) adminBtn.classList.remove('hidden');
+    } else {
+      if (adminBtn) adminBtn.classList.add('hidden');
+    }
   } else {
     nav.innerHTML = `<button onclick="showAuthModal('login');" class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">Đăng nhập / Đăng ký</button>`;
+    if (adminBtn) adminBtn.classList.add('hidden');
   }
 }
 
 // Initialize auth UI on page load
 document.addEventListener('DOMContentLoaded', updateNavbarAuth);
+

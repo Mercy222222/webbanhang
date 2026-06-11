@@ -172,7 +172,7 @@ class ProductController
             ];
         }
 
-        header('Location: /webbanhang/Product/cart');
+        header('Location: index.php?url=cart');
     }
 }
 ?>

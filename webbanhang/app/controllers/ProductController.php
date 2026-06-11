@@ -13,12 +13,15 @@ class ProductController
     {
         $this->db = (new Database())->getConnection();
         $this->productModel = new ProductModel($this->db);
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     public function index()
     {
         $products = $this->productModel->getProducts();
-        include 'app/views/product/list.php';
+        include 'app/views/admin/products.php';
     }
 
     public function show($id)
@@ -59,7 +62,7 @@ class ProductController
                 $categories = (new CategoryModel($this->db))->getCategories();
                 include 'app/views/product/add.php';
             } else {
-                header('Location: /webbanhang/Product');
+                header('Location: index.php?url=admin/products');
             }
         }
     }
@@ -94,7 +97,7 @@ class ProductController
             $edit = $this->productModel->updateProduct($id, $name, $description, $price, $category_id, $image);
 
             if ($edit) {
-                header('Location: /webbanhang/Product');
+                header('Location: index.php?url=admin/products');
             } else {
                 echo "Đã xảy ra lỗi khi lưu sản phẩm";
             }
@@ -104,7 +107,7 @@ class ProductController
     public function delete($id)
     {
         if ($this->productModel->deleteProduct($id)) {
-            header('Location: /webbanhang/Product');
+            header('Location: index.php?url=admin/products');
         } else {
             echo "Đã xảy ra lỗi khi xóa sản phẩm";
         }
@@ -169,7 +172,7 @@ class ProductController
             ];
         }
 
-        header('Location: /webbanhang/Product/cart');
+        header('Location: index.php?url=cart');
     }
 }
 ?>

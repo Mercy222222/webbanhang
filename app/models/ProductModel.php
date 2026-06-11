@@ -79,7 +79,7 @@ class ProductModel
         $stmt->bindParam(':image', $image);
 
         if ($stmt->execute()) {
-            return true;
+            return $this->conn->lastInsertId();
         }
 
         return false;

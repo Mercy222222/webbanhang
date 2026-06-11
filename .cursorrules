@@ -30,6 +30,15 @@ Welcome to the `webbanhang` workspace! Follow these guidelines and architectural
 
 ---
 
+## 🧭 Vibe Coding Workflow
+Refer to the full guidelines at [.agents/vibe-coding/VIBE_CODING.md](file:///d:/webbanhang/.agents/vibe-coding/VIBE_CODING.md).
+1. **Plan Mode**: Present an implementation plan listing modified files, function signatures, assumptions, and risks before writing code.
+2. **Context Control**: Reset or clear conversation context between separate tasks to avoid context bleed.
+3. **Scoped Prompts**: Ensure prompts specify a clear goal, a list of file scopes, constraints, and verification steps.
+4. **Diff Review**: Before finishing a task, present a risk audit detailing deleted files, public API changes, and new dependencies.
+
+---
+
 ## 🧠 Karpathy AI Coding Guidelines
 1. **Think Before Coding**: State assumptions explicitly. If there is ambiguity in requirements, present trade-offs before proceeding.
 2. **Simplicity First**: Write the minimum amount of code to solve the problem. Avoid speculative complexity or unused generic wrappers.

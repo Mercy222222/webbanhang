@@ -23,7 +23,7 @@ class AdminController
         
         // Ensure user is admin
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-            header('Location: /webbanhang/index.php?url=auth/login');
+            header('Location: index.php?url=auth/login');
             exit();
         }
     }
@@ -39,16 +39,27 @@ class AdminController
         require_once 'app/views/admin/orders.php';
     }
 
+    public function products()
+    {
+        $products = $this->productModel->getProducts();
+        require_once 'app/views/admin/products.php';
+    }
+
+    public function categories()
+    {
+        $categories = $this->categoryModel->getCategories();
+        require_once 'app/views/admin/categories.php';
+    }
+
     public function updateOrderStatus($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $status = $_POST['status'] ?? 'pending';
             $this->orderModel->updateOrderStatus($id, $status);
-            header('Location: /webbanhang/index.php?url=admin/orders');
+            header('Location: index.php?url=admin/orders');
             exit();
         }
     }
-    
-    // Add product, category methods here if needed. Right now, using basic ones.
 }
 ?>
+
