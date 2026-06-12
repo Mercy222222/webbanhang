@@ -15,7 +15,8 @@ def run_collection(collection_file):
     # Initialize environment variables
     env_vars = {
         "base_url": "http://localhost:8080",
-        "created_product_id": ""
+        "created_product_id": "",
+        "created_category_id": ""
     }
 
     def replace_variables(text, variables):
@@ -90,7 +91,7 @@ def run_collection(collection_file):
             except Exception:
                 print(f"Response: {response.text}")
 
-            # Post-request Script Simulation (POST Create Product)
+            # Post-request Script Simulation (POST Create Product / Category)
             if "Create Product" in name and 200 <= status_code < 300:
                 try:
                     resp_json = response.json()
@@ -100,6 +101,15 @@ def run_collection(collection_file):
                         print(f"Saved created_product_id = {created_id} (simulating Postman test script)")
                 except Exception as e:
                     print(f"Failed to parse response for created_product_id: {e}")
+            elif "Create Category" in name and 200 <= status_code < 300:
+                try:
+                    resp_json = response.json()
+                    if resp_json.get("success") and "data" in resp_json and "id" in resp_json["data"]:
+                        created_id = resp_json["data"]["id"]
+                        env_vars["created_category_id"] = str(created_id)
+                        print(f"Saved created_category_id = {created_id} (simulating Postman test script)")
+                except Exception as e:
+                    print(f"Failed to parse response for created_category_id: {e}")
 
             if 200 <= status_code < 300:
                 total_passed += 1

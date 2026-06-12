@@ -16,12 +16,16 @@ if (isset($url[0]) && $url[0] === 'api') {
         exit(0);
     }
     
-    if ($resource === 'products') {
+    if ($resource === 'products' || $resource === 'categories') {
         $id = $url[2] ?? null;
+        if ($id === '') {
+            $id = null;
+        }
         $method = $_SERVER['REQUEST_METHOD'];
         
+        $controllerName = ($resource === 'products') ? 'ProductApiController' : 'CategoryApiController';
+        
         // Map HTTP method to controller actions
-        $controllerName = 'ProductApiController';
         if ($method === 'GET') {
             $action = $id ? 'show' : 'index';
         } elseif ($method === 'POST') {
@@ -44,6 +48,14 @@ if (isset($url[0]) && $url[0] === 'api') {
             http_response_code(405);
             header("Content-Type: application/json; charset=UTF-8");
             echo json_encode(["success" => false, "message" => "Method Not Allowed"]);
+            exit();
+        }
+
+        // Validate that $id is provided for actions that require it
+        if (($action === 'update' || $action === 'delete' || $action === 'show') && $id === null) {
+            http_response_code(400);
+            header("Content-Type: application/json; charset=UTF-8");
+            echo json_encode(["success" => false, "message" => "ID is required for this action"]);
             exit();
         }
 

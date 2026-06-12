@@ -67,6 +67,7 @@
 						"exec": [
 							"var jsonData = pm.response.json();",
 							"if (jsonData.success && jsonData.data && jsonData.data.id) {",
+							"    pm.environment.set(\"created_product_id\", jsonData.data.id);",
 							"    pm.collectionVariables.set(\"created_product_id\", jsonData.data.id);",
 							"    console.log(\"Saved created_product_id: \" + jsonData.data.id);",
 							"}"
@@ -159,11 +160,164 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GET List Categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/index.php?url=api/categories",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "api/categories"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Single Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/index.php?url=api/categories/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "api/categories/1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create Category (JSON)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"if (jsonData.success && jsonData.data && jsonData.data.id) {",
+							"    pm.environment.set(\"created_category_id\", jsonData.data.id);",
+							"    pm.collectionVariables.set(\"created_category_id\", jsonData.data.id);",
+							"    console.log(\"Saved created_category_id: \" + jsonData.data.id);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Custom Accessories\",\n    \"description\": \"Custom cases, keycaps, cables and accessories\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/index.php?url=api/categories",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "api/categories"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update Category (JSON)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Custom Accessories v2\",\n    \"description\": \"Upgraded custom gear and accessories\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "api/categories/{{created_category_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Category",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "api/categories/{{created_category_id}}"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
 		{
 			"key": "created_product_id",
+			"value": "1"
+		},
+		{
+			"key": "created_category_id",
 			"value": "1"
 		}
 	]
