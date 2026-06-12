@@ -96,5 +96,16 @@ if (!method_exists($controller, $action)) {
     // Xử lý không tìm thấy action
     die('Action not found');
 }
+// Validate parameters for ApiController actions requiring ID
+if ($controllerName === 'ApiController' && ($action === 'orderDetail' || $action === 'updateOrderStatus')) {
+    $params = array_slice($url, 2);
+    if (empty($params) || $params[0] === '') {
+        http_response_code(400);
+        header("Content-Type: application/json; charset=UTF-8");
+        echo json_encode(["success" => false, "message" => "Order ID is required"]);
+        exit();
+    }
+}
+
 // Gọi action với các tham số còn lại (nếu có)
 call_user_func_array([$controller, $action], array_slice($url, 2));

@@ -29,7 +29,16 @@ def run_collection(collection_file):
                 text = text.replace(f"{{{{{p}}}}}", str(variables[p]))
         return text
 
-    items = collection.get("item", [])
+    def flatten_items(items):
+        flat = []
+        for item in items:
+            if "request" in item:
+                flat.append(item)
+            elif "item" in item:
+                flat.extend(flatten_items(item["item"]))
+        return flat
+
+    items = flatten_items(collection.get("item", []))
     total_passed = 0
 
     for idx, item in enumerate(items, 1):

@@ -2,313 +2,434 @@
 	"info": {
 		"_postman_id": "8c5ab237-7729-4d69-b593-01878b2737ea",
 		"name": "GearVN RESTful API",
-		"description": "Collection of API requests to verify GearVN RESTful product endpoints.",
+		"description": "Collection of API requests to verify GearVN RESTful endpoints (Products, Categories, Orders, and Stats).",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "GET List Products",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/products",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
+			"name": "Products (Sản phẩm)",
+			"item": [
+				{
+					"name": "GET List Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/products"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"description": "Optional category filter",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Single Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/products/1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Product (JSON)",
+					"event": [
 						{
-							"key": "url",
-							"value": "api/products"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.id) {",
+									"    pm.environment.set(\"created_product_id\", jsonData.data.id);",
+									"    pm.collectionVariables.set(\"created_product_id\", jsonData.data.id);",
+									"    console.log(\"Saved created_product_id: \" + jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ban Phim Custom Akko Mod007\",\n    \"price\": 3200000,\n    \"description\": \"Ban phim co nhom nguyen khoi hotswap mach xuoi\",\n    \"category_id\": 5,\n    \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}"
 						},
-						{
-							"key": "category_id",
-							"value": "1",
-							"description": "Optional category filter",
-							"disabled": true
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/products"
+								}
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Single Product",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/products/1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/products/1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Create Product (JSON)",
-			"event": [
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();",
-							"if (jsonData.success && jsonData.data && jsonData.data.id) {",
-							"    pm.environment.set(\"created_product_id\", jsonData.data.id);",
-							"    pm.collectionVariables.set(\"created_product_id\", jsonData.data.id);",
-							"    console.log(\"Saved created_product_id: \" + jsonData.data.id);",
-							"}"
+					"name": "PUT Update Product (JSON)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
 						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Ban Phim Custom Akko Mod007\",\n    \"price\": 3200000,\n    \"description\": \"Ban phim co nhom nguyen khoi hotswap mach xuoi\",\n    \"category_id\": 5,\n    \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}"
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ban Phim Akko Mod007 v2\",\n    \"price\": 3400000,\n    \"description\": \"Ban phim co nhom nguyen khoi v2\",\n    \"category_id\": 5,\n    \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/products/{{created_product_id}}"
+								}
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/products",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/products"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PUT Update Product (JSON)",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Ban Phim Akko Mod007 v2\",\n    \"price\": 3400000,\n    \"description\": \"Ban phim co nhom nguyen khoi v2\",\n    \"category_id\": 5,\n    \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}"
-				},
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/products/{{created_product_id}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE Product",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/products/{{created_product_id}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET List Categories",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/categories",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/categories"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Single Category",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/categories/1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/categories/1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Create Category (JSON)",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();",
-							"if (jsonData.success && jsonData.data && jsonData.data.id) {",
-							"    pm.environment.set(\"created_category_id\", jsonData.data.id);",
-							"    pm.collectionVariables.set(\"created_category_id\", jsonData.data.id);",
-							"    console.log(\"Saved created_category_id: \" + jsonData.data.id);",
-							"}"
+					"name": "DELETE Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/products/{{created_product_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories (Danh mục)",
+			"item": [
+				{
+					"name": "GET List Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/categories"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Single Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/categories/1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Category (JSON)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.id) {",
+									"    pm.environment.set(\"created_category_id\", jsonData.data.id);",
+									"    pm.collectionVariables.set(\"created_category_id\", jsonData.data.id);",
+									"    console.log(\"Saved created_category_id: \" + jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
 						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Custom Accessories\",\n    \"description\": \"Custom cases, keycaps, cables and accessories\"\n}"
-				},
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/categories",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/categories"
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Custom Accessories\",\n    \"description\": \"Custom cases, keycaps, cables and accessories\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/categories"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Category (JSON)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Custom Accessories v2\",\n    \"description\": \"Upgraded custom gear and accessories\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/categories/{{created_category_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/categories/{{created_category_id}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "PUT Update Category (JSON)",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Custom Accessories v2\",\n    \"description\": \"Upgraded custom gear and accessories\"\n}"
-				},
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/categories/{{created_category_id}}"
+			"name": "Orders (Đơn hàng)",
+			"item": [
+				{
+					"name": "GET List Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/orders"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "GET Order Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/orderDetail/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/orderDetail/1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Update Order Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"completed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/updateOrderStatus/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/updateOrderStatus/1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "DELETE Category",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"index.php"
-					],
-					"query": [
-						{
-							"key": "url",
-							"value": "api/categories/{{created_category_id}}"
+			"name": "Stats (Thống kê)",
+			"item": [
+				{
+					"name": "GET API Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "api/stats"
+								}
+							]
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"variable": [
