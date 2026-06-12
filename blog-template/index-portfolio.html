@@ -9,7 +9,7 @@
   <!-- CDNs cho Fonts, Icons và Tiện ích -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
   
@@ -18,6 +18,20 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <!-- Three.js for 3D Background -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/effects/AsciiEffect.js"></script>
+  
+  <!-- Three.js Post-Processing (Bloom) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,11 +41,11 @@
       theme: {
         extend: {
           colors: {
-            brand: '#007bff',
-            'brand-glow': 'rgba(0, 123, 255, 0.4)',
+            brand: '#10b981',
+            'brand-glow': 'rgba(16, 185, 129, 0.4)',
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['Outfit', 'sans-serif'],
             mono: ['Fira Code', 'monospace'],
           }
         }
@@ -150,7 +164,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to right, #3b82f6, #10b981);
+      background: #10b981;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -160,36 +174,16 @@
     }
     .cyber-glitch-logo:hover::before {
       opacity: 0.85;
-      left: 2px;
-      text-shadow: -1.5px 0 #ff00c1;
-      clip: rect(10px, 9999px, 45px, 0);
-      animation: glitch-anim 0.3s infinite linear alternate-reverse;
+      transform: translate(-1.5px, 1.5px);
+      text-shadow: 0 0 10px rgba(255, 0, 193, 0.6);
+      filter: blur(0.5px);
     }
     .cyber-glitch-logo:hover::after {
       opacity: 0.85;
-      left: -2px;
-      text-shadow: -1.5px 0 #00fff9, 0 1.5px #00fff9;
-      clip: rect(35px, 9999px, 80px, 0);
-      animation: glitch-anim2 0.3s infinite linear alternate-reverse;
+      transform: translate(1.5px, -1.5px);
+      text-shadow: 0 0 10px rgba(0, 255, 249, 0.6);
+      filter: blur(0.5px);
     }
-
-    @keyframes glitch-anim {
-      0% { clip: rect(12px, 9999px, 33px, 0); }
-      20% { clip: rect(45px, 9999px, 12px, 0); }
-      40% { clip: rect(23px, 9999px, 50px, 0); }
-      60% { clip: rect(56px, 9999px, 11px, 0); }
-      80% { clip: rect(10px, 9999px, 42px, 0); }
-      100% { clip: rect(35px, 9999px, 55px, 0); }
-    }
-    @keyframes glitch-anim2 {
-      0% { clip: rect(40px, 9999px, 50px, 0); }
-      20% { clip: rect(10px, 9999px, 45px, 0); }
-      40% { clip: rect(52px, 9999px, 12px, 0); }
-      60% { clip: rect(23px, 9999px, 60px, 0); }
-      80% { clip: rect(65px, 9999px, 11px, 0); }
-      100% { clip: rect(12px, 9999px, 35px, 0); }
-    }
-
     /* ─── 3D Tilt Card Glare Effect ─── */
     .card-glare {
       position: absolute;
@@ -215,41 +209,40 @@
     }
 
     .parallax-low {
-      transform: translateZ(10px) translateX(calc(var(--tilt-y, 0) * -0.15px)) translateY(calc(var(--tilt-x, 0) * 0.15px));
-      transition: transform 0.15s ease-out;
+      transform: translateZ(15px);
     }
     .parallax-mid {
-      transform: translateZ(25px) translateX(calc(var(--tilt-y, 0) * -0.35px)) translateY(calc(var(--tilt-x, 0) * 0.35px));
-      transition: transform 0.15s ease-out;
+      transform: translateZ(35px);
     }
     .parallax-high {
-      transform: translateZ(45px) translateX(calc(var(--tilt-y, 0) * -0.65px)) translateY(calc(var(--tilt-x, 0) * 0.65px));
-      transition: transform 0.15s ease-out;
+      transform: translateZ(60px);
     }
     
     .avatar-container img {
-      transform: translateZ(55px) translateX(calc(var(--tilt-y, 0) * -0.8px)) translateY(calc(var(--tilt-x, 0) * 0.8px));
-      transition: transform 0.15s ease-out;
+      transform: translateZ(55px);
     }
 
-    /* ─── Vercel-style Dynamic Border Glow ─── */
+    /* ─── Glassmorphism & Refined Borders ─── */
     .skill-card,
     .work-card,
     .certificate-card,
     .project-card {
       position: relative;
-      background: rgba(255, 255, 255, 0.6) !important;
-      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      background: rgba(250, 250, 250, 0.7) !important;
+      border: 1px solid rgba(0, 0, 0, 0.05) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       overflow: hidden;
-      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s !important;
+      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     
     html.dark .skill-card,
     html.dark .work-card,
     html.dark .certificate-card,
     html.dark .project-card {
-      background: rgba(10, 15, 30, 0.35) !important;
-      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      background: rgba(9, 9, 11, 0.6) !important;
+      border: 1px solid rgba(255, 255, 255, 0.04) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
 
     .skill-card::before,
@@ -260,12 +253,11 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      padding: 1.5px; /* Border thickness */
+      padding: 1px;
       background: radial-gradient(
         180px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-        rgba(59, 130, 246, 0.7), /* Blue glow */
-        rgba(16, 185, 129, 0.5) 45%, /* Emerald glow */
-        transparent 90%
+        rgba(16, 185, 129, 0.6), /* Emerald glow */
+        transparent 80%
       );
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
@@ -284,21 +276,17 @@
     }
 
     @keyframes orbitPulse1 {
-      0%, 100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
-      50% { border-color: rgba(59, 130, 246, 0.75); box-shadow: 0 0 25px rgba(59, 130, 246, 0.35); }
+      0%, 100% { border-color: rgba(16, 185, 129, 0.1); }
+      50% { border-color: rgba(16, 185, 129, 0.4); }
     }
     @keyframes orbitPulse2 {
-      0%, 100% { border-color: rgba(16, 185, 129, 0.25); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
-      50% { border-color: rgba(16, 185, 129, 0.65); box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+      0%, 100% { border-color: rgba(16, 185, 129, 0.2); }
+      50% { border-color: rgba(16, 185, 129, 0.6); }
     }
 
     /* Background overrides for 3D stars */
     body {
-      background-color: #f8fafc !important;
       transition: background-color 0.5s ease, color 0.5s ease;
-    }
-    html.dark body {
-      background-color: #030712 !important;
     }
 
     /* ─── Glowing Scroll Progress Bar ─── */
@@ -306,12 +294,11 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 4px;
+      height: 2px;
       width: 0%;
       z-index: 100;
-      background: linear-gradient(90deg, #3b82f6, #10b981);
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 5px rgba(16, 185, 129, 0.8);
-      transition: width 0.1s ease, background 0.5s ease, box-shadow 0.5s ease;
+      background: #10b981;
+      transition: width 0.1s ease;
     }
 
     /* ─── Hacker Floating Terminal HUD ─── */
@@ -343,8 +330,8 @@
       height: 50px;
       border-radius: 50%;
       z-index: 39;
-      background: linear-gradient(135deg, #3b82f6, #10b981);
-      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+      background: #10b981;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
       color: white;
       display: flex;
       align-items: center;
@@ -353,8 +340,8 @@
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     #terminal-toggle-btn:hover {
-      transform: scale(1.1) rotate(15deg);
-      box-shadow: 0 6px 25px rgba(16, 185, 129, 0.6);
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
     }
     #back-to-top-hud {
       position: fixed;
@@ -410,44 +397,395 @@
       stroke-dashoffset: 138;
       transition: stroke-dashoffset 0.1s ease;
     }
+  
+    
+    
+    
+    /* --- SECURIFY ANIMATIONS --- */
+    @keyframes spin-gradient {
+      from { --gradient-angle: 0deg; }
+      to { --gradient-angle: 360deg; }
+    }
+    @property --gradient-angle {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+    .securify-card {
+      background: rgba(15, 23, 42, 0.7) !important;
+      border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    /* Animated Border Glow */
+    .securify-card::before {
+      content: ""; position: absolute; inset: -2px; border-radius: inherit;
+      background: conic-gradient(from var(--gradient-angle), transparent 70%, #06b6d4, #10b981);
+      z-index: -1; animation: spin-gradient 4s linear infinite;
+      opacity: 0.3; transition: opacity 0.3s;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      padding: 2px;
+    }
+    .securify-card:hover::before { opacity: 1; }
+
+    /* Entrance Animations */
+    .fade-up-enter {
+      opacity: 0; transform: translateY(30px);
+      animation: fadeUpAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUpAnim {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Hide old visual code boxes */
+    .visual-code-box, .code-symbols-container { display: none !important; }
+
+    
+    /* --- BENTO & GSAP ENHANCEMENTS --- */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-auto-flow: dense; /* Crucial for gapless interlocking */
+      gap: 1.5rem;
+    }
+    
+    .securify-card {
+      background: rgba(15, 23, 42, 0.6) !important;
+      border: 1px solid rgba(255, 255, 255, 0.05) !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Spring Physics */
+    }
+    
+    .securify-card:hover {
+      box-shadow: 0 20px 40px -10px rgba(6, 182, 212, 0.15);
+      border-color: rgba(6, 182, 212, 0.3) !important;
+    }
+
+    /* 3D Inner Glow / Spotlight */
+    .securify-card::after {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06), transparent 50%);
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none; border-radius: inherit;
+    }
+    .securify-card:hover::after { opacity: 1; }
+
+    .scrub-text span {
+      opacity: 0.1;
+      display: inline;
+    }
+
+    /* Hide horizontal scrollbars */
+    body { overflow-x: hidden; }
+
+    
+    /* Beyond Ultra: Glare Effect */
+    .securify-card {
+      position: relative;
+      overflow: hidden; /* Contain glare */
+    }
+    .securify-card .glare {
+      position: absolute;
+      top: 0; left: 0; width: 200%; height: 200%;
+      background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.1) 25%, transparent 30%);
+      pointer-events: none;
+      transform: translate(-100%, -100%);
+      transition: transform 0.1s linear;
+      z-index: 20;
+    }
+    .securify-card:hover {
+      box-shadow: 0 30px 60px -15px rgba(6, 182, 212, 0.25), 0 0 20px 2px rgba(6, 182, 212, 0.1) inset;
+    }
+
+    /* --- SECURIFY BENTO UI --- */
+    body { background-color: #0b1121 !important; color: #f8fafc !important; }
+    .aurora-mesh-bg {
+      position: fixed; inset: -20%;
+      z-index: 1; pointer-events: none;
+      background-color: #0b1121;
+      background-image: 
+        radial-gradient(at 20% 30%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+        radial-gradient(at 80% 20%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+        radial-gradient(at 10% 90%, rgba(56, 189, 248, 0.15) 0px, transparent 50%);
+      animation: mesh-rotate 30s infinite alternate linear;
+    }
+    .securify-card {
+      position: relative;
+      background: rgba(30, 41, 59, 0.6) !important; /* slate-800 */
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border-radius: 2rem !important;
+      border: 1px solid rgba(255,255,255,0.05) !important;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02), 0 25px 50px -12px rgba(0,0,0,0.5) !important;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+      z-index: 10;
+      overflow: hidden;
+    }
+    .securify-card:hover {
+      box-shadow: inset 0 0 0 1px rgba(6, 182, 212, 0.3), 0 25px 50px -12px rgba(6, 182, 212, 0.15) !important;
+      border-color: rgba(6, 182, 212, 0.3) !important;
+    }
+    .pill-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.25rem 1rem; border-radius: 9999px;
+      background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2);
+      color: #22d3ee; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .btn-pill-primary {
+      background: #06b6d4; color: #083344; font-weight: 700; border-radius: 9999px;
+      padding: 0.75rem 2rem; transition: all 0.3s;
+    }
+    .btn-pill-primary:hover { background: #22d3ee; transform: scale(1.05); box-shadow: 0 0 20px rgba(6,182,212,0.4); }
+    .btn-pill-secondary {
+      background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #f8fafc; font-weight: 600; border-radius: 9999px;
+      padding: 0.75rem 2rem; transition: all 0.3s;
+    }
+    .btn-pill-secondary:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+    
+    /* Hide the old background grid container if we moved it */
+    #three-bg-container {
+      position: absolute !important; inset: 0 !important; z-index: 0 !important; border-radius: 2rem; pointer-events: auto !important;
+    }
+
+    /* --- BEYOND ULTRA UI --- */
+    .aurora-mesh-bg {
+      position: fixed; inset: -20%;
+      z-index: 1; pointer-events: none;
+      background-color: #030305;
+      background-image: 
+        radial-gradient(at 20% 30%, hsla(160, 100%, 15%, 0.4) 0px, transparent 60%),
+        radial-gradient(at 80% 20%, hsla(280, 100%, 15%, 0.3) 0px, transparent 60%),
+        radial-gradient(at 90% 80%, hsla(190, 100%, 15%, 0.4) 0px, transparent 60%),
+        radial-gradient(at 10% 90%, hsla(220, 100%, 15%, 0.3) 0px, transparent 60%);
+      animation: mesh-rotate 25s infinite alternate linear;
+    }
+    @keyframes mesh-rotate {
+      0% { filter: hue-rotate(-20deg) blur(60px); transform: scale(1); }
+      100% { filter: hue-rotate(40deg) blur(80px); transform: scale(1.1) rotate(5deg); }
+    }
+    .securify-card {
+      position: relative;
+      background: rgba(15, 15, 18, 0.4) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border-radius: 1.25rem !important;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+      z-index: 10;
+      transform-style: preserve-3d;
+      border: 1px solid rgba(255,255,255,0.03) !important; /* Fallback border */
+    }
+    .securify-card::before, .securify-card::after {
+      content: ""; position: absolute; border-radius: inherit;
+      opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
+    }
+    /* Spotlight Border */
+    .securify-card::before {
+      inset: -1px;
+      background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(16, 185, 129, 0.6), transparent 40%);
+      z-index: -1;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      padding: 1px;
+    }
+    /* Inner Ambient Core Glow */
+    .securify-card::after {
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(16, 185, 129, 0.05), transparent 40%);
+      z-index: 1;
+    }
+    .securify-card:hover::before, .securify-card:hover::after { opacity: 1; }
+    
+    .card-glare {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.08), transparent 50%);
+      opacity: 0; pointer-events: none; z-index: 5; transition: opacity 0.3s;
+    }
+    .securify-card:hover .card-glare { opacity: 1; }
+    /* Hide scrollbars for cleaner look */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+  
+    
+    /* PREMIUM SMOOTH HOVER INSTEAD OF GLITCH */
+    .smooth-hover {
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s;
+    }
+    .smooth-hover:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    /* OMNIVERSE TIER CSS */
+    .smooth-hover {
+      transition: all 0.5s ease;
+    }
+    .smooth-hover:hover {
+      filter: url('#liquid-filter');
+      transform: scale(1.1) rotateZ(2deg);
+    }
+
+    .glitch-hover-effect {
+      position: relative;
+      display: inline-block;
+    }
+    .glitch-hover-effect:hover::before, .glitch-hover-effect:hover::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0b1121;
+    }
+    .glitch-hover-effect:hover::before {
+      left: 3px;
+      text-shadow: -2px 0 red;
+      clip: rect(44px, 450px, 56px, 0);
+      animation: glitch-anim 5s infinite linear alternate-reverse;
+    }
+    .glitch-hover-effect:hover::after {
+      left: -3px;
+      text-shadow: -2px 0 blue;
+      clip: rect(44px, 450px, 56px, 0);
+      animation: glitch-anim2 5s infinite linear alternate-reverse;
+    }
+  
+    /* SINGULARITY TIER CSS */
+    @keyframes extreme-glitch-anim {
+      0% { filter: invert(0) hue-rotate(0deg) brightness(1); transform: skewX(0deg); }
+      50% { filter: invert(0.5) hue-rotate(90deg) brightness(1.5); transform: skewX(-5deg); }
+      100% { filter: invert(0) hue-rotate(0deg) brightness(1); transform: skewX(0deg); }
+    }
+
+    /* Terminal Upgrade */
+    #terminal-hud {
+      background: rgba(10, 15, 25, 0.4) !important;
+      backdrop-filter: blur(15px) saturate(150%);
+      -webkit-backdrop-filter: blur(15px) saturate(150%);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(0, 255, 255, 0.1) inset;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    #terminal-body {
+      background: transparent !important;
+    }
+    .glitch-typing {
+      position: relative;
+    }
+    .glitch-typing::before {
+      content: attr(data-text);
+      position: absolute;
+      left: -2px;
+      text-shadow: 2px 0 red;
+      animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    }
+
+  
+    /* PERFORMANCE OPTIMIZATIONS */
+    .securify-card, .skill-card, .project-card, .bento-grid, #terminal-hud, .smooth-hover {
+      will-change: transform;
+      transform-style: flat;
+      -webkit-font-smoothing: antialiased;
+      backface-visibility: hidden;
+    }
+    
+    .god-cursor {
+      will-change: transform, width, height;
+      transform: translateZ(0); /* Force GPU */
+    }
+
+    
+    
+    
+
   </style>
+
+  <style>
+    /* Custom Blending Cursor */
+    * { cursor: none !important; }
+    .god-cursor {
+      position: fixed; top: 0; left: 0;
+      width: 20px; height: 20px;
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s;
+    }
+    .god-cursor.hovering {
+      width: 60px; height: 60px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(4px);
+      mix-blend-mode: normal;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    
+    /* Lenis Smooth Scroll */
+    html.lenis { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+    .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+    /* Magnetic Elements */
+    .magnetic-wrap { display: inline-block; }
+  </style>
+
 </head>
-<body class="bg-[#ffffff] text-[#222222] dark:bg-[#181818] dark:text-[#f5f5f5] pt-[70px] overflow-x-hidden font-sans">
+<div class="god-cursor"></div>
+
+  
+
+<body class="bg-[#0b1121] text-slate-50 pt-[70px] overflow-x-hidden font-sans antialiased">
+  <!-- GLOBAL 3D BACKGROUND -->
+  <canvas id="global-3d-bg" class="fixed inset-0 w-full h-full pointer-events-none z-[-1] opacity-60"></canvas>
 
   <!-- Glowing Scroll Progress Bar -->
   <div id="scroll-progress"></div>
 
   <!-- Interactive 3D Background -->
-  <div id="three-bg-container" style="position:fixed; inset:0; pointer-events:none; z-index:0;"></div>
+  
   <!-- Interactive Particle Cursor Trail -->
-  <canvas id="cursor-trail-canvas" style="position:fixed; inset:0; pointer-events:none; z-index:9999;"></canvas>
+  
 
   <!-- ─── HEADER & NAVBAR ─── -->
-  <nav id="navbar" class="fixed top-0 inset-x-0 h-[70px] z-50 transition-all duration-300 bg-white/80 dark:bg-[#181818]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+  <nav id="navbar" class="fixed top-0 inset-x-0 h-[70px] z-50 transition-all duration-300 bg-white/80 dark:bg-[#181818]/80 backdrop-blur-md border-b border-zinc-200/50 dark:/50">
     <div class="max-w-7xl mx-auto px-4 md:px-8 h-full flex justify-between items-center">
       <!-- Brand Logo -->
-      <a href="#home" class="cyber-glitch-logo text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent transition hover:opacity-80">
-        Võ Hữu Trí ✦
+      <a href="#home" class="cyber-glitch-logo text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 transition hover:opacity-80">
+        Võ Hữu Trí <span class="text-cyan-400">✦</span>
       </a>
 
       <!-- Desktop Nav Menu -->
       <div class="hidden md:flex items-center gap-6">
         <div class="flex gap-4 font-semibold text-sm">
-          <a href="#home" data-nav="home" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
-          <a href="#about" data-nav="about" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
-          <a href="#workExp" data-nav="workExp" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
-          <a href="#skills" data-nav="skills" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
-          <a href="#certificates" data-nav="certificates" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
-          <a href="#projects" data-nav="projects" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
-          <a href="#contact" data-nav="contact" class="nav-link-item py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"></a>
+          <a href="#home" data-nav="home" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
+          <a href="#about" data-nav="about" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
+          <a href="#workExp" data-nav="workExp" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
+          <a href="#skills" data-nav="skills" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
+          <a href="#certificates" data-nav="certificates" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
+          <a href="#projects" data-nav="projects" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
+          <a href="#contact" data-nav="contact" class="nav-link-item py-2 px-1 text-zinc-500 dark:text-zinc-400 hover:text-cyan-400 transition-colors"></a>
         </div>
 
-        <div class="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-2"></div>
+        <div class="h-6 w-px bg-zinc-300 dark:bg-zinc-700 mx-2"></div>
 
         <!-- Controls (Lang / Theme) -->
         <div class="flex items-center gap-4">
           <!-- Language Button Group -->
-          <div class="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center gap-0.5 bg-zinc-100 dark:securify-card p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
+          <div class="glare"></div>
             <button id="btn-lang-vi" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300">
               VI
             </button>
@@ -456,35 +794,37 @@
             </button>
           </div>
           <!-- Theme Toggle -->
-          <button id="btn-theme" onclick="toggleTheme()" class="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-800" title="Toggle Theme">
+          <button id="btn-theme" onclick="toggleTheme()" class="p-2 rounded-md border border-zinc-300 dark:border-zinc-700 text-sm transition hover:bg-zinc-100 dark:hover:securify-card" title="Toggle Theme">
             <i class="fas fa-moon"></i>
           </button>
           <!-- Audio Toggle -->
-          <button id="btn-audio" onclick="toggleMute()" class="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400" title="Toggle Haptic Sounds">
+          <button id="btn-audio" onclick="toggleMute()" class="p-2 rounded-md border border-zinc-300 dark:border-zinc-700 text-sm transition hover:bg-zinc-100 dark:hover:securify-card text-zinc-400" title="Toggle Haptic Sounds">
             <i id="audio-icon" class="fas fa-volume-mute"></i>
           </button>
         </div>
       </div>
 
       <!-- Hamburger (Mobile) -->
-      <button id="btn-hamburger" onclick="toggleMobileMenu()" class="md:hidden p-2 text-xl text-gray-600 dark:text-gray-300 focus:outline-none" aria-label="Toggle menu">
+      <button id="btn-hamburger" onclick="toggleMobileMenu()" class="md:hidden p-2 text-xl text-zinc-600 dark:text-zinc-300 focus:outline-none" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
       </button>
     </div>
 
     <!-- Mobile Nav Menu Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden absolute top-[70px] left-0 w-full bg-white dark:bg-[#181818] border-b border-gray-200 dark:border-gray-800 flex flex-col gap-3 px-6 py-4 shadow-lg">
-      <a href="#home" onclick="closeMobileMenu()" data-nav="home" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <a href="#about" onclick="closeMobileMenu()" data-nav="about" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <a href="#workExp" onclick="closeMobileMenu()" data-nav="workExp" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <a href="#skills" onclick="closeMobileMenu()" data-nav="skills" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <a href="#certificates" onclick="closeMobileMenu()" data-nav="certificates" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <a href="#projects" onclick="closeMobileMenu()" data-nav="projects" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <a href="#contact" onclick="closeMobileMenu()" data-nav="contact" class="nav-link-item font-semibold text-sm py-1 hover:text-blue-500"></a>
-      <div class="h-px bg-gray-200 dark:bg-gray-800 my-1"></div>
+    <div id="mobile-menu" class="hidden md:hidden absolute top-[70px] left-0 w-full bg-white dark:bg-[#181818] border-b border-zinc-200/50 dark:/50 flex flex-col gap-3 px-6 py-4 shadow-lg">
+      <a href="#home" onclick="closeMobileMenu()" data-nav="home" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <a href="#about" onclick="closeMobileMenu()" data-nav="about" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <a href="#workExp" onclick="closeMobileMenu()" data-nav="workExp" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <a href="#skills" onclick="closeMobileMenu()" data-nav="skills" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <a href="#certificates" onclick="closeMobileMenu()" data-nav="certificates" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <a href="#projects" onclick="closeMobileMenu()" data-nav="projects" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <a href="#contact" onclick="closeMobileMenu()" data-nav="contact" class="nav-link-item font-semibold text-sm py-1 hover:text-cyan-400"></a>
+      <div class="h-px bg-zinc-200 dark:securify-card my-1">
+          <div class="glare"></div></div>
       <div class="flex items-center justify-between py-1">
         <!-- Language Button Group -->
-        <div class="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center gap-0.5 bg-zinc-100 dark:securify-card p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
+          <div class="glare"></div>
           <button id="btn-lang-vi-mobile" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase transition-all duration-300">
             VI
           </button>
@@ -492,7 +832,7 @@
             EN
           </button>
         </div>
-        <button id="btn-theme-mobile" onclick="toggleTheme()" class="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-800">
+        <button id="btn-theme-mobile" onclick="toggleTheme()" class="p-2 rounded-md border border-zinc-300 dark:border-zinc-700 text-sm transition hover:bg-zinc-100 dark:hover:securify-card">
           <i class="fas fa-moon"></i>
         </button>
       </div>
@@ -503,164 +843,255 @@
   <main class="max-w-7xl mx-auto px-4 md:px-8 space-y-24 pb-20">
 
     <!-- ─── HERO & CODE EFFECT SECTION ─── -->
-    <section id="home" class="pt-12 md:pt-20">
-      <!-- Khối Visual Code động -->
-      <div class="visual-code-box relative w-full h-[220px] rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-black/40 overflow-hidden font-mono flex items-center justify-center p-4">
-        <!-- Floating code symbols -->
-        <div class="absolute inset-0 select-none overflow-hidden pointer-events-none" id="code-symbols-container">
-          <!-- Sinh tự động bằng JS -->
+    
+    <!-- ─── SECURIFY BENTO HERO SECTION ─── -->
+    <section id="home" class="pt-24 md:pt-32">
+      <!-- 2-Column Bento Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Left: Typography & CTAs -->
+        <div class="lg:col-span-7 flex flex-col justify-center space-y-6 lg:pr-8 fade-up-enter" style="animation-delay: 0.1s">
+          <div class="flex items-center gap-2">
+            <span class="pill-badge"><i class="fas fa-lock text-[10px]"></i> <span id="label-hero-privacy">privacy everywhere</span></span>
+          </div>
+          
+          <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.1]" id="label-hero-title">
+            protect<br/>your data<br/>with <span class="text-cyan-400">securify</span>
+          </h1>
+          
+          <p class="text-lg text-slate-400 max-w-lg leading-relaxed font-medium" id="label-hero-desc">
+            We safeguard your data with utmost care, empowering you with absolute privacy everywhere.
+          </p>
+          
+          <div class="flex flex-wrap items-center gap-4 pt-4">
+            <a href="#projects" id="btn-hero-projects" class="btn-pill-primary">
+              Get Started
+            </a>
+            <a href="#contact" id="btn-hero-contact" class="btn-pill-secondary">
+              Learn More
+            </a>
+          </div>
         </div>
 
-        <!-- Dynamic code line display -->
-        <div class="absolute left-6 md:left-12 flex flex-col gap-1.5 z-10 select-none text-xs md:text-sm">
-          <div class="code-line-anim text-[#ff6b6b]" style="animation-delay: 0s;">
-            <span class="font-bold">const</span> <span class="text-[#4ecdc4]">portfolio</span> = <span class="text-[#96ceb4]">'Vo Huu Tri'</span>;
+        <!-- Right: The 3D Shield/Torus Bento Card -->
+        <div class="lg:col-span-5 relative h-[400px] lg:h-[500px] securify-card flex items-center justify-center p-8 group fade-up-enter" style="animation-delay: 0.3s">
+          <div class="glare"></div>
+          <!-- Inject the 3D Canvas Here -->
+          <div id="three-bg-container" class="absolute inset-0 w-full h-full"></div>
+          
+          <!-- Inner HUD -->
+          <div class="absolute top-6 left-6 flex items-center gap-2 z-10 opacity-60">
+            <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+            <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">Real-time Monitoring</span>
           </div>
-          <div class="code-line-anim text-[#ff6b6b]" style="animation-delay: 1s;">
-            <span class="font-bold">function</span> <span class="text-[#45b7d1]">createMagic</span>() {
-          </div>
-          <div class="code-line-anim text-[#ff6b6b]" style="animation-delay: 2s;">
-            &nbsp;&nbsp;<span class="font-bold">return</span> <span class="text-[#96ceb4]">'✨ Innovation & Success ✨'</span>;
+          <div class="absolute bottom-6 right-6 z-10 opacity-60">
+            <span class="text-xs font-mono text-slate-400">SYS.CORE // SECURE</span>
           </div>
         </div>
 
-        <!-- Binary code falling rain on the right -->
-        <div class="absolute right-6 md:right-16 top-0 bottom-0 flex gap-4 pointer-events-none select-none overflow-hidden" id="binary-rain-container">
-          <!-- Sinh tự động bằng JS -->
-        </div>
-
-        <!-- Command prompt line -->
-        <div class="absolute bottom-4 left-6 md:left-12 font-semibold text-xs md:text-sm flex items-center gap-2 text-green-500">
-          <span class="text-yellow-400">$</span>
-          <span class="text-cyan-400">npm run dev</span>
-          <span class="cursor-blink w-2 h-4 bg-green-500 block"></span>
-        </div>
       </div>
 
-      <!-- Lời chào & Tên -->
-      <div class="mt-12 flex flex-col md:flex-row items-center justify-between gap-8">
-        <div class="flex-1 space-y-4 text-center md:text-left">
-          <h2 id="page-greeting-header" class="text-3xl font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
-            <!-- Text sẽ được nạp từ translation -->
-          </h2>
-          <h4 id="hero-greeting" class="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
-            <!-- Text nạp từ translation -->
-          </h4>
-          <div class="flex justify-center md:justify-start gap-4 pt-2">
-            <a href="#projects" id="btn-hero-projects" class="py-2.5 px-6 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-0.5 transition-all">
-              <!-- Projects -->
-            </a>
-            <a href="#contact" id="btn-hero-contact" class="py-2.5 px-6 rounded-md border border-gray-300 dark:border-gray-700 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
-              <!-- Contact -->
-            </a>
-          </div>
+      <!-- Bottom Mini Bento Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 fade-up-enter" style="animation-delay: 0.5s">
+        <div class="securify-card p-6 flex flex-col items-center justify-center text-center space-y-1">
+          <div class="glare"></div>
+          <span class="text-3xl font-bold text-cyan-400">+65k</span>
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest" id="stat-active-users">Active Users</span>
         </div>
-
-        <!-- Interactive 3D WebGL Morphing Mesh with Viewport Brackets -->
-        <div id="hero-3d-box" class="hero-hud-viewport flex-shrink-0 w-full md:w-[350px] h-[220px] rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-black/30 flex items-center justify-center shadow-inner relative overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-blue-500/10">
-          <!-- Viewport Corner Brackets -->
-          <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-blue-500/40 pointer-events-none z-10"></div>
-          <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-blue-500/40 pointer-events-none z-10"></div>
-          <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-blue-500/40 pointer-events-none z-10"></div>
-          <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-blue-500/40 pointer-events-none z-10"></div>
-          
-          <div id="hero-three-container" class="absolute inset-0 z-0"></div>
-          <div id="hero-hud-status" class="absolute bottom-2 right-2 font-mono text-[9px] text-gray-400/60 z-10 select-none bg-black/40 px-2 py-0.5 rounded border border-gray-800/40">SYS.CORE // ROTATING</div>
+        <div class="securify-card p-6 flex flex-col items-center justify-center text-center space-y-1">
+          <div class="glare"></div>
+          <span class="text-3xl font-bold text-emerald-400">+300k</span>
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest" id="stat-downloads">Downloads</span>
+        </div>
+        <div class="securify-card p-6 flex flex-col items-center justify-center text-center space-y-1">
+          <div class="glare"></div>
+          <span class="text-3xl font-bold text-violet-400">99.9%</span>
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest" id="stat-uptime">Uptime</span>
+        </div>
+        <div class="securify-card p-6 flex flex-col items-center justify-center text-center space-y-1">
+          <div class="glare"></div>
+          <span class="text-3xl font-bold text-white">0</span>
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest" id="stat-data-leaks">Data Leaks</span>
         </div>
       </div>
     </section>
+
 
     <!-- ─── ABOUT ME SECTION ─── -->
-    <section id="about" class="reveal-item">
-      <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
-        <span id="label-about-title"></span>
-        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
-      </h2>
-
-      <div class="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 mt-8">
-        <!-- Circular Avatar with Glow -->
-        <div class="avatar-container relative flex items-center justify-center lg:w-1/2 flex-shrink-0" style="min-height: 280px;">
-          <div class="avatar-glow"></div>
-          <!-- 3D Orbiting Rings -->
-          <div class="absolute w-[240px] h-[240px] md:w-[280px] md:h-[280px] rounded-full border-2 border-dashed border-blue-500/30 pointer-events:none; z-index:5;" style="transform: rotateX(70deg) rotateY(15deg) translateZ(10px); animation: spin 15s linear infinite, orbitPulse1 6s ease-in-out infinite;"></div>
-          <div class="absolute w-[260px] h-[260px] md:w-[300px] md:h-[300px] rounded-full border-2 border-emerald-500/25 pointer-events:none; z-index:5;" style="transform: rotateX(-60deg) rotateY(-20deg) translateZ(-10px); animation: spin 25s linear infinite, orbitPulse2 8s ease-in-out infinite;"></div>
-          <img src="avatar.jpg" alt="Võ Hữu Trí" class="w-[200px] h-[200px] md:w-[240px] md:h-[240px] rounded-full shadow-2xl border-4 border-blue-500 object-cover relative z-10 hover:scale-105 transition-transform duration-500" />
+    <section id="about" class="py-32 md:py-48 relative">
+      <div class="max-w-5xl mx-auto px-4 md:px-8">
+        <div class="flex items-center gap-4 mb-12">
+          <div class="h-[1px] w-12 bg-cyan-400"></div>
+          <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">About Me</span>
         </div>
+        <h2 id="label-about-scrub" class="text-4xl md:text-6xl font-bold leading-tight text-white scrub-text">
+          I am a passionate developer bridging the gap between elegant design and complex backend architecture. I build digital experiences that are secure, fast, and visually cinematic.
+        </h2>
+        
+        <div class="mt-16 bento-grid">
+          <!-- Avatar Card -->
+          <div class="securify-card col-span-12 md:col-span-4 h-[350px] p-0 overflow-hidden flex items-center justify-center gs-reveal-up group relative">
+            <div class="glare"></div>
+            <img src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t39.30808-1/656361180_1217671007059244_5545171905336345277_n.jpg?stp=dst-jpg_tt6&cstp=mx1446x1429&ctp=s200x200&_nc_cat=102&ccb=1-7&_nc_sid=1d2534&_nc_ohc=G6ckmJz6gZUQ7kNvwEZtsfD&_nc_oc=Adqc9bnkbGaj4ZUNm-i2nDf49m_Hte85kbQbz3XWg3VJeDlLKvLBVsF0xJgtckF6CDo3qm19KJFOlxZVFWiTjEwO&_nc_zt=24&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=0ZWCYjDL0TKrNG4crXkkGw&_nc_ss=7b2a8&oh=00_Af9hvuIjIGo2OV7S8gMRXGXPfBz2qimMgsuTZM7nPmE_Fw&oe=6A31EB40" onerror="this.src='https://picsum.photos/seed/hacker/600/800'" alt="Võ Hữu Trí" class="smooth-hover w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 z-10">
+              <h3 class="text-2xl font-bold text-white">Võ Hữu Trí</h3>
+              <p id="label-avatar-role" class="text-cyan-400 font-mono text-sm mt-1">Fullstack Developer</p>
+            </div>
+          </div>
 
-        <!-- Bio & Details -->
-        <div class="lg:w-1/2 space-y-6">
-          <p id="label-about-bio" class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-            <!-- Bio text -->
-          </p>
+          <!-- The Journey / Bio -->
+          <div class="securify-card col-span-12 md:col-span-5 p-8 flex flex-col justify-between gs-reveal-up" style="animation-delay: 0.1s">
+            <div class="glare"></div>
+            <div>
+              <h3 id="label-bio-title" class="text-xl text-white font-bold mb-4">Background & Bio</h3>
+              <p id="label-about-bio" class="text-slate-400 text-lg leading-relaxed">I am an IT student from University of Science, TP.HCM. With a deep passion for programming, I am constantly learning and adapting to new technologies to build robust and beautiful applications.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="px-3 py-1 text-xs rounded-full bg-slate-800/50 text-slate-300"><i class="fas fa-envelope mr-2 text-cyan-400"></i>vohuuntri@gmail.com</span>
+              <span class="px-3 py-1 text-xs rounded-full bg-slate-800/50 text-slate-300"><i class="fas fa-map-marker-alt mr-2 text-emerald-400"></i>Ho Chi Minh City</span>
+            </div>
+          </div>
 
-          <!-- Social link items grid -->
-          <div class="flex flex-col gap-3.5 border-t border-gray-200 dark:border-gray-800 pt-6">
-            <div class="flex items-center gap-3">
-              <i class="fab fa-github text-xl text-[#222222] dark:text-[#f5f5f5]"></i>
-              <span class="font-semibold text-sm w-24">GitHub:</span>
-              <a href="https://github.com/Mercy222222" target="_blank" class="text-blue-500 hover:underline break-all text-sm">github.com/Mercy222222</a>
-            </div>
-            <div class="flex items-center gap-3">
-              <i class="fab fa-facebook text-xl text-[#1877f2]"></i>
-              <span class="font-semibold text-sm w-24">Facebook:</span>
-              <a href="https://www.facebook.com/HUUTRI.USER" target="_blank" class="text-blue-500 hover:underline break-all text-sm">facebook.com/HUUTRI.USER</a>
-            </div>
-            <div class="flex items-center gap-3">
-              <i class="fas fa-comment text-xl text-[#0068ff]"></i>
-              <span class="font-semibold text-sm w-24">Zalo Chat:</span>
-              <a href="https://zalo.me/0979324949" target="_blank" class="text-blue-500 hover:underline break-all text-sm">0979 324 949</a>
-            </div>
-            <div class="flex items-center gap-3">
-              <i class="fab fa-instagram text-xl text-[#e1306c]"></i>
-              <span class="font-semibold text-sm w-24">Instagram:</span>
-              <a href="https://www.instagram.com/prx.mercy/" target="_blank" class="text-blue-500 hover:underline break-all text-sm">@prx.mercy</a>
-            </div>
-            <div class="flex items-center gap-3">
-              <i class="fab fa-youtube text-xl text-[#ff0000]"></i>
-              <span class="font-semibold text-sm w-24">YouTube:</span>
-              <a href="https://www.youtube.com/channel/deoco" target="_blank" class="text-blue-500 hover:underline break-all text-sm">YouTube Channel</a>
-            </div>
-            <div class="flex items-center gap-3">
-              <i class="fas fa-envelope text-xl text-cyan-500"></i>
-              <span class="font-semibold text-sm w-24">Email:</span>
-              <a href="mailto:huutri.user@gmail.com" class="text-blue-500 hover:underline break-all text-sm">huutri.user@gmail.com</a>
+          <!-- 100% Commitment -->
+          <div class="securify-card col-span-12 md:col-span-3 p-8 flex items-center justify-center gs-reveal-up" style="animation-delay: 0.2s">
+            <div class="glare"></div>
+            <div class="text-center">
+              <span class="block text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-cyan-400 to-emerald-400">100%</span>
+              <span id="label-about-commitment" class="block text-xs uppercase text-slate-500 font-mono mt-2">Commitment</span>
             </div>
           </div>
         </div>
       </div>
     </section>
+    
+    <section id="workExp" class="py-32 md:py-48 relative">
+      <div class="max-w-7xl mx-auto px-4 md:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          <!-- Pinned Left Column -->
+          <div class="lg:col-span-5 h-auto lg:h-screen sticky top-0 pt-24" id="work-pinned">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="h-[1px] w-12 bg-emerald-400"></div>
+              <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest">Experience</span>
+            </div>
+            <h2 class="text-5xl md:text-6xl font-bold text-white mb-6" id="label-career-title">Career<br/>Chronicles.</h2>
+            <p class="text-slate-400 text-lg max-w-sm" id="label-career-desc">A timeline of my professional journey, focusing on building scalable systems and polished user interfaces.</p>
+          </div>
 
-    <!-- ─── WORK EXPERIENCE SECTION ─── -->
-    <section id="workExp" class="reveal-item">
-      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-        <span id="label-work-title"></span>
-        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
-      </h2>
+          <!-- Scrolling Right Column -->
+          <div class="lg:col-span-7 space-y-8 pt-24" id="work-scroll">
+            
+            <div class="securify-card p-8 gs-reveal-right">
+          <div class="glare"></div>
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-white">Fullstack Developer</h3>
+                  <p class="text-cyan-400 font-medium">Freelance / Remote</p>
+                </div>
+                <span class="pill-badge bg-slate-800/50 text-slate-300 border-none">2022 - Present</span>
+              </div>
+              <p class="text-slate-400 mb-6">Developed and delivered multiple full-stack applications. Specialized in Next.js, React, Node.js, and complex database architectures.</p>
+              <div class="flex gap-2 flex-wrap">
+                <span class="text-xs font-mono px-2 py-1 rounded bg-slate-800 text-slate-300">React</span>
+                <span class="text-xs font-mono px-2 py-1 rounded bg-slate-800 text-slate-300">Node.js</span>
+                <span class="text-xs font-mono px-2 py-1 rounded bg-slate-800 text-slate-300">AWS</span>
+              </div>
+            </div>
 
-      <!-- Lưới chứa dòng thời gian hoặc thẻ -->
-      <div id="experience-list-container" class="space-y-8 mt-6">
-        <!-- Render động bằng JS -->
+            <div class="securify-card p-8 gs-reveal-right">
+          <div class="glare"></div>
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-white">Frontend Engineer Intern</h3>
+                  <p class="text-emerald-400 font-medium">Tech Startup Inc.</p>
+                </div>
+                <span class="pill-badge bg-slate-800/50 text-slate-300 border-none">2021 - 2022</span>
+              </div>
+              <p class="text-slate-400 mb-6">Contributed to building responsive web applications. Focused on UI/UX enhancements and integrating RESTful APIs.</p>
+              <div class="flex gap-2 flex-wrap">
+                <span class="text-xs font-mono px-2 py-1 rounded bg-slate-800 text-slate-300">Vue.js</span>
+                <span class="text-xs font-mono px-2 py-1 rounded bg-slate-800 text-slate-300">Tailwind</span>
+              </div>
+            </div>
+
+            <div class="securify-card p-8 gs-reveal-right">
+          <div class="glare"></div>
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-white">IT Student</h3>
+                  <p class="text-violet-400 font-medium">University of Science</p>
+                </div>
+                <span class="pill-badge bg-slate-800/50 text-slate-300 border-none">2019 - 2023</span>
+              </div>
+              <p class="text-slate-400 mb-6">Studied core computer science concepts: Data Structures, Algorithms, Software Engineering methodologies, and Database Design.</p>
+            </div>
+
+          </div>
+        </div>
       </div>
     </section>
+    
+    <section id="skills" class="py-32 md:py-48 relative">
+      <div class="max-w-7xl mx-auto px-4 md:px-8">
+        <div class="flex flex-col items-center text-center mb-16 gs-reveal-up">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="h-[1px] w-8 bg-cyan-400"></div>
+            <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">Arsenal</span>
+            <div class="h-[1px] w-8 bg-cyan-400"></div>
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-white">Technical Skills</h2>
+        </div>
 
-    <!-- ─── SKILLS SECTION ─── -->
-    <section id="skills" class="reveal-item">
-      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-        <span id="label-skills-title"></span>
-        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
-      </h2>
+        <div class="bento-grid">
+          
+          <div class="securify-card col-span-12 md:col-span-8 p-8 flex flex-col justify-center gs-reveal-up">
+          <div class="glare"></div>
+            <h3 class="text-2xl font-bold text-white mb-6"><i class="fas fa-layer-group text-cyan-400 mr-2"></i> Frontend Architecture</h3>
+            <div class="grid grid-cols-3 sm:grid-cols-4 gap-6">
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-react-original colored text-5xl group-hover:scale-110 transition-transform"></i><span class="text-xs text-slate-400 font-mono">React</span></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-nextjs-original text-5xl text-white group-hover:scale-110 transition-transform"></i><span class="text-xs text-slate-400 font-mono">Next.js</span></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-vuejs-plain colored text-5xl group-hover:scale-110 transition-transform"></i><span class="text-xs text-slate-400 font-mono">Vue</span></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-tailwindcss-plain colored text-5xl group-hover:scale-110 transition-transform"></i><span class="text-xs text-slate-400 font-mono">Tailwind</span></div>
+            </div>
+          </div>
 
-      <!-- Skills Card Grid -->
-      <div id="skills-grid-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-        <!-- Dữ liệu được kết xuất từ YS array bằng JS -->
+          <div class="securify-card col-span-12 md:col-span-4 p-8 gs-reveal-up" style="animation-delay: 0.1s">
+          <div class="glare"></div>
+            <h3 class="text-2xl font-bold text-white mb-6"><i class="fas fa-server text-emerald-400 mr-2"></i> Backend</h3>
+            <div class="flex flex-wrap gap-4">
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-nodejs-plain colored text-4xl group-hover:scale-110 transition-transform"></i></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-express-original text-4xl text-white group-hover:scale-110 transition-transform"></i></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-python-plain colored text-4xl group-hover:scale-110 transition-transform"></i></div>
+            </div>
+          </div>
+
+          <div class="securify-card col-span-12 md:col-span-5 p-8 gs-reveal-up" style="animation-delay: 0.2s">
+          <div class="glare"></div>
+            <h3 class="text-2xl font-bold text-white mb-6"><i class="fas fa-database text-violet-400 mr-2"></i> Database & DevOps</h3>
+             <div class="flex flex-wrap gap-6">
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-mongodb-plain colored text-4xl group-hover:scale-110 transition-transform"></i></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-postgresql-plain colored text-4xl group-hover:scale-110 transition-transform"></i></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-docker-plain colored text-4xl group-hover:scale-110 transition-transform"></i></div>
+              <div class="flex flex-col items-center gap-2 group"><i class="devicon-git-plain colored text-4xl group-hover:scale-110 transition-transform"></i></div>
+            </div>
+          </div>
+
+          <div class="securify-card col-span-12 md:col-span-7 p-8 relative overflow-hidden flex items-center justify-center gs-reveal-up" style="animation-delay: 0.3s">
+          <div class="glare"></div>
+            <!-- Decorative Background -->
+            <div class="absolute inset-0 opacity-20 pointer-events-none" style="background: repeating-linear-gradient(45deg, transparent, transparent 10px, #06b6d4 10px, #06b6d4 11px);"></div>
+            <h3 class="text-3xl font-extrabold text-white text-center relative z-10 uppercase tracking-widest mix-blend-difference">Always Learning</h3>
+          </div>
+
+        </div>
       </div>
     </section>
-
-    <!-- ─── CERTIFICATES SECTION ─── -->
+    
     <section id="certificates" class="reveal-item">
-      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+      <h2 class="text-3xl font-bold text-balance mb-8 flex items-center gap-3">
         <span id="label-certificates-title"></span>
-        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+        <span class="flex-1 border-b-2 border-cyan-400 ml-4"></span>
       </h2>
 
       <!-- Certificates Cards List Grid -->
@@ -671,9 +1102,9 @@
 
     <!-- ─── PROJECTS SECTION ─── -->
     <section id="projects" class="reveal-item">
-      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+      <h2 class="text-3xl font-bold text-balance mb-8 flex items-center gap-3">
         <span id="label-projects-title"></span>
-        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+        <span class="flex-1 border-b-2 border-cyan-400 ml-4"></span>
       </h2>
 
       <!-- Project Cards Grid -->
@@ -684,49 +1115,49 @@
 
     <!-- ─── CONTACT SECTION ─── -->
     <section id="contact" class="reveal-item">
-      <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+      <h2 class="text-3xl font-bold text-balance mb-8 flex items-center gap-3">
         <span id="label-contact-title"></span>
-        <span class="flex-1 border-b-2 border-blue-500 ml-4"></span>
+        <span class="flex-1 border-b-2 border-cyan-400 ml-4"></span>
       </h2>
 
       <div class="flex flex-col lg:flex-row gap-12 mt-6">
         <!-- Contact Form Card -->
-        <div class="flex-1 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-gray-800 rounded-xl p-6 md:p-8 shadow-sm">
-          <h4 id="label-contact-subtitle" class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">
+        <div class="flex-1 bg-zinc-50 dark:bg-black/30 border border-zinc-200/50 dark:/50 rounded-xl p-6 md:p-8 shadow-sm">
+          <h4 id="label-contact-subtitle" class="text-sm font-semibold text-zinc-500 dark:text-zinc-400  mb-6">
             <!-- Fill out form -->
           </h4>
 
           <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-5">
             <!-- Name Input -->
             <div class="space-y-1.5">
-              <label for="contact-name" id="form-label-name" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
-              <input type="text" id="contact-name" name="name" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white" />
+              <label for="contact-name" id="form-label-name" class="block text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400 tracking-wider"></label>
+              <input type="text" id="contact-name" name="name" class="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-zinc-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-1 focus:ring-emerald-500 dark:text-white" />
               <p id="error-name" class="text-xs text-red-500 font-medium hidden"></p>
             </div>
 
             <!-- Email Input -->
             <div class="space-y-1.5">
-              <label for="contact-email" id="form-label-email" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
-              <input type="email" id="contact-email" name="email" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white" />
+              <label for="contact-email" id="form-label-email" class="block text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400 tracking-wider"></label>
+              <input type="email" id="contact-email" name="email" class="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-zinc-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-1 focus:ring-emerald-500 dark:text-white" />
               <p id="error-email" class="text-xs text-red-500 font-medium hidden"></p>
             </div>
 
             <!-- Phone Input -->
             <div class="space-y-1.5">
-              <label for="contact-phone" id="form-label-phone" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
-              <input type="tel" id="contact-phone" name="phone" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white" />
+              <label for="contact-phone" id="form-label-phone" class="block text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400 tracking-wider"></label>
+              <input type="tel" id="contact-phone" name="phone" class="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-zinc-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-1 focus:ring-emerald-500 dark:text-white" />
               <p id="error-phone" class="text-xs text-red-500 font-medium hidden"></p>
             </div>
 
             <!-- Message Input -->
             <div class="space-y-1.5">
-              <label for="contact-message" id="form-label-message" class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wider"></label>
-              <textarea id="contact-message" name="message" rows="4" class="w-full bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white resize-none"></textarea>
+              <label for="contact-message" id="form-label-message" class="block text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400 tracking-wider"></label>
+              <textarea id="contact-message" name="message" rows="4" class="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-zinc-700 rounded-md py-2.5 px-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-1 focus:ring-emerald-500 dark:text-white resize-none"></textarea>
               <p id="error-message" class="text-xs text-red-500 font-medium hidden"></p>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" id="btn-contact-submit" class="w-full py-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow-md hover:shadow-blue-500/25 flex justify-center items-center gap-2">
+            <button type="submit" id="btn-contact-submit" class="w-full py-2 rounded-md bg-cyan-500 hover:bg-cyan-400 text-white font-bold transition shadow-md hover:shadow-emerald-500/25 flex justify-center items-center gap-2">
               <!-- Send -->
             </button>
           </form>
@@ -734,35 +1165,35 @@
 
         <!-- Contact info widget -->
         <div class="lg:w-[350px] space-y-6 flex flex-col justify-center">
-          <div class="border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-gray-50/50 dark:bg-black/20 space-y-5">
-            <h4 id="label-contact-infotitle" class="text-lg font-bold text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3"></h4>
+          <div class="border border-zinc-200/50 dark:/50 rounded-xl p-6 bg-zinc-50/50 dark:bg-black/20 space-y-5">
+            <h4 id="label-contact-infotitle" class="text-lg font-bold text-zinc-900 text-balance dark:text-white border-b border-zinc-200/50 dark:/50 pb-3"></h4>
             
             <div class="flex items-start gap-4">
-              <div class="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 text-lg flex items-center justify-center flex-shrink-0">
+              <div class="p-2.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-cyan-400 text-lg flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-phone-alt"></i>
               </div>
               <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone</p>
+                <p class="text-sm font-semibold text-zinc-400 ">Phone</p>
                 <a href="tel:0979324949" class="text-sm font-semibold hover:underline">0979 324 949</a>
               </div>
             </div>
 
             <div class="flex items-start gap-4">
-              <div class="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 text-lg flex items-center justify-center flex-shrink-0">
+              <div class="p-2.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-cyan-400 text-lg flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-envelope"></i>
               </div>
               <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Email</p>
+                <p class="text-sm font-semibold text-zinc-400 ">Email</p>
                 <a href="mailto:huutri.user@gmail.com" class="text-sm font-semibold hover:underline">huutri.user@gmail.com</a>
               </div>
             </div>
 
             <div class="flex items-start gap-4">
-              <div class="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 text-lg flex items-center justify-center flex-shrink-0">
+              <div class="p-2.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-cyan-400 text-lg flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-map-marker-alt"></i>
               </div>
               <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Location</p>
+                <p class="text-sm font-semibold text-zinc-400 ">Location</p>
                 <p class="text-sm font-semibold">TP. Hồ Chí Minh, Việt Nam</p>
               </div>
             </div>
@@ -774,19 +1205,19 @@
   </main>
 
   <!-- ─── FOOTER ─── -->
-  <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#181818] py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+  <footer class="border-t border-zinc-200/50 dark:/50 bg-white dark:bg-[#181818] py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
     <div class="max-w-7xl mx-auto px-4 space-y-4">
       <p id="footer-text-desc" class="max-w-md mx-auto"></p>
-      <div class="flex justify-center gap-4 text-xs font-bold text-gray-400 uppercase">
-        <a href="#home" id="footer-link-home" class="hover:text-blue-500"></a>
+      <div class="flex justify-center gap-4 text-sm font-semibold text-zinc-400 uppercase">
+        <a href="#home" id="footer-link-home" class="hover:text-cyan-400"></a>
         <span>•</span>
-        <a href="#about" id="footer-link-about" class="hover:text-blue-500"></a>
+        <a href="#about" id="footer-link-about" class="hover:text-cyan-400"></a>
         <span>•</span>
-        <a href="#projects" id="footer-link-projects" class="hover:text-blue-500"></a>
+        <a href="#projects" id="footer-link-projects" class="hover:text-cyan-400"></a>
         <span>•</span>
-        <a href="#contact" id="footer-link-contact" class="hover:text-blue-500"></a>
+        <a href="#contact" id="footer-link-contact" class="hover:text-cyan-400"></a>
       </div>
-      <div class="pt-4 border-t border-gray-100 dark:border-gray-900 flex flex-col sm:flex-row justify-between items-center text-xs gap-3">
+      <div class="pt-4 border-t border-zinc-100 dark:border-zinc-900 flex flex-col sm:flex-row justify-between items-center text-xs gap-3">
         <span id="footer-text-rights"></span>
         <span class="font-mono opacity-60">v3.0 · Powered by HTML5 & Tailwind</span>
         <span id="footer-text-madewith"></span>
@@ -846,6 +1277,18 @@
         bio: "My name is Vo Huu Tri. I am currently an IT student in Ho Chi Minh City, originally from Vinh Long, Vietnam. I have a deep passion for fullstack web development (PHP, MySQL, JavaScript) and UI/UX design. I enjoy building responsive digital solutions that add real value to users.",
         title: "Fullstack Web Developer",
         name: "Vo Huu Tri",
+        "hero.privacy": "privacy everywhere",
+        "hero.title": "protect\nyour data\nwith securify",
+        "hero.desc": "We safeguard your data with utmost care, empowering you with absolute privacy everywhere.",
+        "stat.users": "Active Users",
+        "stat.downloads": "Downloads",
+        "stat.uptime": "Uptime",
+        "stat.leaks": "Data Leaks",
+        "about.scrub": "I am a passionate developer bridging the gap between elegant design and complex backend architecture. I build digital experiences that are secure, fast, and visually cinematic.",
+        "about.bioTitle": "Background & Bio",
+        "about.commitment": "Commitment",
+        "career.title": "Career\nChronicles.",
+        "career.desc": "A timeline of my professional journey, focusing on building scalable systems and polished user interfaces.",
         projects: [
 
           {
@@ -976,6 +1419,18 @@
         bio: "Mình tên là Võ Hữu Trí. Hiện tại mình là sinh viên IT tại TP. Hồ Chí Minh, quê quán ở Vĩnh Long. Mình có niềm đam mê lớn với phát triển web fullstack (PHP, MySQL, JavaScript) và thiết kế giao diện UI/UX. Mình thích xây dựng các giải pháp kỹ thuật số có khả năng tương tác tốt và mang lại giá trị thực tế.",
         title: "Lập trình viên Fullstack",
         name: "Võ Hữu Trí",
+        "hero.privacy": "bảo mật mọi nơi",
+        "hero.title": "bảo vệ\ndữ liệu của bạn\nvới securify",
+        "hero.desc": "Chúng tôi bảo vệ dữ liệu của bạn với sự cẩn trọng tối đa, mang đến quyền riêng tư tuyệt đối ở bất cứ đâu.",
+        "stat.users": "Người dùng",
+        "stat.downloads": "Lượt tải",
+        "stat.uptime": "Thời gian uptime",
+        "stat.leaks": "Rò rỉ dữ liệu",
+        "about.scrub": "Mình là một lập trình viên đam mê kết nối giữa thiết kế tinh tế và kiến trúc backend phức tạp. Mình xây dựng các trải nghiệm kỹ thuật số an toàn, tốc độ cao và đậm chất điện ảnh.",
+        "about.bioTitle": "Tiểu sử & Nền tảng",
+        "about.commitment": "Cam kết",
+        "career.title": "Biên niên sử\nSự nghiệp.",
+        "career.desc": "Dòng thời gian hành trình làm việc chuyên nghiệp của mình, tập trung vào xây dựng các hệ thống quy mô lớn và giao diện mượt mà.",
         projects: [
 
           {
@@ -1129,7 +1584,7 @@
       const columns = 8;
       for (let i = 0; i < columns; i++) {
         const div = document.createElement('div');
-        div.className = 'absolute binary-column-anim text-emerald-500/30 select-none font-bold';
+        div.className = 'absolute binary-column-anim text-cyan-400/30 select-none font-bold';
         
         const left = 10 + i * 12;
         const duration = (2 + Math.random()).toFixed(2);
@@ -1158,7 +1613,7 @@
         const card = document.createElement('div');
         // Class CSS phối hợp màu viền và nền động khi đổi Theme
         card.className = `skill-card flex items-center gap-4 px-6 py-4 rounded-xl border transition-all duration-500 transform hover:scale-105 opacity-0 translate-y-[30px] cursor-pointer
-          border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-800 dark:bg-black/40 dark:hover:bg-blue-900/10`;
+          border-zinc-200 bg-white hover:bg-zinc-50 dark: dark:bg-black/40 dark:hover:bg-emerald-900/10`;
         
         // Thêm sự kiện hover phát sáng viền xanh
         card.onmouseenter = (e) => {
@@ -1193,14 +1648,14 @@
 
       const workList = W2[currentLanguage].workExperience || [];
       if (workList.length === 0) {
-        container.innerHTML = `<p class="text-center py-8 text-gray-500">${currentLanguage === 'vi' ? 'Chưa có kinh nghiệm nào.' : 'No experience listed.'}</p>`;
+        container.innerHTML = `<p class="text-center py-8 text-zinc-500">${currentLanguage === 'vi' ? 'Chưa có kinh nghiệm nào.' : 'No experience listed.'}</p>`;
         return;
       }
 
       const isVisible = document.getElementById('workExp')?.classList.contains('visible');
       workList.forEach((work) => {
         const card = document.createElement('div');
-        card.className = `work-card bg-gray-50 dark:bg-black/20 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 md:p-8 hover:shadow-xl transition-all duration-500 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
+        card.className = `work-card bg-zinc-50 dark:bg-black/20 rounded-2xl border border-zinc-200/50 dark:/50 p-6 md:p-8 hover:shadow-xl transition-all duration-500 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
         
         card.onmouseenter = (e) => {
           e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 123, 255, 0.1)';
@@ -1216,15 +1671,15 @@
           : (currentLanguage === 'vi' ? 'Đã hoàn thành' : 'Completed');
 
         const badgeClass = (work.duration.includes('Present') || work.duration.includes('Hiện tại'))
-          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
-          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200'
+          : 'bg-zinc-100 text-zinc-800 dark:securify-card dark:text-zinc-300';
 
         let responsibilitiesHTML = '';
         work.responsibilities.forEach((resp) => {
           responsibilitiesHTML += `
             <li class="flex items-start gap-3">
-              <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></span>
-              <span class="text-sm md:text-base text-gray-600 dark:text-gray-300">${resp}</span>
+              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></span>
+              <span class="text-sm md:text-base text-zinc-600 dark:text-zinc-300">${resp}</span>
             </li>
           `;
         });
@@ -1234,7 +1689,7 @@
           achievementsHTML += `
             <li class="flex items-start gap-3">
               <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></span>
-              <span class="text-sm md:text-base text-gray-600 dark:text-gray-300">${ach}</span>
+              <span class="text-sm md:text-base text-zinc-600 dark:text-zinc-300">${ach}</span>
             </li>
           `;
         });
@@ -1243,34 +1698,34 @@
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div class="parallax-high">
               <h3 class="text-xl md:text-2xl font-bold mb-1">${work.position}</h3>
-              <h4 class="text-md md:text-lg font-semibold text-blue-500 mb-2">${work.company}</h4>
-              <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium parallax-low">
+              <h4 class="text-md md:text-lg font-semibold text-cyan-400 mb-2">${work.company}</h4>
+              <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400 font-medium parallax-low">
                 <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt"></i> ${work.duration}</span>
                 <span class="hidden sm:inline">•</span>
                 <span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt"></i> ${work.location}</span>
               </div>
             </div>
             <div class="flex-shrink-0 parallax-mid">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${badgeClass}">
-                <span class="w-2 h-2 rounded-full mr-2 ${work.duration.includes('Present') || work.duration.includes('Hiện tại') ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'}"></span>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold uppercase ${badgeClass}">
+                <span class="w-2 h-2 rounded-full mr-2 ${work.duration.includes('Present') || work.duration.includes('Hiện tại') ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400'}"></span>
                 ${durationBadgeText}
               </span>
             </div>
           </div>
 
           <div class="mb-6 parallax-low">
-            <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">${work.description}</p>
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm md:text-base leading-relaxed">${work.description}</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-200 dark:border-gray-800 parallax-mid">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-zinc-200/50 dark:/50 parallax-mid">
             <div>
-              <h5 class="text-sm font-bold uppercase tracking-wider text-blue-500 mb-3 flex items-center gap-2">
+              <h5 class="text-sm font-bold  text-cyan-400 mb-3 flex items-center gap-2">
                 <i class="fas fa-tasks"></i> ${currentLanguage === 'vi' ? 'Trách nhiệm chính' : 'Key Responsibilities'}
               </h5>
               <ul class="space-y-2.5">${responsibilitiesHTML}</ul>
             </div>
             <div>
-              <h5 class="text-sm font-bold uppercase tracking-wider text-emerald-500 mb-3 flex items-center gap-2">
+              <h5 class="text-sm font-bold  text-cyan-400 mb-3 flex items-center gap-2">
                 <i class="fas fa-trophy"></i> ${currentLanguage === 'vi' ? 'Thành tựu đạt được' : 'Key Achievements'}
               </h5>
               <ul class="space-y-2.5">${achievementsHTML}</ul>
@@ -1293,7 +1748,7 @@
       const isVisible = document.getElementById('certificates')?.classList.contains('visible');
       certs.forEach((cert) => {
         const card = document.createElement('div');
-        card.className = `certificate-card bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-200 dark:border-gray-800 p-5 flex flex-col justify-between transition-all duration-300 hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
+        card.className = `certificate-card bg-zinc-50 dark:bg-black/20 rounded-xl border border-zinc-200/50 dark:/50 p-5 flex flex-col justify-between transition-all duration-300 hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
         
         card.onmouseenter = (e) => {
           e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 123, 255, 0.15)';
@@ -1306,14 +1761,15 @@
 
         card.innerHTML = `
           <div class="space-y-3">
-            <div class="text-3xl text-blue-500 parallax-high"><i class="fas fa-certificate"></i></div>
+            <div class="text-3xl text-cyan-400 parallax-high"><i class="fas fa-certificate"></i></div>
             <h3 class="text-base font-bold tracking-tight parallax-mid">${cert.title}</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold parallax-low">${cert.issuer} • ${cert.date}</p>
-            <div class="inline-block px-2.5 py-0.5 rounded bg-gray-200 dark:bg-gray-800 text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase parallax-low">
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 font-semibold parallax-low">${cert.issuer} • ${cert.date}</p>
+            <div class="inline-block px-2.5 py-0.5 rounded bg-zinc-200 dark:securify-card text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase parallax-low">
+          <div class="glare"></div>
               ID: ${cert.id_code}
             </div>
           </div>
-          <button onclick="showCertAlert('${cert.title}', '${cert.issuer}', '${cert.date}', '${cert.id_code}')" class="mt-5 w-full py-2 rounded font-semibold text-xs transition border border-gray-300 dark:border-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 parallax-high">
+          <button onclick="showCertAlert('${cert.title}', '${cert.issuer}', '${cert.date}', '${cert.id_code}')" class="mt-5 w-full py-2 rounded font-semibold text-xs transition border border-zinc-300 dark:border-zinc-700 hover:bg-cyan-500 hover:text-white hover:border-emerald-600 parallax-high">
             ${t('certiDetail')}
           </button>
         `;
@@ -1338,7 +1794,7 @@
               <i class="fa-solid fa-certificate"></i>
             </div>
             
-            <div class="text-[9px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-sans mb-1">${issuer}</div>
+            <div class="text-[9px] st text-slate-500 dark:text-slate-400 font-sans mb-1">${issuer}</div>
             <div class="text-sm font-bold tracking-tight text-yellow-600 dark:text-yellow-500 mb-4 font-sans uppercase">${title}</div>
             
             <div class="text-[10px] italic text-slate-400 font-sans mb-2">${currentLanguage === 'vi' ? 'Chứng nhận hoàn thành trao cho' : 'This is to certify that'}</div>
@@ -1355,7 +1811,7 @@
               </div>
               <div class="text-right">
                 <span class="text-slate-400 block">${currentLanguage === 'vi' ? 'Mã số chứng chỉ:' : 'Credential ID:'}</span>
-                <strong class="text-blue-500 dark:text-blue-400 font-mono">${id_code}</strong>
+                <strong class="text-cyan-400 dark:text-blue-400 font-mono">${id_code}</strong>
               </div>
             </div>
             
@@ -1383,7 +1839,7 @@
       const isVisible = document.getElementById('projects')?.classList.contains('visible');
       list.forEach((project) => {
         const card = document.createElement('div');
-        card.className = `project-card rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col overflow-hidden transition-all duration-300 hover:scale-105 bg-gray-50 dark:bg-black/20 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
+        card.className = `project-card rounded-xl border border-zinc-200/50 dark:/50 flex flex-col overflow-hidden transition-all duration-300 hover:scale-105 bg-zinc-50 dark:bg-black/20 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`;
         
         card.onmouseenter = (e) => {
           e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 123, 255, 0.15)';
@@ -1397,7 +1853,7 @@
         let techBadges = '';
         project.technologies.forEach((tech) => {
           techBadges += `
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border border-blue-500/30 bg-blue-500/10 text-blue-500">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border border-cyan-400/30 bg-emerald-500/10 text-cyan-400">
               ${tech}
             </span>
           `;
@@ -1406,17 +1862,17 @@
         card.innerHTML = `
           <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
             <div class="space-y-2">
-              <h3 class="text-lg font-bold tracking-tight text-gray-800 dark:text-white parallax-high">${project.name}</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed parallax-low">${project.description}</p>
+              <h3 class="text-lg font-bold tracking-tight text-zinc-800 dark:text-white parallax-high">${project.name}</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-3 leading-relaxed parallax-low">${project.description}</p>
             </div>
             
             <div class="space-y-4">
               <div class="flex flex-wrap gap-1 parallax-mid">${techBadges}</div>
               <div class="flex gap-3 pt-2 parallax-high">
-                <a href="${project.demoLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-xs font-bold border border-blue-500 hover:bg-blue-600 hover:text-white transition-colors duration-200">
+                <a href="${project.demoLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-sm font-semibold border border-cyan-400 hover:bg-cyan-500 hover:text-white transition-colors duration-200">
                   <i class="fas fa-external-link-alt mr-1"></i> Demo
                 </a>
-                <a href="${project.codeLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-xs font-bold border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200">
+                <a href="${project.codeLink}" target="_blank" class="flex-1 py-1.5 rounded text-center text-sm font-semibold border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:securify-card transition-colors duration-200">
                   <i class="fab fa-github mr-1"></i> GitHub
                 </a>
               </div>
@@ -1430,6 +1886,12 @@
     }
 
     /* ─── DỊCH THUẬT VÀ THAY ĐỔI NGÔN NGỮ (I18N) ─── */
+    
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
     function updateLanguageUI() {
       // 1. Cập nhật nhãn Navbar
       document.querySelectorAll('.nav-link-item').forEach((link) => {
@@ -1438,8 +1900,8 @@
       });
 
       // 2. Nút ngôn ngữ Navbar (Cập nhật class Active/Inactive)
-      const activeClass = "bg-blue-600 text-white shadow-sm";
-      const inactiveClass = "text-gray-500 dark:text-gray-400 hover:text-blue-500";
+      const activeClass = "bg-cyan-500 text-white shadow-sm";
+      const inactiveClass = "text-zinc-500 dark:text-zinc-400 hover:text-cyan-400";
       
       const btnVi = document.getElementById('btn-lang-vi');
       const btnEn = document.getElementById('btn-lang-en');
@@ -1459,55 +1921,84 @@
       }
 
       // 3. Greeting và Hero Section
-      document.getElementById('page-greeting-header').innerHTML = `
-        ${t('page.greeting')}
-        <span class="flex-1 border-b-2 border-blue-500 ml-4 max-w-[200px]"></span>
-      `;
-      document.getElementById('hero-greeting').textContent = t('greeting');
-      document.getElementById('btn-hero-projects').textContent = t('nav.projects');
-      document.getElementById('btn-hero-contact').textContent = t('nav.contact');
+      safeSetText('label-hero-privacy', t('hero.privacy'));
+      
+      const titleEl = document.getElementById('label-hero-title');
+      if (titleEl) {
+        const lines = t('hero.title').split('\n');
+        if (lines.length >= 3) {
+          titleEl.innerHTML = `${lines[0]}<br/>${lines[1]}<br/>${lines[2].replace('securify', '<span class="text-cyan-400">securify</span>')}`;
+        } else {
+          titleEl.textContent = t('hero.title');
+        }
+      }
+      safeSetText('label-hero-desc', t('hero.desc'));
+      
+      safeSetText('stat-active-users', t('stat.users'));
+      safeSetText('stat-downloads', t('stat.downloads'));
+      safeSetText('stat-uptime', t('stat.uptime'));
+      safeSetText('stat-data-leaks', t('stat.leaks'));
+
+      safeSetText('btn-hero-projects', t('nav.projects'));
+      safeSetText('btn-hero-contact', t('nav.contact'));
 
       // 4. About Me
-      document.getElementById('label-about-title').textContent = t('page.aboutme');
-      document.getElementById('label-about-bio').textContent = t('bio');
+      safeSetText('label-about-title', t('page.aboutme'));
+      safeSetText('label-about-bio', t('bio'));
+      safeSetText('label-bio-title', t('about.bioTitle'));
+      safeSetText('label-about-commitment', t('about.commitment'));
+      
+      const scrubEl = document.getElementById('label-about-scrub');
+      if (scrubEl && !scrubEl.hasAttribute('data-scrub-animated')) {
+        if (scrubEl.children.length === 0) {
+          scrubEl.textContent = t('about.scrub');
+        }
+      }
 
       // 5. Work Experience
-      document.getElementById('label-work-title').textContent = t('page.workExp');
+      safeSetText('label-work-title', t('page.workExp'));
+      
+      const careerTitleEl = document.getElementById('label-career-title');
+      if (careerTitleEl) {
+        careerTitleEl.innerHTML = t('career.title').replace('\n', '<br/>');
+      }
+      safeSetText('label-career-desc', t('career.desc'));
+      
       renderExperience();
 
       // 6. Skills
-      document.getElementById('label-skills-title').textContent = t('page.skills');
+      safeSetText('label-skills-title', t('page.skills'));
 
       // 7. Certificates
-      document.getElementById('label-certificates-title').textContent = t('page.certificates');
+      safeSetText('label-certificates-title', t('page.certificates'));
       renderCertificates();
 
       // 8. Projects
-      document.getElementById('label-projects-title').textContent = t('page.projects');
+      safeSetText('label-projects-title', t('page.projects'));
       renderProjects();
 
       // 9. Contact Section
-      document.getElementById('label-contact-title').textContent = t('page.contact');
-      document.getElementById('label-contact-subtitle').textContent = t('contact.subtitle');
-      document.getElementById('form-label-name').textContent = t('contact.name');
-      document.getElementById('form-label-email').textContent = t('contact.email');
-      document.getElementById('form-label-phone').textContent = t('contact.phone');
-      document.getElementById('form-label-message').textContent = t('contact.message');
+      safeSetText('label-contact-title', t('page.contact'));
+      safeSetText('label-contact-subtitle', t('contact.subtitle'));
+      safeSetText('form-label-name', t('contact.name'));
+      safeSetText('form-label-email', t('contact.email'));
+      safeSetText('form-label-phone', t('contact.phone'));
+      safeSetText('form-label-message', t('contact.message'));
       
       document.getElementById('contact-name').placeholder = t('contact.namePlaceholder');
       document.getElementById('contact-email').placeholder = t('contact.emailPlaceholder');
       document.getElementById('contact-phone').placeholder = t('contact.phonePlaceholder');
       document.getElementById('contact-message').placeholder = t('contact.messagePlaceholder');
-      document.getElementById('btn-contact-submit').textContent = t('contact.send');
-      document.getElementById('label-contact-infotitle').textContent = t('contact.title');
+      safeSetText('btn-contact-submit', t('contact.send'));
+      safeSetText('label-contact-infotitle', t('contact.title'));
 
       // 10. Footer Section
-      document.getElementById('footer-text-desc').textContent = t('footer.description');
-      document.getElementById('footer-link-home').textContent = t('nav.home');
-      document.getElementById('footer-link-about').textContent = t('nav.about');
-      document.getElementById('footer-link-projects').textContent = t('nav.projects');
-      document.getElementById('footer-link-contact').textContent = t('nav.contact');
-      document.getElementById('footer-text-rights').textContent = t('footer.rights');
+      safeSetText('footer-text-desc', t('footer.description'));
+      safeSetText('footer-link-home', t('nav.home'));
+      safeSetText('footer-link-about', t('nav.about'));
+      safeSetText('footer-link-projects', t('nav.projects'));
+      safeSetText('footer-link-contact', t('nav.contact'));
+      safeSetText('footer-text-rights', t('footer.rights'));
       
       document.getElementById('footer-text-madewith').innerHTML = `
         ${t('footer.madeWith')} ${t('footer.by')} <strong>${t('name')}</strong>
@@ -1544,12 +2035,12 @@
       
       if (isAudioMuted) {
         icon.className = 'fas fa-volume-mute';
-        btn.classList.add('text-gray-400');
-        btn.classList.remove('text-blue-500');
+        btn.classList.add('text-zinc-400');
+        btn.classList.remove('text-cyan-400');
       } else {
         icon.className = 'fas fa-volume-up';
-        btn.classList.remove('text-gray-400');
-        btn.classList.add('text-blue-500', 'border-blue-500/50');
+        btn.classList.remove('text-zinc-400');
+        btn.classList.add('text-cyan-400', 'border-cyan-400/50');
         
         // Play wake-up chime
         playChime();
@@ -1699,8 +2190,8 @@
         const btn = document.getElementById('btn-audio');
         if (icon && btn) {
           icon.className = 'fas fa-volume-up';
-          btn.classList.remove('text-gray-400');
-          btn.classList.add('text-blue-500', 'border-blue-500/50');
+          btn.classList.remove('text-zinc-400');
+          btn.classList.add('text-cyan-400', 'border-cyan-400/50');
         }
         
         // Play the chime arpeggio and speak the welcome message
@@ -1999,8 +2490,8 @@
       initScrollReveal();
       
       // Initialize Three.js 3D Background
-      initThreeJS();
-      animateThree();
+      initBackgroundThree();
+      animateBackgroundThree();
 
       // Initialize 3D Hero Visual Box (Torus Knot)
       initHeroThree();
@@ -2022,975 +2513,369 @@
       initTerminalHUD();
     });
 
-    /* ─── DYNAMIC 3D THREE.JS CYBERNETIC FLOW FIELD SWARM ─── */
-    let rawMouseX = window.innerWidth / 2;
-    let rawMouseY = window.innerHeight / 2;
-    const sectionColors = {
-      home: { c1: '#3b82f6', c2: '#10b981' },
-      about: { c1: '#10b981', c2: '#06b6d4' },
-      workExp: { c1: '#06b6d4', c2: '#6366f1' },
-      skills: { c1: '#6366f1', c2: '#a855f7' },
-      certificates: { c1: '#a855f7', c2: '#ec4899' },
-      projects: { c1: '#ec4899', c2: '#f43f5e' },
-      contact: { c1: '#f43f5e', c2: '#3b82f6' }
-    };
-    let currentC1 = new THREE.Color('#3b82f6');
-    let currentC2 = new THREE.Color('#10b981');
 
-    let scene, camera, renderer, starField;
-    let targetX = 0, targetY = 0;
-    let windowHalfX = window.innerWidth / 2;
-    let windowHalfY = window.innerHeight / 2;
-    let blackHoleSingularity, blackHoleHalo;
-    let diskRotX = 0, diskRotZ = 0;
 
-    // Flow field particle structures
-    const flowParticleCount = 2500;
-    let flowGeometry, flowMaterial, flowPointsObj;
-    let flowPositions = new Float32Array(flowParticleCount * 3);
-    let flowVelocities = new Float32Array(flowParticleCount * 3);
-    let flowSpeeds = new Float32Array(flowParticleCount);
-    let flowOffsets = [];
-    let flowColors = new Float32Array(flowParticleCount * 3);
+    /* ─── BRUTALIST 3D: ASCII TORUS & TERMINAL VOID ─── */
+    
+    // ==========================================
+    // 1. TERMINAL VOID (BACKGROUND)
+    // ==========================================
+    let bgScene, bgCamera, bgRenderer, bgParticles, jetSystem;
+    let bgMouseX = 0, bgMouseY = 0;
+    let bgClock;
 
-    function createCodeTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 256;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'rgba(0,0,0,0)';
-      ctx.clearRect(0, 0, 256, 256);
+    function initBackgroundThree() {
+      const canvas = document.getElementById('global-3d-bg');
+      if (!canvas) return;
+
+      bgScene = new THREE.Scene();
+      bgScene.fog = new THREE.FogExp2(0x0b1121, 0.0008);
       
-      ctx.font = 'bold 38px Fira Code, Courier New, monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#ffffff';
+      const width = window.innerWidth;
+      const height = window.innerHeight;
       
-      const chars = [
-        '0', '1', '{', '}', 
-        '<', '>', '(', ')', 
-        '[', ']', ';', '++', 
-        '=>', '?', '$', '&&'
-      ];
-      
-      for (let i = 0; i < 16; i++) {
-        const row = Math.floor(i / 4);
-        const col = i % 4;
-        const x = col * 64 + 32;
-        const y = row * 64 + 32;
-        ctx.fillText(chars[i], x, y);
+      bgCamera = new THREE.PerspectiveCamera(60, width / height, 1, 10000);
+      bgCamera.position.set(0, 300, 900); // Elevated angle to view the accretion disk
+
+      bgRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
+      bgRenderer.setSize(width, height);
+      bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      bgClock = new THREE.Clock();
+
+      // ─── GOD TIER: QUANTUM SINGULARITY (BLACK HOLE) ───
+
+      // 1. EVENT HORIZON (The Absolute Void)
+      const bhGeo = new THREE.SphereGeometry(120, 64, 64);
+      const bhMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+      const blackHole = new THREE.Mesh(bhGeo, bhMat);
+      bgScene.add(blackHole);
+
+      // 2. PHOTON SPHERE GLOW
+      const photonGeo = new THREE.SphereGeometry(128, 64, 64);
+      const photonMat = new THREE.MeshBasicMaterial({ 
+        color: 0x06b6d4, 
+        transparent: true, 
+        opacity: 0.15, 
+        blending: THREE.AdditiveBlending, 
+        side: THREE.BackSide 
+      });
+      const photonSphere = new THREE.Mesh(photonGeo, photonMat);
+      bgScene.add(photonSphere);
+
+      // 3. ACCRETION DISK (GPU Shader Particles - 80,000 particles)
+      const particleCount = 80000;
+      const pGeo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(particleCount * 3);
+      const sizeArray = new Float32Array(particleCount);
+      const angleArray = new Float32Array(particleCount);
+      const radiusArray = new Float32Array(particleCount);
+      const speedArray = new Float32Array(particleCount);
+      const yOffsetArray = new Float32Array(particleCount);
+
+      for(let i = 0; i < particleCount; i++) {
+        // High density near the event horizon
+        const rT = Math.pow(Math.random(), 3); 
+        const radius = 130 + rT * 1800;
+        
+        radiusArray[i] = radius;
+        angleArray[i] = Math.random() * Math.PI * 2;
+        
+        // Keplerian orbital velocity v ~ 1/sqrt(r)
+        speedArray[i] = (1.0 / Math.sqrt(radius)) * (0.8 + Math.random() * 0.5);
+        sizeArray[i] = Math.random() * 2.5 + 0.5;
+        
+        // Disk thickness flares out at the edges
+        const thickness = (radius - 120) * 0.15;
+        yOffsetArray[i] = (Math.random() - 0.5) * thickness;
       }
-      
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.minFilter = THREE.NearestFilter;
-      texture.magFilter = THREE.NearestFilter;
-      return texture;
+
+      pGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      pGeo.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
+      pGeo.setAttribute('angle', new THREE.BufferAttribute(angleArray, 1));
+      pGeo.setAttribute('radius', new THREE.BufferAttribute(radiusArray, 1));
+      pGeo.setAttribute('speed', new THREE.BufferAttribute(speedArray, 1));
+      pGeo.setAttribute('yOffset', new THREE.BufferAttribute(yOffsetArray, 1));
+
+      const pMat = new THREE.ShaderMaterial({
+        uniforms: { time: { value: 0 } },
+        vertexShader: `
+          uniform float time;
+          attribute float size;
+          attribute float angle;
+          attribute float radius;
+          attribute float speed;
+          attribute float yOffset;
+          varying vec3 vColor;
+          
+          void main() {
+            // Orbital rotation
+            float currentAngle = angle - time * speed * 15.0;
+            
+            float x = cos(currentAngle) * radius;
+            float z = sin(currentAngle) * radius;
+            
+            // Gravitational wave distortion
+            float wave = sin(currentAngle * 4.0 + time * 2.0) * (radius * 0.03);
+            float y = yOffset + wave;
+            
+            vec4 mvPosition = modelViewMatrix * vec4(x, y, z, 1.0);
+            
+            // Point size attenuation
+            gl_PointSize = size * (1200.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+            
+            // Color gradient: Hot Cyan core -> Emerald edges
+            float norm = clamp((radius - 130.0) / 1200.0, 0.0, 1.0);
+            vec3 coreColor = vec3(0.0, 0.8, 1.0); // Electric Blue/Cyan
+            vec3 edgeColor = vec3(0.0, 1.0, 0.5); // Emerald
+            vColor = mix(coreColor, edgeColor, norm);
+            
+            // Extreme brightness & Doppler shift simulation near horizon
+            if (radius < 180.0) {
+              vColor *= 1.5;
+            }
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          void main() {
+            vec2 xy = gl_PointCoord.xy - vec2(0.5);
+            float ll = length(xy);
+            if (ll > 0.5) discard;
+            // Gaussian falloff for perfect soft glowing points
+            float alpha = exp(-ll * ll * 20.0);
+            gl_FragColor = vec4(vColor, alpha * 0.85);
+          }
+        `,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      bgParticles = new THREE.Points(pGeo, pMat);
+      bgParticles.rotation.x = 0.15; // Tilt disk slightly
+      bgScene.add(bgParticles);
+
+      // 4. RELATIVISTIC JETS (Poles)
+      const jetCount = 10000;
+      const jGeo = new THREE.BufferGeometry();
+      const jPos = new Float32Array(jetCount * 3);
+      const jSpeed = new Float32Array(jetCount);
+      const jAngle = new Float32Array(jetCount);
+
+      for(let i=0; i<jetCount; i++) {
+        const r = Math.random() * 35; // Dense narrow beam
+        const a = Math.random() * Math.PI * 2;
+        const h = (Math.random() - 0.5) * 4000; 
+        
+        jPos[i*3] = Math.cos(a)*r;
+        jPos[i*3+1] = h;
+        jPos[i*3+2] = Math.sin(a)*r;
+        
+        // Jets fire outwards rapidly
+        jSpeed[i] = Math.sign(h) * (15 + Math.random() * 20); 
+        jAngle[i] = a;
+      }
+      jGeo.setAttribute('position', new THREE.BufferAttribute(jPos, 3));
+      jGeo.setAttribute('speed', new THREE.BufferAttribute(jSpeed, 1));
+      jGeo.setAttribute('angle', new THREE.BufferAttribute(jAngle, 1));
+
+      const jMat = new THREE.ShaderMaterial({
+        uniforms: { time: { value: 0 } },
+        vertexShader: `
+          uniform float time;
+          attribute float speed;
+          attribute float angle;
+          varying float vAlpha;
+          
+          void main() {
+            vec3 pos = position;
+            pos.y += time * speed * 25.0;
+            
+            // Loop jet particles
+            if (pos.y > 2000.0) pos.y -= 4000.0;
+            if (pos.y < -2000.0) pos.y += 4000.0;
+            
+            // Magnetic twist
+            float currentAngle = angle + pos.y * 0.003;
+            // Funnel expansion
+            float r = length(pos.xz) * (1.0 + abs(pos.y) * 0.0015);
+            
+            pos.x = cos(currentAngle) * r;
+            pos.z = sin(currentAngle) * r;
+            
+            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+            gl_PointSize = (abs(speed) * 0.15) * (1200.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+            
+            // Fade opacity near black hole and far edges
+            float dist = abs(pos.y);
+            vAlpha = smoothstep(120.0, 400.0, dist) * (1.0 - smoothstep(1000.0, 2000.0, dist));
+          }
+        `,
+        fragmentShader: `
+          varying float vAlpha;
+          void main() {
+            vec2 xy = gl_PointCoord.xy - vec2(0.5);
+            float ll = length(xy);
+            if (ll > 0.5) discard;
+            float alpha = exp(-ll * ll * 20.0);
+            gl_FragColor = vec4(0.0, 0.9, 0.8, alpha * vAlpha * 0.7); 
+          }
+        `,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      jetSystem = new THREE.Points(jGeo, jMat);
+      jetSystem.rotation.x = 0.15; // Match disk tilt
+      bgScene.add(jetSystem);
+
+      window.addEventListener('resize', () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        bgCamera.aspect = w / h;
+        bgCamera.updateProjectionMatrix();
+        bgRenderer.setSize(w, h);
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        bgMouseX = (e.clientX - window.innerWidth / 2) * 0.8;
+        bgMouseY = (e.clientY - window.innerHeight / 2) * 0.8;
+      });
     }
 
-    function initThreeJS() {
+    function animateBackgroundThree() {
+      if (!bgCamera || !bgRenderer || !bgScene || !bgClock) return;
+      requestAnimationFrame(animateBackgroundThree);
+      
+      const time = bgClock.getElapsedTime();
+      
+      if (bgParticles) bgParticles.material.uniforms.time.value = time;
+      if (jetSystem) jetSystem.material.uniforms.time.value = time;
+
+      // Slow cinematic precession of the entire universe
+      bgScene.rotation.y = Math.sin(time * 0.05) * 0.05;
+      bgScene.rotation.z = Math.cos(time * 0.05) * 0.02;
+
+      // Premium spring-like camera panning (looking down at the disk)
+      const targetX = bgMouseX * 1.2;
+      const targetY = 300 - bgMouseY * 1.2;
+      bgCamera.position.x += (targetX - bgCamera.position.x) * 0.03;
+      bgCamera.position.y += (targetY - bgCamera.position.y) * 0.03;
+      bgCamera.lookAt(0, 0, 0);
+
+      bgRenderer.render(bgScene, bgCamera);
+    }
+
+    // ==========================================
+    // 2. ASCII TORUS KNOT (HERO)
+    // ==========================================
+    let heroScene, heroCamera, heroRenderer, heroEffect, heroMesh;
+    let hMouseX = 0, hMouseY = 0, hTargetX = 0, hTargetY = 0;
+
+    
+    function initHeroThree() {
       const container = document.getElementById('three-bg-container');
       if (!container) return;
+      container.innerHTML = '';
 
-      scene = new THREE.Scene();
-      
-      // Full screen perspective camera pointing directly at the center
-      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-      camera.position.set(0, 0, 600);
-
-      // Initialize flow particles in an Accretion Disk layout
-      flowGeometry = new THREE.BufferGeometry();
-      const txIndices = new Float32Array(flowParticleCount);
-
-      for (let i = 0; i < flowParticleCount; i++) {
-        // Flat disk layout (XZ plane) with slight Y thickness
-        const r = 80 + Math.random() * 450;
-        const theta = Math.random() * Math.PI * 2.0;
-
-        flowPositions[i * 3] = r * Math.cos(theta); // X
-        flowPositions[i * 3 + 1] = (Math.random() - 0.5) * 35; // Y (height thickness)
-        flowPositions[i * 3 + 2] = r * Math.sin(theta); // Z
-
-        flowVelocities[i * 3] = 0;
-        flowVelocities[i * 3 + 1] = 0;
-        flowVelocities[i * 3 + 2] = 0;
-
-        flowSpeeds[i] = 0.5 + Math.random() * 1.5;
-
-        flowOffsets.push({
-          x: Math.random() * Math.PI * 2.0,
-          y: Math.random() * Math.PI * 2.0,
-          z: Math.random() * Math.PI * 2.0
-        });
-
-        flowColors[i * 3] = currentC1.r;
-        flowColors[i * 3 + 1] = currentC1.g;
-        flowColors[i * 3 + 2] = currentC1.b;
-
-        txIndices[i] = Math.floor(Math.random() * 16);
-      }
-
-      flowGeometry.setAttribute('position', new THREE.BufferAttribute(flowPositions, 3));
-      flowGeometry.setAttribute('color', new THREE.BufferAttribute(flowColors, 3));
-      flowGeometry.setAttribute('aTxIndex', new THREE.BufferAttribute(txIndices, 1));
-
-      // GPU Shader for high-performance glowing particles
-      const flowVertexShader = `
-        attribute vec3 color;
-        attribute float aTxIndex;
-        varying vec3 vColor;
-        varying float vTxIndex;
-        void main() {
-          vColor = color;
-          vTxIndex = aTxIndex;
-          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = (18.0 * (300.0 / -mvPosition.z));
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `;
-
-      const flowFragmentShader = `
-        varying vec3 vColor;
-        varying float vTxIndex;
-        uniform sampler2D uTexture;
-        uniform float uOpacity;
-        void main() {
-          float row = floor(vTxIndex / 4.0);
-          float col = mod(vTxIndex, 4.0);
-          vec2 uv = gl_PointCoord / 4.0 + vec2(col / 4.0, row / 4.0);
-          
-          vec4 texColor = texture2D(uTexture, uv);
-          if (texColor.a < 0.15) discard;
-          
-          gl_FragColor = vec4(vColor * texColor.rgb, texColor.a * uOpacity);
-        }
-      `;
-
-      const codeTexture = createCodeTexture();
-
-      flowMaterial = new THREE.ShaderMaterial({
-        vertexShader: flowVertexShader,
-        fragmentShader: flowFragmentShader,
-        uniforms: {
-          uOpacity: { value: currentTheme === 'dark' ? 0.65 : 0.35 },
-          uTexture: { value: codeTexture }
-        },
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-
-      flowPointsObj = new THREE.Points(flowGeometry, flowMaterial);
-      scene.add(flowPointsObj);
-
-      // Create central black hole singularity (pure black sphere)
-      const singularityGeo = new THREE.SphereGeometry(30, 32, 32);
-      const singularityMat = new THREE.MeshBasicMaterial({ color: 0x010103 });
-      blackHoleSingularity = new THREE.Mesh(singularityGeo, singularityMat);
-      scene.add(blackHoleSingularity);
-
-      // Create glowing accretion disk event horizon halo (gravitational lensing simulation)
-      const haloGeo = new THREE.RingGeometry(30, 36, 64);
-      const haloMat = new THREE.MeshBasicMaterial({
-        color: 0xffa044, // glowing hot accretion orange
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.85,
-        blending: THREE.AdditiveBlending
-      });
-      blackHoleHalo = new THREE.Mesh(haloGeo, haloMat);
-      scene.add(blackHoleHalo);
-
-      // Deep space static starfield
-      const starsGeometry = new THREE.BufferGeometry();
-      const starsCount = 150;
-      const starPositions = new Float32Array(starsCount * 3);
-      for (let i = 0; i < starsCount * 3; i += 3) {
-        starPositions[i] = (Math.random() - 0.5) * 3200;
-        starPositions[i + 1] = (Math.random() - 0.5) * 2000;
-        starPositions[i + 2] = -800;
-      }
-      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-      
-      const starCanvas = document.createElement('canvas');
-      starCanvas.width = 8;
-      starCanvas.height = 8;
-      const starCtx = starCanvas.getContext('2d');
-      const starGrad = starCtx.createRadialGradient(4, 4, 0, 4, 4, 4);
-      starGrad.addColorStop(0, 'rgba(255,255,255,1)');
-      starGrad.addColorStop(1, 'rgba(255,255,255,0)');
-      starCtx.fillStyle = starGrad;
-      starCtx.fillRect(0, 0, 8, 8);
-      const starTexture = new THREE.CanvasTexture(starCanvas);
-
-      const starsMaterial = new THREE.PointsMaterial({
-        size: 4,
-        map: starTexture,
-        transparent: true,
-        opacity: currentTheme === 'dark' ? 0.4 : 0.15,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      starField = new THREE.Points(starsGeometry, starsMaterial);
-      scene.add(starField);
-
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      container.appendChild(renderer.domElement);
-
-      document.addEventListener('mousemove', onThreeMouseMove);
-      window.addEventListener('resize', onThreeWindowResize);
-
-      // Click event for interactive flow blast
-      window.addEventListener('click', (e) => {
-        playPulse();
-        
-        const rect = renderer.domElement.getBoundingClientRect();
-        const clickX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        const clickY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-        
-        const worldX = clickX * (window.innerWidth / 2) * 1.2;
-        const worldY = clickY * (window.innerHeight / 2) * 1.2;
-
-        const positions = flowGeometry.attributes.position.array;
-        for (let i = 0; i < flowParticleCount; i++) {
-          const idx = i * 3;
-          const px = positions[idx];
-          const py = positions[idx + 1];
-          
-          const dx = px - worldX;
-          const dy = py - worldY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 250) {
-            const force = (250 - dist) / 250;
-            const angle = Math.atan2(dy, dx);
-            flowVelocities[idx] += Math.cos(angle) * force * 15.0;
-            flowVelocities[idx + 1] += Math.sin(angle) * force * 15.0;
-          }
-        }
-      });
-    }
-
-    function onThreeMouseMove(event) {
-      rawMouseX = event.clientX;
-      rawMouseY = event.clientY;
-      targetX = (event.clientX - windowHalfX) * 0.15;
-      targetY = (event.clientY - windowHalfY) * 0.15;
-    }
-
-    function onThreeWindowResize() {
-      windowHalfX = window.innerWidth / 2;
-      windowHalfY = window.innerHeight / 2;
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    let lastTime = 0;
-    const colorLerpTarget = new THREE.Color();
-
-    function animateThree(time = 0) {
-      requestAnimationFrame(animateThree);
-      
-      const delta = time - lastTime;
-      const speedMultiplier = lastTime === 0 ? 1 : Math.min(delta / 16.67, 4);
-      lastTime = time;
-
-      const timeSec = time * 0.001;
-
-      // Color interpolation based on activeSectionName
-      const targetColors = sectionColors[activeSectionName] || sectionColors.home;
-      const tColor1 = new THREE.Color(targetColors.c1);
-      const tColor2 = new THREE.Color(targetColors.c2);
-      
-      currentC1.lerp(tColor1, 0.025 * speedMultiplier);
-      currentC2.lerp(tColor2, 0.025 * speedMultiplier);
-
-      // Interpolate disk 3D tilt based on section state and mouse movement
-      let targetDiskRotX = 0;
-      let targetDiskRotZ = 0;
-      if (activeSectionName === 'about') {
-        targetDiskRotX = heroMouseY * 0.45;
-        targetDiskRotZ = heroMouseX * 0.45;
-      }
-      diskRotX += (targetDiskRotX - diskRotX) * 0.06 * speedMultiplier;
-      diskRotZ += (targetDiskRotZ - diskRotZ) * 0.06 * speedMultiplier;
-
-      if (flowPointsObj && blackHoleSingularity && blackHoleHalo) {
-        flowPointsObj.rotation.x = diskRotX;
-        flowPointsObj.rotation.z = diskRotZ;
-        blackHoleSingularity.rotation.x = diskRotX;
-        blackHoleSingularity.rotation.z = diskRotZ;
-        blackHoleHalo.rotation.x = diskRotX;
-        blackHoleHalo.rotation.z = diskRotZ;
-        
-        // Event horizon spin
-        blackHoleHalo.rotation.z = timeSec * 0.6;
-      }
-
-      // Update flow particle positions and vortex swirls
-      if (flowPointsObj) {
-        const positions = flowGeometry.attributes.position.array;
-        const colors = flowGeometry.attributes.color.array;
-        
-        const boxW = window.innerWidth * 1.5;
-        const boxH = window.innerHeight * 1.5;
-        const boxD = 800;
-        
-        flowMaterial.uniforms.uOpacity.value = currentTheme === 'dark' ? 0.65 : 0.35;
-
-        // Map mouse screen coords to 3D world space
-        const worldMouseX = ((rawMouseX / window.innerWidth) - 0.5) * window.innerWidth * 1.2;
-        const worldMouseY = -((rawMouseY / window.innerHeight) - 0.5) * window.innerHeight * 1.2;
-
-        for (let i = 0; i < flowParticleCount; i++) {
-          const idx = i * 3;
-          let px = positions[idx];
-          let py = positions[idx + 1];
-          let pz = positions[idx + 2];
-          
-          let vx = flowVelocities[idx];
-          let vy = flowVelocities[idx + 1];
-          let vz = flowVelocities[idx + 2];
-          
-          const R = Math.sqrt(px * px + pz * pz) || 1.0;
-
-          // SCROLLING STATE MACHINE BEHAVIORS (Cosmic Black Hole Dynamics)
-          if (activeSectionName === 'about') {
-            // Space Warp: Stable Keplerian Accretion disk, but parent object is rotated in 3D by mouse
-            const speed = 4.5 / Math.sqrt(R);
-            vx += (-pz / R) * speed - (px / R) * 0.05;
-            vz += (px / R) * speed - (pz / R) * 0.05;
-            vy += (-py) * 0.08;
-          } else if (activeSectionName === 'workExp') {
-            // Relativistic Spaghettification Columns (Vertical spiral streams entering black hole)
-            const speed = 3.8 / Math.sqrt(R);
-            const pull = 0.6 * flowSpeeds[i];
-            vx += (-px / R) * pull - (pz / R) * speed;
-            vz += (-pz / R) * pull + (px / R) * speed;
-            vy += (Math.sin(R * 0.04 - timeSec * 3.5) * 12.0 - py) * 0.08;
-          } else if (activeSectionName === 'skills') {
-            // Polar Energy Jets (particles ejecting vertically from poles)
-            const speed = 0.12 * flowSpeeds[i];
-            const isNorth = (i % 2 === 0);
-            vy += (isNorth ? 8.5 : -8.5) * flowSpeeds[i];
-            vx += (-px) * 0.08; // confine horizontally
-            vz += (-pz) * 0.08;
-            // spiral rotation
-            vx += -pz * speed;
-            vz += px * speed;
-          } else if (activeSectionName === 'certificates') {
-            // Event Horizon Ring (Fast orbit band concentrated at R = 50)
-            const targetR = 50;
-            const pull = (targetR - R) * 0.08;
-            const orbitSpeed = 7.5;
-            vx += (px / R) * pull - (pz / R) * orbitSpeed * flowSpeeds[i];
-            vz += (pz / R) * pull + (px / R) * orbitSpeed * flowSpeeds[i];
-            vy += (-py) * 0.1;
-          } else if (activeSectionName === 'projects') {
-            // Gravitational Waves (Keplerian disk with concentric ripples)
-            const speed = 4.5 / Math.sqrt(R);
-            vx += (-pz / R) * speed - (px / R) * 0.05;
-            vz += (px / R) * speed - (pz / R) * 0.05;
-            
-            const rippleRadius = ((timeSec * 0.4) % 1.0) * 550;
-            if (Math.abs(R - rippleRadius) < 70) {
-              const strength = (1.0 - Math.abs(R - rippleRadius) / 70) * 5.0;
-              vy += Math.sin((R - rippleRadius) * 0.12) * strength;
-            } else {
-              vy += (-py) * 0.08;
-            }
-          } else if (activeSectionName === 'contact') {
-            // Singularity Collapse (Sucked in directly)
-            const pull = 2.8 * flowSpeeds[i];
-            vx += (-px / R) * pull;
-            vz += (-pz / R) * pull;
-            vy += (-py) * 0.1;
-          } else {
-            // Home: Stable Keplerian Accretion Disk
-            const speed = 4.5 / Math.sqrt(R);
-            vx += (-pz / R) * speed - (px / R) * 0.05;
-            vz += (px / R) * speed - (pz / R) * 0.05;
-            vy += (-py) * 0.08;
-          }
-          
-          // Event Horizon absorption
-          // If the particle gets swallowed by the singularity (R < 32)
-          // or escapes far away (e.g. in Polar Jets, when |Y| > boxH/2)
-          if (R < 32 || (activeSectionName === 'skills' && Math.abs(py) > boxH / 2)) {
-            // Respawn at the outer edge of the accretion disk
-            const r = 250 + Math.random() * 200;
-            const theta = Math.random() * Math.PI * 2.0;
-            px = r * Math.cos(theta);
-            pz = r * Math.sin(theta);
-            py = (Math.random() - 0.5) * 15;
-            vx = 0; vy = 0; vz = 0;
-          }
-          
-          // Damping & speed caps
-          vx *= 0.95;
-          vy *= 0.95;
-          vz *= 0.95;
-          
-          px += vx;
-          py += vy;
-          pz += vz;
-          
-          // Wrap bounds when escaping boundary box (if not recently swallowed by black hole)
-          if (Math.abs(px) > boxW / 2) px = (Math.random() - 0.5) * boxW;
-          if (Math.abs(py) > boxH / 2) py = (Math.random() - 0.5) * boxH;
-          if (pz < -boxD / 2 || pz > boxD / 2) pz = (Math.random() - 0.5) * boxD - 200;
-          
-          positions[idx] = px;
-          positions[idx + 1] = py;
-          positions[idx + 2] = pz;
-          
-          flowVelocities[idx] = vx;
-          flowVelocities[idx + 1] = vy;
-          flowVelocities[idx + 2] = vz;
-          
-          // Relativistic Doppler Beaming color shift:
-          // Left side (px > 0) is blue-shifted, right side (px < 0) is red/orange shifted
-          const dopplerRatio = Math.max(0.0, Math.min(1.0, (px + 300.0) / 600.0));
-          colorLerpTarget.lerpColors(currentC1, currentC2, dopplerRatio);
-          
-          colors[idx] = colorLerpTarget.r;
-          colors[idx + 1] = colorLerpTarget.g;
-          colors[idx + 2] = colorLerpTarget.b;
-        }
-        
-        flowGeometry.attributes.position.needsUpdate = true;
-        flowGeometry.attributes.color.needsUpdate = true;
-      }
-
-      if (starField) {
-        starField.rotation.y = timeSec * 0.012;
-        if (currentTheme === 'dark') {
-          starField.material.opacity = 0.4;
-        } else {
-          starField.material.opacity = 0.15;
-        }
-      }
-
-      // Parallax effect on camera
-      const targetCamX = targetX * 0.8;
-      const targetCamY = -targetY * 0.8;
-      
-      camera.position.x += (targetCamX - camera.position.x) * 0.05 * speedMultiplier;
-      camera.position.y += (targetCamY - camera.position.y) * 0.05 * speedMultiplier;
-      camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-      renderer.render(scene, camera);
-    }
-
-    /* ─── DYNAMIC 3D HERO VISUAL BOX (Torus Knot Morphing Mesh) ─── */
-    let heroScene, heroCamera, heroRenderer, heroMesh, heroPoints, heroDust;
-    let heroRing1, heroRing2, heroRing3;
-    let heroTargetSpeed = 0.005;
-    let heroCurrentSpeed = 0.005;
-    let heroTargetGlow = 1.5;
-    let heroCurrentGlow = 1.5;
-    let heroMouseX = 0, heroMouseY = 0;
-    let heroTargetMouseX = 0, heroTargetMouseY = 0;
-    let heroHoverVal = 0.0, heroHoverTarget = 0.0;
-    let heroCamTheta = 0, heroCamPhi = Math.PI / 2;
-
-    // GLSL Shader Code
-    const heroVertexShader = `
-      uniform float uTime;
-      uniform float uNoiseStrength;
-      uniform float uHover;
-      varying vec3 vNormal;
-      varying vec3 vPosition;
-      varying float vNoise;
-
-      // GLSL Simplex 3D Noise code
-      vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-      vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-      vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-      vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-      
-      float snoise(vec3 v) {
-        const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-        const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-        vec3 i  = floor(v + dot(v, C.yyy));
-        vec3 x0 = v - i + dot(i, C.xxx);
-        vec3 g = step(x0.yzx, x0.xyz);
-        vec3 l = 1.0 - g;
-        vec3 i1 = min(g.xyz, l.zxy);
-        vec3 i2 = max(g.xyz, l.zxy);
-        vec3 x1 = x0 - i1 + C.xxx;
-        vec3 x2 = x0 - i2 + C.yyy;
-        vec3 x3 = x0 - D.yyy;
-        i = mod289(i);
-        vec4 p = permute(permute(permute(
-                   i.z + vec4(0.0, i1.z, i2.z, 1.0))
-                 + i.y + vec4(0.0, i1.y, i2.y, 1.0))
-                 + i.x + vec4(0.0, i1.x, i2.x, 1.0));
-        float n_ = 0.142857142857;
-        vec3 ns = n_ * D.wyz - D.xzx;
-        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-        vec4 x_ = floor(j * ns.z);
-        vec4 y_ = floor(j - 7.0 * x_);
-        vec4 x = x_ *ns.x + ns.yyyy;
-        vec4 y = y_ *ns.x + ns.yyyy;
-        vec4 h = 1.0 - abs(x) - abs(y);
-        vec4 b0 = vec4(x.xy, y.xy);
-        vec4 b1 = vec4(x.zw, y.zw);
-        vec4 s0 = floor(b0)*2.0 + 1.0;
-        vec4 s1 = floor(b1)*2.0 + 1.0;
-        vec4 sh = -step(h, vec4(0.0));
-        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
-        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
-        vec3 p0 = vec3(a0.xy, h.x);
-        vec3 p1 = vec3(a0.zw, h.y);
-        vec3 p2 = vec3(a1.xy, h.z);
-        vec3 p3 = vec3(a1.zw, h.w);
-        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-        p0 *= norm.x;
-        p1 *= norm.y;
-        p2 *= norm.z;
-        p3 *= norm.w;
-        vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-        m = m * m;
-        return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
-      }
-
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        vPosition = position;
-        
-        // Deform geometry coordinates
-        vec3 noisePos = position * 0.12 + vec3(0.0, 0.0, uTime * 0.6);
-        float noise = snoise(noisePos);
-        vNoise = noise;
-        
-        // Organic ripple wave along coordinates
-        float wave = sin(position.x * 0.35 + uTime * 2.5) * cos(position.y * 0.35 + uTime * 2.5);
-        float strength = uNoiseStrength + uHover * 1.8;
-        vec3 displacedPosition = position + normal * (noise * 0.65 + wave * 0.35) * strength;
-        
-        vec4 modelViewPosition = modelViewMatrix * vec4(displacedPosition, 1.0);
-        gl_Position = projectionMatrix * modelViewPosition;
-      }
-    `;
-
-    const heroFragmentShader = `
-      uniform float uTime;
-      uniform vec3 uColor1;
-      uniform vec3 uColor2;
-      uniform float uGlowIntensity;
-      uniform float uHover;
-      varying vec3 vNormal;
-      varying vec3 vPosition;
-      varying float vNoise;
-
-      void main() {
-        vec3 viewDirection = normalize(vec3(0.0, 0.0, 1.0));
-        float fresnel = pow(1.0 - max(dot(vNormal, viewDirection), 0.0), 3.0);
-        
-        float mixFactor = (vNoise + 1.0) * 0.5;
-        
-        // Iridescent neon color shift
-        vec3 iridescence = vec3(
-          sin(vPosition.x * 0.12 + uTime) * 0.15 + 0.85,
-          sin(vPosition.y * 0.12 + uTime + 2.0) * 0.15 + 0.85,
-          sin(vPosition.z * 0.12 + uTime + 4.0) * 0.15 + 0.85
-        );
-        vec3 baseColor = mix(uColor1, uColor2, mixFactor) * iridescence;
-        
-        float pulse = sin(uTime * 2.5) * 0.08 + 0.92;
-        float glow = uGlowIntensity + uHover * 2.0;
-        
-        // Holographic scanlines
-        float scanline = sin(vPosition.y * 1.5 - uTime * 8.0) * 0.08 + 0.92;
-        // Light wave pulsing along the Torus Knot's length (using local coordinates)
-        float wave = sin(vPosition.x * 0.25 + vPosition.y * 0.25 + vPosition.z * 0.25 + uTime * 3.5) * 0.2 + 0.8;
-        
-        vec3 finalColor = baseColor + (baseColor * fresnel * glow * pulse * wave);
-        float alpha = (0.18 + fresnel * 0.65 + uHover * 0.18) * scanline * wave;
-        
-        gl_FragColor = vec4(finalColor, alpha);
-      }
-    `;
-
-    const heroPointsFragmentShader = `
-      uniform vec3 uColor1;
-      uniform vec3 uColor2;
-      uniform float uHover;
-      varying float vNoise;
-
-      void main() {
-        vec2 coord = gl_PointCoord - vec2(0.5);
-        float dist = length(coord);
-        
-        // 1. Tech ring glow
-        float thickness = 0.05 + uHover * 0.03;
-        float radius = 0.28;
-        float ring = smoothstep(thickness, 0.0, abs(dist - radius));
-        
-        // 2. Center dot glow
-        float centerDot = smoothstep(0.08, 0.0, dist) * 1.5;
-        
-        // 3. Crosshair lines (horizontal and vertical ticks)
-        float lineThickness = 0.012;
-        float lineLength = 0.4;
-        float tick = 0.0;
-        if (abs(coord.x) < lineThickness && abs(coord.y) < lineLength && abs(coord.y) > 0.1) {
-          tick = 1.0;
-        }
-        if (abs(coord.y) < lineThickness && abs(coord.x) < lineLength && abs(coord.x) > 0.1) {
-          tick = 1.0;
-        }
-        
-        float alpha = max(max(ring, centerDot), tick * 0.7);
-        if (alpha < 0.05) discard;
-        
-        float mixFactor = (vNoise + 1.0) * 0.5;
-        vec3 baseColor = mix(uColor1, uColor2, mixFactor);
-        
-        // Boost brightness on hover
-        vec3 finalColor = baseColor * (1.8 + uHover * 2.5);
-        gl_FragColor = vec4(finalColor, alpha * (0.85 + uHover * 0.15));
-      }
-    `;
-
-    // Gyro Rings shaders
-    const ringVertexShader = `
-      varying vec3 vPosition;
-      void main() {
-        vPosition = position;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `;
-
-    const ringFragmentShader = `
-      uniform float uTime;
-      uniform vec3 uColor;
-      uniform float uSpeed;
-      uniform float uDashes;
-      varying vec3 vPosition;
-      void main() {
-        float angle = atan(vPosition.y, vPosition.x);
-        float dash = step(0.4, sin(angle * uDashes + uTime * uSpeed));
-        if (dash < 0.1) discard;
-        
-        float pulse = sin(uTime * 2.0) * 0.15 + 0.85;
-        gl_FragColor = vec4(uColor * pulse, 0.38 * pulse);
-      }
-    `;
-
-    let ring1Uniforms = {
-      uTime: { value: 0 },
-      uColor: { value: new THREE.Color('#3b82f6') },
-      uSpeed: { value: 2.0 },
-      uDashes: { value: 8.0 }
-    };
-
-    let ring2Uniforms = {
-      uTime: { value: 0 },
-      uColor: { value: new THREE.Color('#10b981') },
-      uSpeed: { value: -2.5 },
-      uDashes: { value: 12.0 }
-    };
-
-    let ring3Uniforms = {
-      uTime: { value: 0 },
-      uColor: { value: new THREE.Color('#3b82f6') },
-      uSpeed: { value: 1.2 },
-      uDashes: { value: 4.0 }
-    };
-
-    let heroUniforms = {
-      uTime: { value: 0 },
-      uNoiseStrength: { value: 0.6 },
-      uColor1: { value: new THREE.Color('#3b82f6') },
-      uColor2: { value: new THREE.Color('#10b981') },
-      uGlowIntensity: { value: 2.5 },
-      uHover: { value: 0.0 }
-    };
-
-    let dustMaterial;
-    let dustCount = 120;
-    let dustOffsets = [];
-
-    function initHeroThree() {
-      const container = document.getElementById('hero-three-container');
-      const box = document.getElementById('hero-3d-box');
-      if (!container || !box) return;
-
-      const width = container.clientWidth || 350;
-      const height = container.clientHeight || 220;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
       heroScene = new THREE.Scene();
-      heroCamera = new THREE.PerspectiveCamera(40, width / height, 1, 1000);
-      heroCamera.position.z = 35;
+      // Transparent background so the card gradient shows through
+      heroScene.background = null;
 
-      // Create Torus Knot Geometry (with higher resolution segments)
-      const geometry = new THREE.TorusKnotGeometry(7.5, 2.3, 140, 18, 2, 3);
+      heroCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      heroCamera.position.z = 12; // Bring it closer to fit the card
 
-      // Shader Material for Mesh
-      const meshMaterial = new THREE.ShaderMaterial({
-        vertexShader: heroVertexShader,
-        fragmentShader: heroFragmentShader,
-        uniforms: heroUniforms,
-        wireframe: true,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
+      heroRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+      heroRenderer.setSize(width, height);
+      heroRenderer.setClearColor(0x000000, 0);
+
+      if (typeof THREE.AsciiEffect !== 'undefined') {
+        heroEffect = new THREE.AsciiEffect(heroRenderer, ' .:-+*=%@#', { invert: true, color: false, resolution: 0.2 });
+        heroEffect.setSize(width, height);
+        heroEffect.domElement.style.color = '#06b6d4'; // Cyan color
+        heroEffect.domElement.style.backgroundColor = 'transparent';
+        heroEffect.domElement.style.fontFamily = '"Fira Code", monospace';
+        heroEffect.domElement.style.lineHeight = '1em';
+        container.appendChild(heroEffect.domElement);
+      } else {
+        container.appendChild(heroRenderer.domElement);
+        heroEffect = heroRenderer;
+      }
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+      heroScene.add(ambientLight);
+
+      const pointLight1 = new THREE.PointLight(0x06b6d4, 1.5);
+      pointLight1.position.set(10, 10, 10);
+      heroScene.add(pointLight1);
+      
+      const pointLight2 = new THREE.PointLight(0x10b981, 1);
+      pointLight2.position.set(-10, -10, -10);
+      heroScene.add(pointLight2);
+
+      const geometry = new THREE.TorusKnotGeometry(3, 0.8, 100, 16);
+      const material = new THREE.MeshStandardMaterial({ 
+        color: 0xffffff,
+        roughness: 0.3,
+        metalness: 0.9
       });
-      heroMesh = new THREE.Mesh(geometry, meshMaterial);
+      
+      heroMesh = new THREE.Mesh(geometry, material);
       heroScene.add(heroMesh);
 
-      // Shader Material for Points
-      const pointsMaterial = new THREE.ShaderMaterial({
-        vertexShader: heroVertexShader,
-        fragmentShader: heroPointsFragmentShader,
-        uniforms: heroUniforms,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      heroPoints = new THREE.Points(geometry, pointsMaterial);
-      heroScene.add(heroPoints);
-
-      // Gyroscope Rings (using advanced dash shader)
-      const ring1Geo = new THREE.RingGeometry(13, 13.15, 64);
-      const ring1Mat = new THREE.ShaderMaterial({
-        vertexShader: ringVertexShader,
-        fragmentShader: ringFragmentShader,
-        uniforms: ring1Uniforms,
-        side: THREE.DoubleSide,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      heroRing1 = new THREE.Mesh(ring1Geo, ring1Mat);
-      heroRing1.rotation.x = Math.PI / 2;
-      heroScene.add(heroRing1);
-
-      const ring2Geo = new THREE.RingGeometry(11, 11.15, 64);
-      const ring2Mat = new THREE.ShaderMaterial({
-        vertexShader: ringVertexShader,
-        fragmentShader: ringFragmentShader,
-        uniforms: ring2Uniforms,
-        side: THREE.DoubleSide,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      heroRing2 = new THREE.Mesh(ring2Geo, ring2Mat);
-      heroRing2.rotation.y = Math.PI / 4;
-      heroScene.add(heroRing2);
-
-      // Outer Target Gimbal Ring (Ring 3)
-      const ring3Geo = new THREE.RingGeometry(15, 15.12, 64);
-      const ring3Mat = new THREE.ShaderMaterial({
-        vertexShader: ringVertexShader,
-        fragmentShader: ringFragmentShader,
-        uniforms: ring3Uniforms,
-        side: THREE.DoubleSide,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      heroRing3 = new THREE.Mesh(ring3Geo, ring3Mat);
-      heroRing3.rotation.x = Math.PI / 3;
-      heroRing3.rotation.y = -Math.PI / 6;
-      heroScene.add(heroRing3);
-
-      // Volumetric Space Dust Particles
-      const dustGeometry = new THREE.BufferGeometry();
-      const dustPositions = new Float32Array(dustCount * 3);
-      dustOffsets = [];
-      
-      for (let i = 0; i < dustCount; i++) {
-        const r = 8.0 + Math.random() * 10.0;
-        const theta = Math.random() * Math.PI * 2.0;
-        const phi = Math.acos((Math.random() * 2.0) - 1.0);
-        
-        dustPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-        dustPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-        dustPositions[i * 3 + 2] = r * Math.cos(phi);
-        
-        dustOffsets.push({
-          x: Math.random() * Math.PI * 2.0,
-          y: Math.random() * Math.PI * 2.0,
-          z: Math.random() * Math.PI * 2.0
-        });
-      }
-      
-      dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
-      
-      dustMaterial = new THREE.PointsMaterial({
-        size: 0.25,
-        transparent: true,
-        opacity: currentTheme === 'dark' ? 0.6 : 0.3,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      
-      heroDust = new THREE.Points(dustGeometry, dustMaterial);
-      heroScene.add(heroDust);
-
-      heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      heroRenderer.setSize(width, height);
-      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(heroRenderer.domElement);
-
-      // Hover and mousemove
-      box.addEventListener('mouseenter', () => {
-        heroTargetSpeed = 0.018;
-        heroTargetGlow = 3.5;
-        heroHoverTarget = 1.0;
-      });
-
-      box.addEventListener('mouseleave', () => {
-        heroTargetSpeed = 0.005;
-        heroTargetGlow = 1.5;
-        heroHoverTarget = 0.0;
-        heroTargetMouseX = 0;
-        heroTargetMouseY = 0;
-      });
-
-      box.addEventListener('mousemove', (e) => {
-        const rect = box.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        heroTargetMouseX = (x / rect.width) * 2 - 1;
-        heroTargetMouseY = (y / rect.height) * -2 + 1;
-      });
-
-      // Resize event
-      window.addEventListener('resize', () => {
+      const handleResize = () => {
+        if (!container) return;
         const w = container.clientWidth;
         const h = container.clientHeight;
         heroCamera.aspect = w / h;
         heroCamera.updateProjectionMatrix();
-        heroRenderer.setSize(w, h);
+        if (heroEffect) heroEffect.setSize(w, h);
+        else heroRenderer.setSize(w, h);
+      };
+      window.addEventListener('resize', handleResize);
+
+      // Track mouse within the card for interactive rotation
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        hTargetX = (x / rect.width) * 2 - 1;
+        hTargetY = -(y / rect.height) * 2 + 1;
       });
 
-      // Status HUD log rotator
-      const hudStatuses = [
-        "SYS.CORE // ACTIVE",
-        "GEOM: TORUS_KNOT",
-        "NOISE: SIMPLEX_3D",
-        "RENDER: WebGL 2.0",
-        "CORE_TEMP: 32°C // OK",
-        "SHADERS: GLSL 3.0",
-        "FPS: 60.0 // AUTO",
-        "HUD-3D // STATUS_OK"
-      ];
-      let hudIndex = 0;
-      setInterval(() => {
-        const el = document.getElementById('hero-hud-status');
-        if (el) {
-          hudIndex = (hudIndex + 1) % hudStatuses.length;
-          el.textContent = hudStatuses[hudIndex];
-        }
-      }, 3000);
+      container.addEventListener('mouseleave', () => {
+        hTargetX = 0;
+        hTargetY = 0;
+      });
+      
+      if (container.style) {
+        container.style.mixBlendMode = 'screen';
+      }
     }
-
-    function animateHeroThree(time = 0) {
+function animateHeroThree(time = 0) {
+      if (!heroCamera || !heroRenderer || !heroScene) return;
       requestAnimationFrame(animateHeroThree);
 
-      const timeSec = time * 0.001;
+      // Smooth inertia mouse tracking
+      hMouseX += (hTargetX - hMouseX) * 0.05;
+      hMouseY += (hTargetY - hMouseY) * 0.05;
 
-      if (heroMesh && heroPoints) {
-        // Interpolate rotation speed, hover intensity, and mouse position
-        heroCurrentSpeed += (heroTargetSpeed - heroCurrentSpeed) * 0.08;
-        heroHoverVal += (heroHoverTarget - heroHoverVal) * 0.08;
-        heroMouseX += (heroTargetMouseX - heroMouseX) * 0.1;
-        heroMouseY += (heroTargetMouseY - heroMouseY) * 0.1;
-
-        // Update uniforms
-        heroUniforms.uTime.value = timeSec;
-        heroUniforms.uHover.value = heroHoverVal;
-        
-        ring1Uniforms.uTime.value = timeSec;
-        ring2Uniforms.uTime.value = timeSec;
-        ring3Uniforms.uTime.value = timeSec;
-
-        const scrollOffset = window.scrollY;
-
-        // Base rotation + parallax scroll rotation
-        heroMesh.rotation.y = timeSec * 0.35 + scrollOffset * 0.0015;
-        heroMesh.rotation.x = timeSec * 0.18 + scrollOffset * 0.0008;
-        heroPoints.rotation.copy(heroMesh.rotation);
-
-        // Gyro rings rotation & mouse & scroll response
-        if (heroRing1) {
-          heroRing1.rotation.z = timeSec * 0.35 + scrollOffset * 0.001;
-          heroRing1.rotation.x = Math.PI / 2 + heroMouseY * 0.35;
-          heroRing1.rotation.y = heroMouseX * 0.35;
-        }
-        if (heroRing2) {
-          heroRing2.rotation.z = -timeSec * 0.45 - scrollOffset * 0.0012;
-          heroRing2.rotation.x = heroMouseY * 0.25;
-          heroRing2.rotation.y = Math.PI / 4 + heroMouseX * 0.25;
-        }
-        if (heroRing3) {
-          heroRing3.rotation.z = timeSec * 0.15 - scrollOffset * 0.0005;
-          heroRing3.rotation.x = Math.PI / 3 + heroMouseY * 0.15;
-          heroRing3.rotation.y = -Math.PI / 6 + heroMouseX * 0.15;
-        }
-
-        // Volumetric dust float drift
-        if (heroDust && dustMaterial) {
-          heroDust.rotation.y = timeSec * 0.05;
-          heroDust.rotation.x = timeSec * 0.02;
-          
-          const positions = heroDust.geometry.attributes.position.array;
-          for (let i = 0; i < dustCount; i++) {
-            const idx = i * 3;
-            positions[idx + 1] += Math.sin(timeSec * 0.5 + dustOffsets[i].y) * 0.005;
-          }
-          heroDust.geometry.attributes.position.needsUpdate = true;
-          
-          if (currentTheme === 'dark') {
-            dustMaterial.color.copy(currentC1).lerp(currentC2, 0.5);
-            dustMaterial.opacity = 0.6;
-          } else {
-            dustMaterial.color.copy(currentC1).lerp(currentC2, 0.5).multiplyScalar(0.7);
-            dustMaterial.opacity = 0.3;
-          }
-        }
-
-        // Spherical camera orbit with mouse inertia
-        const radius = 35;
-        const targetTheta = heroMouseX * 0.45; // Max 25 degrees horizontal
-        const targetPhi = Math.PI / 2 + heroMouseY * 0.4; // Tilt up/down
-        
-        heroCamTheta += (targetTheta - heroCamTheta) * 0.05; // Smooth lag
-        heroCamPhi += (targetPhi - heroCamPhi) * 0.05;
-        
-        heroCamera.position.x = radius * Math.sin(heroCamPhi) * Math.sin(heroCamTheta);
-        heroCamera.position.y = radius * Math.cos(heroCamPhi);
-        heroCamera.position.z = radius * Math.sin(heroCamPhi) * Math.cos(heroCamTheta);
-        heroCamera.lookAt(0, 0, 0);
-
-        // Theme adjustments & sync with dynamic section colors (from background terrain)
-        if (currentTheme === 'dark') {
-          heroUniforms.uColor1.value.copy(currentC1);
-          heroUniforms.uColor2.value.copy(currentC2);
-          if (heroRing1 && heroRing2 && heroRing3) {
-            ring1Uniforms.uColor.value.copy(currentC1);
-            ring2Uniforms.uColor.value.copy(currentC2);
-            ring3Uniforms.uColor.value.copy(currentC1).lerp(currentC2, 0.5);
-          }
-        } else {
-          heroUniforms.uColor1.value.copy(currentC1).multiplyScalar(0.7);
-          heroUniforms.uColor2.value.copy(currentC2).multiplyScalar(0.7);
-          if (heroRing1 && heroRing2 && heroRing3) {
-            ring1Uniforms.uColor.value.copy(currentC1).multiplyScalar(0.7);
-            ring2Uniforms.uColor.value.copy(currentC2).multiplyScalar(0.7);
-            ring3Uniforms.uColor.value.copy(currentC1).lerp(currentC2, 0.5).multiplyScalar(0.7);
-          }
-        }
+      // Rotate the ASCII Torus
+      if (heroMesh) {
+        heroMesh.rotation.x = time * 0.0005 + hMouseY * 0.5;
+        heroMesh.rotation.y = time * 0.001 + hMouseX * 0.5;
       }
 
-      if (heroRenderer && heroScene && heroCamera) {
+      if (heroEffect) {
+        heroEffect.render(heroScene, heroCamera);
+      } else {
         heroRenderer.render(heroScene, heroCamera);
       }
     }
@@ -3371,15 +3256,15 @@
       line.className = 'leading-relaxed select-text';
       
       if (type === 'system') {
-        line.innerHTML = `<span class="text-gray-400 dark:text-gray-500">[SYS]</span> ${text}`;
+        line.innerHTML = `<span class="text-zinc-400 dark:text-zinc-500">[SYS]</span> ${text}`;
       } else if (type === 'user') {
-        line.innerHTML = `<span class="text-blue-500 dark:text-green-500 font-bold">$</span> <span class="text-gray-900 dark:text-white">${text}</span>`;
+        line.innerHTML = `<span class="text-cyan-400 dark:text-green-500 font-bold">$</span> <span class="text-zinc-900 dark:text-white">${text}</span>`;
       } else if (type === 'error') {
         line.innerHTML = `<span class="text-red-500 font-bold">[ERR]</span> ${text}`;
       } else if (type === 'success') {
-        line.innerHTML = `<span class="text-emerald-500 font-bold">[OK]</span> ${text}`;
+        line.innerHTML = `<span class="text-cyan-400 font-bold">[OK]</span> ${text}`;
       } else {
-        line.innerHTML = `<span class="text-gray-400 dark:text-gray-500">[INFO]</span> ${text}`;
+        line.innerHTML = `<span class="text-zinc-400 dark:text-zinc-500">[INFO]</span> ${text}`;
       }
       
       container.appendChild(line);
@@ -3485,27 +3370,28 @@
   </script>
 
   <!-- Floating Hacker Terminal HUD -->
-  <div id="terminal-hud" class="border border-gray-300 dark:border-gray-800 bg-white/95 dark:bg-black/95 backdrop-blur-md font-mono flex flex-col text-xs text-gray-700 dark:text-green-400">
+  <div id="terminal-hud" class="border border-zinc-300 dark: bg-white/95 dark:bg-black/95 backdrop-blur-md font-mono flex flex-col text-xs text-zinc-700 dark:text-green-400">
     <!-- Terminal Header -->
-    <div class="h-9 bg-gray-200 dark:bg-zinc-900 border-b border-gray-300 dark:border-gray-800 flex justify-between items-center px-4 select-none">
+    <div class="h-9 bg-zinc-200 dark:securify-card border-b border-zinc-300 dark: flex justify-between items-center px-4 select-none">
+          <div class="glare"></div>
       <div class="flex items-center gap-2">
         <span class="w-3 h-3 rounded-full bg-red-500"></span>
         <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
         <span class="w-3 h-3 rounded-full bg-green-500"></span>
-        <span class="ml-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">MERCY-OS // CONSOLE</span>
+        <span class="ml-1 text-[10px] font-bold text-zinc-500 ">MERCY-OS // CONSOLE</span>
       </div>
-      <button onclick="toggleTerminalHUD()" class="text-gray-500 hover:text-red-500 transition-colors">
+      <button onclick="toggleTerminalHUD()" class="text-zinc-500 hover:text-red-500 transition-colors">
         <i class="fas fa-times"></i>
       </button>
     </div>
     <!-- Terminal Body -->
     <div id="terminal-body" class="flex-1 overflow-y-auto p-4 space-y-2 flex flex-col justify-end">
-      <div class="text-[10px] text-gray-400 dark:text-gray-500 mb-2">Type 'help' for a list of commands.</div>
+      <div class="text-[10px] text-zinc-400 dark:text-zinc-500 mb-2">Type 'help' for a list of commands.</div>
       <div id="terminal-logs" class="space-y-1.5 overflow-y-auto max-h-[200px]"></div>
       <!-- Terminal Input Line -->
-      <div class="flex items-center gap-1.5 border-t border-gray-100 dark:border-zinc-900 pt-2">
-        <span class="text-blue-500 dark:text-green-500 font-bold">$</span>
-        <input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-gray-800 dark:text-green-400 font-mono caret-blue-500 dark:caret-green-400" autocomplete="off" />
+      <div class="flex items-center gap-1.5 border-t border-zinc-100 dark:border-zinc-900 pt-2">
+        <span class="text-cyan-400 dark:text-green-500 font-bold">$</span>
+        <input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-zinc-800 dark:text-green-400 font-mono caret-emerald-500 dark:caret-green-400" autocomplete="off" />
       </div>
     </div>
   </div>
@@ -3523,5 +3409,458 @@
     </svg>
     <i class="fas fa-chevron-up text-sm"></i>
   </div>
+  <script>
+
+    /* --- SINGULARITY TIER GLOBAL SPOTLIGHT --- */
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.securify-card').forEach(card => {
+        const glare = document.createElement('div');
+        glare.className = 'card-glare';
+        card.appendChild(glare);
+      });
+      
+      // Global Mouse Tracker for Spotlight (without tilt)
+      document.addEventListener('mousemove', (e) => {
+        document.querySelectorAll('.securify-card').forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
+      });
+    });
+
+  </script>
+
+  <!-- GLOBAL 3D PLEXUS SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById('global-3d-bg');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x0b1121, 0.0015);
+
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+      camera.position.z = 300;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // Unreal Bloom Setup
+      let composer;
+      if (typeof THREE.EffectComposer !== 'undefined') {
+        const renderScene = new THREE.RenderPass(scene, camera);
+        const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+        bloomPass.threshold = 0;
+        bloomPass.strength = 2.0; // Intense neon glow
+        bloomPass.radius = 0.5;
+
+        composer = new THREE.EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+      }
+
+      // 1. Particles (Plexus)
+      const particleCount = 250;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const velocities = [];
+      const basePositions = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        const x = (Math.random() - 0.5) * 1200;
+        const y = (Math.random() - 0.5) * 1200;
+        const z = (Math.random() - 0.5) * 800;
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+        basePositions.push({ x, y, z });
+        velocities.push({ x: 0, y: 0, z: 0 });
+      }
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const pMaterial = new THREE.PointsMaterial({
+        color: 0x06b6d4, size: 4, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending
+      });
+      const particles = new THREE.Points(geometry, pMaterial);
+      scene.add(particles);
+
+      const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0x10b981, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
+      });
+      const lineGeometry = new THREE.BufferGeometry();
+      const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+      scene.add(linesMesh);
+
+      // 2. Floating Icosahedrons (Giant wireframe objects)
+      const icoGroup = new THREE.Group();
+      const icoGeo = new THREE.IcosahedronGeometry(80, 0);
+      const icoMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe: true, transparent: true, opacity: 0.15 });
+      for (let i=0; i<5; i++) {
+        const mesh = new THREE.Mesh(icoGeo, icoMat);
+        mesh.position.set((Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1000 - 300);
+        mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+        icoGroup.add(mesh);
+      }
+      scene.add(icoGroup);
+
+      // Mouse & Raycaster for Repulsion
+      let mouse = new THREE.Vector2();
+      let targetCamera = { x: 0, y: 0 };
+      const raycaster = new THREE.Raycaster();
+      const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+      let pointOfIntersection = new THREE.Vector3();
+
+      document.addEventListener('mousemove', (event) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        targetCamera.x = mouse.x * 100;
+        targetCamera.y = mouse.y * 100;
+      });
+
+      let scrollY = 0;
+      window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        if(composer) composer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Repulsion Physics
+        raycaster.setFromCamera(mouse, camera);
+        raycaster.ray.intersectPlane(plane, pointOfIntersection);
+
+        const posAttribute = geometry.attributes.position;
+        const array = posAttribute.array;
+        let linePositions = [];
+
+        for (let i = 0; i < particleCount; i++) {
+          const i3 = i * 3;
+          let px = array[i3], py = array[i3+1], pz = array[i3+2];
+          let bx = basePositions[i].x, by = basePositions[i].y, bz = basePositions[i].z;
+
+          // Push away from mouse intersection
+          const dx = px - pointOfIntersection.x;
+          const dy = py - pointOfIntersection.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          const force = Math.max(0, 250 - dist) * 0.05;
+
+          if (dist < 250) {
+            velocities[i].x += (dx / dist) * force;
+            velocities[i].y += (dy / dist) * force;
+          }
+
+          // Spring back to base position
+          velocities[i].x += (bx - px) * 0.02;
+          velocities[i].y += (by - py) * 0.02;
+          velocities[i].z += (bz - pz) * 0.02;
+
+          // Dampening
+          velocities[i].x *= 0.9;
+          velocities[i].y *= 0.9;
+          velocities[i].z *= 0.9;
+
+          array[i3] += velocities[i].x;
+          array[i3+1] += velocities[i].y;
+          array[i3+2] += velocities[i].z;
+
+          // Lines
+          for (let j = i + 1; j < particleCount; j++) {
+            const j3 = j * 3;
+            const dpx = array[i3] - array[j3];
+            const dpy = array[i3 + 1] - array[j3 + 1];
+            const dpz = array[i3 + 2] - array[j3 + 2];
+            if (dpx*dpx + dpy*dpy + dpz*dpz < 20000) {
+              linePositions.push(array[i3], array[i3 + 1], array[i3 + 2], array[j3], array[j3 + 1], array[j3 + 2]);
+            }
+          }
+        }
+        posAttribute.needsUpdate = true;
+        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+
+        // Group Rotations
+        particles.rotation.y += 0.0005;
+        linesMesh.rotation.y = particles.rotation.y;
+        
+        icoGroup.children.forEach(mesh => {
+          mesh.rotation.x += 0.001;
+          mesh.rotation.y += 0.002;
+        });
+        icoGroup.rotation.y -= 0.0005;
+
+        // Camera Smooth Movement
+        camera.position.x += (targetCamera.x - camera.position.x) * 0.02;
+        camera.position.y += (targetCamera.y - camera.position.y) * 0.02;
+        camera.position.z = 300 - (scrollY * 0.08);
+        camera.lookAt(scene.position);
+
+        if (composer) composer.render();
+        else renderer.render(scene, camera);
+      }
+      animate();
+    });
+  </script>
+
+  <!-- GOD TIER ENGINE -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Initialize Lenis
+      const lenis = new Lenis({
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Sync GSAP with Lenis
+      if(typeof ScrollTrigger !== 'undefined') {
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
+        gsap.ticker.lagSmoothing(0);
+      }
+
+
+      
+
+
+      // Terminal 3D Tilt
+      const terminal = document.getElementById('terminal-hud');
+      if (terminal) {
+        const xToTerm = gsap.quickTo(terminal, "rotationY", {duration: 0.5, ease: "power3"});
+        const yToTerm = gsap.quickTo(terminal, "rotationX", {duration: 0.5, ease: "power3"});
+        
+        terminal.addEventListener('mousemove', (e) => {
+          const rect = terminal.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          xToTerm((e.clientX - cx) * 0.05);
+          yToTerm(-(e.clientY - cy) * 0.05);
+        });
+        terminal.addEventListener('mouseleave', () => {
+          xToTerm(0);
+          yToTerm(0);
+        });
+      }
+
+      
+      // Add data-text to typing line for glitch
+      const typingLines = document.querySelectorAll('#terminal-body p');
+      typingLines.forEach(p => {
+        p.setAttribute('data-text', p.innerText);
+        p.classList.add('glitch-typing');
+      });
+
+      
+
+
+
+      // --- OMNIVERSE GLOBAL 3D SPLIT TEXT ---
+      const omniTitles = document.querySelectorAll('.omni-split');
+      omniTitles.forEach(title => {
+        const text = title.innerText;
+        title.innerHTML = '';
+        title.setAttribute('data-text', text); // For glitch
+        const words = text.split(' ');
+        words.forEach(word => {
+          const span = document.createElement('span');
+          span.innerHTML = word + '&nbsp;';
+          span.style.display = 'inline-block';
+          title.appendChild(span);
+        });
+
+        gsap.fromTo(title.querySelectorAll('span'), 
+          { opacity: 0, rotationX: 90, rotationY: 45, z: 200, scale: 2, filter: 'blur(15px)' },
+          {
+            scrollTrigger: {
+              trigger: title,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse'
+            },
+            opacity: 1, rotationX: 0, rotationY: 0, z: 0, scale: 1, filter: 'blur(0px)',
+            stagger: 0.1, duration: 1.5, ease: "expo.out"
+          }
+        );
+      });
+
+
+      // 2. Custom Cursor
+      const cursor = document.querySelector('.god-cursor');
+      let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+      
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      // Smooth follow
+      gsap.ticker.add(() => {
+        cursorX += (mouseX - cursorX) * 0.2;
+        cursorY += (mouseY - cursorY) * 0.2;
+        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+      });
+
+      // Hover Effects
+      const interactiveEls = document.querySelectorAll('a, button, .securify-card, .magnetic');
+      interactiveEls.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+      });
+
+      // 3. Magnetic Physics
+      const magnetics = document.querySelectorAll('.nav-link, #btn-hero-projects, #btn-hero-contact, .pill-badge');
+      magnetics.forEach(el => {
+        el.classList.add('magnetic-wrap');
+        const xTo = gsap.quickTo(el, "x", {duration: 1, ease: "elastic.out(1, 0.3)"});
+        const yTo = gsap.quickTo(el, "y", {duration: 1, ease: "elastic.out(1, 0.3)"});
+
+        el.addEventListener("mousemove", (e) => {
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          xTo((e.clientX - cx) * 0.4);
+          yTo((e.clientY - cy) * 0.4);
+        });
+        el.addEventListener("mouseleave", () => {
+          xTo(0); yTo(0);
+        });
+      });
+    });
+  </script>
+
+<!-- --- GSAP & 3D INTERACTION SCRIPT --- -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // 1. Beyond Ultra Text Scrub (3D Flip & Blur)
+      const splitText = document.getElementById('about-scrub');
+      if (splitText) {
+        const words = splitText.innerText.split(' ');
+        splitText.innerHTML = '';
+        words.forEach(word => {
+          const span = document.createElement('span');
+          span.innerHTML = word + '&nbsp;';
+          span.style.display = 'inline-block'; // Required for transform
+          splitText.appendChild(span);
+        });
+
+        gsap.fromTo('#about-scrub span', 
+          { opacity: 0, rotationX: -90, z: -100, filter: 'blur(10px)', y: 20 },
+          {
+            scrollTrigger: {
+              trigger: '#about-scrub',
+              start: 'top 85%',
+              end: 'bottom 40%',
+              scrub: 1.5,
+            },
+            opacity: 1, rotationX: 0, z: 0, filter: 'blur(0px)', y: 0,
+            stagger: 0.05, ease: 'back.out(1.7)'
+          }
+        );
+      }
+
+      // 2. Work Experience Pinned Scroll
+      const workPinned = document.getElementById('work-pinned');
+      const workScroll = document.getElementById('work-scroll');
+      if (workPinned && workScroll && window.innerWidth >= 1024) {
+        ScrollTrigger.create({
+          trigger: '#workExp',
+          start: 'top 20%',
+          end: 'bottom bottom',
+          pin: '#work-pinned',
+          pinSpacing: false,
+        });
+      }
+
+      // 3. Origami Fold-Out Reveals
+      gsap.utils.toArray('.gs-reveal-up').forEach(elem => {
+        gsap.fromTo(elem, 
+          { y: 100, opacity: 0, rotationX: 30, scale: 0.9 }, 
+          {
+            scrollTrigger: { trigger: elem, start: 'top 90%', toggleActions: 'play none none reverse' },
+            y: 0, opacity: 1, rotationX: 0, scale: 1,
+            duration: 1.2, ease: 'elastic.out(1, 0.7)'
+          }
+        );
+      });
+
+      gsap.utils.toArray('.gs-reveal-right').forEach((elem, i) => {
+        gsap.fromTo(elem, 
+          { x: -100, opacity: 0, rotationY: -30, scale: 0.9 }, 
+          {
+            scrollTrigger: { trigger: elem, start: 'top 85%', toggleActions: 'play none none reverse' },
+            x: 0, opacity: 1, rotationY: 0, scale: 1,
+            duration: 1.2, ease: 'elastic.out(1, 0.7)', delay: i * 0.15
+          }
+        );
+      });
+
+      // 4. SINGULARITY TIER: Buttery Smooth GSAP Tilt & Glare
+      const cards = document.querySelectorAll('.securify-card');
+      cards.forEach(card => {
+        const glare = card.querySelector('.card-glare');
+        
+        const xTo = gsap.quickTo(card, "rotationY", {duration: 0.6, ease: "power3.out"});
+        const yTo = gsap.quickTo(card, "rotationX", {duration: 0.6, ease: "power3.out"});
+        const scaleTo = gsap.quickTo(card, "scale", {duration: 0.6, ease: "power3.out"});
+        const glareXTo = glare ? gsap.quickTo(glare, "xPercent", {duration: 0.4, ease: "power2.out"}) : null;
+        const glareYTo = glare ? gsap.quickTo(glare, "yPercent", {duration: 0.4, ease: "power2.out"}) : null;
+
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          // Smooth GSAP variables
+          const tiltX = ((y - centerY) / centerY) * -8; 
+          const tiltY = ((x - centerX) / centerX) * 8;
+          
+          // Apply GSAP animation instantly without jitter
+          xTo(tiltY);
+          yTo(tiltX);
+          scaleTo(1.02);
+          
+          // Glare movement
+          if (glare) {
+            const percentageX = (x / rect.width) * 100 - 50;
+            const percentageY = (y / rect.height) * 100 - 50;
+            glareXTo(percentageX);
+            glareYTo(percentageY);
+          }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          xTo(0);
+          yTo(0);
+          scaleTo(1);
+          if (glare) {
+            glareXTo(0);
+            glareYTo(0);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
