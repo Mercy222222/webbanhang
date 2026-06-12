@@ -12,12 +12,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/index.php?url=api/products",
-					"protocol": "http",
+					"raw": "{{base_url}}/index.php?url=api/products",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "8080",
 					"path": [
 						"index.php"
 					],
@@ -43,12 +41,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/index.php?url=api/products/1",
-					"protocol": "http",
+					"raw": "{{base_url}}/index.php?url=api/products/1",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "8080",
 					"path": [
 						"index.php"
 					],
@@ -92,12 +88,10 @@
 					"raw": "{\n    \"name\": \"Ban Phim Custom Akko Mod007\",\n    \"price\": 3200000,\n    \"description\": \"Ban phim co nhom nguyen khoi hotswap mach xuoi\",\n    \"category_id\": 5,\n    \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/index.php?url=api/products",
-					"protocol": "http",
+					"raw": "{{base_url}}/index.php?url=api/products",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "8080",
 					"path": [
 						"index.php"
 					],
@@ -126,12 +120,10 @@
 					"raw": "{\n    \"name\": \"Ban Phim Akko Mod007 v2\",\n    \"price\": 3400000,\n    \"description\": \"Ban phim co nhom nguyen khoi v2\",\n    \"category_id\": 5,\n    \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/index.php?url=api/products/{{created_product_id}}",
-					"protocol": "http",
+					"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "8080",
 					"path": [
 						"index.php"
 					],
@@ -151,12 +143,10 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/index.php?url=api/products/{{created_product_id}}",
-					"protocol": "http",
+					"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "8080",
 					"path": [
 						"index.php"
 					],
