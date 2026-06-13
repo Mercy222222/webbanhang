@@ -16,5 +16,4 @@ taste-skill/
 node_modules/
 Understand-Anything/
 andrej-karpathy-skills/
-package-lock.json
 *.log
