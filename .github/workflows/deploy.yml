@@ -37,6 +37,10 @@ jobs:
         working-directory: ./blog-template
         run: npm run build
 
+      - name: Set Default Index Page
+        working-directory: ./blog-template/dist
+        run: cp index-portfolio.html index.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
