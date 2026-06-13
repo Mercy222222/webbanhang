@@ -231,3 +231,16 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 | Date | Change | Target | Reason |
 |------|--------|--------|--------|
 | 2026-06-10 | Initial 10-member Deca Harness setup | All | Configure unified 10-member workspace-wide team and hybrid orchestrator skill. |
+
+---
+
+## 하네스: Growth & Deployment
+
+**목표:** Manage A/B testing, ASO/SEO optimizations, and CI/CD deployments for the webbanhang portfolio.
+
+**트리거:** Deployment, experiment, or metadata optimization 관련 작업 요청 시 `orchestrator-growth` 스킬을 사용하라. 단순 질문은 직접 응답 가능.
+
+**변경 이력:**
+| 날짜 | 변경 내용 | 대상 | 사유 |
+|------|----------|------|------|
+| 2026-06-13 | 초기 구성 | 전체 | 포트폴리오 프로덕션 배포 및 Growth 자동화 셋업 |
