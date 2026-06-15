@@ -2,6 +2,7 @@
 require_once 'app/config/database.php';
 require_once 'app/models/ProductModel.php';
 require_once 'app/models/CategoryModel.php';
+require_once 'app/middleware/JwtMiddleware.php';
 
 class ProductApiController
 {
@@ -76,6 +77,8 @@ class ProductApiController
     public function store()
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
+
             // Determine if request is JSON or Form-Data
             $input = json_decode(file_get_contents("php://input"), true);
             
@@ -148,6 +151,8 @@ class ProductApiController
     public function update($id)
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
+
             $product = $this->productModel->getProductById($id);
             if (!$product) {
                 http_response_code(404);
@@ -208,6 +213,8 @@ class ProductApiController
     public function delete($id)
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
+
             $product = $this->productModel->getProductById($id);
             if (!$product) {
                 http_response_code(404);

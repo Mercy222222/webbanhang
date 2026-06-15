@@ -1,6 +1,7 @@
 <?php
 require_once 'app/config/database.php';
 require_once 'app/models/CategoryModel.php';
+require_once 'app/middleware/JwtMiddleware.php';
 
 class CategoryApiController
 {
@@ -69,6 +70,7 @@ class CategoryApiController
     public function store()
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             $input = json_decode(file_get_contents("php://input"), true);
             
             $name = $input['name'] ?? $_POST['name'] ?? '';
@@ -123,6 +125,7 @@ class CategoryApiController
     public function update($id)
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             $category = $this->categoryModel->getCategoryById($id);
             if (!$category) {
                 http_response_code(404);
@@ -179,6 +182,7 @@ class CategoryApiController
     public function delete($id)
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             $category = $this->categoryModel->getCategoryById($id);
             if (!$category) {
                 http_response_code(404);

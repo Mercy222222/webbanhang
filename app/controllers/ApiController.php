@@ -2,6 +2,7 @@
 require_once 'app/models/OrderModel.php';
 require_once 'app/models/ProductModel.php';
 require_once 'app/config/database.php';
+require_once 'app/middleware/JwtMiddleware.php';
 
 class ApiController
 {
@@ -30,6 +31,7 @@ class ApiController
     public function stats()
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             // Total Revenue
             $queryRev = "SELECT SUM(total_price) as total_revenue FROM orders WHERE status != 'cancelled'";
             $stmtRev = $this->db->prepare($queryRev);
@@ -77,6 +79,7 @@ class ApiController
     public function orders()
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             $orders = $this->orderModel->getAllOrders();
             echo json_encode([
                 "success" => true,
@@ -92,6 +95,7 @@ class ApiController
     public function orderDetail($id)
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             $details = $this->orderModel->getOrderDetails($id);
             
             // Get order general info
@@ -126,6 +130,7 @@ class ApiController
     public function updateOrderStatus($id)
     {
         try {
+            $admin = JwtMiddleware::requireAdmin();
             $input = json_decode(file_get_contents("php://input"), true);
             $status = $input['status'] ?? '';
 
