@@ -3014,22 +3014,30 @@
 
       heroMesh = new THREE.Group();
 
-      // 1. Inner Core (Solid Glowing)
-      const coreGeo = new THREE.IcosahedronGeometry(2.5, 1);
+      // 1. Inner Core (Solid Glowing Sphere)
+      const coreGeo = new THREE.SphereGeometry(2.5, 64, 64);
       const coreMat = new THREE.MeshStandardMaterial({ 
-        color: 0x06b6d4, emissive: 0x06b6d4, emissiveIntensity: 0.5,
-        roughness: 0.2, metalness: 0.8, wireframe: false, transparent: true, opacity: 0.9
+        color: 0x0f172a, emissive: 0x06b6d4, emissiveIntensity: 0.8,
+        roughness: 0.1, metalness: 1.0, wireframe: false, transparent: true, opacity: 0.95
       });
       const coreMesh = new THREE.Mesh(coreGeo, coreMat);
       heroMesh.add(coreMesh);
 
-      // 2. Outer Wireframe Shield
-      const shieldGeo = new THREE.IcosahedronGeometry(3.5, 2);
+      // 2. Outer Wireframe Grid (Tech Shield)
+      const shieldGeo = new THREE.SphereGeometry(2.6, 32, 32);
       const shieldMat = new THREE.MeshBasicMaterial({
-        color: 0x10b981, wireframe: true, transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending
+        color: 0x10b981, wireframe: true, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
       });
       const shieldMesh = new THREE.Mesh(shieldGeo, shieldMat);
       heroMesh.add(shieldMesh);
+
+      // 2.5 Glow Atmosphere
+      const atmosGeo = new THREE.SphereGeometry(3.2, 32, 32);
+      const atmosMat = new THREE.MeshBasicMaterial({
+        color: 0x06b6d4, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, side: THREE.BackSide
+      });
+      const atmosMesh = new THREE.Mesh(atmosGeo, atmosMat);
+      heroMesh.add(atmosMesh);
 
       // 3. Scanner Rings
       const ringGeo1 = new THREE.TorusGeometry(4.5, 0.05, 16, 100);
