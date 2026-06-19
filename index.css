@@ -1,10 +1,61 @@
-/* Mobile responsiveness overrides */
+/* 
+  Modern CSS with Shadcn UI & Glassmorphism influences.
+  Cleaned up mobile responsiveness overrides.
+*/
+
+/* Smooth Scrollbar - Modernized */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(227, 0, 25, 0.6);
+  border-radius: 99px;
+  transition: background 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(227, 0, 25, 1);
+}
+
+/* Glassmorphism & Shadcn-like Surfaces */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Base utilities & Overrides */
+body {
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Mobile Responsiveness Overrides (Consolidated) */
 @media (max-width: 640px) {
-  /* Make modals full width on small screens */
-  #auth-modal .bg-white,
-  #auth-modal .dark\\:bg-gray-800 {
-    width: 90% !important;
-    max-width: 90% !important;
+  /* Modals and Drawers */
+  #auth-modal > div {
+    width: 95% !important;
+    max-width: 95% !important;
+    padding: 1.25rem !important;
   }
   #detail-drawer,
   #cart-drawer,
@@ -12,42 +63,33 @@
     width: 100% !important;
     max-width: 100% !important;
   }
-  /* Reduce padding on card components */
-  .glass-card {
-    padding: 0.75rem;
-  }
-  /* Ensure tables are scrollable */
-  table {
-    display: block;
-    overflow-x: auto;
-    width: 100%;
-  }
-}
-/* Additional mobile responsiveness */
-@media (max-width: 640px) {
-  /* Header layout: stack items vertically */
+
+  /* Header adjustments */
   header > div {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    gap: 0.75rem !important;
+    height: auto !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
   }
-  /* Auth modal full width adjustment */
-  #auth-modal > div {
-    width: 95% !important;
-    max-width: 95% !important;
+  
+  /* Make theme and cart controls stick to right */
+  header > div > div:last-child {
+    width: auto;
   }
-} 
-/* Additional mobile fixes */
-body { overflow-x: hidden; }
-.max-w-7xl { max-width: 100% !important; }
-header > div { justify-content: flex-start !important; }
-header > div {
-  flex-wrap: wrap !important;
-  justify-content: flex-start !important;
+
+  /* Padding adjustments */
+  .glass-card {
+    padding: 1rem !important;
+  }
+
+  /* Table scroll for mobile */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
 }
-
-/* Ensure body does not overflow horizontally */
-body { overflow-x: hidden; }
-
-/* Ensure max width container fills screen */
-.max-w-7xl { max-width: 100% !important; }

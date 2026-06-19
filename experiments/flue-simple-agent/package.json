@@ -1,0 +1,12 @@
+{
+  "name": "flue-simple-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "flue run simple_agent.ts"
+  },
+  "dependencies": {
+    "@flue/runtime": "latest",
+    "@flue/cli": "latest"
+  }
+}
