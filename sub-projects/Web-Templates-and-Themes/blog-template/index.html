@@ -501,6 +501,7 @@
       width: 20px; height: 20px;
       background: white;
       border-radius: 50%;
+      pointer-events: none; /* CRITICAL: prevent cursor from blocking clicks */
       z-index: 999999;
       transform: translate(-50%, -50%);
       transition: width 0.2s, height 0.2s, background-color 0.2s;
@@ -3016,18 +3017,19 @@
       heroMesh = new THREE.Group();
 
       // 1. Inner Core (Solid Glowing Sphere)
-      const coreGeo = new THREE.SphereGeometry(2.5, 64, 64);
+      const coreGeo = new THREE.IcosahedronGeometry(2.4, 2);
       const coreMat = new THREE.MeshStandardMaterial({ 
-        color: 0x0f172a, emissive: 0x06b6d4, emissiveIntensity: 0.8,
-        roughness: 0.1, metalness: 1.0, wireframe: false, transparent: true, opacity: 0.95
+        color: 0x0f172a, emissive: 0x0284c7, emissiveIntensity: 0.5,
+        roughness: 0.2, metalness: 0.9, wireframe: false, transparent: true, opacity: 0.95,
+        flatShading: true
       });
       const coreMesh = new THREE.Mesh(coreGeo, coreMat);
       heroMesh.add(coreMesh);
 
       // 2. Outer Wireframe Grid (Tech Shield)
-      const shieldGeo = new THREE.SphereGeometry(2.6, 32, 32);
+      const shieldGeo = new THREE.IcosahedronGeometry(2.7, 2);
       const shieldMat = new THREE.MeshBasicMaterial({
-        color: 0x10b981, wireframe: true, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
+        color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending
       });
       const shieldMesh = new THREE.Mesh(shieldGeo, shieldMat);
       heroMesh.add(shieldMesh);
@@ -3041,28 +3043,29 @@
       heroMesh.add(atmosMesh);
 
       // 3. Scanner Rings
-      const ringGeo1 = new THREE.TorusGeometry(4.5, 0.05, 16, 100);
-      const ringMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
-      const ring1 = new THREE.Mesh(ringGeo1, ringMat);
+      const ringGeo1 = new THREE.TorusGeometry(4.2, 0.02, 16, 100);
+      const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+      const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
       ring1.rotation.x = Math.PI / 2;
       heroMesh.add(ring1);
 
-      const ringGeo2 = new THREE.TorusGeometry(5.2, 0.03, 16, 100);
-      const ring2 = new THREE.Mesh(ringGeo2, ringMat);
+      const ringGeo2 = new THREE.TorusGeometry(4.8, 0.015, 16, 100);
+      const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x818cf8, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending });
+      const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
       ring2.rotation.y = Math.PI / 2;
       heroMesh.add(ring2);
 
       // 4. Data Particles
       const pGeo = new THREE.BufferGeometry();
-      const pCount = 200;
+      const pCount = 300;
       const pPos = new Float32Array(pCount * 3);
       for(let i=0; i<pCount; i++){
-        pPos[i*3] = (Math.random() - 0.5) * 12;
-        pPos[i*3+1] = (Math.random() - 0.5) * 12;
-        pPos[i*3+2] = (Math.random() - 0.5) * 12;
+        pPos[i*3] = (Math.random() - 0.5) * 15;
+        pPos[i*3+1] = (Math.random() - 0.5) * 15;
+        pPos[i*3+2] = (Math.random() - 0.5) * 15;
       }
       pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-      const pMat = new THREE.PointsMaterial({ color: 0x10b981, size: 0.1, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+      const pMat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.15, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
       const particles = new THREE.Points(pGeo, pMat);
       heroMesh.add(particles);
 
@@ -3915,39 +3918,67 @@
             color += vec3(stars) * vec3(0.5, 0.6, 0.8);
 
             // Hào quang siêu dịu (Tối màu)
-            float glow = exp(-(r - bhRadius) * 6.0);
-            color += vec3(0.1, 0.2, 0.4) * glow * 0.8;
+            float glow = exp(-(r - bhRadius) * 4.0);
+            color += vec3(0.05, 0.2, 0.5) * glow * 1.5;
             
             // Đĩa bồi tụ
-            float diskR = length(vec2(warpedUv.x, warpedUv.y * 4.0));
-            float diskInner = 0.05;
+            float diskR = length(vec2(warpedUv.x, warpedUv.y * 3.5));
+            float diskInner = bhRadius * 1.5;
             float diskOuter = 1.8;
             
-            if (diskR > diskInner && diskR < diskOuter && r > bhRadius) {
+            vec3 diskColorBase = vec3(0.0);
+            
+            if (diskR > diskInner && diskR < diskOuter) {
                 float falloff = smoothstep(diskOuter, diskInner, diskR);
                 float innerFade = smoothstep(diskInner, diskInner + 0.1, diskR);
-                float doppler = 1.0 + 0.3 * smoothstep(0.0, -1.5, warpedUv.x);
+                float doppler = 1.0 + 0.4 * smoothstep(0.0, -1.5, warpedUv.x);
                 
                 float angle = atan(warpedUv.y, warpedUv.x);
-                vec2 noiseUv = vec2(angle * 2.0 + uTime * 0.4, diskR * 4.0 - uTime * 1.0);
+                vec2 noiseUv = vec2(angle * 2.0 + uTime * 0.5, diskR * 3.0 - uTime * 0.8);
                 float n = fbm(noiseUv);
-                float n2 = fbm(noiseUv * 2.0 + vec2(uTime * 0.5));
+                float n2 = fbm(noiseUv * 2.0 + vec2(uTime * 0.4));
                 
-                vec3 color1 = vec3(0.05, 0.1, 0.3); // Tối màu
-                vec3 color2 = vec3(0.1, 0.4, 0.6);  // Cyan dịu
+                vec3 color1 = vec3(0.0, 0.4, 0.8); // Cyan
+                vec3 color2 = vec3(0.4, 0.8, 1.0); // Light Cyan
                 vec3 diskColor = mix(color1, color2, smoothstep(0.3, 0.7, n + n2 * 0.5));
                 
-                // Giảm hệ số sáng từ 7.0 xuống 1.5
-                color += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 1.5 * doppler;
+                diskColorBase += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 2.5 * doppler;
             }
 
-            // Photon Ring mỏng và dịu
-            float rim = smoothstep(bhRadius + 0.015, bhRadius, r) * smoothstep(bhRadius - 0.005, bhRadius + 0.005, r);
-            color += vec3(0.3, 0.6, 0.8) * rim * 1.2;
-            
+            if (r > bhRadius) {
+                color += diskColorBase;
+            }
+
+            // Photon Ring
+            float rim = smoothstep(bhRadius + 0.02, bhRadius, r) * smoothstep(bhRadius - 0.01, bhRadius + 0.01, r);
+            color += vec3(0.5, 0.8, 1.0) * rim * 2.0;
+
             if (r < bhRadius) {
                 color = vec3(0.0);
             }
+
+            // Đĩa bồi tụ phía trước (Vắt ngang qua Black Hole như Gargantua)
+            float frontDiskR = length(vec2(uv.x, uv.y * 5.0));
+            if (frontDiskR > diskInner && frontDiskR < diskOuter && uv.y > -0.15 && uv.y < 0.15) {
+                float f_falloff = smoothstep(diskOuter, diskInner, frontDiskR);
+                float f_innerFade = smoothstep(diskInner, diskInner + 0.05, frontDiskR);
+                float f_doppler = 1.0 + 0.4 * smoothstep(0.0, -1.5, uv.x);
+                
+                float f_angle = atan(uv.y, uv.x);
+                vec2 f_noiseUv = vec2(f_angle * 2.0 + uTime * 0.5, frontDiskR * 3.0 - uTime * 0.8);
+                float fn = fbm(f_noiseUv);
+                float fn2 = fbm(f_noiseUv * 2.0 + vec2(uTime * 0.4));
+                
+                vec3 f_color1 = vec3(0.0, 0.5, 0.9);
+                vec3 f_color2 = vec3(0.5, 0.9, 1.0);
+                vec3 f_diskColor = mix(f_color1, f_color2, smoothstep(0.3, 0.7, fn + fn2 * 0.5));
+                
+                color += f_diskColor * (fn * 0.9 + fn2 * 0.6) * f_falloff * f_innerFade * 3.0 * f_doppler;
+            }
+
+            // Tonemapping
+            color = color / (1.0 + color);
+            color = pow(color, vec3(1.0 / 2.2));
             
             float vignette = length(vUv - 0.5);
             color *= 1.0 - vignette * 0.8; // Vignette mạnh hơn
