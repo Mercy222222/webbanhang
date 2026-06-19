@@ -27,19 +27,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: 'blog-template/package-lock.json'
+          cache-dependency-path: 'sub-projects/Web-Templates-and-Themes/blog-template/package-lock.json'
 
       - name: Install Dependencies
-        working-directory: ./blog-template
+        working-directory: ./sub-projects/Web-Templates-and-Themes/blog-template
         run: npm ci
 
       - name: Build Project
-        working-directory: ./blog-template
+        working-directory: ./sub-projects/Web-Templates-and-Themes/blog-template
         run: npm run build
-
-      - name: Set Default Index Page
-        working-directory: ./blog-template/dist
-        run: cp index-portfolio.html index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -47,7 +43,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './blog-template/dist'
+          path: './sub-projects/Web-Templates-and-Themes/blog-template/dist'
 
   deploy:
     environment:
