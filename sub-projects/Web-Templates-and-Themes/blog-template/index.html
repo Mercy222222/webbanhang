@@ -499,11 +499,9 @@
       width: 20px; height: 20px;
       background: white;
       border-radius: 50%;
-      pointer-events: none;
-      z-index: 99999;
-      mix-blend-mode: difference;
+      z-index: 999999;
       transform: translate(-50%, -50%);
-      transition: width 0.3s, height 0.3s, background 0.3s;
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
     }
     .god-cursor.hovering {
       width: 60px; height: 60px;
@@ -3870,15 +3868,14 @@
             uv.x *= uResolution.x / uResolution.y;
             
             // Parallax chuột
-            uv -= uMouse * 0.05;
+            uv -= uMouse * 0.02;
 
-            // Dịch hố đen sang phải một chút giống ảnh
-            uv.x -= 0.2;
+            // Đưa hố đen ra giữa và nhỏ hơn
+            uv.x -= 0.1;
 
-            float bhRadius = 0.35;
+            float bhRadius = 0.25; // Nhỏ hơn
             float r = length(uv);
             
-            // 1. Thấu kính hấp dẫn (Gravitational Lensing) - Bẻ cong không gian
             vec2 warpedUv = uv;
             if (r > bhRadius) {
                 float warpAmount = (bhRadius * bhRadius) / (r * r);
@@ -3887,64 +3884,53 @@
             
             vec3 color = vec3(0.0);
 
-            // 2. Dải ngân hà nền (Bị bẻ cong) - Tăng số lượng sao
+            // Sao nền tĩnh và tối hơn
             float starNoise = hash(warpedUv * 350.0);
-            float stars = pow(starNoise, 120.0) * 8.0;
-            color += vec3(stars) * vec3(0.5, 0.9, 1.0);
+            float stars = pow(starNoise, 150.0) * 3.0;
+            color += vec3(stars) * vec3(0.5, 0.6, 0.8);
 
-            // 3. Hào quang (Global Glow) - Tăng độ rực
-            float glow = exp(-(r - bhRadius) * 5.0);
-            color += vec3(0.0, 0.8, 1.0) * glow * 2.0;
+            // Hào quang siêu dịu (Tối màu)
+            float glow = exp(-(r - bhRadius) * 6.0);
+            color += vec3(0.1, 0.2, 0.4) * glow * 0.8;
             
-            // 4. Đĩa bồi tụ (Accretion Disk) - Gargantua Style
-            // Tính toán trên không gian đã bị bẻ cong (warpedUv) để tự động tạo hiệu ứng Halo (vòng cung trên/dưới)
-            float diskR = length(vec2(warpedUv.x, warpedUv.y * 4.5));
+            // Đĩa bồi tụ
+            float diskR = length(vec2(warpedUv.x, warpedUv.y * 4.0));
             float diskInner = 0.05;
-            float diskOuter = 2.5;
+            float diskOuter = 1.8;
             
             if (diskR > diskInner && diskR < diskOuter && r > bhRadius) {
                 float falloff = smoothstep(diskOuter, diskInner, diskR);
                 float innerFade = smoothstep(diskInner, diskInner + 0.1, diskR);
-                
-                // Hiệu ứng Doppler (vật chất quay về phía mắt nhìn sáng hơn)
-                float doppler = 1.0 + 0.8 * smoothstep(0.0, -1.5, warpedUv.x);
+                float doppler = 1.0 + 0.3 * smoothstep(0.0, -1.5, warpedUv.x);
                 
                 float angle = atan(warpedUv.y, warpedUv.x);
-                vec2 noiseUv = vec2(angle * 3.0 + uTime * 0.8, diskR * 6.0 - uTime * 2.0);
+                vec2 noiseUv = vec2(angle * 2.0 + uTime * 0.4, diskR * 4.0 - uTime * 1.0);
                 float n = fbm(noiseUv);
-                float n2 = fbm(noiseUv * 2.0 + vec2(uTime));
+                float n2 = fbm(noiseUv * 2.0 + vec2(uTime * 0.5));
                 
-                // Tông màu Xanh/Trắng giống ảnh
-                vec3 color1 = vec3(0.02, 0.25, 0.7); // Deep space blue
-                vec3 color2 = vec3(0.0, 1.0, 0.9);  // Bright cyan/emerald
+                vec3 color1 = vec3(0.05, 0.1, 0.3); // Tối màu
+                vec3 color2 = vec3(0.1, 0.4, 0.6);  // Cyan dịu
                 vec3 diskColor = mix(color1, color2, smoothstep(0.3, 0.7, n + n2 * 0.5));
                 
-                color += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 7.0 * doppler;
+                // Giảm hệ số sáng từ 7.0 xuống 1.5
+                color += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 1.5 * doppler;
             }
 
-            // Điểm sáng lóe lên ở bên trái đĩa (giống ánh sao phản chiếu trong ảnh)
-            vec2 starPos = vec2(-0.8, 0.0);
-            float starDist = length(warpedUv - starPos);
-            float brightStar = smoothstep(0.15, 0.0, starDist);
-            color += vec3(0.8, 1.0, 0.9) * pow(brightStar, 2.0) * 5.0 * glow;
-
-            // 5. Photon Ring (Vành đai photon mỏng sát chân trời sự kiện)
-            float rim = smoothstep(bhRadius + 0.02, bhRadius, r) * smoothstep(bhRadius - 0.005, bhRadius + 0.005, r);
-            color += vec3(0.6, 0.9, 1.0) * rim * 4.0;
+            // Photon Ring mỏng và dịu
+            float rim = smoothstep(bhRadius + 0.015, bhRadius, r) * smoothstep(bhRadius - 0.005, bhRadius + 0.005, r);
+            color += vec3(0.3, 0.6, 0.8) * rim * 1.2;
             
-            // 6. Chân trời sự kiện (Event Horizon - Đen tuyệt đối)
             if (r < bhRadius) {
                 color = vec3(0.0);
             }
             
-            // Vignette
             float vignette = length(vUv - 0.5);
-            color *= 1.0 - vignette * 0.5;
+            color *= 1.0 - vignette * 0.8; // Vignette mạnh hơn
 
-            // Tăng Contrast
-            color = pow(color, vec3(1.1));
-
-            gl_FragColor = vec4(color, 1.0);
+            color = pow(color, vec3(1.2)); // Contrast
+            
+            // Giảm độ mờ tổng thể để dễ nhìn chữ
+            gl_FragColor = vec4(color, 0.6);
         }
       `;
 
