@@ -3828,7 +3828,7 @@
     });
   </script>
 
-  <!-- BLACK HOLE SCRIPT -->
+  <!-- 3D GALAXY BACKGROUND SCRIPT -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const canvas = document.getElementById('blackhole-canvas');
@@ -3840,169 +3840,107 @@
       }
 
       const scene = new THREE.Scene();
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-      camera.position.z = 1;
+      
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.x = 0;
+      camera.position.y = 5;
+      camera.position.z = 8;
 
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
       window.blackHoleRenderer = renderer;
 
-      const geometry = new THREE.PlaneGeometry(2, 2);
+      // Galaxy parameters
+      const parameters = {
+        count: 85000,
+        size: 0.06,
+        radius: 14,
+        branches: 5,
+        spin: 1.5,
+        randomness: 0.4,
+        randomnessPower: 3,
+        insideColor: '#f43f5e', // Rose / Pink core
+        outsideColor: '#0ea5e9' // Light blue / Cyan edges
+      };
 
-      const vertexShader = `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = vec4(position, 1.0);
-        }
-      `;
+      let geometry = null;
+      let material = null;
+      let points = null;
 
-      const fragmentShader = `
-        uniform float uTime;
-        uniform vec2 uResolution;
-        uniform vec2 uMouse;
-        varying vec2 vUv;
-
-        float hash(float n) { return fract(sin(n) * 1e4); }
-        float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
-
-        float noise(vec2 x) {
-            vec2 i = floor(x);
-            vec2 f = fract(x);
-            float a = hash(i);
-            float b = hash(i + vec2(1.0, 0.0));
-            float c = hash(i + vec2(0.0, 1.0));
-            float d = hash(i + vec2(1.0, 1.0));
-            vec2 u = f * f * (3.0 - 2.0 * f);
-            return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      const generateGalaxy = () => {
+        if(points !== null) {
+            geometry.dispose();
+            material.dispose();
+            scene.remove(points);
         }
 
-        float fbm(vec2 x) {
-            float v = 0.0;
-            float a = 0.5;
-            vec2 shift = vec2(100.0);
-            mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
-            for (int i = 0; i < 6; ++i) {
-                v += a * noise(x);
-                x = rot * x * 2.0 + shift;
-                a *= 0.5;
-            }
-            return v;
+        geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(parameters.count * 3);
+        const colors = new Float32Array(parameters.count * 3);
+
+        const colorInside = new THREE.Color(parameters.insideColor);
+        const colorOutside = new THREE.Color(parameters.outsideColor);
+
+        for(let i = 0; i < parameters.count; i++) {
+            const i3 = i * 3;
+
+            // Position
+            const radius = Math.random() * parameters.radius;
+            const spinAngle = radius * parameters.spin;
+            const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+
+            const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+            const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+            const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+
+            positions[i3    ] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+            positions[i3 + 1] = randomY;
+            positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+            // Color
+            const mixedColor = colorInside.clone();
+            mixedColor.lerp(colorOutside, radius / parameters.radius);
+
+            colors[i3    ] = mixedColor.r;
+            colors[i3 + 1] = mixedColor.g;
+            colors[i3 + 2] = mixedColor.b;
         }
 
-        void main() {
-            vec2 uv = (vUv - 0.5) * 2.0;
-            uv.x *= uResolution.x / uResolution.y;
-            
-            // Parallax chuột
-            uv -= uMouse * 0.02;
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            // Đưa hố đen ra giữa và nhỏ hơn
-            uv.x -= 0.1;
+        // Tạo texture dạng tròn phát sáng để particle giống sao hơn
+        const canvas2d = document.createElement('canvas');
+        canvas2d.width = 16;
+        canvas2d.height = 16;
+        const ctx = canvas2d.getContext('2d');
+        const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+        grad.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,16,16);
+        const texture = new THREE.CanvasTexture(canvas2d);
 
-            float bhRadius = 0.25; // Nhỏ hơn
-            float r = length(uv);
-            
-            vec2 warpedUv = uv;
-            if (r > bhRadius) {
-                float warpAmount = (bhRadius * bhRadius) / (r * r);
-                warpedUv = uv * (1.0 - warpAmount);
-            }
-            
-            vec3 color = vec3(0.0);
+        material = new THREE.PointsMaterial({
+            size: parameters.size,
+            sizeAttenuation: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            vertexColors: true,
+            transparent: true,
+            map: texture,
+            opacity: 0.9
+        });
 
-            // Sao nền tĩnh và tối hơn
-            float starNoise = hash(warpedUv * 350.0);
-            float stars = pow(starNoise, 150.0) * 3.0;
-            color += vec3(stars) * vec3(0.5, 0.6, 0.8);
+        points = new THREE.Points(geometry, material);
+        points.rotation.x = 0.2; // Nghiêng nhẹ dải ngân hà
+        scene.add(points);
+      };
 
-            // Hào quang siêu dịu (Tối màu)
-            float glow = exp(-(r - bhRadius) * 4.0);
-            color += vec3(0.05, 0.2, 0.5) * glow * 1.5;
-            
-            // Đĩa bồi tụ
-            float diskR = length(vec2(warpedUv.x, warpedUv.y * 3.5));
-            float diskInner = bhRadius * 1.5;
-            float diskOuter = 1.8;
-            
-            vec3 diskColorBase = vec3(0.0);
-            
-            if (diskR > diskInner && diskR < diskOuter) {
-                float falloff = smoothstep(diskOuter, diskInner, diskR);
-                float innerFade = smoothstep(diskInner, diskInner + 0.1, diskR);
-                float doppler = 1.0 + 0.4 * smoothstep(0.0, -1.5, warpedUv.x);
-                
-                float angle = atan(warpedUv.y, warpedUv.x);
-                vec2 noiseUv = vec2(angle * 2.0 + uTime * 0.5, diskR * 3.0 - uTime * 0.8);
-                float n = fbm(noiseUv);
-                float n2 = fbm(noiseUv * 2.0 + vec2(uTime * 0.4));
-                
-                vec3 color1 = vec3(0.0, 0.4, 0.8); // Cyan
-                vec3 color2 = vec3(0.4, 0.8, 1.0); // Light Cyan
-                vec3 diskColor = mix(color1, color2, smoothstep(0.3, 0.7, n + n2 * 0.5));
-                
-                diskColorBase += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 2.5 * doppler;
-            }
-
-            if (r > bhRadius) {
-                color += diskColorBase;
-            }
-
-            // Photon Ring
-            float rim = smoothstep(bhRadius + 0.02, bhRadius, r) * smoothstep(bhRadius - 0.01, bhRadius + 0.01, r);
-            color += vec3(0.5, 0.8, 1.0) * rim * 2.0;
-
-            if (r < bhRadius) {
-                color = vec3(0.0);
-            }
-
-            // Đĩa bồi tụ phía trước (Vắt ngang qua Black Hole như Gargantua)
-            float frontDiskR = length(vec2(uv.x, uv.y * 5.0));
-            if (frontDiskR > diskInner && frontDiskR < diskOuter && uv.y > -0.15 && uv.y < 0.15) {
-                float f_falloff = smoothstep(diskOuter, diskInner, frontDiskR);
-                float f_innerFade = smoothstep(diskInner, diskInner + 0.05, frontDiskR);
-                float f_doppler = 1.0 + 0.4 * smoothstep(0.0, -1.5, uv.x);
-                
-                float f_angle = atan(uv.y, uv.x);
-                vec2 f_noiseUv = vec2(f_angle * 2.0 + uTime * 0.5, frontDiskR * 3.0 - uTime * 0.8);
-                float fn = fbm(f_noiseUv);
-                float fn2 = fbm(f_noiseUv * 2.0 + vec2(uTime * 0.4));
-                
-                vec3 f_color1 = vec3(0.0, 0.5, 0.9);
-                vec3 f_color2 = vec3(0.5, 0.9, 1.0);
-                vec3 f_diskColor = mix(f_color1, f_color2, smoothstep(0.3, 0.7, fn + fn2 * 0.5));
-                
-                color += f_diskColor * (fn * 0.9 + fn2 * 0.6) * f_falloff * f_innerFade * 3.0 * f_doppler;
-            }
-
-            // Tonemapping
-            color = color / (1.0 + color);
-            color = pow(color, vec3(1.0 / 2.2));
-            
-            float vignette = length(vUv - 0.5);
-            color *= 1.0 - vignette * 0.8; // Vignette mạnh hơn
-
-            color = pow(color, vec3(1.2)); // Contrast
-            
-            // Giảm độ mờ tổng thể để dễ nhìn chữ
-            gl_FragColor = vec4(color, 0.6);
-        }
-      `;
-
-      const material = new THREE.ShaderMaterial({
-        vertexShader,
-        fragmentShader,
-        uniforms: {
-          uTime: { value: 0 },
-          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-          uMouse: { value: new THREE.Vector2(0, 0) }
-        },
-        transparent: true
-      });
-
-      const plane = new THREE.Mesh(geometry, material);
-      scene.add(plane);
+      generateGalaxy();
 
       let targetMouse = new THREE.Vector2(0, 0);
       document.addEventListener('mousemove', (e) => {
@@ -4011,17 +3949,27 @@
       });
 
       window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
       });
 
       const clock = new THREE.Clock();
 
       function animate() {
         requestAnimationFrame(animate);
-        material.uniforms.uTime.value = clock.getElapsedTime();
-        material.uniforms.uMouse.value.x += (targetMouse.x - material.uniforms.uMouse.value.x) * 0.05;
-        material.uniforms.uMouse.value.y += (targetMouse.y - material.uniforms.uMouse.value.y) * 0.05;
+        const elapsedTime = clock.getElapsedTime();
+
+        // Xoay dải ngân hà liên tục
+        if(points) {
+            points.rotation.y = elapsedTime * 0.05;
+        }
+
+        // Hiệu ứng Parallax khi di chuột
+        camera.position.x += (targetMouse.x * 3 - camera.position.x) * 0.05;
+        camera.position.y += (-targetMouse.y * 3 + 5 - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+
         renderer.render(scene, camera);
       }
       animate();
