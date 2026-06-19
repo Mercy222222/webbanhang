@@ -21,7 +21,9 @@
 
   <style>
     /* ─── ULTIMATE GOD TIER CUSTOM CURSOR ─── */
-    * { cursor: none !important; }
+    @media (pointer: fine) {
+      * { cursor: none !important; }
+    }
     .god-cursor {
       position: fixed;
       top: 0; left: 0;
@@ -1391,7 +1393,9 @@
               <button class="btn-deposit-plus" onclick="event.stopPropagation(); openDepositModal()"><i class="fa-solid fa-plus"></i></button>
             </div>
             <div class="user-dropdown-btn" onclick="toggleUserDropdown()">
-              <div class="user-avatar-small" id="display-avatar">U</div>
+              <div class="user-avatar-small" id="display-avatar">
+                <img src="avatar.jpg" onerror="this.style.display='none'; this.parentElement.innerText='U';" class="w-full h-full rounded-full object-cover">
+              </div>
               <span class="user-name-small" id="display-username">Khách</span>
               <i class="fa-solid fa-chevron-down" style="font-size:0.75rem; color:var(--text-muted)"></i>
             </div>
@@ -2291,7 +2295,7 @@
       userNav.style.display = 'flex';
       displayBalance.innerText = `${currentUser.balance.toLocaleString('vi-VN')} đ`;
       displayUsername.innerText = currentUser.username;
-      displayAvatar.innerText = currentUser.username.charAt(0).toUpperCase();
+      displayAvatar.innerHTML = `<img src="avatar.jpg" onerror="this.style.display='none'; this.parentElement.innerText='${currentUser.username.charAt(0).toUpperCase()}';" class="w-full h-full rounded-full object-cover">`;
     }
 
     function updateUIForLogout() {
@@ -2748,12 +2752,14 @@
     const codeSymbols = ["✦", "✨", "★", "🔥", "⚡", "::", "{}", "<>"];
     let mouse = { x: null, y: null };
 
-    if (cursor && window.innerWidth >= 768) {
+    if (cursor) {
       document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
         mouse.x = e.clientX;
         mouse.y = e.clientY;
+
+        if (window.innerWidth < 768) return;
 
         if (trailParticles.length < 60) {
           trailParticles.push({
@@ -2861,6 +2867,12 @@
           trailParticles = trailParticles.filter(p => p.alpha > 0);
         }
         animateCursorTrail();
+      }
+      if (cursor) {
+        document.querySelectorAll('a, button, input, select, .cursor-pointer').forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
       }
     }
 
