@@ -24,7 +24,7 @@
   <!-- CDNs cho Fonts, Icons và Tiện ích -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
   
@@ -53,254 +53,9 @@
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: '#10b981',
-            'brand-glow': 'rgba(16, 185, 129, 0.4)',
-          },
-          fontFamily: {
-            sans: ['Outfit', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
-          }
-        }
-      }
     }
   </script>
-  
   <style>
-    /* Hiệu ứng chuyển động tùy chỉnh */
-    @keyframes codeFloat1 {
-      0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.6; }
-      25% { transform: translateY(-20px) translateX(10px) rotate(15deg); opacity: 1; }
-      50% { transform: translateY(-30px) translateX(-5px) rotate(-10deg); opacity: 0.8; }
-      75% { transform: translateY(-15px) translateX(8px) rotate(5deg); opacity: 1; }
-    }
-    @keyframes codeFloat2 {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
-      50% { transform: translateY(-25px) scale(1.1); opacity: 1; }
-    }
-    @keyframes codeFloat3 {
-      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
-      33% { transform: translateY(-10px) rotate(10deg); opacity: 1; }
-      66% { transform: translateY(-20px) rotate(-5deg); opacity: 0.9; }
-    }
-    @keyframes codeSlideIn {
-      0% { opacity: 0; transform: translateX(-30px); }
-      20% { opacity: 1; transform: translateX(0); }
-      80% { opacity: 1; transform: translateX(0); }
-      100% { opacity: 0; transform: translateX(30px); }
-    }
-    @keyframes binaryRain {
-      0% { transform: translateY(-100px); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(250px); opacity: 0; }
-    }
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); opacity: 0.2; }
-      50% { transform: scale(1.2); opacity: 0.4; }
-    }
-    @keyframes gravitationalGlow {
-      0%, 100% { opacity: 0.6; filter: blur(0px); }
-      50% { opacity: 0.9; filter: blur(1px); }
-    }
-    @keyframes coronaPulse {
-      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
-      50% { transform: scale(1.02) rotate(180deg); opacity: 1; }
-    }
-    /* Cinematic 3D Canvas - solid rendering with Bloom */
-    #global-3d-bg {
-      opacity: 0.95;
-    }
-
-    .code-symbol-float {
-      animation-duration: 4s;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
-    }
-    .code-line-anim {
-      opacity: 0;
-      animation: codeSlideIn 3.5s infinite ease-in-out;
-    }
-    .binary-column-anim {
-      writing-mode: vertical-rl;
-      font-size: 11px;
-      animation: binaryRain 3s infinite linear;
-    }
-    .cursor-blink {
-      animation: blink 1s infinite;
-    }
-    .avatar-glow {
-      position: absolute;
-      width: 130%;
-      height: 130%;
-      background: radial-gradient(circle, rgba(0, 123, 255, 0.4) 0%, transparent 70%);
-      border-radius: 50%;
-      z-index: 1;
-      animation: pulseGlow 4s infinite ease-in-out;
-      pointer-events: none;
-    }
-
-    /* Hiệu ứng chuyển động mượt mà khi cuộn trang */
-    .reveal-item {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .reveal-item.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-     /* Chế độ Sáng / Tối */
-    body {
-      transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    /* HUD Viewport Grid Blueprint Background */
-    .hero-hud-viewport::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 16px 16px;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .dark .hero-hud-viewport::before {
-      background: linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
-      background-size: 16px 16px;
-    }
-
-    /* Logo Glitch Effect */
-    .cyber-glitch-logo {
-      position: relative;
-    }
-    .cyber-glitch-logo::before,
-    .cyber-glitch-logo::after {
-      content: 'Võ Hữu Trí ✦';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #10b981;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .cyber-glitch-logo:hover::before {
-      opacity: 0.85;
-      transform: translate(-1.5px, 1.5px);
-      text-shadow: 0 0 10px rgba(255, 0, 193, 0.6);
-      filter: blur(0.5px);
-    }
-    .cyber-glitch-logo:hover::after {
-      opacity: 0.85;
-      transform: translate(1.5px, -1.5px);
-      text-shadow: 0 0 10px rgba(0, 255, 249, 0.6);
-      filter: blur(0.5px);
-    }
-    /* ─── 3D Tilt Card Glare Effect ─── */
-    .card-glare {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-      mix-blend-mode: overlay;
-      border-radius: inherit;
-    }
-
-    /* ─── 3D Card Parallax Tilt Child Offsets ─── */
-    .skill-card,
-    .work-card,
-    .certificate-card,
-    .project-card,
-    .avatar-container,
-    .visual-code-box {
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    .parallax-low {
-      transform: translateZ(15px);
-    }
-    .parallax-mid {
-      transform: translateZ(35px);
-    }
-    .parallax-high {
-      transform: translateZ(60px);
-    }
-    
-    .avatar-container img {
-      transform: translateZ(55px);
-    }
-
-    /* ─── Glassmorphism & Refined Borders ─── */
-    .skill-card,
-    .work-card,
-    .certificate-card,
-    .project-card {
-      position: relative;
-      background: rgba(250, 250, 250, 0.7) !important;
-      border: 1px solid rgba(0, 0, 0, 0.05) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      overflow: hidden;
-      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-    
-    html.dark .skill-card,
-    html.dark .work-card,
-    html.dark .certificate-card,
-    html.dark .project-card {
-      background: rgba(9, 9, 11, 0.6) !important;
-      border: 1px solid rgba(255, 255, 255, 0.04) !important;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    }
-
-    .skill-card::before,
-    .work-card::before,
-    .certificate-card::before,
-    .project-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      padding: 1px;
-      background: radial-gradient(
-        180px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-        rgba(16, 185, 129, 0.6), /* Emerald glow */
-        transparent 80%
-      );
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 2;
-    }
-
-    .skill-card:hover::before,
-    .work-card:hover::before,
-    .certificate-card:hover::before,
-    .project-card:hover::before {
-      opacity: 1;
-    }
 
     /* A/B Testing Visibility */
     .ab-variant-b-text {
@@ -451,17 +206,6 @@
     }
     .securify-card {
       background: rgba(15, 23, 42, 0.7) !important;
-      border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    }
-    /* Animated Border Glow */
-    .securify-card::before {
-      content: ""; position: absolute; inset: -2px; border-radius: inherit;
-      background: conic-gradient(from var(--gradient-angle), transparent 70%, #06b6d4, #10b981);
-      z-index: -1; animation: spin-gradient 4s linear infinite;
-      opacity: 0.3; transition: opacity 0.3s;
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
       padding: 2px;
     }
     .securify-card:hover::before { opacity: 1; }
@@ -806,7 +550,7 @@
   </script>
 
   <!-- GLOBAL 3D BACKGROUND -->
-  <canvas id="global-3d-bg" class="fixed inset-0 w-full h-full pointer-events-none z-[-1] opacity-60"></canvas>
+  <canvas id="global-3d-bg" class="fixed inset-0 w-full h-full pointer-events-none z-[-1] opacity-30 dark:opacity-100 mix-blend-multiply invert hue-rotate-180 dark:mix-blend-screen dark:invert-0 dark:hue-rotate-0 transition-all duration-500"></canvas>
 
   <!-- Glowing Scroll Progress Bar -->
   <div id="scroll-progress"></div>
@@ -990,7 +734,7 @@
           <!-- Avatar Card -->
           <div class="securify-card col-span-12 md:col-span-4 h-[350px] p-0 overflow-hidden flex items-center justify-center gs-reveal-up group relative">
             <div class="glare"></div>
-            <img src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t39.30808-1/656361180_1217671007059244_5545171905336345277_n.jpg?stp=dst-jpg_tt6&cstp=mx1446x1429&ctp=s200x200&_nc_cat=102&ccb=1-7&_nc_sid=1d2534&_nc_ohc=G6ckmJz6gZUQ7kNvwEZtsfD&_nc_oc=Adqc9bnkbGaj4ZUNm-i2nDf49m_Hte85kbQbz3XWg3VJeDlLKvLBVsF0xJgtckF6CDo3qm19KJFOlxZVFWiTjEwO&_nc_zt=24&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=0ZWCYjDL0TKrNG4crXkkGw&_nc_ss=7b2a8&oh=00_Af9hvuIjIGo2OV7S8gMRXGXPfBz2qimMgsuTZM7nPmE_Fw&oe=6A31EB40" onerror="this.src='https://picsum.photos/seed/hacker/600/800'" alt="Võ Hữu Trí" class="smooth-hover w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
+            <img src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t39.30808-1/656361180_1217671007059244_5545171905336345277_n.jpg?stp=dst-jpg_tt6&cstp=mx1446x1429&ctp=s200x200&_nc_cat=102&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeEpWnJThUsYT5eKIIwTyUF-UVjUvj7kC7FRWNS-PuQLsaOyzhIvKDl6FsHIe5lzlEdubJD3G_qO0HfuQex_bDDK&_nc_ohc=ttNRzvcKAGwQ7kNvwE33G9W&_nc_oc=Ado0_ml_c2Cqg1OPeVoYYaqvAnyNhJ-2e8TIc9xJ5cU4RQ_7sf0iyZaHRrE3DCB4fwR7eErsbXyj1b2SP1ilvKOo&_nc_zt=24&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=8hi--JNCBMSvyySM5aj7vw&_nc_ss=7b2a8&oh=00_Af-5Y6gx0Q4B6G-YejGNgfrqUmfraMfaxC6VqvXsR6YC5w&oe=6A35A780" onerror="this.src='https://picsum.photos/seed/hacker/600/800'" alt="Võ Hữu Trí" class="smooth-hover w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent"></div>
             <div class="absolute bottom-6 left-6 z-10">
               <h3 class="text-2xl font-bold text-white">Võ Hữu Trí</h3>
@@ -2615,7 +2359,7 @@
       bgRenderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false, powerPreference: 'high-performance' });
       bgRenderer.setSize(width, height);
       bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-      bgScene.background = new THREE.Color(0x00000a);
+      bgScene.background = new THREE.Color(0x000000);
 
       // ─── BLOOM COMPOSER ───
       const renderScene = new THREE.RenderPass(bgScene, bgCamera);
@@ -4135,14 +3879,14 @@
             
             vec3 color = vec3(0.0);
 
-            // 2. Dải ngân hà nền (Bị bẻ cong)
-            float starNoise = hash(warpedUv * 250.0);
-            float stars = pow(starNoise, 90.0) * 3.0;
-            color += vec3(stars) * vec3(0.6, 0.8, 1.0);
+            // 2. Dải ngân hà nền (Bị bẻ cong) - Tăng số lượng sao
+            float starNoise = hash(warpedUv * 350.0);
+            float stars = pow(starNoise, 120.0) * 8.0;
+            color += vec3(stars) * vec3(0.5, 0.9, 1.0);
 
-            // 3. Hào quang (Global Glow)
-            float glow = exp(-(r - bhRadius) * 4.0);
-            color += vec3(0.1, 0.25, 0.6) * glow * 1.5;
+            // 3. Hào quang (Global Glow) - Tăng độ rực
+            float glow = exp(-(r - bhRadius) * 5.0);
+            color += vec3(0.0, 0.8, 1.0) * glow * 2.0;
             
             // 4. Đĩa bồi tụ (Accretion Disk) - Gargantua Style
             // Tính toán trên không gian đã bị bẻ cong (warpedUv) để tự động tạo hiệu ứng Halo (vòng cung trên/dưới)
@@ -4163,18 +3907,18 @@
                 float n2 = fbm(noiseUv * 2.0 + vec2(uTime));
                 
                 // Tông màu Xanh/Trắng giống ảnh
-                vec3 color1 = vec3(0.02, 0.15, 0.5); // Deep space blue
-                vec3 color2 = vec3(0.5, 0.85, 1.0);  // Bright cyan/white
+                vec3 color1 = vec3(0.02, 0.25, 0.7); // Deep space blue
+                vec3 color2 = vec3(0.0, 1.0, 0.9);  // Bright cyan/emerald
                 vec3 diskColor = mix(color1, color2, smoothstep(0.3, 0.7, n + n2 * 0.5));
                 
-                color += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 5.0 * doppler;
+                color += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 7.0 * doppler;
             }
 
             // Điểm sáng lóe lên ở bên trái đĩa (giống ánh sao phản chiếu trong ảnh)
             vec2 starPos = vec2(-0.8, 0.0);
             float starDist = length(warpedUv - starPos);
             float brightStar = smoothstep(0.15, 0.0, starDist);
-            color += vec3(0.9, 0.95, 1.0) * pow(brightStar, 2.0) * 3.0 * glow;
+            color += vec3(0.8, 1.0, 0.9) * pow(brightStar, 2.0) * 5.0 * glow;
 
             // 5. Photon Ring (Vành đai photon mỏng sát chân trời sự kiện)
             float rim = smoothstep(bhRadius + 0.02, bhRadius, r) * smoothstep(bhRadius - 0.005, bhRadius + 0.005, r);
@@ -4458,4 +4202,7 @@
       makeDraggable(document.getElementById('widget-notif'));
     });
   </script>
-\n</body>\n</html>
+
+  </script>
+</body>
+</html>

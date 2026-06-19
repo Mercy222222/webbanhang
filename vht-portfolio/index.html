@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Võ Hữu Trí | Hyprland OS Portfolio</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <canvas id="webgl-canvas"></canvas>
+    
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-trail"></div>
+
+    <div id="os-container">
+        <header class="top-bar">
+            <div class="workspaces">
+                <span class="ws-item active magnetic-btn">1</span>
+                <span class="ws-item magnetic-btn">2</span>
+                <span class="ws-item magnetic-btn">3</span>
+                <span class="ws-item magnetic-btn">4</span>
+                <span class="ws-item magnetic-btn">_</span>
+            </div>
+            <div class="clock glitch-hover" id="live-clock">00:00:00</div>
+            <div class="sys-stats">
+                <span id="cpu-stat">CPU: 12%</span>
+                <span id="ram-stat">RAM: 4.2G</span>
+                <span class="glitch-hover">VOL: 100%</span>
+                <span class="glitch-hover">WIFI</span>
+            </div>
+        </header>
+
+        <main class="desktop-grid">
+            
+            <article class="widget profile-widget" data-tilt>
+                <div class="widget-header">
+                    <div class="window-controls">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <span class="title glitch-hover">~ / user / info</span>
+                </div>
+                <div class="profile-content">
+                    <div class="avatar-container">
+                        <img src="avatar.png" alt="Võ Hữu Trí" class="profile-avatar">
+                        <div class="avatar-glitch"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="typewriter-name" data-text="VÕ HỮU TRÍ"></h1>
+                        <p class="role">Creative Engineer / 10 Yrs Exp</p>
+                        <p class="bio">Building uncompromising, performance-driven web experiences. Blending deep technical logic with cutting-edge visual aesthetics.</p>
+                        <div class="sys-tags">
+                            <span class="magnetic-btn">sudo apt install awesome-dev</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget music-widget" data-tilt>
+                <div class="music-cover magnetic-btn">
+                    <div class="audio-equalizer">
+                        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    </div>
+                </div>
+                <div class="music-info">
+                    <h3 class="glitch-hover">Cyberpunk Dreams</h3>
+                    <p>Synthwave 2026</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="music-controls">
+                        <span class="magnetic-btn">⏮</span>
+                        <span class="magnetic-btn play-btn">⏯</span>
+                        <span class="magnetic-btn">⏭</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget tech-widget" data-tilt>
+                <div class="widget-header">
+                    <span class="title glitch-hover">~ / system / dependencies</span>
+                </div>
+                <div class="tech-list">
+                    <div class="tech-item magnetic-btn"><span class="accent">pkg</span> react@18.0</div>
+                    <div class="tech-item magnetic-btn"><span class="accent">pkg</span> next.js@14.0</div>
+                    <div class="tech-item magnetic-btn"><span class="accent">pkg</span> three.js/webgl</div>
+                    <div class="tech-item magnetic-btn"><span class="accent">pkg</span> gsap/scroll</div>
+                    <div class="tech-item magnetic-btn"><span class="accent">pkg</span> postgresql/db</div>
+                    <div class="tech-item magnetic-btn"><span class="accent">pkg</span> tailwindcss/ui</div>
+                </div>
+            </article>
+
+            <article class="widget projects-widget" data-tilt>
+                <div class="widget-header">
+                    <span class="title glitch-hover">~ / var / www / projects</span>
+                </div>
+                <div class="projects-container">
+                    <div class="project-card magnetic-btn">
+                        <h4>Lunar E-Commerce</h4>
+                        <p>Next.js + WebGL</p>
+                    </div>
+                    <div class="project-card magnetic-btn">
+                        <h4>Vault Protocol</h4>
+                        <p>Fintech Dashboard</p>
+                    </div>
+                    <div class="project-card magnetic-btn">
+                        <h4>Studio Neu</h4>
+                        <p>Creative Agency</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Hologram Widget (fal-3d simulated rendering) -->
+            <article class="widget hologram-widget" data-tilt>
+                <div class="widget-header">
+                    <span class="title glitch-hover">~ / 3d / fal-render</span>
+                </div>
+                <div class="hologram-container magnetic-btn">
+                    <canvas id="hologram-canvas"></canvas>
+                </div>
+            </article>
+
+            <article class="widget social-widget" data-tilt>
+                <div class="social-grid">
+                    <a href="https://github.com" target="_blank" class="social-btn magnetic-btn">
+                        <span class="icon">GH</span>
+                        <span class="glitch-hover">GITHUB</span>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" class="social-btn magnetic-btn">
+                        <span class="icon">IN</span>
+                        <span class="glitch-hover">LINKEDIN</span>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-btn magnetic-btn">
+                        <span class="icon">X</span>
+                        <span class="glitch-hover">TWITTER</span>
+                    </a>
+                    <a href="mailto:hello@vohuurtri.com" class="social-btn highlight magnetic-btn">
+                        <span class="icon">@</span>
+                        <span class="glitch-hover">CONTACT</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Terminal Widget -->
+            <article class="widget terminal-widget" data-tilt>
+                <div class="widget-header">
+                    <span class="title glitch-hover">~ / bin / bash</span>
+                </div>
+                <div class="terminal-content" id="terminal-output">
+                </div>
+            </article>
+
+            <!-- Hardware Stats Widget -->
+            <article class="widget stats-widget" data-tilt>
+                <div class="widget-header">
+                    <span class="title glitch-hover">~ / sys / hardware</span>
+                </div>
+                <div class="stats-container">
+                    <div class="ring-wrapper">
+                        <svg class="ring" viewBox="0 0 36 36">
+                            <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="ring-fill cpu-ring" stroke-dasharray="12, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <span class="ring-text">CPU</span>
+                    </div>
+                    <div class="ring-wrapper">
+                        <svg class="ring" viewBox="0 0 36 36">
+                            <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="ring-fill gpu-ring" stroke-dasharray="35, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <span class="ring-text">GPU</span>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
