@@ -24,7 +24,7 @@
   <!-- CDNs cho Fonts, Icons và Tiện ích -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
   
@@ -53,254 +53,9 @@
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: '#10b981',
-            'brand-glow': 'rgba(16, 185, 129, 0.4)',
-          },
-          fontFamily: {
-            sans: ['Outfit', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
-          }
-        }
-      }
     }
   </script>
-  
   <style>
-    /* Hiệu ứng chuyển động tùy chỉnh */
-    @keyframes codeFloat1 {
-      0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.6; }
-      25% { transform: translateY(-20px) translateX(10px) rotate(15deg); opacity: 1; }
-      50% { transform: translateY(-30px) translateX(-5px) rotate(-10deg); opacity: 0.8; }
-      75% { transform: translateY(-15px) translateX(8px) rotate(5deg); opacity: 1; }
-    }
-    @keyframes codeFloat2 {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
-      50% { transform: translateY(-25px) scale(1.1); opacity: 1; }
-    }
-    @keyframes codeFloat3 {
-      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
-      33% { transform: translateY(-10px) rotate(10deg); opacity: 1; }
-      66% { transform: translateY(-20px) rotate(-5deg); opacity: 0.9; }
-    }
-    @keyframes codeSlideIn {
-      0% { opacity: 0; transform: translateX(-30px); }
-      20% { opacity: 1; transform: translateX(0); }
-      80% { opacity: 1; transform: translateX(0); }
-      100% { opacity: 0; transform: translateX(30px); }
-    }
-    @keyframes binaryRain {
-      0% { transform: translateY(-100px); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(250px); opacity: 0; }
-    }
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); opacity: 0.2; }
-      50% { transform: scale(1.2); opacity: 0.4; }
-    }
-    @keyframes gravitationalGlow {
-      0%, 100% { opacity: 0.6; filter: blur(0px); }
-      50% { opacity: 0.9; filter: blur(1px); }
-    }
-    @keyframes coronaPulse {
-      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
-      50% { transform: scale(1.02) rotate(180deg); opacity: 1; }
-    }
-    /* Cinematic 3D Canvas - solid rendering with Bloom */
-    #global-3d-bg {
-      opacity: 0.95;
-    }
-
-    .code-symbol-float {
-      animation-duration: 4s;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
-    }
-    .code-line-anim {
-      opacity: 0;
-      animation: codeSlideIn 3.5s infinite ease-in-out;
-    }
-    .binary-column-anim {
-      writing-mode: vertical-rl;
-      font-size: 11px;
-      animation: binaryRain 3s infinite linear;
-    }
-    .cursor-blink {
-      animation: blink 1s infinite;
-    }
-    .avatar-glow {
-      position: absolute;
-      width: 130%;
-      height: 130%;
-      background: radial-gradient(circle, rgba(0, 123, 255, 0.4) 0%, transparent 70%);
-      border-radius: 50%;
-      z-index: 1;
-      animation: pulseGlow 4s infinite ease-in-out;
-      pointer-events: none;
-    }
-
-    /* Hiệu ứng chuyển động mượt mà khi cuộn trang */
-    .reveal-item {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .reveal-item.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-     /* Chế độ Sáng / Tối */
-    body {
-      transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    /* HUD Viewport Grid Blueprint Background */
-    .hero-hud-viewport::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 16px 16px;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .dark .hero-hud-viewport::before {
-      background: linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
-      background-size: 16px 16px;
-    }
-
-    /* Logo Glitch Effect */
-    .cyber-glitch-logo {
-      position: relative;
-    }
-    .cyber-glitch-logo::before,
-    .cyber-glitch-logo::after {
-      content: 'Võ Hữu Trí ✦';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #10b981;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .cyber-glitch-logo:hover::before {
-      opacity: 0.85;
-      transform: translate(-1.5px, 1.5px);
-      text-shadow: 0 0 10px rgba(255, 0, 193, 0.6);
-      filter: blur(0.5px);
-    }
-    .cyber-glitch-logo:hover::after {
-      opacity: 0.85;
-      transform: translate(1.5px, -1.5px);
-      text-shadow: 0 0 10px rgba(0, 255, 249, 0.6);
-      filter: blur(0.5px);
-    }
-    /* ─── 3D Tilt Card Glare Effect ─── */
-    .card-glare {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-      mix-blend-mode: overlay;
-      border-radius: inherit;
-    }
-
-    /* ─── 3D Card Parallax Tilt Child Offsets ─── */
-    .skill-card,
-    .work-card,
-    .certificate-card,
-    .project-card,
-    .avatar-container,
-    .visual-code-box {
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    .parallax-low {
-      transform: translateZ(15px);
-    }
-    .parallax-mid {
-      transform: translateZ(35px);
-    }
-    .parallax-high {
-      transform: translateZ(60px);
-    }
-    
-    .avatar-container img {
-      transform: translateZ(55px);
-    }
-
-    /* ─── Glassmorphism & Refined Borders ─── */
-    .skill-card,
-    .work-card,
-    .certificate-card,
-    .project-card {
-      position: relative;
-      background: rgba(250, 250, 250, 0.7) !important;
-      border: 1px solid rgba(0, 0, 0, 0.05) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      overflow: hidden;
-      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-    
-    html.dark .skill-card,
-    html.dark .work-card,
-    html.dark .certificate-card,
-    html.dark .project-card {
-      background: rgba(9, 9, 11, 0.6) !important;
-      border: 1px solid rgba(255, 255, 255, 0.04) !important;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    }
-
-    .skill-card::before,
-    .work-card::before,
-    .certificate-card::before,
-    .project-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      padding: 1px;
-      background: radial-gradient(
-        180px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-        rgba(16, 185, 129, 0.6), /* Emerald glow */
-        transparent 80%
-      );
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 2;
-    }
-
-    .skill-card:hover::before,
-    .work-card:hover::before,
-    .certificate-card:hover::before,
-    .project-card:hover::before {
-      opacity: 1;
-    }
 
     /* A/B Testing Visibility */
     .ab-variant-b-text {
@@ -451,17 +206,6 @@
     }
     .securify-card {
       background: rgba(15, 23, 42, 0.7) !important;
-      border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    }
-    /* Animated Border Glow */
-    .securify-card::before {
-      content: ""; position: absolute; inset: -2px; border-radius: inherit;
-      background: conic-gradient(from var(--gradient-angle), transparent 70%, #06b6d4, #10b981);
-      z-index: -1; animation: spin-gradient 4s linear infinite;
-      opacity: 0.3; transition: opacity 0.3s;
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
       padding: 2px;
     }
     .securify-card:hover::before { opacity: 1; }
@@ -786,6 +530,8 @@
   
 
 <body class="bg-[#0b1121] text-slate-50 pt-[70px] overflow-x-hidden font-sans antialiased">
+  <!-- GLOBAL BLACK HOLE BACKGROUND -->
+  <canvas id="blackhole-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[0] opacity-80" style="mix-blend-mode: screen;"></canvas>
   
   <!-- A/B Test Logic Engine -->
   <script>
@@ -804,7 +550,7 @@
   </script>
 
   <!-- GLOBAL 3D BACKGROUND -->
-  <canvas id="global-3d-bg" class="fixed inset-0 w-full h-full pointer-events-none z-[-1] opacity-60"></canvas>
+  <canvas id="global-3d-bg" class="fixed inset-0 w-full h-full pointer-events-none z-[-1] opacity-30 dark:opacity-100 mix-blend-multiply invert hue-rotate-180 dark:mix-blend-screen dark:invert-0 dark:hue-rotate-0 transition-all duration-500"></canvas>
 
   <!-- Glowing Scroll Progress Bar -->
   <div id="scroll-progress"></div>
@@ -988,7 +734,7 @@
           <!-- Avatar Card -->
           <div class="securify-card col-span-12 md:col-span-4 h-[350px] p-0 overflow-hidden flex items-center justify-center gs-reveal-up group relative">
             <div class="glare"></div>
-            <img src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t39.30808-1/656361180_1217671007059244_5545171905336345277_n.jpg?stp=dst-jpg_tt6&cstp=mx1446x1429&ctp=s200x200&_nc_cat=102&ccb=1-7&_nc_sid=1d2534&_nc_ohc=G6ckmJz6gZUQ7kNvwEZtsfD&_nc_oc=Adqc9bnkbGaj4ZUNm-i2nDf49m_Hte85kbQbz3XWg3VJeDlLKvLBVsF0xJgtckF6CDo3qm19KJFOlxZVFWiTjEwO&_nc_zt=24&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=0ZWCYjDL0TKrNG4crXkkGw&_nc_ss=7b2a8&oh=00_Af9hvuIjIGo2OV7S8gMRXGXPfBz2qimMgsuTZM7nPmE_Fw&oe=6A31EB40" onerror="this.src='https://picsum.photos/seed/hacker/600/800'" alt="Võ Hữu Trí" class="smooth-hover w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
+            <img src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t39.30808-1/656361180_1217671007059244_5545171905336345277_n.jpg?stp=dst-jpg_tt6&cstp=mx1446x1429&ctp=s200x200&_nc_cat=102&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeEpWnJThUsYT5eKIIwTyUF-UVjUvj7kC7FRWNS-PuQLsaOyzhIvKDl6FsHIe5lzlEdubJD3G_qO0HfuQex_bDDK&_nc_ohc=ttNRzvcKAGwQ7kNvwE33G9W&_nc_oc=Ado0_ml_c2Cqg1OPeVoYYaqvAnyNhJ-2e8TIc9xJ5cU4RQ_7sf0iyZaHRrE3DCB4fwR7eErsbXyj1b2SP1ilvKOo&_nc_zt=24&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=8hi--JNCBMSvyySM5aj7vw&_nc_ss=7b2a8&oh=00_Af-5Y6gx0Q4B6G-YejGNgfrqUmfraMfaxC6VqvXsR6YC5w&oe=6A35A780" onerror="this.src='https://picsum.photos/seed/hacker/600/800'" alt="Võ Hữu Trí" class="smooth-hover w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent"></div>
             <div class="absolute bottom-6 left-6 z-10">
               <h3 class="text-2xl font-bold text-white">Võ Hữu Trí</h3>
@@ -2557,8 +2303,8 @@
       initScrollReveal();
       
       // Initialize Three.js 3D Background
-      initBackgroundThree();
-      animateBackgroundThree();
+      // initBackgroundThree();
+      // animateBackgroundThree();
 
       // Initialize 3D Hero Visual Box (Torus Knot)
       initHeroThree();
@@ -2613,7 +2359,7 @@
       bgRenderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false, powerPreference: 'high-performance' });
       bgRenderer.setSize(width, height);
       bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-      bgScene.background = new THREE.Color(0x00000a);
+      bgScene.background = new THREE.Color(0x000000);
 
       // ─── BLOOM COMPOSER ───
       const renderScene = new THREE.RenderPass(bgScene, bgCamera);
@@ -3929,322 +3675,8 @@
 
   </script>
 
-  <!-- GLOBAL 3D PLEXUS SCRIPT -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const canvas = document.getElementById('global-3d-bg');
-      if (!canvas || typeof THREE === 'undefined') return;
-
-      const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x0b1121, 0.0015);
-
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-      camera.position.z = 300;
-
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-
-      // Unreal Bloom Setup
-      let composer;
-      if (typeof THREE.EffectComposer !== 'undefined') {
-        const renderScene = new THREE.RenderPass(scene, camera);
-        const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-        bloomPass.threshold = 0;
-        bloomPass.strength = 2.0; // Intense neon glow
-        bloomPass.radius = 0.5;
-
-        composer = new THREE.EffectComposer(renderer);
-        composer.addPass(renderScene);
-        composer.addPass(bloomPass);
-      }
-
-      // 1. Particles (Plexus)
-      const particleCount = 250;
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(particleCount * 3);
-      const velocities = [];
-      const basePositions = [];
-
-      for (let i = 0; i < particleCount; i++) {
-        const x = (Math.random() - 0.5) * 1200;
-        const y = (Math.random() - 0.5) * 1200;
-        const z = (Math.random() - 0.5) * 800;
-        positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
-        basePositions.push({ x, y, z });
-        velocities.push({ x: 0, y: 0, z: 0 });
-      }
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-      const pMaterial = new THREE.PointsMaterial({
-        color: 0x06b6d4, size: 4, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending
-      });
-      const particles = new THREE.Points(geometry, pMaterial);
-      scene.add(particles);
-
-      const lineMaterial = new THREE.LineBasicMaterial({
-        color: 0x10b981, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
-      });
-      const lineGeometry = new THREE.BufferGeometry();
-      const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-      scene.add(linesMesh);
-
-      // 2. Floating Icosahedrons (Giant wireframe objects)
-      const icoGroup = new THREE.Group();
-      const icoGeo = new THREE.IcosahedronGeometry(80, 0);
-      const icoMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe: true, transparent: true, opacity: 0.15 });
-      for (let i=0; i<5; i++) {
-        const mesh = new THREE.Mesh(icoGeo, icoMat);
-        mesh.position.set((Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1000 - 300);
-        mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
-        icoGroup.add(mesh);
-      }
-      scene.add(icoGroup);
-
-      // Mouse & Raycaster for Repulsion
-      let mouse = new THREE.Vector2();
-      let targetCamera = { x: 0, y: 0 };
-      const raycaster = new THREE.Raycaster();
-      const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-      let pointOfIntersection = new THREE.Vector3();
-
-      document.addEventListener('mousemove', (event) => {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        targetCamera.x = mouse.x * 100;
-        targetCamera.y = mouse.y * 100;
-      });
-
-      let scrollY = 0;
-      window.addEventListener('scroll', () => { scrollY = window.scrollY; });
-
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        if(composer) composer.setSize(window.innerWidth, window.innerHeight);
-      });
-
-      function animate() {
-        requestAnimationFrame(animate);
-
-        // Repulsion Physics
-        raycaster.setFromCamera(mouse, camera);
-        raycaster.ray.intersectPlane(plane, pointOfIntersection);
-
-        const posAttribute = geometry.attributes.position;
-        const array = posAttribute.array;
-        let linePositions = [];
-
-        for (let i = 0; i < particleCount; i++) {
-          const i3 = i * 3;
-          let px = array[i3], py = array[i3+1], pz = array[i3+2];
-          let bx = basePositions[i].x, by = basePositions[i].y, bz = basePositions[i].z;
-
-          // Push away from mouse intersection
-          const dx = px - pointOfIntersection.x;
-          const dy = py - pointOfIntersection.y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          const force = Math.max(0, 250 - dist) * 0.05;
-
-          if (dist < 250) {
-            velocities[i].x += (dx / dist) * force;
-            velocities[i].y += (dy / dist) * force;
-          }
-
-          // Spring back to base position
-          velocities[i].x += (bx - px) * 0.02;
-          velocities[i].y += (by - py) * 0.02;
-          velocities[i].z += (bz - pz) * 0.02;
-
-          // Dampening
-          velocities[i].x *= 0.9;
-          velocities[i].y *= 0.9;
-          velocities[i].z *= 0.9;
-
-          array[i3] += velocities[i].x;
-          array[i3+1] += velocities[i].y;
-          array[i3+2] += velocities[i].z;
-
-          // Lines
-          for (let j = i + 1; j < particleCount; j++) {
-            const j3 = j * 3;
-            const dpx = array[i3] - array[j3];
-            const dpy = array[i3 + 1] - array[j3 + 1];
-            const dpz = array[i3 + 2] - array[j3 + 2];
-            if (dpx*dpx + dpy*dpy + dpz*dpz < 20000) {
-              linePositions.push(array[i3], array[i3 + 1], array[i3 + 2], array[j3], array[j3 + 1], array[j3 + 2]);
-            }
-          }
-        }
-        posAttribute.needsUpdate = true;
-        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-
-        // Group Rotations
-        particles.rotation.y += 0.0005;
-        linesMesh.rotation.y = particles.rotation.y;
-        
-        icoGroup.children.forEach(mesh => {
-          mesh.rotation.x += 0.001;
-          mesh.rotation.y += 0.002;
-        });
-        icoGroup.rotation.y -= 0.0005;
-
-        // Camera Smooth Movement
-        camera.position.x += (targetCamera.x - camera.position.x) * 0.02;
-        camera.position.y += (targetCamera.y - camera.position.y) * 0.02;
-        camera.position.z = 300 - (scrollY * 0.08);
-        camera.lookAt(scene.position);
-
-        if (composer) composer.render();
-        else renderer.render(scene, camera);
-      }
-      animate();
-    });
-  </script>
-
-  <!-- GOD TIER ENGINE -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // 1. Initialize Lenis
-      const lenis = new Lenis({
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-      });
-
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-      requestAnimationFrame(raf);
-
-      // Sync GSAP with Lenis
-      if(typeof ScrollTrigger !== 'undefined') {
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
-        gsap.ticker.lagSmoothing(0);
-      }
-
-      // Export Lenis scroll position for the Black Hole parallax
-      lenis.on('scroll', ({ scroll }) => {
-        window.__lenisScrollY = scroll;
-      });
-      
-
-
-      // Terminal 3D Tilt
-      const terminal = document.getElementById('terminal-hud');
-      if (terminal) {
-        const xToTerm = gsap.quickTo(terminal, "rotationY", {duration: 0.5, ease: "power3"});
-        const yToTerm = gsap.quickTo(terminal, "rotationX", {duration: 0.5, ease: "power3"});
-        
-        terminal.addEventListener('mousemove', (e) => {
-          const rect = terminal.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          xToTerm((e.clientX - cx) * 0.05);
-          yToTerm(-(e.clientY - cy) * 0.05);
-        });
-        terminal.addEventListener('mouseleave', () => {
-          xToTerm(0);
-          yToTerm(0);
-        });
-      }
-
-      
-      // Add data-text to typing line for glitch
-      const typingLines = document.querySelectorAll('#terminal-body p');
-      typingLines.forEach(p => {
-        p.setAttribute('data-text', p.innerText);
-        p.classList.add('glitch-typing');
-      });
-
-      
-
-
-
-      // --- OMNIVERSE GLOBAL 3D SPLIT TEXT ---
-      const omniTitles = document.querySelectorAll('.omni-split');
-      omniTitles.forEach(title => {
-        const text = title.innerText;
-        title.innerHTML = '';
-        title.setAttribute('data-text', text); // For glitch
-        const words = text.split(' ');
-        words.forEach(word => {
-          const span = document.createElement('span');
-          span.innerHTML = word + '&nbsp;';
-          span.style.display = 'inline-block';
-          title.appendChild(span);
-        });
-
-        gsap.fromTo(title.querySelectorAll('span'), 
-          { opacity: 0, rotationX: 90, rotationY: 45, z: 200, scale: 2, filter: 'blur(15px)' },
-          {
-            scrollTrigger: {
-              trigger: title,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse'
-            },
-            opacity: 1, rotationX: 0, rotationY: 0, z: 0, scale: 1, filter: 'blur(0px)',
-            stagger: 0.1, duration: 1.5, ease: "expo.out"
-          }
-        );
-      });
-
-
-      // 2. Custom Cursor
-      const cursor = document.querySelector('.god-cursor');
-      let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-      
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-
-      // Smooth follow
-      gsap.ticker.add(() => {
-        cursorX += (mouseX - cursorX) * 0.2;
-        cursorY += (mouseY - cursorY) * 0.2;
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-      });
-
-      // Hover Effects
-      const interactiveEls = document.querySelectorAll('a, button, .securify-card, .magnetic');
-      interactiveEls.forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-      });
-
-      // 3. Magnetic Physics
-      const magnetics = document.querySelectorAll('.nav-link, #btn-hero-projects, #btn-hero-contact, .pill-badge');
-      magnetics.forEach(el => {
-        el.classList.add('magnetic-wrap');
-        const xTo = gsap.quickTo(el, "x", {duration: 1, ease: "elastic.out(1, 0.3)"});
-        const yTo = gsap.quickTo(el, "y", {duration: 1, ease: "elastic.out(1, 0.3)"});
-
-        el.addEventListener("mousemove", (e) => {
-          const rect = el.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          xTo((e.clientX - cx) * 0.4);
-          yTo((e.clientY - cy) * 0.4);
-        });
-        el.addEventListener("mouseleave", () => {
-          xTo(0); yTo(0);
-        });
-      });
-    });
-  </script>
-
-<!-- --- GSAP & 3D INTERACTION SCRIPT --- -->
+  
+  <!-- --- GSAP & 3D INTERACTION SCRIPT --- -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       gsap.registerPlugin(ScrollTrigger);
@@ -4361,6 +3793,416 @@
       });
     });
   </script>
+
+  <!-- BLACK HOLE SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById('blackhole-canvas');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      // Xóa scene cũ nếu có
+      if (window.blackHoleRenderer) {
+          window.blackHoleRenderer.dispose();
+      }
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      camera.position.z = 1;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      window.blackHoleRenderer = renderer;
+
+      const geometry = new THREE.PlaneGeometry(2, 2);
+
+      const vertexShader = `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
+        }
+      `;
+
+      const fragmentShader = `
+        uniform float uTime;
+        uniform vec2 uResolution;
+        uniform vec2 uMouse;
+        varying vec2 vUv;
+
+        float hash(float n) { return fract(sin(n) * 1e4); }
+        float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
+
+        float noise(vec2 x) {
+            vec2 i = floor(x);
+            vec2 f = fract(x);
+            float a = hash(i);
+            float b = hash(i + vec2(1.0, 0.0));
+            float c = hash(i + vec2(0.0, 1.0));
+            float d = hash(i + vec2(1.0, 1.0));
+            vec2 u = f * f * (3.0 - 2.0 * f);
+            return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+        }
+
+        float fbm(vec2 x) {
+            float v = 0.0;
+            float a = 0.5;
+            vec2 shift = vec2(100.0);
+            mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+            for (int i = 0; i < 6; ++i) {
+                v += a * noise(x);
+                x = rot * x * 2.0 + shift;
+                a *= 0.5;
+            }
+            return v;
+        }
+
+        void main() {
+            vec2 uv = (vUv - 0.5) * 2.0;
+            uv.x *= uResolution.x / uResolution.y;
+            
+            // Parallax chuột
+            uv -= uMouse * 0.05;
+
+            // Dịch hố đen sang phải một chút giống ảnh
+            uv.x -= 0.2;
+
+            float bhRadius = 0.35;
+            float r = length(uv);
+            
+            // 1. Thấu kính hấp dẫn (Gravitational Lensing) - Bẻ cong không gian
+            vec2 warpedUv = uv;
+            if (r > bhRadius) {
+                float warpAmount = (bhRadius * bhRadius) / (r * r);
+                warpedUv = uv * (1.0 - warpAmount);
+            }
+            
+            vec3 color = vec3(0.0);
+
+            // 2. Dải ngân hà nền (Bị bẻ cong) - Tăng số lượng sao
+            float starNoise = hash(warpedUv * 350.0);
+            float stars = pow(starNoise, 120.0) * 8.0;
+            color += vec3(stars) * vec3(0.5, 0.9, 1.0);
+
+            // 3. Hào quang (Global Glow) - Tăng độ rực
+            float glow = exp(-(r - bhRadius) * 5.0);
+            color += vec3(0.0, 0.8, 1.0) * glow * 2.0;
+            
+            // 4. Đĩa bồi tụ (Accretion Disk) - Gargantua Style
+            // Tính toán trên không gian đã bị bẻ cong (warpedUv) để tự động tạo hiệu ứng Halo (vòng cung trên/dưới)
+            float diskR = length(vec2(warpedUv.x, warpedUv.y * 4.5));
+            float diskInner = 0.05;
+            float diskOuter = 2.5;
+            
+            if (diskR > diskInner && diskR < diskOuter && r > bhRadius) {
+                float falloff = smoothstep(diskOuter, diskInner, diskR);
+                float innerFade = smoothstep(diskInner, diskInner + 0.1, diskR);
+                
+                // Hiệu ứng Doppler (vật chất quay về phía mắt nhìn sáng hơn)
+                float doppler = 1.0 + 0.8 * smoothstep(0.0, -1.5, warpedUv.x);
+                
+                float angle = atan(warpedUv.y, warpedUv.x);
+                vec2 noiseUv = vec2(angle * 3.0 + uTime * 0.8, diskR * 6.0 - uTime * 2.0);
+                float n = fbm(noiseUv);
+                float n2 = fbm(noiseUv * 2.0 + vec2(uTime));
+                
+                // Tông màu Xanh/Trắng giống ảnh
+                vec3 color1 = vec3(0.02, 0.25, 0.7); // Deep space blue
+                vec3 color2 = vec3(0.0, 1.0, 0.9);  // Bright cyan/emerald
+                vec3 diskColor = mix(color1, color2, smoothstep(0.3, 0.7, n + n2 * 0.5));
+                
+                color += diskColor * (n * 0.8 + n2 * 0.5) * falloff * innerFade * 7.0 * doppler;
+            }
+
+            // Điểm sáng lóe lên ở bên trái đĩa (giống ánh sao phản chiếu trong ảnh)
+            vec2 starPos = vec2(-0.8, 0.0);
+            float starDist = length(warpedUv - starPos);
+            float brightStar = smoothstep(0.15, 0.0, starDist);
+            color += vec3(0.8, 1.0, 0.9) * pow(brightStar, 2.0) * 5.0 * glow;
+
+            // 5. Photon Ring (Vành đai photon mỏng sát chân trời sự kiện)
+            float rim = smoothstep(bhRadius + 0.02, bhRadius, r) * smoothstep(bhRadius - 0.005, bhRadius + 0.005, r);
+            color += vec3(0.6, 0.9, 1.0) * rim * 4.0;
+            
+            // 6. Chân trời sự kiện (Event Horizon - Đen tuyệt đối)
+            if (r < bhRadius) {
+                color = vec3(0.0);
+            }
+            
+            // Vignette
+            float vignette = length(vUv - 0.5);
+            color *= 1.0 - vignette * 0.5;
+
+            // Tăng Contrast
+            color = pow(color, vec3(1.1));
+
+            gl_FragColor = vec4(color, 1.0);
+        }
+      `;
+
+      const material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTime: { value: 0 },
+          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uMouse: { value: new THREE.Vector2(0, 0) }
+        },
+        transparent: true
+      });
+
+      const plane = new THREE.Mesh(geometry, material);
+      scene.add(plane);
+
+      let targetMouse = new THREE.Vector2(0, 0);
+      document.addEventListener('mousemove', (e) => {
+        targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      });
+
+      window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+      });
+
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        material.uniforms.uTime.value = clock.getElapsedTime();
+        material.uniforms.uMouse.value.x += (targetMouse.x - material.uniforms.uMouse.value.x) * 0.05;
+        material.uniforms.uMouse.value.y += (targetMouse.y - material.uniforms.uMouse.value.y) * 0.05;
+        renderer.render(scene, camera);
+      }
+      animate();
+    });
+  </script>
+
+
+  \n
+  <!-- GLASSMORPHISM DESKTOP UI OVERLAY -->
+  <style>
+    .glass-panel {
+      background: rgba(15, 20, 30, 0.45);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      border-radius: 16px;
+    }
+    
+    .glass-button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      transition: all 0.3s ease;
+    }
+    
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .glass-button.active {
+      background: #7dd3fc;
+      color: #0f172a;
+      border: 1px solid #38bdf8;
+    }
+
+    /* Custom Slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #7dd3fc;
+      cursor: pointer;
+      margin-top: -5px;
+      box-shadow: 0 0 10px rgba(125, 211, 252, 0.8);
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+    }
+    
+    /* Vertical Slider */
+    input[type=range].vertical {
+      writing-mode: bt-lr;
+      -webkit-appearance: slider-vertical;
+      width: 8px;
+      height: 100px;
+    }
+
+    .vinyl-record {
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Draggable window styling */
+    .drag-handle {
+      cursor: grab;
+    }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+    .desktop-widget {
+      position: fixed;
+      z-index: 9999;
+      transition: transform 0.1s;
+    }
+  </style>
+
+  <div id="desktop-ui" class="pointer-events-none fixed inset-0 z-[9999] font-sans">
+    
+    <!-- Music Player Widget -->
+    <div id="widget-music" class="desktop-widget glass-panel flex flex-col pointer-events-auto" style="bottom: 40px; left: 40px; width: 340px; transform: scale(0.9); transform-origin: bottom left;">
+      <!-- Drag Handle -->
+      <div class="drag-handle w-full h-6 flex items-center justify-center border-b border-white/5 opacity-50 hover:opacity-100">
+        <div class="w-10 h-1 rounded-full bg-white/20"></div>
+      </div>
+      <div class="p-5 relative overflow-hidden">
+        <div class="flex justify-between items-start">
+          <div class="relative w-24 h-24 rounded-full border-2 border-sky-400/50 flex items-center justify-center bg-black/40 shadow-[0_0_20px_rgba(56,189,248,0.3)]">
+            <div class="vinyl-record w-20 h-20 rounded-full border border-slate-700 bg-[radial-gradient(circle,rgba(30,41,59,1)_0%,rgba(15,23,42,1)_100%)] flex items-center justify-center overflow-hidden">
+              <div class="w-6 h-6 rounded-full bg-slate-900 border border-slate-700 z-10 flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-slate-500"></div>
+              </div>
+              <div class="absolute inset-0 opacity-40 mix-blend-screen bg-center bg-cover" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><path d=\'M20,50 Q40,10 60,50 T90,60\' stroke=\'%23fff\' fill=\'none\' stroke-width=\'2\'/></svg>');"></div>
+            </div>
+          </div>
+          <div class="flex-1 ml-4 pt-1">
+            <h3 class="text-white font-bold text-base leading-tight mb-1">LONOWN, riserayss<br>- worry (Slowed)</h3>
+            <p class="text-slate-400 text-[10px] uppercase tracking-wider mb-2">BY LONOWN</p>
+            <div class="inline-flex items-center text-[10px] text-sky-200 bg-sky-900/30 px-2 py-1 rounded">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 5a1 1 0 012 0v5h2.5a.5.5 0 010 1h-3a.5.5 0 01-.5-.5V5z"/></svg>
+              JBL Tune 720BT
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <input type="range" min="0" max="100" value="35" class="w-full">
+          <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+            <span>00:19</span>
+            <span>03:21</span>
+          </div>
+          <div class="flex justify-center items-center space-x-6 mt-1">
+            <button class="text-slate-300 hover:text-white transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/></svg></button>
+            <button class="w-8 h-8 bg-sky-400 rounded-full flex items-center justify-center text-slate-900 hover:bg-sky-300 transition shadow-[0_0_15px_rgba(56,189,248,0.5)]">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+            </button>
+            <button class="text-slate-300 hover:text-white transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798l-5.445 3.63A1 1 0 013 14V6a1 1 0 011.555-.832L10 8.798V6a1 1 0 011.555-.832l6 4a1 1 0 010 1.664l-6 4z"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Equalizer Widget -->
+    <div id="widget-eq" class="desktop-widget glass-panel flex flex-col pointer-events-auto" style="bottom: 40px; left: 380px; width: 340px; transform: scale(0.9); transform-origin: bottom left;">
+      <div class="drag-handle w-full h-6 flex items-center justify-center border-b border-white/5 opacity-50 hover:opacity-100">
+        <div class="w-10 h-1 rounded-full bg-white/20"></div>
+      </div>
+      <div class="p-5 flex flex-col">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-slate-200 font-semibold text-xs uppercase tracking-widest">Equalizer</h3>
+          <div class="flex space-x-2">
+            <span class="text-[10px] text-sky-300 bg-sky-900/40 px-2 py-1 rounded">Saved</span>
+            <span class="text-[10px] text-white bg-slate-700/50 px-2 py-1 rounded">Bass</span>
+          </div>
+        </div>
+        <div class="flex justify-between items-end h-28 mb-4 px-1 relative">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+            <path d="M 10 50 Q 30 30 50 40 T 90 40 T 130 50 T 170 60 T 210 55 T 250 40" fill="none" stroke="rgba(125, 211, 252, 0.4)" stroke-width="2"/>
+          </svg>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="60"><span class="text-[9px] text-slate-400 mt-1">31</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="70"><span class="text-[9px] text-slate-400 mt-1">63</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="55"><span class="text-[9px] text-slate-400 mt-1">125</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="45"><span class="text-[9px] text-slate-400 mt-1">250</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="40"><span class="text-[9px] text-slate-400 mt-1">500</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="50"><span class="text-[9px] text-slate-400 mt-1">1k</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="65"><span class="text-[9px] text-slate-400 mt-1">2k</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="80"><span class="text-[9px] text-slate-400 mt-1">4k</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="60"><span class="text-[9px] text-slate-400 mt-1">8k</span></div>
+          <div class="flex flex-col items-center"><input type="range" class="vertical z-10" min="0" max="100" value="45"><span class="text-[9px] text-slate-400 mt-1">16k</span></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <button class="glass-button py-1 text-[10px] rounded">Flat</button>
+          <button class="glass-button active py-1 text-[10px] rounded font-semibold shadow-[0_0_10px_rgba(56,189,248,0.3)]">Bass</button>
+          <button class="glass-button py-1 text-[10px] rounded">Treble</button>
+          <button class="glass-button py-1 text-[10px] rounded">Vocal</button>
+          <button class="glass-button py-1 text-[10px] rounded">Pop</button>
+          <button class="glass-button py-1 text-[10px] rounded">Rock</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="widget-notif" class="desktop-widget glass-panel p-3 w-64 pointer-events-auto" style="top: 80px; right: 20px; transform: scale(0.9); transform-origin: top right;">
+      <div class="drag-handle absolute inset-0 z-0"></div>
+      <div class="relative z-10 pointer-events-none">
+        <div class="absolute left-[-12px] top-[-12px] bottom-[-12px] w-1 bg-sky-400"></div>
+        <h4 class="text-white text-[10px] font-bold uppercase mb-1 flex items-center">
+          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          Screen Recorder
+        </h4>
+        <p class="text-sky-300 text-xs font-semibold mb-1">Recording Started</p>
+        <p class="text-slate-400 text-[10px] leading-tight">Press shortcut again to stop.</p>
+      </div>
+      <!-- Close button -->
+      <button onclick="document.getElementById('widget-notif').style.display='none'" class="absolute top-2 right-2 text-slate-400 hover:text-white z-20 pointer-events-auto">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Draggable Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const makeDraggable = (element) => {
+        const handle = element.querySelector('.drag-handle') || element;
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        
+        handle.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+          e.preventDefault();
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e.preventDefault();
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          element.style.top = (element.offsetTop - pos2) + "px";
+          element.style.left = (element.offsetLeft - pos1) + "px";
+          element.style.bottom = "auto"; // Remove bottom constraints once dragged
+          element.style.right = "auto";
+        }
+
+        function closeDragElement() {
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      };
+
+      makeDraggable(document.getElementById('widget-music'));
+      makeDraggable(document.getElementById('widget-eq'));
+      makeDraggable(document.getElementById('widget-notif'));
+    });
+  </script>
+
+  </script>
 </body>
 </html>
-

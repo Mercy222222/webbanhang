@@ -7,6 +7,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index-portfolio.html'),
+        smm: resolve(__dirname, 'index.html'),
       }
     }
   }
