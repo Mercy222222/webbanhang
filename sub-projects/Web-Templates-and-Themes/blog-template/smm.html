@@ -2876,34 +2876,37 @@
       }
     }
 
-    /* ─── Dynamic 3D Volumetric Star Nest Background ─── */
-    let scene, camera, renderer, material;
-    let targetMouse = new THREE.Vector2(0, 0);
-
+    /* ─── Dynamic 3D Volumetric Star Nest + Planets & Spaceships ─── */
+    let bgScene, bgCamera, renderer, bgMaterial;
+    let mainScene, mainCamera;
+    let targetMouseParallax = new THREE.Vector2(0, 0);
+    let targetMouseShader = new THREE.Vector2(0, 0);
+    
+    // 3D Objects
+    let planets = [];
+    let spaceships = [];
+    
     function initThreeJS() {
       const container = document.getElementById('three-bg-container');
       if (!container) return;
 
-      scene = new THREE.Scene();
-      
-      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-      camera.position.z = 1;
-
+      // Renderer
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.autoClear = false; // Important for multi-pass rendering
       container.appendChild(renderer.domElement);
 
-      const geometry = new THREE.PlaneGeometry(2, 2);
+      // --- Background Shader Setup ---
+      bgScene = new THREE.Scene();
+      bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      bgCamera.position.z = 1;
 
+      const bgGeometry = new THREE.PlaneGeometry(2, 2);
       const vertexShader = `
         varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = vec4(position, 1.0);
-        }
+        void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
       `;
-
       const fragmentShader = `
         uniform float uTime;
         uniform vec2 uResolution;
@@ -2974,8 +2977,7 @@
             gl_FragColor = vec4(finalColor, 1.0);
         }
       `;
-
-      material = new THREE.ShaderMaterial({
+      bgMaterial = new THREE.ShaderMaterial({
         vertexShader,
         fragmentShader,
         uniforms: {
@@ -2985,39 +2987,154 @@
         },
         transparent: true
       });
+      bgScene.add(new THREE.Mesh(bgGeometry, bgMaterial));
 
-      const plane = new THREE.Mesh(geometry, material);
-      scene.add(plane);
+      // --- Main 3D Scene Setup ---
+      mainScene = new THREE.Scene();
+      mainCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      mainCamera.position.z = 30;
 
-      // Event listeners
+      // Lighting
+      mainScene.add(new THREE.AmbientLight(0x222233, 2.0));
+      const pLight1 = new THREE.PointLight(0x06b6d4, 5, 100);
+      pLight1.position.set(-20, 10, 20);
+      mainScene.add(pLight1);
+      const pLight2 = new THREE.PointLight(0x8b5cf6, 5, 100);
+      pLight2.position.set(20, -10, 20);
+      mainScene.add(pLight2);
+
+      // --- Planet 1: Cyberpunk Wireframe Planet ---
+      const planet1Grp = new THREE.Group();
+      const coreGeo = new THREE.IcosahedronGeometry(4.8, 2);
+      const coreMat = new THREE.MeshStandardMaterial({ color: 0x050814, roughness: 0.8 });
+      planet1Grp.add(new THREE.Mesh(coreGeo, coreMat));
+      
+      const wireGeo = new THREE.IcosahedronGeometry(5, 2);
+      const wireMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.3 });
+      planet1Grp.add(new THREE.Mesh(wireGeo, wireMat));
+      
+      const atmosGeo = new THREE.SphereGeometry(5.2, 32, 32);
+      const atmosMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending });
+      planet1Grp.add(new THREE.Mesh(atmosGeo, atmosMat));
+      
+      planet1Grp.position.set(-18, 8, -10);
+      mainScene.add(planet1Grp);
+      planets.push({ mesh: planet1Grp, rotSpeedX: 0.002, rotSpeedY: 0.003 });
+
+      // --- Planet 2: Ringed Gas Giant ---
+      const planet2Grp = new THREE.Group();
+      const p2Geo = new THREE.SphereGeometry(6, 32, 32);
+      const p2Mat = new THREE.MeshStandardMaterial({ color: 0x5c20d2, emissive: 0x220a4f, roughness: 0.5 });
+      planet2Grp.add(new THREE.Mesh(p2Geo, p2Mat));
+      
+      const ringGeo = new THREE.RingGeometry(8, 14, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, side: THREE.DoubleSide, transparent: true, opacity: 0.4, wireframe: true });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      ringMesh.rotation.x = Math.PI / 2.2;
+      planet2Grp.add(ringMesh);
+      
+      planet2Grp.position.set(22, -10, -25);
+      mainScene.add(planet2Grp);
+      planets.push({ mesh: planet2Grp, rotSpeedX: 0.001, rotSpeedY: -0.002 });
+
+      // --- Spaceships Fleet ---
+      const shipGeo = new THREE.ConeGeometry(0.4, 2.5, 4);
+      shipGeo.rotateX(Math.PI / 2); // point forward
+      const shipMat = new THREE.MeshStandardMaterial({ 
+        color: 0xffffff, 
+        emissive: 0x06b6d4, 
+        emissiveIntensity: 1.5,
+        wireframe: true
+      });
+
+      for(let i=0; i<12; i++) {
+        const ship = new THREE.Mesh(shipGeo, shipMat);
+        const radius = Math.random() * 25 + 15;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 0.015 + 0.005;
+        const yOffset = (Math.random() - 0.5) * 30;
+        
+        mainScene.add(ship);
+        spaceships.push({ mesh: ship, angle, radius, speed, yOffset });
+        
+        const engineLight = new THREE.PointLight(0x06b6d4, 1.5, 8);
+        engineLight.position.set(0, 0, -1);
+        ship.add(engineLight);
+      }
+
+      // --- Asteroid / Stardust Field ---
+      const dustGeo = new THREE.BufferGeometry();
+      const dustCount = 1500;
+      const dustPos = new Float32Array(dustCount * 3);
+      for(let i=0; i<dustCount*3; i++) {
+        dustPos[i] = (Math.random() - 0.5) * 120;
+      }
+      dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+      const dustMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.6 });
+      mainScene.add(new THREE.Points(dustGeo, dustMat));
+
       document.addEventListener('mousemove', onThreeMouseMove);
       window.addEventListener('resize', onThreeWindowResize);
     }
 
     function onThreeMouseMove(event) {
-      targetMouse.x = event.clientX;
-      targetMouse.y = event.clientY;
+      targetMouseParallax.x = (event.clientX / window.innerWidth) * 2 - 1;
+      targetMouseParallax.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      targetMouseShader.x = event.clientX;
+      targetMouseShader.y = event.clientY;
     }
 
     function onThreeWindowResize() {
       renderer.setSize(window.innerWidth, window.innerHeight);
-      if(material) {
-        material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+      if(bgMaterial) {
+        bgMaterial.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
       }
+      mainCamera.aspect = window.innerWidth / window.innerHeight;
+      mainCamera.updateProjectionMatrix();
     }
 
     const clock = new THREE.Clock();
 
     function animateThree() {
       requestAnimationFrame(animateThree);
+      const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
       
-      if(material) {
-        material.uniforms.uTime.value = clock.getElapsedTime();
-        material.uniforms.uMouse.value.x += (targetMouse.x - material.uniforms.uMouse.value.x) * 0.05;
-        material.uniforms.uMouse.value.y += (targetMouse.y - material.uniforms.uMouse.value.y) * 0.05;
+      if(bgMaterial) {
+        bgMaterial.uniforms.uTime.value = elapsed;
+        bgMaterial.uniforms.uMouse.value.x += (targetMouseShader.x - bgMaterial.uniforms.uMouse.value.x) * 0.05;
+        bgMaterial.uniforms.uMouse.value.y += (targetMouseShader.y - bgMaterial.uniforms.uMouse.value.y) * 0.05;
       }
       
-      renderer.render(scene, camera);
+      // Parallax Camera
+      mainCamera.position.x += (targetMouseParallax.x * 6 - mainCamera.position.x) * 0.05;
+      mainCamera.position.y += (targetMouseParallax.y * 6 - mainCamera.position.y) * 0.05;
+      mainCamera.lookAt(0, 0, 0);
+
+      // Rotate Planets
+      planets.forEach((p, index) => {
+        p.mesh.rotation.x += p.rotSpeedX;
+        p.mesh.rotation.y += p.rotSpeedY;
+        p.mesh.position.y += Math.sin(elapsed * 1.5 + index) * 0.015; // Floating effect
+      });
+
+      // Fly Spaceships
+      spaceships.forEach((s) => {
+        s.angle += s.speed * delta * 20;
+        const nextX = Math.cos(s.angle) * s.radius;
+        const nextZ = Math.sin(s.angle) * s.radius * 0.6 - 15;
+        const nextY = s.yOffset + Math.sin(s.angle * 3) * 8;
+        
+        const targetPos = new THREE.Vector3(nextX, nextY, nextZ);
+        s.mesh.lookAt(targetPos);
+        s.mesh.position.copy(targetPos);
+      });
+      
+      renderer.clear();
+      renderer.render(bgScene, bgCamera);
+      renderer.clearDepth();
+      renderer.render(mainScene, mainCamera);
     }
 
     /* ─── Dynamic Typewriter Effect for Hero Description ─── */
