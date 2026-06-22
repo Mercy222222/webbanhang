@@ -2894,41 +2894,41 @@
       const shipGroup = new THREE.Group();
       
       // Body
-      const bodyGeo = new THREE.CylinderGeometry(6, 18, 50, 8);
+      const bodyGeo = new THREE.CylinderGeometry(30, 90, 250, 8);
       bodyGeo.rotateX(Math.PI / 2);
-      const bodyMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.1 });
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.9, roughness: 0.1, emissive: 0x222222 });
       const body = new THREE.Mesh(bodyGeo, bodyMat);
       shipGroup.add(body);
       
       // Cockpit
-      const cockGeo = new THREE.SphereGeometry(9, 16, 16);
+      const cockGeo = new THREE.SphereGeometry(45, 16, 16);
       cockGeo.scale(1, 0.6, 1.8);
-      const cockMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.9, roughness: 0.1, emissive: 0x0044aa, transparent: true, opacity: 0.85 });
+      const cockMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.9, roughness: 0.1, emissive: 0x0088ff, transparent: true, opacity: 0.9 });
       const cockpit = new THREE.Mesh(cockGeo, cockMat);
-      cockpit.position.set(0, 10, 8);
+      cockpit.position.set(0, 50, 40);
       shipGroup.add(cockpit);
       
       // Wings
-      const wingGeo = new THREE.BoxGeometry(60, 3, 20);
-      const wingMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.7, roughness: 0.4 });
+      const wingGeo = new THREE.BoxGeometry(300, 15, 100);
+      const wingMat = new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.7, roughness: 0.4, emissive: 0x111111 });
       const wings = new THREE.Mesh(wingGeo, wingMat);
-      wings.position.set(0, 0, -8);
+      wings.position.set(0, 0, -40);
       shipGroup.add(wings);
       
       // Engines
-      const engGeo = new THREE.CylinderGeometry(5, 7, 12, 8);
+      const engGeo = new THREE.CylinderGeometry(25, 35, 60, 8);
       engGeo.rotateX(Math.PI / 2);
       const engMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
       const engine1 = new THREE.Mesh(engGeo, engMat);
-      engine1.position.set(-15, 0, -30);
+      engine1.position.set(-75, 0, -150);
       shipGroup.add(engine1);
       const engine2 = new THREE.Mesh(engGeo, engMat);
-      engine2.position.set(15, 0, -30);
+      engine2.position.set(75, 0, -150);
       shipGroup.add(engine2);
 
       // Light trail
-      const shipLight = new THREE.PointLight(0x00ffff, 3, 400);
-      shipLight.position.set(0, 0, -35);
+      const shipLight = new THREE.PointLight(0x00ffff, 8, 1500);
+      shipLight.position.set(0, 0, -175);
       shipGroup.add(shipLight);
       
       bgScene.add(shipGroup);
@@ -2971,23 +2971,23 @@
           o.mesh.rotation.y += 0.012 * o.speed;
         }
         if (o.type === 'spaceship') {
-          o.progress += 0.003;
-          // Fly in a large 3D infinity curve (Lissajous curve) through the solar system
-          const r = 2400;
+          o.progress += 0.005; // Fly faster
+          // Fly closer to the camera/sun
+          const r = 800;
           const x = Math.sin(o.progress) * r;
           const z = Math.sin(o.progress * 0.5) * r * 1.5;
-          const y = Math.cos(o.progress * 1.2) * 600 + 300;
+          const y = Math.cos(o.progress * 1.2) * 300 + 100;
           o.mesh.position.set(x, y, z);
           
           // Calculate derivative to point the nose correctly
           const dx = Math.cos(o.progress) * r;
           const dz = Math.cos(o.progress * 0.5) * 0.5 * r * 1.5;
-          const dy = -Math.sin(o.progress * 1.2) * 1.2 * 600;
+          const dy = -Math.sin(o.progress * 1.2) * 1.2 * 300;
           
           const lookAtPos = new THREE.Vector3(x + dx, y + dy, z + dz);
           o.mesh.lookAt(lookAtPos);
           // Add bank effect (roll)
-          o.mesh.rotation.z = -Math.sin(o.progress * 1.5) * 0.4;
+          o.mesh.rotation.z = -Math.sin(o.progress * 1.5) * 0.5;
         }
       });
 
