@@ -2478,33 +2478,33 @@
       orbitals.push({ mesh: diskMesh, type: 'disk' });
 
       // ════════════════════════════════════════════
-      // B) GALAXY ARMS (Milky Way spiral — 30,000 stars)
+      // B) GALAXY ARMS (Vivid Milky Way spiral — 50,000 stars)
       // ════════════════════════════════════════════
-      const galCount = 30000;
+      const galCount = 50000;
       const gPos = new Float32Array(galCount * 3);
       const gCol = new Float32Array(galCount * 3);
       const gSizes = new Float32Array(galCount);
-      const numArms = 4;
+      const numArms = 5;
       const armOffset = (Math.PI * 2) / numArms;
 
       for (let i = 0; i < galCount; i++) {
         const arm = i % numArms;
         const progress = Math.pow(Math.random(), 0.6);
-        const r = 600 + progress * 3500;
-        const spin = progress * Math.PI * 5;
-        const spread = Math.random() * 0.5;
+        const r = 500 + progress * 4000;
+        const spin = progress * Math.PI * 6;
+        const spread = Math.random() * 0.6;
         const angle = arm * armOffset + spin + (Math.random() - 0.5) * spread;
 
-        gPos[i*3]   = Math.cos(angle) * r + (Math.random() - 0.5) * 150;
-        gPos[i*3+1] = (Math.random() - 0.5) * 200 * (1 - progress * 0.7);
-        gPos[i*3+2] = Math.sin(angle) * r + (Math.random() - 0.5) * 150;
+        gPos[i*3]   = Math.cos(angle) * r + (Math.random() - 0.5) * 180;
+        gPos[i*3+1] = (Math.random() - 0.5) * 250 * (1 - progress * 0.7);
+        gPos[i*3+2] = Math.sin(angle) * r + (Math.random() - 0.5) * 180;
 
-        // Star colors: blue-white core, yellow-orange midrange, red periphery
+        // Enhanced vivid colors: Cyan/Blue to Purple/Magenta
         const t = progress;
-        gCol[i*3]   = 0.5 + t * 0.5;
-        gCol[i*3+1] = 0.6 - t * 0.2;
-        gCol[i*3+2] = 1.0 - t * 0.8;
-        gSizes[i] = 0.8 + Math.random() * 2.2;
+        gCol[i*3]   = 0.4 + t * 0.6 + Math.random() * 0.2; // R
+        gCol[i*3+1] = 0.5 - t * 0.3 + Math.random() * 0.3; // G
+        gCol[i*3+2] = 1.0 - t * 0.4 + Math.random() * 0.2; // B
+        gSizes[i] = 0.9 + Math.random() * 2.5;
       }
 
       const galGeo = new THREE.BufferGeometry();
@@ -2561,6 +2561,8 @@
         { r: 70, orbitR: 980, speed: 0.45, color: 0xffcc77, emissive: 0x664400, name: 'Jupiter', inc: 0.03, hasRing: true },
         { r: 55, orbitR:1220, speed: 0.32, color: 0xddbb66, emissive: 0x553300, name: 'Saturn',  inc: 0.15, hasRing: true, bigRing: true },
         { r: 40, orbitR:1450, speed: 0.22, color: 0x66bbff, emissive: 0x003366, name: 'Uranus',  inc: 0.20 },
+        { r: 38, orbitR:1680, speed: 0.18, color: 0x3366ff, emissive: 0x001188, name: 'Neptune', inc: 0.12 },
+        { r: 12, orbitR:1880, speed: 0.12, color: 0xcccccc, emissive: 0x222222, name: 'Pluto',   inc: 0.25 }
       ];
 
       planetDefs.forEach(def => {
@@ -2886,6 +2888,52 @@
         });
       }
 
+      // ════════════════════════════════════════════
+      // H) SPACESHIP FLEET
+      // ════════════════════════════════════════════
+      const shipGroup = new THREE.Group();
+      
+      // Body
+      const bodyGeo = new THREE.CylinderGeometry(6, 18, 50, 8);
+      bodyGeo.rotateX(Math.PI / 2);
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.1 });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      shipGroup.add(body);
+      
+      // Cockpit
+      const cockGeo = new THREE.SphereGeometry(9, 16, 16);
+      cockGeo.scale(1, 0.6, 1.8);
+      const cockMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.9, roughness: 0.1, emissive: 0x0044aa, transparent: true, opacity: 0.85 });
+      const cockpit = new THREE.Mesh(cockGeo, cockMat);
+      cockpit.position.set(0, 10, 8);
+      shipGroup.add(cockpit);
+      
+      // Wings
+      const wingGeo = new THREE.BoxGeometry(60, 3, 20);
+      const wingMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.7, roughness: 0.4 });
+      const wings = new THREE.Mesh(wingGeo, wingMat);
+      wings.position.set(0, 0, -8);
+      shipGroup.add(wings);
+      
+      // Engines
+      const engGeo = new THREE.CylinderGeometry(5, 7, 12, 8);
+      engGeo.rotateX(Math.PI / 2);
+      const engMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+      const engine1 = new THREE.Mesh(engGeo, engMat);
+      engine1.position.set(-15, 0, -30);
+      shipGroup.add(engine1);
+      const engine2 = new THREE.Mesh(engGeo, engMat);
+      engine2.position.set(15, 0, -30);
+      shipGroup.add(engine2);
+
+      // Light trail
+      const shipLight = new THREE.PointLight(0x00ffff, 3, 400);
+      shipLight.position.set(0, 0, -35);
+      shipGroup.add(shipLight);
+      
+      bgScene.add(shipGroup);
+      orbitals.push({ mesh: shipGroup, type: 'spaceship', progress: 0 });
+
       // ─── RESIZE ───
       window.addEventListener('resize', () => {
         const w = window.innerWidth, h = window.innerHeight;
@@ -2921,6 +2969,25 @@
         }
         if (o.type === 'moon') {
           o.mesh.rotation.y += 0.012 * o.speed;
+        }
+        if (o.type === 'spaceship') {
+          o.progress += 0.003;
+          // Fly in a large 3D infinity curve (Lissajous curve) through the solar system
+          const r = 2400;
+          const x = Math.sin(o.progress) * r;
+          const z = Math.sin(o.progress * 0.5) * r * 1.5;
+          const y = Math.cos(o.progress * 1.2) * 600 + 300;
+          o.mesh.position.set(x, y, z);
+          
+          // Calculate derivative to point the nose correctly
+          const dx = Math.cos(o.progress) * r;
+          const dz = Math.cos(o.progress * 0.5) * 0.5 * r * 1.5;
+          const dy = -Math.sin(o.progress * 1.2) * 1.2 * 600;
+          
+          const lookAtPos = new THREE.Vector3(x + dx, y + dy, z + dz);
+          o.mesh.lookAt(lookAtPos);
+          // Add bank effect (roll)
+          o.mesh.rotation.z = -Math.sin(o.progress * 1.5) * 0.4;
         }
       });
 
