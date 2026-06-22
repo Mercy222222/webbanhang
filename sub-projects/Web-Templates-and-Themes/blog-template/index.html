@@ -56,6 +56,31 @@
     }
   </script>
   <style>
+    /* ─── GOD TIER CUSTOM CURSOR ─── */
+    * { cursor: none !important; }
+    .god-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      border: 2px solid #06b6d4;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 999999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+      mix-blend-mode: difference;
+    }
+    .god-cursor.hovering {
+      width: 50px; height: 50px;
+      background-color: rgba(6, 182, 212, 0.2);
+    }
+    #cursor-trail-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 999998;
+    }
 
     /* A/B Testing Visibility */
     .ab-variant-b-text {
@@ -559,7 +584,8 @@
   <!-- Interactive 3D Background -->
   
   <!-- Interactive Particle Cursor Trail -->
-  
+  <div class="god-cursor"></div>
+  <canvas id="cursor-trail-canvas"></canvas>
 
   <!-- ─── HEADER & NAVBAR ─── -->
   <nav id="navbar" class="fixed top-0 inset-x-0 h-[70px] z-50 transition-all duration-300 bg-white/80 dark:bg-[#181818]/80 backdrop-blur-md border-b border-zinc-200/50 dark:/50">
@@ -1979,10 +2005,10 @@
       let lang = '';
       
       if (currentLanguage === 'vi') {
-        text = 'Chào mừng bạn đến với danh mục hồ sơ năng lực của Võ Hữu Trí!';
+        text = 'Xin chào sếp! Chào mừng sếp đến với không gian vũ trụ, danh mục hồ sơ năng lực của Võ Hữu Trí. Hệ thống phi thuyền đã sẵn sàng, chúc sếp có một trải nghiệm tuyệt vời!';
         lang = 'vi-VN';
       } else {
-        text = 'Welcome to the portfolio of Vo Huu Tri!';
+        text = 'Hello boss! Welcome to the cosmic portfolio space of Vo Huu Tri. Spaceship system is ready, have a great experience!';
         lang = 'en-US';
       }
       
@@ -4225,12 +4251,134 @@
         }
       };
 
-      makeDraggable(document.getElementById('widget-music'));
-      makeDraggable(document.getElementById('widget-eq'));
       makeDraggable(document.getElementById('widget-notif'));
     });
-  </script>
 
+    /* ─── GOD TIER CURSOR SYSTEM ─── */
+    const cursor = document.querySelector('.god-cursor');
+    const canvas = document.getElementById('cursor-trail-canvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let trailParticles = [];
+    const codeSymbols = ["✦", "✨", "★", "🔥", "⚡", "::", "{}", "<>"];
+    let mouse = { x: null, y: null };
+
+    if (cursor) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+
+        if (window.innerWidth < 768) return;
+
+        if (trailParticles.length < 60) {
+          trailParticles.push({
+            x: e.clientX, y: e.clientY,
+            text: codeSymbols[Math.floor(Math.random() * codeSymbols.length)],
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5 - 0.4,
+            size: Math.floor(Math.random() * 5) + 10,
+            color: Math.random() > 0.5 ? '#8b5cf6' : '#06b6d4',
+            alpha: 1.0,
+            decay: Math.random() * 0.015 + 0.012,
+            angle: Math.random() * Math.PI * 2,
+            angularVelocity: (Math.random() - 0.5) * 0.06
+          });
+        }
+      });
+
+      document.querySelectorAll('a, button, input, select, .cursor-pointer, .nav-link-item, .project-card, .skill-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+      });
+
+      if (canvas && ctx) {
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('click', (e) => {
+          const count = Math.min(12, 60 - trailParticles.length);
+          for (let i = 0; i < count; i++) {
+            const speed = Math.random() * 5 + 3;
+            const angle = Math.random() * Math.PI * 2;
+            trailParticles.push({
+              x: e.clientX, y: e.clientY,
+              text: codeSymbols[Math.floor(Math.random() * codeSymbols.length)],
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              size: Math.floor(Math.random() * 6) + 12,
+              color: Math.random() > 0.5 ? '#8b5cf6' : '#06b6d4',
+              alpha: 1.0,
+              decay: Math.random() * 0.02 + 0.015,
+              angle: Math.random() * Math.PI * 2,
+              angularVelocity: (Math.random() - 0.5) * 0.1
+            });
+          }
+        });
+
+        function animateCursorTrail() {
+          requestAnimationFrame(animateCursorTrail);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          for (let i = 0; i < trailParticles.length; i++) {
+            const p1 = trailParticles[i];
+            
+            if (mouse.x !== null && mouse.y !== null) {
+              const dx = p1.x - mouse.x;
+              const dy = p1.y - mouse.y;
+              const dist = Math.sqrt(dx*dx + dy*dy);
+              if (dist < 100) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = p1.color;
+                ctx.globalAlpha = (1 - dist / 100) * p1.alpha * 0.28;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+              }
+            }
+
+            for (let j = i + 1; j < trailParticles.length; j++) {
+              const p2 = trailParticles[j];
+              const dx = p1.x - p2.x;
+              const dy = p1.y - p2.y;
+              const dist = Math.sqrt(dx*dx + dy*dy);
+              if (dist < 80) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.strokeStyle = p1.color;
+                ctx.globalAlpha = (1 - dist / 80) * p1.alpha * p2.alpha * 0.2;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+
+            p1.x += p1.vx;
+            p1.y += p1.vy;
+            p1.angle += p1.angularVelocity;
+            p1.alpha -= p1.decay;
+
+            ctx.save();
+            ctx.translate(p1.x, p1.y);
+            ctx.rotate(p1.angle);
+            ctx.globalAlpha = p1.alpha;
+            ctx.fillStyle = p1.color;
+            ctx.font = `${p1.size}px monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(p1.text, 0, 0);
+            ctx.restore();
+          }
+          trailParticles = trailParticles.filter(p => p.alpha > 0);
+        }
+        animateCursorTrail();
+      }
+    }
   </script>
 </body>
 </html>
