@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Báo cáo đồ án: Website Bán Bánh Ngọt (Bản Hoàn Chỉnh)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css" id="theme">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Outfit', sans-serif; }
+    .reveal .slides { text-align: left; height: 100%; }
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Playfair Display', serif; text-transform: none; font-weight: 700; color: #333;
+    }
+    .reveal p, .reveal li { font-family: 'Outfit', sans-serif; color: #555; }
+    .canva-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 24px; padding: 50px 60px;
+      box-shadow: 0 20px 50px rgba(219, 39, 119, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      width: 100%; max-width: 1150px; margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+    .bg-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center; z-index: -1;
+    }
+    .reveal ul { list-style-type: none; padding-left: 0; margin-top: 15px; }
+    .reveal ul li { position: relative; padding-left: 35px; margin-bottom: 12px; font-size: 1.3rem; line-height: 1.5; }
+    .reveal ul li::before { content: '🌸'; position: absolute; left: 0; top: 2px; font-size: 0.9em; }
+    
+    .img-container { text-align: center; margin-top: 20px; }
+    .img-container img { max-width: 100%; width: auto; max-height: none; object-fit: contain; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    
+    /* Tables for forms */
+    table.form-table { 
+      width: 100%; border-collapse: separate; border-spacing: 0; 
+      margin-top: 15px; font-size: 1.1rem; background: white;
+      border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(219,39,119,0.08);
+    }
+    table.form-table th, table.form-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #fce7f3; }
+    table.form-table th { background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%); color: white; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; font-size: 0.95rem; }
+    table.form-table tr:last-child td { border-bottom: none; }
+    table.form-table tr:hover { background-color: #fdf2f8; transition: 0.3s ease; }
+    
+    /* Receipt Cards */
+    .receipt-card {
+      background: #fffcfd;
+      border: 2px dashed #f9a8d4;
+      border-radius: 16px;
+      padding: 35px 45px;
+      position: relative;
+      box-shadow: inset 0 0 30px rgba(244, 114, 182, 0.05), 0 10px 25px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+    .receipt-card::before, .receipt-card::after {
+      content: ''; position: absolute; width: 30px; height: 30px; background: #fdf4ff; border-radius: 50%; top: 50%; transform: translateY(-50%);
+    }
+    .receipt-card::before { left: -15px; box-shadow: inset -3px 0 5px rgba(0,0,0,0.02); }
+    .receipt-card::after { right: -15px; box-shadow: inset 3px 0 5px rgba(0,0,0,0.02); }
+    
+    .receipt-header { text-align: center; border-bottom: 2px dashed #fbcfe8; padding-bottom: 20px; margin-bottom: 25px; }
+    .receipt-title { font-size: 1.8rem; font-weight: 800; color: #be185d; letter-spacing: 2px; font-family: 'Playfair Display', serif;}
+    .receipt-subtitle { font-size: 1rem; color: #831843; opacity: 0.8; margin-top: 5px; font-weight: 600;}
+    
+    .form-text { font-size: 1.2rem; line-height: 1.8; color: #4c1d95; }
+    .form-text strong { color: #be185d; }
+    
+    .signature-box { display: flex; justify-content: space-between; margin-top: 40px; text-align: center; }
+    .signature-title { font-weight: bold; color: #9d174d; font-size: 1.1rem; }
+    .signature-line { margin-top: 50px; border-bottom: 1px solid #f9a8d4; width: 120px; margin-left: auto; margin-right: auto; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      
+      <!-- Slide 1: Bìa -->
+      <section>
+        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1965&auto=format&fit=crop'); opacity: 0.3;"></div>
+        <div class="canva-card">
+          <div class="flex justify-center mb-8">
+            <img src="assets/image1.jpeg" alt="Logo" class="h-32 object-contain rounded-xl shadow-lg" onerror="this.style.display='none'">
+          </div>
+          
+          <h1 class="text-5xl text-center text-pink-700 font-extrabold mb-10 leading-snug">
+            Báo Cáo Đồ Án<br>Website Kinh Doanh Bánh Ngọt Trực Tuyến
+          </h1>
+          
+          <div class="flex justify-between w-full border-t border-pink-200 pt-8 mt-4">
+            <div class="text-left">
+              <p class="font-bold text-gray-500 text-xl mb-2">Giảng viên hướng dẫn:</p>
+              <p class="text-pink-600 text-3xl font-bold">Th.S Nguyễn Văn Danh</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-500 text-xl mb-2">Sinh viên thực hiện:</p>
+              <p class="text-gray-700 leading-relaxed text-2xl font-bold">
+                Hoàng Minh Triều<br>Nguyễn Gia Sinh<br>Võ Hữu Trí<br>Phan Tấn Phát
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Giới thiệu đề tài -->
+      <section data-transition="slide">
+        <div class="bg-overlay" style="background-color: #f8fafc;"></div>
+        <div class="canva-card">
+          <h2 class="text-5xl text-pink-700 mb-8 text-center border-b pb-4">📖 Tổng Quan Đề Tài</h2>
+          <div class="grid grid-cols-2 gap-12 mt-4 flex-1">
+            <div class="bg-red-50 p-8 rounded-2xl border border-red-100 shadow-sm">
+              <h3 class="text-3xl text-red-600 mb-6 flex items-center">⚠️ Lý do & Khó khăn</h3>
+              <ul>
+                <li>Sự thay đổi hành vi: Khách hàng ngày càng ưa chuộng tiện lợi.</li>
+                <li>Hạn chế truyền thống: Khó mở rộng tệp khách hàng.</li>
+                <li>Quản lý thủ công: Khó theo dõi tồn kho và hạn sử dụng.</li>
+              </ul>
+            </div>
+            <div class="bg-green-50 p-8 rounded-2xl border border-green-100 shadow-sm">
+              <h3 class="text-3xl text-green-600 mb-6 flex items-center">💡 Giải pháp</h3>
+              <ul>
+                <li>Hệ thống Website bán bánh trực tuyến tích hợp quản lý.</li>
+                <li>Tối ưu quy trình: Từ tiếp nhận đơn đến giao hàng.</li>
+                <li>Hỗ trợ người dùng đặt hàng 24/7.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BIỂU MẪU BẰNG HTML (Vì trong Word nó là bảng Text, không phải hình) -->
+      
+      <!-- Biểu mẫu 1 -->
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fdf2f8;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-fuchsia-700 text-center mb-4">2.2.1. Biểu mẫu: Bảng thanh toán tiền lương</h2>
+          <div class="text-center font-bold text-gray-500 tracking-widest text-sm mb-6">TIỆM BÁNH LÀNG XÌ MI</div>
+          <table class="form-table">
+            <tr><th>STT</th><th>Họ và tên</th><th>Chức vụ</th><th>Lương cơ bản</th><th>Phụ cấp</th><th>Ngày công</th><th>Thực lĩnh</th></tr>
+            <tr><td>1</td><td class="font-semibold text-pink-700">Nguyễn Văn A</td><td>Thợ bánh chính</td><td>15,000,000</td><td>1,000,000</td><td>26</td><td class="font-bold text-green-600">16,000,000</td></tr>
+            <tr><td>2</td><td class="font-semibold text-pink-700">Trần Thị B</td><td>Phụ bánh</td><td>8,000,000</td><td>500,000</td><td>26</td><td class="font-bold text-green-600">8,500,000</td></tr>
+            <tr><td>3</td><td class="font-semibold text-pink-700">Phạm Văn C</td><td>Thu ngân</td><td>9,000,000</td><td>500,000</td><td>25</td><td class="font-bold text-green-600">9,153,846</td></tr>
+            <tr class="bg-pink-50"><td colspan="3" class="font-extrabold text-pink-800 text-right">TỔNG CỘNG:</td><td class="font-bold">32,000,000</td><td class="font-bold">2,000,000</td><td class="font-bold">77</td><td class="font-extrabold text-pink-700 text-xl">33,653,846</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- Biểu mẫu 2 -->
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fdf2f8;"></div>
+        <div class="canva-card" style="align-items: center;">
+          <h2 class="text-4xl text-fuchsia-700 text-center w-full">2.2.2. Biểu mẫu: Phiếu thu</h2>
+          <div class="receipt-card w-[80%]">
+            <div class="receipt-header">
+              <div class="receipt-subtitle">TIỆM BÁNH LÀNG XÌ MI</div>
+              <div class="receipt-title mt-2">PHIẾU THU</div>
+            </div>
+            <div class="form-text">
+              <div class="flex justify-between mb-2">
+                <p><strong>Ngày:</strong> 21 tháng 06 năm 2026</p>
+                <p><strong>Số:</strong> PT-1024</p>
+              </div>
+              <p><strong>Nợ:</strong> 111 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Có:</strong> 131</p>
+              <p class="mt-4 border-b border-pink-100 pb-2"><strong>Họ và tên người nộp:</strong> Nguyễn Khách Hàng</p>
+              <p class="mt-2 border-b border-pink-100 pb-2"><strong>Địa chỉ:</strong> Quận 1, TP.HCM</p>
+              <p class="mt-2 border-b border-pink-100 pb-2"><strong>Lý do nộp:</strong> Thanh toán đơn hàng bánh sinh nhật #DH001</p>
+              <p class="mt-2 border-b border-pink-100 pb-2"><strong>Số tiền:</strong> <span class="text-2xl font-bold text-pink-600">1,500,000 VNĐ</span></p>
+              <p class="mt-2 text-sm italic"><strong>Bằng chữ:</strong> Một triệu năm trăm nghìn đồng chẵn.</p>
+            </div>
+            <div class="signature-box">
+              <div><p class="signature-title">Người nộp tiền</p><div class="signature-line"></div></div>
+              <div><p class="signature-title">Thủ quỹ</p><div class="signature-line"></div></div>
+              <div><p class="signature-title">Giám đốc</p><div class="signature-line"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Biểu mẫu 3 -->
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fdf2f8;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-fuchsia-700 text-center mb-4">2.2.3. Biểu mẫu: Phiếu nhập kho</h2>
+          <div class="text-center font-bold text-gray-500 tracking-widest text-sm mb-6">TIỆM BÁNH LÀNG XÌ MI</div>
+          <table class="form-table">
+            <tr><th>STT</th><th>Tên vật tư, nguyên liệu</th><th>Mã số</th><th>ĐVT</th><th>Số lượng</th><th>Đơn giá</th><th>Thành tiền</th></tr>
+            <tr><td>1</td><td class="font-semibold text-blue-700">Bột mì số 11 (Bakers' Choice)</td><td>VT-01</td><td>Kg</td><td>50</td><td>20,000</td><td class="font-bold">1,000,000</td></tr>
+            <tr><td>2</td><td class="font-semibold text-blue-700">Bơ nhạt Anchor</td><td>VT-02</td><td>Thùng</td><td>10</td><td>150,000</td><td class="font-bold">1,500,000</td></tr>
+            <tr><td>3</td><td class="font-semibold text-blue-700">Đường trắng Biên Hòa</td><td>VT-03</td><td>Kg</td><td>30</td><td>25,000</td><td class="font-bold">750,000</td></tr>
+          </table>
+          <div class="flex justify-between items-center mt-6 px-4">
+            <p class="italic text-gray-500 text-lg">Người giao: Cty TNHH Nguyên Liệu Á Âu</p>
+            <p class="text-right font-extrabold text-2xl text-pink-700 bg-pink-50 py-3 px-6 rounded-xl border border-pink-100">Tổng cộng: 3,250,000 VNĐ</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Biểu mẫu 4 -->
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fdf2f8;"></div>
+        <div class="canva-card" style="align-items: center;">
+          <h2 class="text-4xl text-fuchsia-700 text-center w-full">2.2.4. Chứng từ thanh toán lương</h2>
+          <div class="receipt-card w-[80%]">
+            <div class="receipt-header">
+              <div class="receipt-subtitle">TIỆM BÁNH LÀNG XÌ MI</div>
+              <div class="receipt-title mt-2">CHỨNG TỪ THANH TOÁN</div>
+            </div>
+            <div class="form-text">
+              <div class="flex justify-between mb-4">
+                <p><strong>Ngày:</strong> 05 tháng 07 năm 2026</p>
+                <p><strong>Số:</strong> CT-005</p>
+              </div>
+              <p class="mb-2"><strong>Căn cứ vào:</strong> Bảng thanh toán tiền lương tháng 06/2026</p>
+              <p class="mb-2"><strong>Tổng số nhân viên:</strong> 03 (Người)</p>
+              <p class="mb-2"><strong>Hình thức thanh toán:</strong> ☑ Chuyển khoản &nbsp;&nbsp; ☐ Tiền mặt</p>
+              <p class="mt-6"><strong>Tổng số tiền lương thực tế thanh toán:</strong> <span class="text-3xl font-extrabold text-green-600 block text-center mt-4 mb-4">33,653,846 VNĐ</span></p>
+              <p class="text-center italic text-sm text-gray-500">Ba mươi ba triệu sáu trăm năm mươi ba nghìn tám trăm bốn mươi sáu đồng.</p>
+            </div>
+            <div class="signature-box mt-10">
+              <div><p class="signature-title">Kế toán trưởng</p><div class="signature-line"></div></div>
+              <div><p class="signature-title">Giám đốc</p><div class="signature-line"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Biểu mẫu 5 -->
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fdf2f8;"></div>
+        <div class="canva-card" style="align-items: center;">
+          <h2 class="text-4xl text-fuchsia-700 text-center w-full">2.2.5. Biểu mẫu: Phiếu chi</h2>
+          <div class="receipt-card w-[80%]">
+            <div class="receipt-header">
+              <div class="receipt-subtitle">TIỆM BÁNH LÀNG XÌ MI</div>
+              <div class="receipt-title mt-2">PHIẾU CHI</div>
+            </div>
+            <div class="form-text">
+              <div class="flex justify-between mb-2">
+                <p><strong>Ngày:</strong> 21 tháng 06 năm 2026</p>
+                <p><strong>Số:</strong> PC-2051</p>
+              </div>
+              <p><strong>Nợ:</strong> 331 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Có:</strong> 111</p>
+              <p class="mt-4 border-b border-pink-100 pb-2"><strong>Họ tên người nhận:</strong> Đại diện Cty Á Âu</p>
+              <p class="mt-2 border-b border-pink-100 pb-2"><strong>Địa chỉ:</strong> Quận 3, TP.HCM</p>
+              <p class="mt-2 border-b border-pink-100 pb-2"><strong>Lý do chi:</strong> Thanh toán tiền nhập nguyên liệu (Phiếu NK-01)</p>
+              <p class="mt-2 border-b border-pink-100 pb-2"><strong>Số tiền:</strong> <span class="text-2xl font-bold text-red-600">3,250,000 VNĐ</span></p>
+            </div>
+            <div class="signature-box mt-8">
+              <div><p class="signature-title">Người nhận</p><div class="signature-line"></div></div>
+              <div><p class="signature-title">Thủ quỹ</p><div class="signature-line"></div></div>
+              <div><p class="signature-title">Giám đốc</p><div class="signature-line"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Biểu mẫu 6 -->
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fdf2f8;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-fuchsia-700 text-center mb-4">2.2.6. Biểu mẫu: Phiếu xuất kho</h2>
+          <div class="text-center font-bold text-gray-500 tracking-widest text-sm mb-6">TIỆM BÁNH LÀNG XÌ MI</div>
+          <table class="form-table">
+            <tr><th>STT</th><th>Tên thành phẩm / hàng hóa</th><th>Mã số</th><th>ĐVT</th><th>Số lượng</th><th>Đơn giá</th><th>Thành tiền</th></tr>
+            <tr><td>1</td><td class="font-semibold text-purple-700">Bánh kem Chocolate size 20</td><td>SP-01</td><td>Cái</td><td>2</td><td>250,000</td><td class="font-bold">500,000</td></tr>
+            <tr><td>2</td><td class="font-semibold text-purple-700">Bánh Tiramisu size 16</td><td>SP-02</td><td>Cái</td><td>3</td><td>150,000</td><td class="font-bold">450,000</td></tr>
+            <tr><td>3</td><td class="font-semibold text-purple-700">Nến sinh nhật nghệ thuật</td><td>PK-01</td><td>Hộp</td><td>5</td><td>20,000</td><td class="font-bold">100,000</td></tr>
+          </table>
+          <div class="flex justify-between items-center mt-6 px-4">
+            <p class="italic text-gray-500 text-lg">Người nhận: Shipper AhaMove</p>
+            <p class="text-right font-extrabold text-2xl text-pink-700 bg-pink-50 py-3 px-6 rounded-xl border border-pink-100">Tổng cộng: 1,050,000 VNĐ</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SƠ ĐỒ BFD -->
+      <section data-transition="slide">
+        <div class="bg-overlay" style="background-color: #f0fdfa;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-teal-700 text-center">2.4. Sơ Đồ BFD (Phân Rã Chức Năng)</h2>
+          <div class="img-container">
+            <img src="assets/image2.png" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SƠ ĐỒ USE CASE -->
+      <section data-transition="slide">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.1. Sơ Đồ Use Case Tổng Quát</h2>
+          <div class="img-container">
+            <img src="assets/image3.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Quản lý Sản phẩm (Bánh)</h2>
+          <div class="img-container">
+            <img src="assets/image4.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Quản lý Đơn hàng</h2>
+          <div class="img-container">
+            <img src="assets/image5.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Quản lý Tài khoản</h2>
+          <div class="img-container">
+            <img src="assets/image6.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Quản lý Giỏ hàng</h2>
+          <div class="img-container">
+            <img src="assets/image7.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Tìm kiếm</h2>
+          <div class="img-container">
+            <img src="assets/image8.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Xem sản phẩm</h2>
+          <div class="img-container">
+            <img src="assets/image9.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Quản lý nhân viên</h2>
+          <div class="img-container">
+            <img src="assets/image10.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #eff6ff;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-blue-700 text-center">3.1.2. Phân rã cấp 1: Quản lý người dùng</h2>
+          <div class="img-container">
+            <img src="assets/image11.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="slide">
+        <div class="bg-overlay" style="background-color: #fff1f2;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-rose-700 text-center">3.1.3. Phân rã cấp 2: Đăng nhập</h2>
+          <div class="img-container">
+            <img src="assets/image12.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fff1f2;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-rose-700 text-center">3.1.3. Phân rã cấp 2: Đặt hàng</h2>
+          <div class="img-container">
+            <img src="assets/image13.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fff1f2;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-rose-700 text-center">3.1.3. Phân rã cấp 2: Thêm bánh</h2>
+          <div class="img-container">
+            <img src="assets/image14.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fff1f2;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-rose-700 text-center">3.1.3. Phân rã cấp 2: Trả hàng</h2>
+          <div class="img-container">
+            <img src="assets/image15.png" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SƠ ĐỒ ACTIVITY -->
+      <section data-transition="slide">
+        <div class="bg-overlay" style="background-color: #ecfdf5;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-emerald-700 text-center">3.2.1. Sơ đồ Activity: Đăng nhập</h2>
+          <div class="img-container">
+            <img src="assets/image16.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #ecfdf5;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-emerald-700 text-center">3.2.2. Sơ đồ Activity: Đặt hàng</h2>
+          <div class="img-container">
+            <img src="assets/image17.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #ecfdf5;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-emerald-700 text-center">3.2.3. Sơ đồ Activity: Trả hàng</h2>
+          <div class="img-container">
+            <img src="assets/image18.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #ecfdf5;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-emerald-700 text-center">3.2.4. Sơ đồ Activity: Thêm bánh</h2>
+          <div class="img-container">
+            <img src="assets/image19.png" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SƠ ĐỒ SEQUENCE -->
+      <section data-transition="slide">
+        <div class="bg-overlay" style="background-color: #fff7ed;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-orange-700 text-center">3.3.1. Sơ đồ Sequence: Đăng nhập</h2>
+          <div class="img-container">
+            <img src="assets/image20.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fff7ed;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-orange-700 text-center">3.3.2. Sơ đồ Sequence: Đặt bánh</h2>
+          <div class="img-container">
+            <img src="assets/image21.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fff7ed;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-orange-700 text-center">3.3.3. Sơ đồ Sequence: Thêm bánh</h2>
+          <div class="img-container">
+            <img src="assets/image22.png" />
+          </div>
+        </div>
+      </section>
+
+      <section data-transition="fade">
+        <div class="bg-overlay" style="background-color: #fff7ed;"></div>
+        <div class="canva-card">
+          <h2 class="text-4xl text-orange-700 text-center">3.3.4. Sơ đồ Sequence: Trả hàng</h2>
+          <div class="img-container">
+            <img src="assets/image23.png" />
+          </div>
+        </div>
+      </section>
+
+      <!-- TỔNG KẾT -->
+      <section data-transition="zoom">
+        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1989&auto=format&fit=crop'); opacity: 0.2;"></div>
+        <div class="canva-card justify-center items-center text-center">
+          <h2 class="text-6xl text-pink-700 mb-8 font-extrabold">✨ Tổng Kết & Lời Cảm Ơn ✨</h2>
+          
+          <div class="bg-white/90 p-10 rounded-2xl shadow-sm w-4/5 text-left mb-8 border border-pink-100">
+            <h3 class="text-3xl text-pink-600 font-bold mb-4">Mở rộng hệ thống:</h3>
+            <ul class="text-2xl space-y-4">
+              <li>Tích hợp AI phân tích sở thích khách hàng và gợi ý bánh.</li>
+              <li>Phát triển ứng dụng Mobile (iOS/Android).</li>
+              <li>Hỗ trợ thanh toán điện tử (ZaloPay, MoMo, VNPay).</li>
+            </ul>
+          </div>
+          
+          <p class="text-4xl font-bold text-gray-800 leading-relaxed mt-6">
+            Nhóm em xin chân thành cảm ơn<br>
+            <span class="text-pink-600 text-5xl mt-2 mb-2 block font-extrabold">Thầy và các bạn</span>
+            đã chú ý lắng nghe!
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script>
+    Reveal.initialize({
+      controls: true, progress: true, center: true, hash: true, transition: 'slide',
+      width: 1280, height: 720, margin: 0
+    });
+  </script>
+</body>
+</html>

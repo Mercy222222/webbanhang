@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Đồ Án - Website Bán Bánh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #f4f7fe; color: #1e293b; font-family: 'Inter', sans-serif; }
+        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; transform: translateX(50px); pointer-events: none; display: flex; flex-direction: column; justify-content: center; padding: 4rem; }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; z-index: 10; }
+        
+        /* Background decorative circles */
+        .bg-circle-1 { position: absolute; top: -20%; left: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #e0e7ff 0%, rgba(224,231,255,0) 70%); border-radius: 50%; z-index: 0; }
+        .bg-circle-2 { position: absolute; bottom: -20%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #dbeafe 0%, rgba(219,234,254,0) 70%); border-radius: 50%; z-index: 0; }
+        .bg-circle-3 { position: absolute; top: 20%; right: 20%; width: 20vw; height: 20vw; background: radial-gradient(circle, #fce7f3 0%, rgba(252,231,243,0) 70%); border-radius: 50%; z-index: 0; }
+        
+        /* 3D-like Text Shadow */
+        .text-3d { color: #4338ca; text-shadow: 2px 2px 0px #c7d2fe, 4px 4px 0px #e0e7ff; }
+        
+        /* Cards */
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); transition: transform 0.3s; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(67, 56, 202, 0.1); }
+        
+        /* Pills */
+        .pill-outline { display: inline-flex; align-items: center; px-6; py-2; border: 2px solid #1e293b; border-radius: 9999px; font-weight: bold; background: white; }
+        .pill-solid { display: inline-flex; align-items: center; px-6; py-2; background: #4f46e5; color: white; border-radius: 9999px; font-weight: bold; }
+        
+        /* Controls */
+        .controls { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; display: flex; gap: 1rem; }
+        .btn { width: 50px; height: 50px; border-radius: 50%; background: white; border: 1px solid #e2e8f0; color: #4f46e5; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .btn:hover { background: #4f46e5; color: white; transform: scale(1.1); }
+        
+        .progress-bar { position: fixed; top: 0; left: 0; height: 6px; background: #4f46e5; z-index: 50; transition: width 0.3s ease; }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
+    <div class="bg-circle-3"></div>
+    
+    <div id="progress" class="progress-bar" style="width: 0%"></div>
+
+    <!-- Slide 1: Title (Replicating the user's Canva template style) -->
+    <div class="slide active relative z-10" id="slide-1">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="flex gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-globe"></i></div>
+                    <div class="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-crosshairs"></i></div>
+                    <div class="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-rocket"></i></div>
+                </div>
+                
+                <h1 class="text-7xl font-black mb-4 text-3d uppercase leading-tight">
+                    BÁO CÁO<br>ĐỒ ÁN
+                </h1>
+                <h2 class="text-2xl font-extrabold text-slate-800 mb-8 border-l-4 border-indigo-600 pl-4">
+                    WEBSITE BÁN BÁNH NGỌT | Phân Tích Thiết Kế
+                </h2>
+                
+                <div class="flex gap-4 flex-wrap">
+                    <div class="px-6 py-3 border-2 border-slate-800 rounded-full font-bold bg-white shadow-sm">
+                        GVHD: Th.S Nguyễn Văn Danh
+                    </div>
+                    <div class="px-6 py-3 bg-indigo-600 text-white rounded-full font-bold shadow-lg shadow-indigo-200">
+                        Nhóm: Triều - Sinh - Trí - Phát
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <!-- Abstract 3D-like illustration placeholder using CSS shapes -->
+                <div class="w-full aspect-square rounded-3xl bg-white/50 backdrop-blur-md border border-white p-8 shadow-2xl relative overflow-hidden flex items-end justify-center">
+                    <div class="w-3/4 h-3/4 bg-slate-100 rounded-t-xl border-4 border-b-0 border-slate-300 relative flex items-end px-4 gap-2 pb-4">
+                        <div class="w-1/4 h-1/3 bg-pink-400 rounded-t-sm shadow-md"></div>
+                        <div class="w-1/4 h-2/3 bg-indigo-400 rounded-t-sm shadow-md"></div>
+                        <div class="w-1/4 h-1/2 bg-blue-400 rounded-t-sm shadow-md"></div>
+                        <div class="w-1/4 h-full bg-green-400 rounded-t-sm shadow-md"></div>
+                        
+                        <!-- Floating coins -->
+                        <div class="absolute -right-6 top-1/4 w-12 h-12 rounded-full bg-yellow-400 border-4 border-yellow-300 shadow-lg transform rotate-12"></div>
+                        <div class="absolute -right-2 top-10 w-10 h-10 rounded-full bg-yellow-400 border-4 border-yellow-300 shadow-lg transform -rotate-12"></div>
+                        
+                        <!-- Screen inner graphic -->
+                        <div class="absolute top-4 left-4 right-4 h-1/4 bg-slate-200 rounded-md"></div>
+                        <svg class="absolute top-12 left-4 w-3/4 h-1/2" viewBox="0 0 100 50">
+                            <path d="M0 40 Q 25 10, 50 30 T 100 5" fill="none" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Overview -->
+    <div class="slide relative z-10" id="slide-2">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-5xl font-black mb-12 text-indigo-700 uppercase">1. Tổng Quan Đề Tài</h2>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div class="glass-card">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 text-3xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Lý do chọn đề tài</h3>
+                    <ul class="space-y-4 text-slate-600 text-lg font-medium">
+                        <li class="flex items-start"><i class="fa-solid fa-circle-check text-indigo-500 mt-1 mr-3"></i> Thay đổi hành vi mua sắm sang trực tuyến của khách hàng hiện đại.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-circle-check text-indigo-500 mt-1 mr-3"></i> Khắc phục giới hạn bảo quản, tiếp cận khách hàng của cửa hàng vật lý.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-circle-check text-indigo-500 mt-1 mr-3"></i> Tối ưu hóa chu trình: Đặt hàng - Bếp - Giao nhận hoàn toàn khép kín.</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card">
+                    <div class="w-16 h-16 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-600 text-3xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Mục tiêu hệ thống</h3>
+                    <ul class="space-y-4 text-slate-600 text-lg font-medium">
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-right text-pink-500 mt-1 mr-3"></i> <b>Khách hàng:</b> Đặt bánh nhanh, tùy chỉnh lời chúc, theo dõi đơn 24/7.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-right text-pink-500 mt-1 mr-3"></i> <b>Quản lý:</b> Giám sát kho, định mức nguyên liệu, POS, báo cáo tự động.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-right text-pink-500 mt-1 mr-3"></i> <b>Công nghệ:</b> Kiến trúc hiện đại (NodeJS/React/MySQL), bảo mật cao.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Forms -->
+    <div class="slide relative z-10" id="slide-3">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-5xl font-black mb-4 text-indigo-700 uppercase">2. Hệ Thống 6 Biểu Mẫu</h2>
+            <p class="text-xl text-slate-500 font-semibold mb-10">Số hóa hoàn toàn quy trình vận hành thực tế tại tiệm bánh</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Form 1 -->
+                <div class="glass-card text-center hover:bg-white transition-colors">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                    <h3 class="text-lg font-extrabold text-slate-800">Bảng Thanh Toán Lương</h3>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-sm font-bold rounded-full mt-3">Mẫu 02-L</span>
+                </div>
+                <!-- Form 2 -->
+                <div class="glass-card text-center hover:bg-white transition-colors border-2 border-indigo-100">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-green-100 text-green-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-money-bill-wave"></i></div>
+                    <h3 class="text-lg font-extrabold text-slate-800">Phiếu Thu</h3>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-sm font-bold rounded-full mt-3">Mẫu 01-TT</span>
+                </div>
+                <!-- Form 3 -->
+                <div class="glass-card text-center hover:bg-white transition-colors">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-box-open"></i></div>
+                    <h3 class="text-lg font-extrabold text-slate-800">Phiếu Nhập Kho</h3>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-sm font-bold rounded-full mt-3">Mẫu 01-VT</span>
+                </div>
+                <!-- Form 4 -->
+                <div class="glass-card text-center hover:bg-white transition-colors">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-signature"></i></div>
+                    <h3 class="text-lg font-extrabold text-slate-800">Chứng Từ TT Lương</h3>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-sm font-bold rounded-full mt-3">Mẫu CT-TTL</span>
+                </div>
+                <!-- Form 5 -->
+                <div class="glass-card text-center hover:bg-white transition-colors">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <h3 class="text-lg font-extrabold text-slate-800">Phiếu Chi</h3>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-sm font-bold rounded-full mt-3">Mẫu 02-TT</span>
+                </div>
+                <!-- Form 6 -->
+                <div class="glass-card text-center hover:bg-white transition-colors border-2 border-pink-100">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-truck-fast"></i></div>
+                    <h3 class="text-lg font-extrabold text-slate-800">Phiếu Xuất Kho</h3>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-sm font-bold rounded-full mt-3">Mẫu 02-VT</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: BFD & Use Case -->
+    <div class="slide relative z-10" id="slide-4">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-5xl font-black mb-10 text-indigo-700 uppercase">3. Sơ Đồ BFD & Use Case</h2>
+            
+            <div class="flex flex-col md:flex-row gap-6 h-full">
+                <div class="glass-card flex-1 border-t-4 border-t-indigo-500 bg-white/80">
+                    <h3 class="text-2xl font-black text-indigo-700 mb-4 flex items-center"><i class="fa-solid fa-sitemap mr-3"></i> Sơ Đồ BFD</h3>
+                    <p class="text-slate-600 font-medium mb-6">Phân rã nghiệp vụ thành 4 khối chức năng chính:</p>
+                    <ul class="space-y-3 font-bold text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <li><i class="fa-solid fa-cash-register text-indigo-400 mr-2"></i> 1. Quản lý Bán hàng</li>
+                        <li><i class="fa-solid fa-warehouse text-indigo-400 mr-2"></i> 2. Quản lý Kho & Nguyên liệu</li>
+                        <li><i class="fa-solid fa-users text-indigo-400 mr-2"></i> 3. Quản lý Nhân sự</li>
+                        <li><i class="fa-solid fa-shield-halved text-indigo-400 mr-2"></i> 4. Quản trị Hệ thống</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card flex-[2] border-t-4 border-t-pink-500 bg-white/80">
+                    <h3 class="text-2xl font-black text-pink-600 mb-4 flex items-center"><i class="fa-solid fa-users-gear mr-3"></i> Mô Hình Hóa Use Case</h3>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-3 bg-pink-50 inline-block px-3 py-1 rounded-md">8 Sơ đồ Phân rã Cấp 1</h4>
+                            <ul class="list-disc list-inside text-slate-600 font-medium space-y-2 text-sm ml-2">
+                                <li>Quản lý Sản phẩm</li>
+                                <li>Quản lý Đơn hàng</li>
+                                <li>Quản lý Tài khoản & Người dùng</li>
+                                <li>Quản lý Nhân viên</li>
+                                <li>Quản lý Giỏ hàng</li>
+                                <li>Tìm kiếm & Xem SP</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-3 bg-indigo-50 inline-block px-3 py-1 rounded-md">4 Sơ đồ Phân rã Cấp 2</h4>
+                            <ul class="list-disc list-inside text-slate-600 font-medium space-y-2 text-sm ml-2">
+                                <li>Quy trình Đăng nhập</li>
+                                <li>Quy trình Đặt hàng</li>
+                                <li>Quy trình Thêm bánh</li>
+                                <li>Quy trình Trả hàng</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Activity & Sequence -->
+    <div class="slide relative z-10" id="slide-5">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-5xl font-black mb-10 text-indigo-700 uppercase">4. Activity & Sequence</h2>
+            
+            <p class="text-xl text-slate-600 font-semibold mb-8">Hệ thống phân tích 4 luồng xử lý tương tác cốt lõi nhất qua biểu đồ Hoạt động (Activity) và Tuần tự (Sequence):</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-indigo-100 border border-indigo-50 flex gap-4 items-start hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl font-bold">1</div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 mb-2">Đăng Nhập & Phân Quyền</h3>
+                        <p class="text-slate-500 font-medium text-sm leading-relaxed">Xác thực Email/Password, hash mã hóa bảo mật, phân bổ Token, và khởi tạo Session cho Khách hàng / Nhân viên / Admin.</p>
+                    </div>
+                </div>
+                <!-- 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-pink-100 border border-pink-50 flex gap-4 items-start hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 shrink-0 rounded-full bg-pink-500 text-white flex items-center justify-center text-xl font-bold">2</div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 mb-2">Quy Trình Đặt Hàng</h3>
+                        <p class="text-slate-500 font-medium text-sm leading-relaxed">Kiểm tra giỏ hàng, transaction trừ tồn kho, tính phí vận chuyển, xuất hóa đơn tự động và đẩy lệnh xuống khu vực Bếp.</p>
+                    </div>
+                </div>
+                <!-- 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-blue-100 border border-blue-50 flex gap-4 items-start hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-xl font-bold">3</div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 mb-2">Quản Lý Thêm Bánh</h3>
+                        <p class="text-slate-500 font-medium text-sm leading-relaxed">Admin upload ảnh, thiết lập định mức nguyên liệu tự động (Recipe), tính giá cost, và update trực tiếp lên Frontend.</p>
+                    </div>
+                </div>
+                <!-- 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-green-100 border border-green-50 flex gap-4 items-start hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 shrink-0 rounded-full bg-green-500 text-white flex items-center justify-center text-xl font-bold">4</div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 mb-2">Xử Lý Trả Hàng</h3>
+                        <p class="text-slate-500 font-medium text-sm leading-relaxed">Thu nhận yêu cầu lỗi, rollback lại doanh thu POS, ghi nhận nguyên nhân hao hụt và hoàn trả nguyên liệu (nếu có thể tái sử dụng).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Ending -->
+    <div class="slide relative z-10" id="slide-6">
+        <div class="max-w-5xl mx-auto w-full text-center">
+            <div class="inline-block px-8 py-3 rounded-full border-2 border-indigo-600 text-indigo-700 font-black mb-8 bg-white shadow-xl shadow-indigo-100 text-xl">
+                Q&A THẢO LUẬN
+            </div>
+            <h1 class="text-7xl font-black mb-6 text-3d uppercase">
+                XIN CẢM ƠN!
+            </h1>
+            <p class="text-2xl text-slate-600 font-semibold mb-12">Cảm ơn Hội đồng đã chú ý lắng nghe phần trình bày.</p>
+            
+            <div class="flex justify-center gap-6">
+                <div class="px-8 py-4 bg-slate-800 text-white rounded-full font-bold shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i> Code
+                </div>
+                <div class="px-8 py-4 bg-indigo-600 text-white rounded-full font-bold shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-pen-ruler"></i> Design
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left text-xl"></i></button>
+        <button class="btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-arrow-right text-xl"></i></button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+
+        function updateSlides() {
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                if(index + 1 === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            
+            // Update progress bar
+            const progress = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+        }
+
+        function nextSlide() {
+            if(currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if(currentSlide > 1) {
+                currentSlide--;
+                updateSlides();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>

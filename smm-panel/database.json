@@ -1,0 +1,68 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "123",
+      "balance": 5000000,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "trieuhi",
+      "password": "123",
+      "balance": 75000,
+      "role": "member"
+    }
+  ],
+  "services": {
+    "facebook": [
+      {
+        "id": 1,
+        "name": "Facebook Follow (Bảo hành 30 ngày)",
+        "price": 15000,
+        "originalPrice": 5000
+      },
+      {
+        "id": 2,
+        "name": "Facebook Like Bài Viết (Siêu Tốc)",
+        "price": 8000,
+        "originalPrice": 3000
+      }
+    ],
+    "tiktok": [
+      {
+        "id": 3,
+        "name": "TikTok Follow (Người dùng thật)",
+        "price": 25000,
+        "originalPrice": 10000
+      },
+      {
+        "id": 4,
+        "name": "TikTok View (Rẻ nhất)",
+        "price": 200,
+        "originalPrice": 50
+      }
+    ],
+    "instagram": [
+      {
+        "id": 5,
+        "name": "Instagram Follow (Max 100k)",
+        "price": 12000,
+        "originalPrice": 4000
+      }
+    ]
+  },
+  "orders": [
+    {
+      "id": 734753,
+      "userId": 2,
+      "serviceName": "TikTok Follow (Người dùng thật)",
+      "link": "fsdfds",
+      "quantity": 1000,
+      "charge": 25000,
+      "status": "Processing",
+      "createdAt": "2026-06-21T10:29:25.866Z"
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMM Elite Panel - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen relative">
+    
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Animated Background -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-pulse"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="glass-panel border-b border-gray-700/50 fixed w-full z-20 top-0 left-0">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="#" class="flex items-center">
+                <i class="fa-solid fa-rocket text-blue-500 text-2xl mr-3"></i>
+                <span class="self-center text-2xl font-bold whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">SMM Elite</span>
+            </a>
+            <div class="flex md:order-2 space-x-4 items-center">
+                <div class="bg-gray-800/80 px-4 py-2 rounded-lg font-mono border border-gray-700 shadow-inner">
+                    <span class="text-gray-400 text-sm">Số dư:</span>
+                    <span class="text-green-400 font-bold ml-1" id="userBalance">0 ₫</span>
+                </div>
+                <button id="logoutBtn" type="button" class="text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-all shadow-lg shadow-red-900/50">
+                    <i class="fa-solid fa-right-from-bracket"></i> Thoát
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside class="fixed top-16 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+            <div class="h-full px-3 py-4 overflow-y-auto glass-panel border-r border-gray-700/50">
+                
+                <!-- User Mini Profile -->
+                <div class="flex items-center mb-6 p-2 bg-gray-800/50 rounded-lg border border-gray-700">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xl font-bold shadow-lg">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-semibold text-white" id="sidebarUsername">User</p>
+                        <p class="text-xs text-gray-400" id="sidebarRole">Member</p>
+                    </div>
+                </div>
+
+                <ul class="space-y-2 font-medium">
+                    <li>
+                        <a href="#" onclick="showSection('new-order')" class="flex items-center p-3 text-white rounded-lg hover:bg-white/10 group transition-all">
+                            <i class="fa-solid fa-cart-plus flex-shrink-0 w-5 h-5 text-blue-400 group-hover:text-blue-300 transition duration-75"></i>
+                            <span class="ml-3">Tạo Đơn Mới</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showSection('orders')" class="flex items-center p-3 text-white rounded-lg hover:bg-white/10 group transition-all">
+                            <i class="fa-solid fa-list-check flex-shrink-0 w-5 h-5 text-purple-400 group-hover:text-purple-300 transition duration-75"></i>
+                            <span class="ml-3">Lịch Sử Đơn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showSection('add-funds')" class="flex items-center p-3 text-white rounded-lg hover:bg-white/10 group transition-all">
+                            <i class="fa-solid fa-wallet flex-shrink-0 w-5 h-5 text-green-400 group-hover:text-green-300 transition duration-75"></i>
+                            <span class="ml-3">Nạp Tiền</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Admin Menu (Hidden by default) -->
+                    <li id="adminMenu" class="hidden pt-4 mt-4 border-t border-gray-700">
+                        <span class="text-xs font-semibold text-gray-500 uppercase px-3">Quản Trị Hệ Thống</span>
+                        <a href="#" onclick="showSection('admin-panel')" class="mt-2 flex items-center p-3 text-white rounded-lg hover:bg-red-900/50 group transition-all">
+                            <i class="fa-solid fa-shield-halved flex-shrink-0 w-5 h-5 text-red-400 group-hover:text-red-300 transition duration-75"></i>
+                            <span class="ml-3">Admin Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="p-4 sm:ml-64 w-full">
+            <div class="p-4 rounded-lg mt-4 min-h-[80vh]">
+                
+                <!-- Section: New Order -->
+                <div id="new-order-section" class="content-section block">
+                    <h2 class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Tạo Đơn Mới</h2>
+                    
+                    <!-- User Stats Bar -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="glass-card p-4 rounded-xl text-center">
+                            <i class="fa-solid fa-box-open text-2xl text-blue-400 mb-2"></i>
+                            <p class="text-sm text-gray-400">Tổng Đơn Đã Đặt</p>
+                            <p class="text-xl font-bold text-white" id="statTotalOrders">0</p>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl text-center">
+                            <i class="fa-solid fa-hand-holding-dollar text-2xl text-green-400 mb-2"></i>
+                            <p class="text-sm text-gray-400">Tổng Tiền Đã Tiêu</p>
+                            <p class="text-xl font-bold text-white" id="statTotalSpent">0 ₫</p>
+                        </div>
+                    </div>
+
+                    <form id="orderForm" class="max-w-2xl glass-panel p-6 rounded-2xl">
+                        <div class="mb-5">
+                            <label for="category" class="block mb-2 text-sm font-medium text-gray-300">Chuyên mục</label>
+                            <select id="category" class="bg-gray-800/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none transition-all">
+                                <option value="facebook">Facebook - Tăng Follow/Like</option>
+                                <option value="tiktok">TikTok - Tăng Follow/View</option>
+                                <option value="instagram">Instagram - Tăng Follow</option>
+                            </select>
+                        </div>
+                        <div class="mb-5">
+                            <label for="service" class="block mb-2 text-sm font-medium text-gray-300">Dịch vụ</label>
+                            <select id="service" class="bg-gray-800/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none transition-all">
+                                <!-- Options loaded via JS -->
+                            </select>
+                            <p class="mt-2 text-sm text-blue-400 font-mono" id="serviceDesc">Giá: 0₫ / 1000 lượt</p>
+                        </div>
+                        <div class="mb-5">
+                            <label for="link" class="block mb-2 text-sm font-medium text-gray-300">Link bài viết / Profile</label>
+                            <input type="text" id="link" class="bg-gray-800/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none transition-all" placeholder="https://..." required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="quantity" class="block mb-2 text-sm font-medium text-gray-300">Số lượng</label>
+                            <input type="number" id="quantity" min="100" max="100000" class="bg-gray-800/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none transition-all" value="1000" required>
+                        </div>
+                        <div class="mb-6 p-4 bg-gray-900/80 rounded-lg border border-gray-700/50 shadow-inner">
+                            <p class="text-sm text-gray-400">Tổng thanh toán:</p>
+                            <p class="text-3xl font-bold text-green-400" id="totalCharge">0 ₫</p>
+                        </div>
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm w-full px-5 py-4 text-center transition-all shadow-lg shadow-blue-900/50 text-lg">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Đặt Hàng Ngay
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Section: Orders History -->
+                <div id="orders-section" class="content-section hidden">
+                    <h2 class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Lịch Sử Đơn Hàng</h2>
+                    <div class="relative overflow-x-auto shadow-2xl sm:rounded-xl border border-gray-700/50 glass-panel">
+                        <table class="w-full text-sm text-left text-gray-300">
+                            <thead class="text-xs text-gray-400 uppercase bg-gray-800/80 border-b border-gray-700">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4">Mã Đơn</th>
+                                    <th scope="col" class="px-6 py-4">Dịch vụ</th>
+                                    <th scope="col" class="px-6 py-4">Link</th>
+                                    <th scope="col" class="px-6 py-4">Số lượng</th>
+                                    <th scope="col" class="px-6 py-4">Giá</th>
+                                    <th scope="col" class="px-6 py-4">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody" class="divide-y divide-gray-700/50">
+                                <!-- Orders loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section: Add Funds -->
+                <div id="add-funds-section" class="content-section hidden">
+                    <h2 class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Nạp Tiền Tự Động</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="glass-card p-8 rounded-2xl text-center">
+                            <h3 class="text-xl font-bold text-white mb-6">Quét mã QR (BIDV)</h3>
+                            <div class="bg-white p-2 inline-block rounded-xl mx-auto mb-6 shadow-xl">
+                                <img src="https://img.vietqr.io/image/bidv-0979324949-compact.png?accountName=VO%20HUU%20TRI&amount=0&addInfo=NAPTIEN" alt="QR Code" class="w-48 rounded-lg">
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-gray-400 text-sm">Chủ tài khoản: <b class="text-white uppercase text-base">Võ Hữu Trí</b></p>
+                                <p class="text-gray-400 text-sm">Số tài khoản: <b class="text-white font-mono text-base">0979324949</b></p>
+                                <p class="text-gray-400 text-sm">Ngân hàng: <b class="text-white text-base">BIDV</b></p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-8 rounded-2xl flex flex-col justify-center">
+                            <h3 class="text-xl font-bold text-white mb-6">Nội dung chuyển khoản</h3>
+                            <div class="p-6 bg-gray-900/80 border border-gray-600/50 rounded-xl text-center mb-6 shadow-inner cursor-pointer hover:border-blue-500 transition-colors" onclick="copySyntax()" title="Click để copy">
+                                <span class="text-2xl font-mono text-yellow-400 font-bold" id="transferSyntax">NAPTIEN USERNAME</span>
+                                <p class="text-xs text-gray-500 mt-2"><i class="fa-regular fa-copy"></i> Click để sao chép</p>
+                            </div>
+                            <div class="space-y-3 bg-blue-900/20 p-4 rounded-lg border border-blue-900/50">
+                                <p class="text-sm text-blue-300"><i class="fa-solid fa-bolt mr-2"></i> Hệ thống tự động xử lý giao dịch trong 1-3 phút.</p>
+                                <p class="text-sm text-yellow-300"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Nhập đúng 100% nội dung chuyển khoản để được cộng tiền tự động.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Admin Panel -->
+                <div id="admin-panel-section" class="content-section hidden">
+                    <h2 class="text-3xl font-bold mb-6 text-red-400"><i class="fa-solid fa-shield-halved mr-2"></i>Hệ Thống Quản Trị (Admin Only)</h2>
+                    
+                    <!-- Admin Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                        <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-500">
+                            <p class="text-sm text-gray-400 font-medium mb-1">Tổng Người Dùng</p>
+                            <p class="text-3xl font-bold text-white" id="adminTotalUsers">0</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl border-t-4 border-green-500">
+                            <p class="text-sm text-gray-400 font-medium mb-1">Tổng Doanh Thu</p>
+                            <p class="text-3xl font-bold text-green-400" id="adminTotalRevenue">0 ₫</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl border-t-4 border-yellow-500">
+                            <p class="text-sm text-gray-400 font-medium mb-1">Tổng Lợi Nhuận</p>
+                            <p class="text-3xl font-bold text-yellow-400" id="adminTotalProfit">0 ₫</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl border-t-4 border-purple-500">
+                            <p class="text-sm text-gray-400 font-medium mb-1">Đơn Chờ Xử Lý</p>
+                            <p class="text-3xl font-bold text-purple-400" id="adminPendingOrders">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Admin Orders -->
+                    <div class="glass-panel p-6 rounded-2xl border border-gray-700/50">
+                        <h3 class="text-xl font-bold mb-4 text-white">Quản Lý Toàn Bộ Đơn Hàng</h3>
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            <table class="w-full text-sm text-left text-gray-300">
+                                <thead class="text-xs text-gray-400 uppercase bg-gray-800">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3">Mã Đơn</th>
+                                        <th scope="col" class="px-4 py-3">User ID</th>
+                                        <th scope="col" class="px-4 py-3">Dịch vụ</th>
+                                        <th scope="col" class="px-4 py-3">Doanh Thu</th>
+                                        <th scope="col" class="px-4 py-3">Lợi Nhuận</th>
+                                        <th scope="col" class="px-4 py-3 text-center">Hành Động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminOrdersTableBody" class="divide-y divide-gray-700/50">
+                                    <!-- Loaded via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Application -->
+    <script src="js/app.js"></script>
+</body>
+</html>

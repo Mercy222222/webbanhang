@@ -1,0 +1,1174 @@
+BỘ GIÁO DỤC VÀ ĐÀO TẠO
+
+TRƯỜNG ĐẠI HỌC CÔNG NGHỆ TP. HCM
+
+
+
+BÁO CÁO ĐỒ ÁN
+
+
+
+WEBSITE BÁN BÁNH NGỌT
+
+
+
+
+
+Môn: PHÂN TÍCH THIẾT KẾ HỆ THỘNG
+
+
+
+	
+
+	                              Giảng viên hướng dẫn	:Th.S Nguyễn Văn Danh
+
+	
+
+	Sinh viên thực hiện: Hoàng Minh Triều    MSSV:2380602333      Lớp:23DTHC7 
+
+	Sinh viên thực hiện: Nguyễn Gia Sinh      MSSV: 2380601910	Lớp: 23DTHC7 
+
+	Sinh viên thực hiện: Võ Hữu Trí               MSSV:2380602333      Lớp:23DTHC7 
+
+	Sinh viên thực hiện: Phan Tấn phát           MSSV:2380602333      Lớp:23DTHC7 
+
+	
+
+	
+
+	
+
+			TP. Hồ Chí Minh, <2026>
+
+
+LỜI CẢM ƠN
+
+
+
+Lời đầu tiên, em xin gửi lời cảm ơn chân thành và sâu sắc nhất đến Ban giám hiệu nhà trường, cùng toàn thể quý thầy cô giáo khoa Công nghệ thông tin đã truyền đạt cho em những kiến thức quý báu, nền tảng lý thuyết vững chắc và những kỹ năng thực tiễn trong suốt quá trình em học tập tại trường.
+
+Đặc biệt, em xin bày tỏ lòng biết ơn sâu sắc nhất tới Thầy [Điền họ tên Thầy vào đây], người đã trực tiếp tiếp nhận, tận tình chỉ bảo, định hướng và động viên em trong suốt quá trình triển khai, phân tích thiết kế hệ thống và hoàn thiện đề tài này. Sự đồng hành và những lời góp ý chuyên môn của Thầy là yếu tố quyết định giúp em tháo gỡ các khó khăn và hoàn thành báo cáo đúng tiến độ.
+
+Do kiến thức bản thân và thời gian thực hiện đề tài còn hạn chế, bài báo cáo chắc chắn không tránh khỏi những thiếu sót. Em rất mong nhận được những ý kiến đóng góp, nhận xét quý báu từ Thầy để hệ thống web bán bánh này được hoàn thiện hơn và có tính thực tế cao hơn.
+
+Em xin kính chúc Thầy luôn mạnh khỏe, hạnh phúc và gặt hái được nhiều thành công hơn nữa trong sự nghiệp cao quý của mình!
+
+Em xin chân thành cảm ơn Thầy!
+
+
+
+
+Mục lụcs
+
+	CHƯƠNG 1: TỔNG QUAN	5
+
+	1.1. Giới thiệu đề tài	5
+
+	1.2. Lý do chọn đề tài / Tính cấp thiết	5
+
+	1.3. Mục tiêu đề tài.	5
+
+	1.4. Đối tượng và phạm vi nghiên cứu	6
+
+	1.5. Phương pháp nghiên cứu & công nghệ dự kiến	6
+
+	1.6. Cấu trúc báo cáo	7
+
+	CHƯƠNG 2: KHẢO SÁT & PHÂN TÍCH YÊU CẦU HỆ THỐNG	8
+
+	2.1. Mô tả hệ thống diễn tả chi tiết hệ thống, hệ thống lưu trữ những thông tin gì? Hoạt động nghiệp vụ như thế nào?	8
+
+	2.2. Biểu mẫu.	10
+
+	2.2.1. Biểu mẩu bảng thanh toán tiền lượng.	10
+
+	2.2.2. Biểu mẩu phiếu thu.	11
+
+	2.2.3. Biểu mẩu phiếu nhập kho.	12
+
+	2.2.4. Biểu mẩu chứng từ thanh toán lương.	13
+
+	2.2.5. Biểu mẩu phiếu chi.	14
+
+	2.2.6. Biểu mẩu phiếu xuất kho.	15
+
+	2.3. Xác định yêu cầu hệ thống	16
+
+	2.3.1. Yêu cầu chức năng (Functional Requirements)	16
+
+	2.3.2. Yêu cầu phi chức năng (Non-functional Requirements)	17
+
+	2.4. Sơ đồ BFD.	19
+
+	CHƯƠNG 3: MÔ HÌNH HÓA HỆ THỐNG THEO UML	20
+
+	3.1.Sơ đồ Use case.	20
+
+	3.1.1.Sơ đồ tổng quát:	20
+
+	3.1.2 Phân rã cấp 1.	20
+
+	3.1.3.Phân rã cấp 2.	24
+
+	3.2. Sơ đồ activity diagram.	26
+
+	3.2.1.Đăng nhập	26
+
+	3.2.2. Đặt hàng.	27
+
+	3.2.3. Trả hàng.	27
+
+	3.2.4. Thêm bánh.	28
+
+	3.3. Sơ đồ sequence.	28
+
+	3.3.1. Đăng nhập.	28
+
+	3.3.2. Đặt bánh.	29
+
+	3.3.3.Thêm bánh	29
+
+	3.3.4.Trả hàng.	30
+
+
+
+
+
+
+CHƯƠNG 1: TỔNG QUAN
+
+1.1. Giới thiệu đề tài
+
+Trong kỷ nguyên số hóa và sự phát triển mạnh mẽ của thương mại điện tử, việc mua sắm trực tuyến đã trở thành một phần không thể thiếu trong đời sống hàng ngày của người tiêu dùng. Không nằm ngoài xu thế đó, ngành sản xuất và kinh doanh bánh ngọt, bánh kem, bánh phong cách hiện đại cũng đang chuyển dịch mạnh mẽ từ mô hình truyền thống sang mô hình kinh doanh trực tuyến nhằm tiếp cận tập khách hàng rộng lớn hơn.
+
+Đề tài "Xây dựng hệ thống website kinh doanh bánh ngọt trực tuyến" được thực hiện nhằm mục đích nghiên cứu, phân tích quy trình vận hành và triển khai một giải pháp công nghệ toàn diện. Hệ thống không chỉ đơn thuần là nơi trưng bày sản phẩm mà còn tích hợp các tính năng quản lý đơn hàng, quản lý kho, chăm sóc khách hàng và tối ưu hóa trải nghiệm người dùng, giúp doanh nghiệp nâng cao năng lực cạnh tranh trong thị trường F&B (Food and Beverage) đầy tiềm năng.
+
+1.2. Lý do chọn đề tài / Tính cấp thiết
+
+Việc lựa chọn nghiên cứu và phát triển hệ thống website bán bánh xuất phát từ những lý do khách quan và chủ quan mang tính cấp thiết sau đây:
+
+Sự thay đổi trong hành vi người tiêu dùng: Khách hàng hiện đại, đặc biệt là giới trẻ và nhân viên văn phòng, ngày càng ưa chuộng sự tiện lợi. Thay vì phải đến trực tiếp cửa hàng, họ có nhu cầu tìm hiểu kiểu dáng, hương vị, giá cả và đặt mua bánh trực tuyến để được giao hàng tận nơi.
+
+Hạn chế của mô hình truyền thống: Các cửa hàng bánh truyền thống gặp nhiều khó khăn trong việc mở rộng tệp khách hàng ngoài phạm vi địa lý hẹp, quản lý lượng bánh tồn kho có hạn sử dụng ngắn ngày và khó theo dõi chính xác xu hướng yêu thích của khách hàng theo thời gian.
+
+Tối ưu hóa quản lý và vận hành: Bánh là loại mặt hàng đòi hỏi quy trình bảo quản nghiêm ngặt và thời gian giao hàng nhanh chóng. Một hệ thống website quản lý đồng bộ từ khâu tiếp nhận đơn, chuẩn bị nguyên liệu, làm bánh cho đến giao hàng sẽ giúp giảm thiểu sai sót, tiết kiệm chi phí vận hành và nâng cao uy tín thương hiệu.
+
+1.3. Mục tiêu đề tài.
+
+Mục tiêu tổng quát: Nghiên cứu lý thuyết và ứng dụng thực tiễn quy trình phân tích thiết kế hệ thống để xây dựng hoàn chỉnh một website kinh doanh bánh ngọt trực tuyến có giao diện trực quan, tính năng bảo mật tốt và vận hành ổn định.
+
+
+
+Mục tiêu cụ thể:
+
+Đối với khách hàng: Cung cấp giao diện xem danh mục bánh sinh động, hỗ trợ các bộ lọc thông minh (theo loại bánh, giá cả, dịp lễ), chức năng tùy chọn thêm thông điệp lên bánh kem, đặt hàng nhanh chóng và theo dõi trạng thái đơn hàng thời gian thực.
+
+Đối với nhà quản lý (Admin): Xây dựng phân hệ quản trị mạnh mẽ giúp dễ dàng cập nhật danh mục sản phẩm, quản lý tình trạng tồn kho nguyên liệu/bánh thành phẩm, tiếp nhận và phân loại đơn đặt hàng, đồng thời thống kê doanh thu theo ngày, tuần, tháng.
+
+Về mặt kỹ thuật: Áp dụng các công nghệ lập trình hiện đại, tối ưu tốc độ tải trang, đảm bảo an toàn thông tin khách hàng và khả năng mở rộng hệ thống trong tương lai.
+
+1.4. Đối tượng và phạm vi nghiên cứu
+
+Đối tượng nghiên cứu: Quy trình nghiệp vụ bán hàng, quản lý kho, giao nhận sản phẩm trong ngành F&B (cụ thể là mặt hàng bánh ngọt); các công nghệ thiết thiết kế và phát triển ứng dụng web hiện đại.
+
+Phạm vi nghiên cứu:
+
+Về mặt tính năng: Tập trung vào các phân hệ cốt lõi bao gồm: Quản lý người dùng, Quản lý sản phẩm, Giỏ hàng & Đặt hàng, Quản lý đơn hàng và Thống kê báo cáo cơ bản.
+
+Về mặt không gian: Áp dụng thử nghiệm cho mô hình một cửa hàng bánh ngọt có dịch vụ giao hàng trong phạm vi nội thành.
+
+1.5. Phương pháp nghiên cứu & công nghệ dự kiến
+
+Phương pháp nghiên cứu:
+
+Phương pháp nghiên cứu tài liệu: Đọc và tìm hiểu các tài liệu về phân tích thiết kế hệ thống hướng đối tượng, ngôn ngữ mô hình hóa thống nhất UML.
+
+Phương pháp khảo sát thực tế: Khảo sát quy trình mua bán và vận hành tại một số cửa hàng bánh tiêu biểu để rút ra các yêu cầu chức năng cần thiết.
+
+Công nghệ dự kiến áp dụng:
+
+Giao diện người dùng (Frontend): HTML5, CSS3, JavaScript kết hợp framework hiện đại (ReactJS hoặc VueJS) và Bootstrap để tối ưu giao diện hiển thị trên mọi thiết bị di động (Responsive Design).
+
+Phần mềm máy chủ (Backend): NodeJS (ExpressJS) hoặc PHP (Laravel) để xây dựng hệ thống xử lý logic và cung cấp API an toàn.
+
+Cơ sở dữ liệu (Database): MySQL hoặc SQL Server phục vụ lưu trữ dữ liệu có cấu trúc ổn định và tính toàn vẹn cao.
+
+1.6. Cấu trúc báo cáo
+
+Nội dung của báo cáo nghiên cứu và xây dựng hệ thống được cấu trúc thành 3 chương chính như sau:
+
+Chương 1: Tổng quan: Giới thiệu tổng quan về đề tài, lý do lựa chọn, các mục tiêu cần đạt được, đối tượng, phạm vi nghiên cứu cũng như công nghệ dự kiến sử dụng.
+
+Chương 2: Khảo sát & Phân tích yêu cầu hệ thống: Trình bày kết quả khảo sát thực trạng quy trình tại doanh nghiệp mẫu; xác định các yêu cầu chức năng, yêu cầu phi chức năng và xây dựng sơ đồ phân rã chức năng (BFD).
+
+Chương 3: Mô hình hóa hệ thống theo UML: Đi sâu vào thiết kế chi tiết hệ thống bằng việc xây dựng mô hình nghiệp vụ Use Case (sơ đồ tổng quát, sơ đồ phân rã, đặc tả chi tiết), sơ đồ hoạt động (Activity Diagram), sơ đồ tuần tự (Sequence Diagram) và sơ đồ lớp (Class Diagram).
+
+
+
+
+
+
+
+
+CHƯƠNG 2: KHẢO SÁT & PHÂN TÍCH YÊU CẦU HỆ THỐNG
+
+
+
+2.1. Mô tả hệ thống diễn tả chi tiết hệ thống, hệ thống lưu trữ những thông tin gì? Hoạt động nghiệp vụ như thế nào? 
+
+Hệ thống quản lý cửa hàng bánh hiện đại không đơn thuần là một công cụ hỗ trợ tính tiền tại quầy, mà được thiết lập như một hệ điều hành cốt lõi, bao quát toàn bộ vòng đời của một sản phẩm thực phẩm từ khi còn là nguyên liệu thô trong kho cho đến khi trở thành món quà ngọt ngào trên tay khách hàng. Về phương diện lưu trữ, hệ thống này đóng vai trò như một kho tri thức số hóa, nơi mọi thực thể đều được định danh và quản lý chặt chẽ. Trọng tâm của cơ sở dữ liệu chính là danh mục sản phẩm và nguyên liệu, nhưng điểm khác biệt nằm ở sự kết nối thông qua các định mức kỹ thuật hay còn gọi là công thức chế biến. Mỗi chiếc bánh sừng bò hay bánh kem bơ đều gắn liền với một bảng phân rã nguyên liệu chi tiết đến từng gam bột, mililit sữa, giúp hệ thống không chỉ biết giá bán mà còn hiểu rõ chi phí cấu thành và giá trị dinh dưỡng của từng sản phẩm. 
+
+Bên cạnh đó, hệ thống còn quản lý một lượng lớn dữ liệu về kho vận theo phương thức quản lý lô hàng. Điều này có nghĩa là mỗi bao bột hay thùng bơ nhập về đều được gắn nhãn về ngày nhập, nhà cung cấp và đặc biệt là hạn sử dụng để hệ thống tự động áp dụng nguyên tắc nhập trước xuất trước, đảm bảo tính tươi mới cho nguyên liệu. Thông tin về khách hàng cũng được lưu trữ một cách khoa học, không chỉ dừng lại ở số điện thoại hay tên gọi mà còn mở rộng sang lịch sử giao dịch, sở thích về độ ngọt, các loại hạt gây dị ứng và những dịp kỷ niệm quan trọng của gia đình họ, tạo nên một hồ sơ khách hàng 360 độ phục vụ cho các chiến dịch chăm sóc tinh tế. 
+
+Chuyển sang khía cạnh vận hành nghiệp vụ, hệ thống hoạt động dựa trên một quy trình khép kín và có tính liên kết chặt chẽ giữa ba bộ phận chính: Kho, Bếp và Bán hàng. Quy trình bắt đầu từ khâu dự báo và lập kế hoạch sản xuất dựa trên dữ liệu lịch sử. Vào mỗi buổi sáng sớm, hệ thống sẽ tự động phân tích doanh số của cùng kỳ tuần trước hoặc tháng trước để gợi ý cho bộ phận bếp số lượng bánh cần ra lò trong ngày, giúp tối ưu hóa nhân lực và tránh tình trạng cháy hàng hoặc dư thừa quá mức. Ngay khi lệnh sản xuất được xác nhận, hệ thống sẽ tự động thực hiện thao tác tạm ứng nguyên liệu từ kho, giúp người quản lý biết chính xác lượng tồn kho còn lại mà không cần phải thực hiện kiểm kê thủ công tại chỗ. 
+
+Tại điểm bán hàng, quy trình nghiệp vụ diễn ra mượt mà thông qua giao diện POS thông minh. Khi một giao dịch được thực hiện, hệ thống không chỉ in hóa đơn mà còn kích hoạt một chuỗi các sự kiện ngầm: trừ tồn kho thành phẩm, cộng điểm tích lũy cho khách hàng và ghi nhận doanh thu vào báo cáo tài chính theo thời gian thực. Đối với các đơn hàng đặc thù như bánh đặt riêng theo yêu cầu, quy trình này còn bao gồm việc quản lý tiền đặt cọc và theo dõi tiến độ hoàn thiện của bộ phận trang trí, đảm bảo khách hàng luôn nhận được thông báo về tình trạng bánh qua tin nhắn hoặc ứng dụng. 
+
+Cuối cùng, một nghiệp vụ không thể thiếu trong quản lý cửa hàng thực phẩm là xử lý bánh hủy và kiểm soát lãng phí. Cuối mỗi ngày làm việc, nhân viên sẽ nhập số lượng bánh không bán hết vào hệ thống, từ đó hệ thống sẽ tự động tính toán tỷ lệ hao hụt và đưa ra các báo cáo phân tích sâu về nguyên nhân dư thừa. Toàn bộ bức tranh vận hành này được tổng hợp thành các biểu đồ trực quan, giúp chủ cửa hàng có cái nhìn toàn diện về sức khỏe tài chính, từ dòng tiền mặt, công nợ nhà cung cấp cho đến hiệu suất làm việc của từng nhân viên, từ đó đưa ra những điều chỉnh chiến lược kịp thời để tối ưu hóa lợi nhuận và nâng cao trải nghiệm khách hàng.  
+
+
+
+
+2.2. Biểu mẫu.
+
+2.2.1. Biểu mẩu bảng thanh toán tiền lượng.
+
+
+
+TIỆM BÁNH LÀNG XÌ MI
+
+Mẫu số: 02 - L
+
+CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
+
+Độc lập - Tự do - Hạnh phúc
+
+
+
+BẢNG THANH TOÁN TIỀN LƯƠNG
+
+Tháng ...... năm 202...
+
+STT
+
+Họ và tên
+
+Chức vụ
+
+Lương cơ bản
+
+Phụ cấp
+
+Ngày công thực tế
+
+Lương thực lĩnh
+
+Ký nhận
+
+Ghi chú
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Chuyển khoản
+
+Tiền mặt
+
+
+
+A
+
+B
+
+C
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+D
+
+ 
+
+1
+
+Nguyễn Văn A
+
+Thợ bánh chính
+
+15,000,000
+
+1,000,000
+
+26
+
+16,000,000
+
+
+
+
+
+
+
+2
+
+Trần Thị B
+
+Phụ bánh
+
+8,000,000
+
+500,000
+
+26
+
+8,500,000
+
+
+
+
+
+
+
+3
+
+Phạm Văn C
+
+Thu ngân
+
+9,000,000
+
+500,000
+
+25
+
+9,153,846
+
+
+
+
+
+
+
+TỔNG CỘNG
+
+32,000,000
+
+2,000,000
+
+77
+
+33,653,846
+
+
+
+
+
+- Tổng số tiền (Viết bằng chữ): 
+
+Ngày ...... tháng ...... năm 202...
+
+Phê duyệt của Giám đốc
+
+(Ký, họ tên)
+
+Kế toán trưởng
+
+(Ký, họ tên)
+
+Người lập bảng
+
+(Ký, họ tên)
+
+
+
+2.2.2. Biểu mẩu phiếu thu.
+
+
+
+TIỆM BÁNH LÀNG XÌ MI
+
+Địa chỉ: 
+
+Mã số thuế: 
+
+Mẫu số: 01 - TT
+
+(Ban hành theo Thông tư số 133/2016/TT-BTC
+
+Ngày 26/08/2016 của Bộ Tài chính)
+
+
+
+PHIẾU THU
+
+Ngày ...... tháng ...... năm 202...
+
+Số: PT................
+
+Nợ: ............. / Có: .............
+
+- Họ và tên người nộp tiền: ..................................................................
+
+- Địa chỉ: ..................................................................
+
+- Lý do nộp: ..................................................................
+
+- Số tiền: .................................................................. (Viết bằng chữ): .............
+
+- Kèm theo: ........................................................ Chứng từ gốc: .............
+
+Ngày ...... tháng ...... năm 202...
+
+Giám đốc
+
+(Ký, họ tên, đóng dấu)
+
+Kế toán trưởng
+
+(Ký, họ tên)
+
+Thủ quỹ
+
+(Ký, họ tên)
+
+Người nộp tiền
+
+(Ký, họ tên)
+
+Người lập phiếu
+
+(Ký, họ tên)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2.2.3. Biểu mẩu phiếu nhập kho.
+
+TIỆM BÁNH LÀNG XÌ MI
+
+Địa chỉ:
+
+Số điện thoại:
+
+Mẫu số: 01 - VT
+
+(Ban hành theo Thông tư số 133/2016/TT-BTC
+
+Ngày 26/08/2016 của Bộ Tài chính)
+
+
+
+PHIẾU NHẬP KHO
+
+Ngày ...... tháng ...... năm 202...
+
+Số: NK................
+
+Nợ: ............. / Có: .............
+
+- Họ và tên người giao hàng: 
+
+- Theo hóa đơn số: .................... ngày .......... tháng .......... năm 202... của 
+
+- Nhập tại kho: ....................................................Địa điểm: 
+
+STT
+
+Tên, nhãn hiệu, quy cách, phẩm chất vật tư, dụng cụ sản phẩm, hàng hóa
+
+Mã số
+
+Đơn vị tính
+
+Số lượng
+
+Đơn giá
+
+Thành tiền
+
+
+
+
+
+
+
+
+
+Theo chứng từ
+
+Thực nhập
+
+
+
+
+
+A
+
+B
+
+C
+
+D
+
+1
+
+2
+
+3
+
+4
+
+ 
+
+1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cộng
+
+
+
+
+
+
+
+
+
+- Tổng số tiền (Viết bằng chữ): 
+
+- Số chứng từ gốc kèm theo: 
+
+Ngày ...... tháng ...... năm 202...
+
+Người lập phiếu
+
+(Ký, họ tên)
+
+Người giao hàng
+
+(Ký, họ tên)
+
+Thủ kho
+
+(Ký, họ tên)
+
+Kế toán trưởng
+
+(Ký,họ tên)
+
+2.2.4. Biểu mẩu chứng từ thanh toán lương.
+
+
+
+TIỆM BÁNH LÀNG XÌ MI
+
+Mã số thuế: ........................................................
+
+Mẫu số: CT - TTL
+
+(Chứng từ nội bộ)
+
+
+
+CHỨNG TỪ THANH TOÁN LƯƠNG
+
+Ngày ...... tháng ...... năm 202...
+
+Số: CT................
+
+- Căn cứ vào: Bảng thanh toán tiền lương tháng ....../202... đã được phê duyệt.
+
+- Tổng số nhân viên: ....................... (Người).
+
+- Hình thức thanh toán: ☐ Chuyển khoản ☐ Tiền mặt
+
+- Tổng số tiền lương thực tế thanh toán: 
+
+- (Viết bằng chữ): 
+
+- (Nội dung chi chi tiết có Bảng thanh toán lương số [Mã bảng lương] kèm theo).
+
+Giám đốc Phê duyệt
+
+(Ký, họ tên, đóng dấu)
+
+Kế toán trưởng
+
+(Ký, họ tên)
+
+Người lập chứng từ
+
+(Ký, họ tên)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2.2.5. Biểu mẩu phiếu chi.
+
+
+
+TIỆM BÁNH LÀNG XÌ MI
+
+Địa chỉ: 
+
+Mã số thuế:
+
+
+
+Mẫu số: 02 - TT
+
+(Ban hành theo Thông tư số 133/2016/TT-BTC
+
+Ngày 26/08/2016 của Bộ Tài chính)
+
+
+
+PHIẾU CHI
+
+Ngày ...... tháng ...... năm 202...
+
+Số: PC................
+
+Nợ: ............. / Có: .............
+
+
+
+- Họ và tên người nhận tiền: ..................................................................
+
+- Địa chỉ: ..................................................................
+
+- Lý do chi: ..................................................................
+
+- Số tiền: .................................................................. (Viết bằng chữ): .............
+
+- Kèm theo: ............................................................................... Chứng từ gốc.
+
+Ngày ...... tháng ...... năm 202...
+
+Giám đốc
+
+(Ký, họ tên, đóng dấu)
+
+Kế toán trưởng
+
+(Ký, họ tên)
+
+Thủ quỹ
+
+(Ký, họ tên)
+
+Người nhận tiền
+
+(Ký, họ tên)
+
+Người lập phiếu
+
+(Ký, họ tên)
+
+
+
+
+
+
+2.2.6. Biểu mẩu phiếu xuất kho.	
+
+TIỆM BÁNH LÀNG XÌ MI
+
+Địa chỉ: 
+
+Số điện thoại: 
+
+Mẫu số: 02 - VT
+
+(Ban hành theo Thông tư số 133/2016/TT-BTC
+
+Ngày 26/08/2016 của Bộ Tài chính)
+
+
+
+PHIẾU XUẤT KHO
+
+Ngày ...... tháng ...... năm 202...
+
+Số: XK................
+
+Nợ: ............. / Có: .............
+
+- Họ và tên người nhận hàng: .........................................................
+
+- Lý do xuất kho: .........................................................
+
+- Xuất tại kho (ngăn lô): ......................................................... Địa điểm: 
+
+STT
+
+Tên, nhãn hiệu, quy cách, phẩm chất vật tư, dụng cụ sản phẩm, hàng hóa
+
+Mã số
+
+Đơn vị tính
+
+Số lượng
+
+Đơn giá
+
+Thành tiền
+
+
+
+
+
+
+
+
+
+Theo chứng từ
+
+Thực xuất
+
+
+
+
+
+A
+
+B
+
+C
+
+D
+
+1
+
+2
+
+3
+
+4
+
+ 
+
+1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cộng
+
+
+
+
+
+
+
+
+
+- Tổng số tiền (Viết bằng chữ): .........................................................
+
+- Số chứng từ gốc kèm theo: .........................................................
+
+Ngày ...... tháng ...... năm 202...
+
+Người lập phiếu
+
+(Ký, họ tên)
+
+Người nhận hàng
+
+(Ký, họ tên)
+
+Thủ kho
+
+(Ký, họ tên)
+
+Kế toán trưởng
+
+(Hoặc Giám đốc, Ký, họ tên)
+
+2.3. Xác định yêu cầu hệ thống
+
+2.3.1. Yêu cầu chức năng (Functional Requirements)
+
+Yêu cầu chức năng mô tả các hành động cụ thể mà hệ thống phải thực hiện được đối với từng nhóm người dùng.
+
+a. Nhóm chức năng dành cho Khách hàng
+
+Quản lý tài khoản:
+
+Đăng ký tài khoản mới qua Email/Số điện thoại.
+
+Đăng nhập và quản lý phiên làm việc (Session).
+
+Cập nhật thông tin cá nhân: Họ tên, số điện thoại, địa chỉ giao hàng mặc định.
+
+Thay đổi mật khẩu và lấy lại mật khẩu qua Email.
+
+Tìm kiếm & Xem sản phẩm:
+
+Xem danh mục các loại bánh (Bánh kem, bánh mỳ, bánh quy...).
+
+Tìm kiếm bánh theo tên hoặc mô tả.
+
+Lọc sản phẩm theo khoảng giá, đánh giá hoặc theo độ phổ biến.
+
+Quản lý Giỏ hàng & Đặt hàng:
+
+Thêm sản phẩm vào giỏ hàng mà không làm mất dữ liệu khi chuyển trang.
+
+Điều chỉnh số lượng sản phẩm hoặc xóa sản phẩm khỏi giỏ hàng.
+
+Thanh toán (Checkout): Nhập thông tin người nhận, lời chúc trên bánh, chọn ngày giờ giao bánh và phương thức thanh toán.
+
+Theo dõi trạng thái đơn hàng (Đã đặt, Đang xử lý, Đang giao).
+
+b. Nhóm chức năng dành cho Quản trị viên (Admin)
+
+Quản lý sản phẩm (CRUD):
+
+Thêm mới sản phẩm với đầy đủ thông tin (Tên, giá, hình ảnh, số lượng tồn kho).
+
+Cập nhật thông tin sản phẩm hoặc tạm ẩn các sản phẩm đã hết hàng/ngừng kinh doanh.
+
+Quản lý đơn hàng:
+
+Tiếp nhận thông báo khi có đơn hàng mới.
+
+Cập nhật trạng thái đơn hàng theo quy trình: Chờ xác nhận → Đang chế biến → Đang giao hàng → Hoàn thành/Hủy đơn.
+
+Quản lý nhân viên:
+
+Thêm mới hồ sơ nhân viên với đầy đủ thông tin cá nhân (Mã NV, tên NV, hình ảnh, CCCD, giới tính, ngày sinh, SĐT, địa chỉ, email).
+
+Thiết lập thông tin hệ thống cho nhân viên bao gồm: Cấp phát tài khoản đăng nhập, thiết lập chức vụ/phân quyền (Quản lý, Thu ngân, Thợ bánh...) và ngày bắt đầu làm việc.
+
+Cập nhật trạng thái lao động (Đang làm việc / Đã nghỉ việc) thay vì xóa vĩnh viễn để bảo toàn lịch sử giao dịch của hệ thống.
+
+Quản lý người dùng: Khóa/Mở khóa tài khoản khách hàng hoặc phân quyền cho nhân viên quản lý kho/nhân viên bán hàng.
+
+Thống kê & Báo cáo:
+
+Biểu đồ doanh thu theo các mốc thời gian (Ngày, tháng, quý).
+
+Thống kê các loại bánh được yêu thích nhất để lên kế hoạch nhập hàng/nguyên liệu.
+
+2.3.2. Yêu cầu phi chức năng (Non-functional Requirements)
+
+a. Nhóm yêu cầu về Vận hành & Hiệu năng
+
+		Tốc độ phản hồi (Response Time):
+
+		Thời gian tải trang chủ không quá 2 giây.
+
+		Thời gian phản hồi các truy vấn tìm kiếm sản phẩm hoặc lọc theo danh mục không quá 1 giây.
+
+		Khả năng chịu tải (Scalability):
+
+		Hệ thống có khả năng phục vụ đồng thời ít nhất 100 người dùng tại cùng một thời điểm mà không làm giảm hiệu suất.
+
+		Cơ sở dữ liệu phải được thiết kế để có thể mở rộng, lưu trữ tối thiểu 10.000 đơn hàng và 5.000 tài khoản khách hàng mà không bị chậm.
+
+		Tính sẵn sàng (Availability):
+
+		Hệ thống đảm bảo hoạt động 24/7. Các hoạt động bảo trì định kỳ phải được thực hiện vào khung giờ ít người truy cập (ví dụ: 2:00 AM - 4:00 AM).
+
+b. Nhóm yêu cầu về Bảo mật & Toàn vẹn (Security & Integrity)
+
+		Bảo mật dữ liệu:
+
+		Sử dụng giao thức HTTPS để mã hóa dữ liệu truyền tải giữa trình duyệt và máy chủ.
+
+		Mật khẩu người dùng phải được băm (hashing) bằng các thuật toán hiện đại (như BCrypt hoặc Argon2) trước khi lưu vào cơ sở dữ liệu.
+
+		Kiểm soát truy cập:
+
+		Hệ thống phải phân quyền rõ ràng: Nhân viên chỉ được xem đơn hàng, Admin mới có quyền xóa sản phẩm hoặc thay đổi cấu hình hệ thống.
+
+		Tự động đăng xuất sau 30 phút nếu người dùng không có hoạt động.
+
+		Toàn vẹn dữ liệu:
+
+		Đảm bảo các giao dịch mua hàng là nguyên tử (Atomicity): Nếu quá trình thanh toán lỗi giữa chừng, hệ thống phải hoàn tác (rollback) để tránh tình trạng trừ tiền mà không có đơn hàng.
+
+c. Nhóm yêu cầu về Trải nghiệm & Tương thích (Usability & Compatibility)
+
+		Tính tương thích (Compatibility):
+
+		Website hoạt động ổn định trên các trình duyệt phổ biến: Google Chrome, Microsoft Edge, Safari và Firefox.
+
+		Giao diện Responsive: Hiển thị tối ưu trên các kích thước màn hình khác nhau (Mobile, Tablet, Desktop).
+
+		Tính dễ sử dụng (Usability):
+
+		Bố cục web phải nhất quán: Thanh menu và giỏ hàng luôn nằm ở vị trí dễ tìm.
+
+		Cung cấp thông báo phản hồi cho mọi hành động của người dùng (ví dụ: Thông báo "Đã thêm vào giỏ hàng thành công").
+
+		Hỗ trợ đa ngôn ngữ (nếu cần thiết, ví dụ: Tiếng Việt và Tiếng Anh).
+
+
+
+
+d. Nhóm yêu cầu về Bảo trì & Phát triển (Maintainability)
+
+		Khả năng bảo trì:
+
+		Mã nguồn được tổ chức theo mô hình kiến trúc sạch (như MVC hoặc Clean Architecture) để dễ dàng sửa lỗi và nâng cấp.
+
+		Phải có hệ thống ghi nhật ký lỗi (Logging) để Admin có thể kiểm tra và xử lý khi hệ thống gặp sự cố.
+
+		Chuẩn hóa dữ liệu:
+
+		Tất cả hình ảnh bánh khi tải lên phải được tự động tối ưu hóa dung lượng (nén ảnh) để tiết kiệm băng thông và bộ nhớ máy chủ.
+
+
+
+2.4. Sơ đồ BFD.
+
+
+
+
+
+
+CHƯƠNG 3: MÔ HÌNH HÓA HỆ THỐNG THEO UML
+
+3.1.Sơ đồ Use case.
+
+3.1.1.Sơ đồ tổng quát: 
+
+
+
+3.1.2 Phân rã cấp 1.
+
+a.Phân rã Quản lý sản phẩm(Bánh):
+
+
+
+
+
+b.Phân rã quản lý đơn hàng:
+
+
+
+
+
+c.Phân rã quản lí tài khoản:
+
+
+
+
+
+
+
+
+
+
+
+d.Phân rã quản lí giỏ hàng:
+
+
+
+
+
+e.Phân rã tìm kiếm:
+
+
+
+
+
+
+f.Phân rã xem sản phẩm
+
+
+
+
+
+g.Phân rã quản lý nhân viên:
+
+
+
+
+
+
+h.Phân rã quản lý người dùng:
+
+
+
+3.1.3.Phân rã cấp 2.
+
+a.Phân rã Đăng nhập
+
+
+
+
+
+
+b.Phân rã Đặt hàng:
+
+
+
+c.Phân rã thêm bánh:
+
+
+
+
+
+d.Phân rã trả hàng:
+
+
+
+
+
+3.2. Sơ đồ activity diagram.
+
+3.2.1.Đăng nhập
+
+
+
+3.2.2. Đặt hàng.
+
+
+
+3.2.3. Trả hàng.
+
+
+
+3.2.4. Thêm bánh.
+
+
+
+
+
+3.3. Sơ đồ sequence.
+
+3.3.1. Đăng nhập.
+
+
+
+
+3.3.2. Đặt bánh.
+
+
+
+3.3.3.Thêm bánh
+
+
+
+
+
+
+
+
+
+3.3.4.Trả hàng.
+
+
+
+
+
+2

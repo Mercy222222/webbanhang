@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercy - Best SMM Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Custom animations for the hero section */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-delayed {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 3s;
+        }
+        /* Grid background pattern */
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+    </style>
+</head>
+<body class="bg-[#050a14] text-white min-h-screen relative overflow-x-hidden font-sans">
+    
+    <!-- Background Glow Effects -->
+    <div class="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-pink-600 rounded-full mix-blend-screen filter blur-[150px] opacity-20"></div>
+    <div class="fixed top-[20%] right-[20%] w-[300px] h-[300px] bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] opacity-15"></div>
+    <div class="fixed inset-0 bg-grid-pattern z-0 opacity-30 pointer-events-none"></div>
+
+    <!-- Navigation -->
+    <nav class="relative z-50 flex items-center justify-between px-8 lg:px-24 py-6">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center transform rotate-12 shadow-lg shadow-pink-500/30">
+                <i class="fa-solid fa-bolt text-white text-xl transform -rotate-12"></i>
+            </div>
+            <span class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">MERCY</span>
+        </div>
+
+        <!-- Links -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#" class="text-white font-medium hover:text-pink-400 transition-colors">Home</a>
+            <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Services</a>
+            <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">API</a>
+            <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Blog</a>
+            <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">About Us</a>
+        </div>
+
+        <!-- Auth Button -->
+        <a href="login.html" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-2.5 rounded-full font-semibold shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:shadow-[0_0_30px_rgba(236,72,153,0.6)] hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+            <span class="relative z-10">Login / Sign Up</span>
+            <div class="absolute inset-0 h-full w-full bg-gradient-to-r from-rose-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+        </a>
+    </nav>
+
+    <!-- Main Hero Section -->
+    <main class="relative z-10 container mx-auto px-8 lg:px-24 pt-12 lg:pt-24 pb-20 flex flex-col lg:flex-row items-center gap-16">
+        
+        <!-- Left Content -->
+        <div class="flex-1 text-center lg:text-left content-section">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-sm font-semibold mb-8 backdrop-blur-sm shadow-[0_0_15px_rgba(236,72,153,0.15)]">
+                <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+                BEST SMM PANEL IN THE WORLD
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
+                <span class="text-white">Welcome to Mercy -</span><br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">SMM Panel</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-gray-400 text-lg lg:text-xl mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                Cheapest SMM Panel Services for Resellers - Grow Your Social Media Accounts With Most Trusted Panel
+            </p>
+
+            <!-- CTA -->
+            <a href="login.html" class="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_40px_rgba(236,72,153,0.4)] hover:shadow-[0_15px_50px_rgba(236,72,153,0.6)] hover:-translate-y-1 transition-all duration-300">
+                Get Started Now! <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- Right Content (Mockup / Illustration) -->
+        <div class="flex-1 relative w-full h-[500px] flex items-center justify-center">
+            <!-- Central Dashboard Mockup -->
+            <div class="relative w-full max-w-md h-[400px] rounded-3xl bg-gray-900/80 border border-gray-700/50 backdrop-blur-xl shadow-2xl p-6 floating overflow-hidden z-20">
+                <!-- Mac UI Dots -->
+                <div class="flex gap-2 mb-6">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-4">Mercy Dashboard</h3>
+                
+                <!-- Mockup Stats Cards -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-800/60 rounded-xl p-4 border border-gray-700/50">
+                        <div class="text-pink-400 text-sm mb-1">Balance</div>
+                        <div class="text-2xl font-bold">$1,245.00</div>
+                    </div>
+                    <div class="bg-gray-800/60 rounded-xl p-4 border border-gray-700/50">
+                        <div class="text-purple-400 text-sm mb-1">Total Spent</div>
+                        <div class="text-2xl font-bold">$4,820.50</div>
+                    </div>
+                </div>
+
+                <!-- Mockup Chart -->
+                <div class="w-full h-32 bg-gradient-to-t from-pink-500/20 to-transparent rounded-xl border border-pink-500/20 flex items-end px-4 pt-4 gap-2">
+                    <div class="w-1/6 bg-pink-500/60 rounded-t-md h-[40%]"></div>
+                    <div class="w-1/6 bg-pink-500/80 rounded-t-md h-[60%]"></div>
+                    <div class="w-1/6 bg-pink-400 rounded-t-md h-[85%] relative"><div class="absolute -top-3 -right-2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_#fff]"></div></div>
+                    <div class="w-1/6 bg-pink-500/60 rounded-t-md h-[50%]"></div>
+                    <div class="w-1/6 bg-pink-500/40 rounded-t-md h-[30%]"></div>
+                    <div class="w-1/6 bg-pink-500/50 rounded-t-md h-[70%]"></div>
+                </div>
+            </div>
+
+            <!-- Floating Social Icons -->
+            <div class="absolute top-10 left-10 w-16 h-16 bg-[#1877F2] rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-500/40 floating-delayed z-30 transform -rotate-12 border border-white/10 backdrop-blur-md">
+                <i class="fa-brands fa-facebook-f text-white"></i>
+            </div>
+            
+            <div class="absolute bottom-20 left-0 w-14 h-14 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-pink-500/40 floating z-30 transform rotate-12 border border-white/10">
+                <i class="fa-brands fa-instagram text-white"></i>
+            </div>
+
+            <div class="absolute top-20 right-0 w-16 h-16 bg-[#000000] rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-gray-700/40 floating z-30 transform rotate-6 border border-white/20">
+                <i class="fa-brands fa-tiktok text-white"></i>
+            </div>
+
+            <div class="absolute bottom-10 right-10 w-14 h-14 bg-[#FF0000] rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-red-500/40 floating-delayed z-30 transform -rotate-6 border border-white/10">
+                <i class="fa-brands fa-youtube text-white"></i>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Stats Bar -->
+    <div class="relative z-10 container mx-auto px-8 lg:px-24 pb-12">
+        <div class="glass-panel border border-white/5 rounded-3xl p-6 lg:p-8 flex flex-col md:flex-row items-center justify-around gap-8 relative overflow-hidden">
+            <!-- Glass reflection -->
+            <div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/5 to-transparent"></div>
+            
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-2xl">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black tracking-tight">1,402,154+</div>
+                    <div class="text-gray-400 text-sm font-medium">Total Orders</div>
+                </div>
+            </div>
+
+            <div class="hidden md:block w-px h-16 bg-gray-700/50"></div>
+
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-2xl">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black tracking-tight">1,514</div>
+                    <div class="text-gray-400 text-sm font-medium">Total Services</div>
+                </div>
+            </div>
+            
+            <div class="hidden md:block w-px h-16 bg-gray-700/50"></div>
+
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-2xl">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black tracking-tight">50,000+</div>
+                    <div class="text-gray-400 text-sm font-medium">Active Users</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

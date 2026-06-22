@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMM Elite Panel - Đăng Nhập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style="animation-delay: 2s;"></div>
+
+    <div class="glass-panel p-8 rounded-2xl w-full max-w-md relative z-10">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 mb-2"><i class="fa-solid fa-rocket mr-2 text-blue-500"></i>SMM Elite</h1>
+            <p class="text-gray-300">Hệ thống Đại lý Tăng Tương Tác</p>
+            <p class="text-xs text-green-400 mt-2"><i class="fa-solid fa-server"></i> Powered by Node.js Backend</p>
+        </div>
+        
+        <form id="loginForm" class="space-y-6">
+            <div id="errorMsg" class="hidden p-3 text-sm text-red-400 bg-red-900 rounded-lg border border-red-800 text-center"></div>
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-400 mb-1">Tài khoản</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-user text-gray-500"></i>
+                    </div>
+                    <input type="text" id="username" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Nhập tài khoản" required>
+                </div>
+            </div>
+            
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-400 mb-1">Mật khẩu</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-lock text-gray-500"></i>
+                    </div>
+                    <input type="password" id="password" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all shadow-lg shadow-blue-900/50">
+                Đăng Nhập
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
+            btn.disabled = true;
+            errorMsg.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    localStorage.setItem('smm_user_auth', JSON.stringify(data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorMsg.textContent = 'Sai tài khoản hoặc mật khẩu!';
+                    errorMsg.classList.remove('hidden');
+                }
+            } catch(err) {
+                errorMsg.textContent = 'Không thể kết nối đến máy chủ Node.js!';
+                errorMsg.classList.remove('hidden');
+            }
+            
+            btn.innerHTML = 'Đăng Nhập';
+            btn.disabled = false;
+        });
+    </script>
+</body>
+</html>
