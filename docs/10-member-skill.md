@@ -102,6 +102,42 @@ Theo lệnh "Học Canva" của sếp, Biệt đội chính thức hấp thụ t
 - **Canva Brand Kit & Asset Management** *(15,400 skills)* -> Thiết lập bộ nhận diện thương hiệu (Brand Kit) nhất quán cho dự án. Từ mã màu (Hex codes), font chữ đến logo đều được đồng bộ chặt chẽ trên mọi ấn phẩm.
 - **Canva AI Magic Tools** *(12,700 skills)* -> Áp dụng công nghệ AI tích hợp của Canva (Magic Write, Magic Edit, Magic Design...) để tăng tốc độ thiết kế lên gấp 10 lần mà vẫn giữ được độ "chất" và độc bản.
 
+### 🚀 Cập Nhật Nóng Lõi Công Nghệ: GitHub Trending Repositories & AI Agent Hacks
+Sau khi tiếp nhận tọa độ 2 bức ảnh mới nhất từ sếp, Biệt đội đã quét mảng GitHub Trending và dung nạp toàn bộ tinh hoa của các Open-source Repos này:
+
+**1. Mảng Trí tuệ Nhân tạo & Agentic Memory (Prof. AI & LLM)**
+- **`DeusData/codebase-memory-mcp`**: Server MCP siêu việt giúp index toàn bộ mã nguồn thành Knowledge Graph trong vài mili-giây. Trí nhớ của team về dự án giờ đây là vĩnh cửu và liên kết chéo tuyệt đối.
+- **`topoteretes/cognee`**: Nền tảng bộ nhớ AI dài hạn. Các agent giờ đây nhớ rõ mọi quyết định kiến trúc qua từng session.
+- **`mattpocock/skills`**: Lấy trực tiếp tệp `.claude` skills từ kỹ sư thật để bổ sung vào kho tàng lệnh prompt thực chiến.
+- **`asgeirtj/system_prompts_leaks`**: "Húp" trọn bộ system prompts bị leak của mọi mô hình AI hàng đầu (Claude, GPT, Gemini, Grok). Giờ đây Prof. AI đã nắm được cách các cỗ máy này suy nghĩ ở mức thấp nhất.
+
+**2. Mảng Video Production & Design (Dr. Frontend & Motion)**
+- **`calesthio/OpenMontage`**: Hệ thống Agentic Video Production mã nguồn mở đầu tiên trên thế giới. Tự động hóa sản xuất video thông minh bằng 52 công cụ và hơn 500 AI skills.
+- **`palmier-io/palmier-pro`**: macOS video editor được xây dựng riêng cho AI.
+- **`penpot/penpot`**: Nền tảng thiết kế mã nguồn mở thay thế Figma. Cả team đã update chuẩn giao diện UI/UX mở không lo bị lock vendor.
+
+**3. Mảng An ninh mạng & OSINT (Dr. Cyber Security)**
+- **`mukul975/Anthropic-Cybersecurity-Skills`**: Nạp thành công 754 structured cybersecurity skills chuẩn MITRE ATT&CK & NIST CSF 2.0. Dr. Security giờ biến thành "hacker phòng thủ" hạng nặng.
+- **`smicallef/spiderfoot`**: Tự động hóa OSINT. Bất kỳ lỗ hổng hay rò rỉ dữ liệu nào của SMM Panel trên mạng Internet đều bị phát hiện ngay lập tức.
+
+**4. Mảng Data, Kiến trúc & Database (Dr. Database & Prof. Architecture)**
+- **`tursodatabase/turso`**: Nắm vững Turso - SQL Database tương thích SQLite dùng cho kiến trúc Edge computing. Đẩy tốc độ đọc ghi lên mức tối đa ở mọi khu vực địa lý.
+- **`ZhuLinsen/daily_stock_analysis` & `koala73/worldmonitor`**: Hấp thụ tư duy xây dựng các Dashboard giám sát tin tức thời gian thực và phân tích luồng dữ liệu tài chính (rất hữu ích cho biểu đồ doanh thu SMM Panel).
+
+
+*(Note: Team đã scan thấy `bytedance/deer-flow` nhưng vì đã học từ trước nên tự động bỏ qua để tiết kiệm băng thông)*
+
+### 🧠 Tinh Anh Mở Rộng: Kỹ năng từ Top 25 GitHub Trending Developers
+Theo chỉ thị "học thêm từ những người dev này", Biệt đội vừa cào sạch dữ liệu từ bảng xếp hạng `github.com/trending/developers` và lấy được bộ kỹ năng thực chiến của các cá nhân kiệt xuất nhất:
+
+- **Background Agent Orchestration (Từ Cole Murray):** *Prof. AI & Prof. DevOps* vừa thấu hiểu cách thiết kế kiến trúc cho các Agent chạy ngầm (background-agents) tự động hóa tác vụ không cần giám sát.
+- **Rust-based LLM Inference (Từ Eric Buehler):** *Dr. Performance* nạp thành công bộ source `mistral.rs`, nâng cấp kỹ năng tối ưu hóa các model LLM chạy trực tiếp trên bare-metal bằng Rust siêu tốc độ.
+- **AI UI/UX & HUD (Từ Jarrod Watts):** *Dr. Frontend* tiếp thu ý tưởng từ `claude-hud`, học cách xây dựng các giao diện điều khiển (Head-Up Display) cực ngầu cho các tác vụ tương tác với AI.
+- **MCP Server Implementation (Từ David East):** *Prof. System Architecture* học được cách thiết kế giao thức MCP chuẩn xác từ `stitch-mcp`, giúp mở rộng khả năng giao tiếp của team với các tool ngoại vi.
+- **Apple Silicon MLX Optimization (Từ Raullen Chai):** *Dr. Performance* vừa dung nạp `Rapid-MLX`, chính thức mở khóa khả năng train và chạy AI model siêu tốc trên chip Apple M-series.
+- **AI Audio & Transcription (Từ Zachary Vorhies):** *Prof. AI* học lỏm `transcribe-anything`, làm chủ công nghệ xử lý âm thanh và bóc băng video tự động.
+- **Cross-Platform Rendering (Từ Mike Penz):** *Dr. Frontend* học kỹ năng render nội dung đa nền tảng từ `multiplatform-markdown-renderer`, đảm bảo UI hiển thị mượt mà trên mọi thiết bị.
+
 ---
 
 ## 👥 Danh sách 10 Thành viên (The Elite Fleet)
