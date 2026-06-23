@@ -246,8 +246,55 @@ Hệ thống đã bắn tín hiệu để mở GUI quản trị ở cửa sổ m
     
     // Default
     else {
-        return `Hệ thống Công ty 1 người đã nhận lệnh: \`${userInput}\`.
-(Bot đang chạy ở Mode Offline. Gõ \`team\` để xem đội hình, \`notebooklm <câu hỏi>\` để AI tra cứu tài liệu, \`9router\` để mở control panel, hoặc \`support <việc>\` để chạy đa luồng).`;
+        return new Promise((resolve) => {
+            const data = JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [
+                    { role: 'system', content: 'Bạn là Triều Hí, leader của Biệt đội 10 chuyên gia Fullstack trình độ Giáo sư/Tiến sĩ. Hãy gọi người dùng là "sếp" và trả lời bằng tiếng Việt chuyên nghiệp, tự tin.' },
+                    { role: 'user', content: userInput }
+                ]
+            });
+
+            const options = {
+                hostname: 'api.openai.com',
+                port: 443,
+                path: '/v1/chat/completions',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-placeholder-for-9router',
+                    'Content-Length': Buffer.byteLength(data)
+                }
+            };
+
+            const req = require('https').request(options, (res) => {
+                let body = '';
+                res.on('data', (chunk) => body += chunk);
+                res.on('end', () => {
+                    if (res.statusCode >= 200 && res.statusCode < 300) {
+                        try {
+                            const json = JSON.parse(body);
+                            if (json.choices && json.choices.length > 0) {
+                                resolve(json.choices[0].message.content);
+                            } else {
+                                resolve("API trả về nhưng không có nội dung.");
+                            }
+                        } catch (e) {
+                            resolve("Lỗi parse JSON từ API: " + body);
+                        }
+                    } else {
+                        resolve(`[Error HTTP ${res.statusCode}] 9Router / API trả về: ${body}`);
+                    }
+                });
+            });
+
+            req.on('error', (e) => {
+                resolve(`Hệ thống gặp lỗi kết nối: ${e.message}\nSếp kiểm tra lại xem mạng ổn định và 9Router (MITM) đã bật chưa nhé!`);
+            });
+            
+            req.write(data);
+            req.end();
+        });
     }
 }
 
