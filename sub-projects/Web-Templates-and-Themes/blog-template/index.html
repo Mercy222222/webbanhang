@@ -760,12 +760,12 @@
           </p>
           
           <div class="flex flex-wrap items-center gap-5 pt-6">
-            <a href="#projects" id="btn-hero-projects" class="relative group px-8 py-3.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 font-bold rounded-xl border border-cyan-500/30 hover:border-cyan-400 transition-all duration-300 overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:-translate-y-0.5">
+            <a href="#projects" class="relative group px-8 py-3.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 font-bold rounded-xl border border-cyan-500/30 hover:border-cyan-400 transition-all duration-300 overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:-translate-y-0.5">
               <div class="absolute inset-0 bg-gradient-to-r from-cyan-400/0 via-cyan-400/10 to-cyan-400/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
-              Get Started
+              <span id="btn-hero-projects">Get Started</span>
             </a>
-            <a href="#contact" id="btn-hero-contact" class="px-8 py-3.5 text-slate-300 font-bold rounded-xl border border-white/10 hover:bg-white/5 hover:text-white transition-all duration-300 hover:-translate-y-0.5">
-              Learn More
+            <a href="#contact" class="px-8 py-3.5 text-slate-300 font-bold rounded-xl border border-white/10 hover:bg-white/5 hover:text-white transition-all duration-300 hover:-translate-y-0.5">
+              <span id="btn-hero-contact">Learn More</span>
             </a>
           </div>
         </div>
@@ -1901,7 +1901,12 @@
       if (titleEl) {
         const lines = t('hero.title').split('\n');
         if (lines.length >= 3) {
-          titleEl.innerHTML = `${lines[0]}<br/>${lines[1]}<br/>${lines[2].replace('securify', '<span class="text-cyan-400">securify</span>')}`;
+          titleEl.innerHTML = `<span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">${lines[0]}</span><br/>` +
+                              `<span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">${lines[1]}</span><br/>` +
+                              `<span class="relative inline-block mt-2 group">` +
+                              `<span class="absolute -inset-2 blur-2xl bg-cyan-500/20 group-hover:bg-cyan-500/40 transition-all duration-500 rounded-full"></span>` +
+                              `<span class="relative text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 bg-[length:200%_auto] animate-[gradient_3s_linear_infinite]">${lines[2]}</span>` +
+                              `</span>`;
         } else {
           titleEl.textContent = t('hero.title');
         }
@@ -1934,7 +1939,12 @@
       
       const careerTitleEl = document.getElementById('label-career-title');
       if (careerTitleEl) {
-        careerTitleEl.innerHTML = t('career.title').replace('\n', '<br/>');
+        const cLines = t('career.title').split('\n');
+        if (cLines.length >= 2) {
+          careerTitleEl.innerHTML = `${cLines[0]}<br/><span class="premium-accent-gradient">${cLines[1]}</span>`;
+        } else {
+          careerTitleEl.innerHTML = t('career.title').replace('\n', '<br/>');
+        }
       }
       safeSetText('label-career-desc', t('career.desc'));
       
