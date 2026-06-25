@@ -4,6 +4,7 @@ const readline = require('readline');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+const os = require('os');
 
 // ANSI escape codes for styling
 const colors = {
@@ -96,10 +97,15 @@ async function bootSequence() {
     await showSpinner("Đang đồng bộ Thư viện Codex & Claude Skills (SkillsMP)...", 400);
     console.log(`${colors.fg.green}✔ Sẵn sàng chạy In-Browser AI & Tự động hoá IDE 100%.${colors.reset}\n`);
 
+    const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(1);
+    const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(1);
+    const usedMem = (totalMem - freeMem).toFixed(1);
+
     console.log(`${colors.fg.blue}  [SYSTEM METRICS HUD]${colors.reset}`);
+    console.log(`${colors.dim}  ├─ OS Architecture: ${os.type()} ${os.arch()} | CPUs: ${os.cpus().length} Cores${colors.reset}`);
     console.log(`${colors.dim}  ├─ Active Threads : 10/10 (Prof. System Architecture, Dr. Frontend, ...)${colors.reset}`);
     console.log(`${colors.dim}  ├─ Knowledge Base : 23 SOC Categories | 817 CyberSecurity Rules${colors.reset}`);
-    console.log(`${colors.dim}  └─ Memory Usage   : 14.2GB / 16.0GB (Apple Silicon Rapid-MLX mode)${colors.reset}\n`);
+    console.log(`${colors.dim}  └─ Memory Usage   : ${usedMem}GB / ${totalMem}GB (Apple Silicon Rapid-MLX mode)${colors.reset}\n`);
 
     console.log(`${colors.dim}Commands: 'team', 'skills', 'learn <name>', 'support <task>', 'notebooklm <query>', '9router', 'clear', 'exit'${colors.reset}\n`);
 }
@@ -118,7 +124,18 @@ async function main() {
         
         if (input !== '') {
             rl.pause();
-            await showSpinner("Agentic System Monitor đang phân tích Thought Process...", Math.random() * 800 + 400);
+            
+            // HUD: Agentic Thought Process Streaming
+            await showSpinner("Agentic System Monitor đang phân tích Thought Process...", 400);
+            const agents = ["Prof. AI", "Prof. System Architecture", "Dr. Frontend", "Prof. DevOps", "Dr. QA"];
+            const actions = ["Phân tích Intent...", "Truy xuất Knowledge Base...", "Đối chiếu SOC Skills...", "Kiểm tra Security Protocol...", "Tổng hợp Response..."];
+            for (let i = 0; i < 3; i++) {
+                const agent = agents[Math.floor(Math.random() * agents.length)];
+                const action = actions[Math.floor(Math.random() * actions.length)];
+                process.stdout.write(`\r${colors.dim}  [${agent}] ${action}${colors.reset}`);
+                await new Promise(r => setTimeout(r, Math.random() * 300 + 200));
+            }
+            process.stdout.write(`\r${' '.repeat(60)}\r`); // clear thought line
             
             const response = await getResponse(input);
             
@@ -225,17 +242,17 @@ Quy trình áp dụng:
     // 4. Lệnh Song song Support
     else if (input.startsWith('support ') || input.startsWith('giúp ')) {
         const task = userInput.substring(userInput.indexOf(' ') + 1);
-        return `**[KÍCH HOẠT QUY TRÌNH SONG SONG (PARALLEL WORKFLOW)]**
+        return `**[KÍCH HOẠT QUY TRÌNH SONG SONG (MCP - PARALLEL WORKFLOW)]**
 
-Đã nhận nhiệm vụ: *"${task}"*. Đang phân bổ task cho các phân hệ...
+Đã nhận nhiệm vụ: *"${task}"*. Đang phân tích Intent và mapping với **1.9M SOC Career Skills**...
 
-🚀 **Dr. Frontend** đang setup dự án giao diện và viết HTML/CSS.
-🚀 **Prof. Backend** đang thiết kế Database Schema và khởi tạo REST API.
-🚀 **Prof. DevOps** đang chuẩn bị Pipeline CI/CD và server Docker.
-🚀 **Prof. AI** đang train model để hỗ trợ tính năng thông minh.
-🚀 **Dr. QA** đang viết kịch bản test tự động.
+🚀 **[Prof. System Architecture]** (Management Analyst Skill): Đang thiết kế System Architecture và bóc tách Sub-tasks...
+🚀 **[Dr. Frontend]** (Graphic Designer Skill): Đang render UI Components với AgentSkills.io Standard...
+🚀 **[Prof. Backend]** (Database Administrator Skill): Đang thiết lập Schema và REST/GraphQL Endpoints...
+🚀 **[Prof. DevOps]** (Cloud Engineer Skill): Đang cấu hình CI/CD Pipeline & Docker orchestration...
+🚀 **[Dr. QA]** (Software Quality Assurance Skill): Đang chạy Automation Test Scripts (E2E)...
 
-*(Tiến trình đang chạy ngầm trên 5 luồng. Khi hoàn thành em sẽ báo cáo sếp ngay! CÔNG TY 1 NGƯỜI vạn tuế!)*`;
+*(Tiến trình Agentic đang chạy ngầm trên 5 luồng. Khi hoàn thành em sẽ báo cáo sếp ngay! CÔNG TY 1 NGƯỜI vạn tuế!)*`;
     }
     
     // 5. Lệnh NotebookLM
