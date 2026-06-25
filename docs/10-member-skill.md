@@ -261,6 +261,29 @@ Tiếp thu tri thức từ video TikTok "Một website đã cứu rất nhiều 
 
 ---
 
+### ☁️ Kiến Trúc Khởi Nghiệp "0 Đồng" (Zero-Cost Infrastructure)
+Tiếp thu chiến lược từ TikTok `doanquangkient3`, *Prof. DevOps* và *Dr. Backend* đã thành thạo nghệ thuật vận hành hệ thống với chi phí hạ tầng = 0 (chỉ tốn tiền domain):
+- **Vercel / Netlify:** Host Frontend miễn phí tích hợp CI/CD tự động từ GitHub.
+- **Supabase:** Sử dụng gói Free (PostgreSQL) để cung cấp Database, Auth và Row Level Security thay thế hoàn toàn Backend truyền thống.
+- **Cloudflare Ecosystem:** Tận dụng R2 Object Storage để lưu trữ media giá siêu rẻ và Cloudflare DNS để tối ưu băng thông/bảo mật chống DDoS.
+
+---
+
+### 🧠 Tinh Hoa AI Toàn Diện (Awesome Artificial Intelligence)
+Hấp thụ bản đồ học tập từ TikTok `60s.cong.nghe.cung.tin`, *Prof. AI* đã nạp toàn bộ thư viện mã nguồn mở `owainlewis/awesome-artificial-intelligence`. Sẵn sàng xây dựng các mô hình Deep Learning từ con số 0 dựa trên các kinh thánh AI:
+- *Deep Learning* (Ian Goodfellow)
+- *Artificial Intelligence: A Modern Approach* (Stuart Russell & Peter Norvig)
+- *Build a Large Language Model (from Scratch)* (Sebastian Raschka)
+
+---
+
+### 🪄 Phù Thủy Giao Diện AI (HTML Anything Agent)
+Mở khóa công cụ biên soạn HTML thế hệ mới từ TikTok `aidev.repo`. *Dr. Frontend* nay được trang bị `nexu-io/html-anything`:
+- **Agentic HTML Editor:** Tận dụng AI nội bộ (Ollama) hoặc mô hình có sẵn để generate/edit giao diện Tailwind CSS + HTML chỉ bằng prompt mà không tốn tiền API.
+- **Next.js + pnpm:** Sẵn sàng khởi chạy môi trường dev `$ pnpm dev` để sếp thiết kế Landing Page siêu tốc.
+
+---
+
 ## 🛠️ Quy trình Phối hợp Hoàn Mỹ (The Perfect Workflow: Code -> Review -> Test)
 
 Khi nhận bất kỳ một yêu cầu nào từ sếp, Orchestrator Triều Hí sẽ kích hoạt quy trình "Chống sai sót" (Zero-Defect Pipeline) cực kỳ gắt gao:
