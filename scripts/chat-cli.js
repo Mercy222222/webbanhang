@@ -91,6 +91,32 @@ const rl = readline.createInterface({
 
 async function bootSequence() {
     console.clear();
+    
+    // GOD TIER EFFECT: SYSTEM AWAKENING (Matrix / Power Surge)
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+{}|[]<>?";
+    const cols = process.stdout.columns || 80;
+    for (let i = 0; i < 20; i++) {
+        let line = "";
+        for (let j = 0; j < cols; j++) {
+            if (Math.random() > 0.8) {
+                line += `${colors.fg.cyan}${chars.charAt(Math.floor(Math.random() * chars.length))}${colors.reset}`;
+            } else if (Math.random() > 0.95) {
+                line += `${colors.fg.magenta}${chars.charAt(Math.floor(Math.random() * chars.length))}${colors.reset}`;
+            } else {
+                line += " ";
+            }
+        }
+        process.stdout.write(line + "\n");
+        await new Promise(r => setTimeout(r, 30));
+    }
+    
+    // God Tier Flash
+    process.stdout.write(`\x1b[47m\x1b[30m                                                                                \x1b[0m\n`);
+    process.stdout.write(`\x1b[47m\x1b[30m            [ GOD TIER PROTOCOL ENGAGED ] - HUU TRI AI SYSTEM AWAKE             \x1b[0m\n`);
+    process.stdout.write(`\x1b[47m\x1b[30m                                                                                \x1b[0m\n`);
+    await new Promise(r => setTimeout(r, 200));
+    console.clear();
+
     process.stdout.write('\x07'); // System Beep
     
     // 1. Memory Dump Boot Effect
@@ -121,8 +147,11 @@ async function bootSequence() {
         "  |_| |_|  \\___/   \\___/      |_|   |_| \\_\\ |___| "
     ];
     
+    // God Tier: Laser-etched Logo animation
     for (let line of logo3D) {
-        console.log(gradientText(line, gradientTop, gradientBottom));
+        let gradientLine = gradientText(line, gradientTop, gradientBottom);
+        process.stdout.write(gradientLine + '\n');
+        await new Promise(r => setTimeout(r, 80));
     }
     
     console.log(gradientText(`  ╔════════════════════════════════════════════════════════════════════════╗`, gradientTop, gradientBottom));
