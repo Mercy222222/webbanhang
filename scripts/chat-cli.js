@@ -92,6 +92,18 @@ const rl = readline.createInterface({
 async function bootSequence() {
     console.clear();
     process.stdout.write('\x07'); // System Beep
+    
+    // 1. Memory Dump Boot Effect
+    for(let i=0; i<15; i++) {
+        let hexStr = "";
+        for(let j=0; j<8; j++) {
+            hexStr += Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase() + " ";
+        }
+        process.stdout.write(`\r${colors.dim}[HT.CORE.BOOT] 0x${Math.floor(Math.random()*100000).toString(16).toUpperCase()} : ${hexStr}${colors.reset}\n`);
+        await new Promise(r => setTimeout(r, 25));
+    }
+    console.clear();
+    
     console.log("");
     const gradientTop = [0, 255, 255]; // Cyan
     const gradientBottom = [255, 0, 255]; // Magenta
@@ -131,8 +143,12 @@ async function bootSequence() {
     process.stdout.write(`${colors.fg.green}  [`);
     for(let i=0; i<60; i++) {
         process.stdout.write(`█`);
+        // Random hex flash at the end
+        const hex = Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
+        process.stdout.write(`\x1b[s\x1b[1G\x1b[65C${colors.fg.cyan}DECRYPT: 0x${hex}\x1b[u`);
         await new Promise(r => setTimeout(r, Math.random() * 20 + 5));
     }
+    process.stdout.write(`\x1b[s\x1b[1G\x1b[65C${colors.fg.green}STATUS: SECURE   \x1b[u`);
     console.log(`] 100% DECRYPTED${colors.reset}\n`);
 
     console.log(`${colors.dim}Commands: 'team', 'skills', 'learn <name>', 'support <task>', 'notebooklm <query>', '9router', 'clear', 'exit'${colors.reset}\n`);
