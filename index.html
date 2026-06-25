@@ -575,7 +575,12 @@
       transform: scale(1.05) translateY(-5px);
     }
 
-  </style>
+    @media (hover: none) and (pointer: coarse) {
+    .god-cursor, #cursor-trail-canvas { display: none !important; }
+    .securify-card { transform: none !important; transition: none !important; }
+    .smooth-hover:hover { transform: none !important; filter: none !important; }
+  }
+</style>
 
   <style>
     /* Custom Blending Cursor */
@@ -2569,7 +2574,7 @@
 
       bgRenderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false, powerPreference: 'high-performance' });
       bgRenderer.setSize(width, height);
-      bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1 : 1.5));
       bgScene.background = new THREE.Color(0x000000);
 
       // ─── BLOOM COMPOSER ───
@@ -3276,7 +3281,7 @@
       heroRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       heroRenderer.setSize(width, height);
       heroRenderer.setClearColor(0x000000, 0);
-      heroRenderer.setPixelRatio(window.devicePixelRatio);
+      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1 : 1.5));
       container.appendChild(heroRenderer.domElement);
 
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -3673,7 +3678,7 @@
 
       function animate() {
         if (canvas) {
-          requestAnimationFrame(animate);
+          if (window.innerWidth > 768) requestAnimationFrame(animate);
           const ctx = canvas.getContext('2d');
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -4159,7 +4164,7 @@
       camera.position.z = 1;
 
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1 : 1.5));
       renderer.setSize(window.innerWidth, window.innerHeight);
       window.blackHoleRenderer = renderer;
 
@@ -4492,7 +4497,7 @@
         });
 
         function animateCursorTrail() {
-          requestAnimationFrame(animateCursorTrail);
+          if (window.innerWidth > 768) requestAnimationFrame(animateCursorTrail);
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           for (let i = 0; i < trailParticles.length; i++) {
