@@ -24,6 +24,21 @@ const colors = {
     }
 };
 
+// RGB Gradient generator
+function gradientText(text, startColor, endColor) {
+    let result = '';
+    const length = text.length;
+    for (let i = 0; i < length; i++) {
+        const ratio = i / (length - 1 || 1);
+        const r = Math.round(startColor[0] + ratio * (endColor[0] - startColor[0]));
+        const g = Math.round(startColor[1] + ratio * (endColor[1] - startColor[1]));
+        const b = Math.round(startColor[2] + ratio * (endColor[2] - startColor[2]));
+        result += `\x1b[38;2;${r};${g};${b}m${text[i]}`;
+    }
+    result += colors.reset;
+    return result;
+}
+
 // Markdown parser
 function formatMarkdown(text) {
     let formatted = text;
@@ -78,12 +93,15 @@ async function bootSequence() {
     console.clear();
     process.stdout.write('\x07'); // System Beep
     console.log("");
-    console.log(`${colors.fg.cyan}${colors.bright}  ╭────────────────────────────────────────────────────────────────────────╮${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  │                                                                        │${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  │  ${colors.fg.magenta}🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI${colors.fg.cyan}                          │${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  │  ${colors.fg.yellow}🤖 THE ELITE FLEET (10-MEMBER) - CLAUDE-HUD ACTIVE${colors.fg.cyan}                    │${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  │                                                                        │${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  ╰────────────────────────────────────────────────────────────────────────╯${colors.reset}`);
+    const gradientTop = [0, 255, 255]; // Cyan
+    const gradientBottom = [255, 0, 255]; // Magenta
+    
+    console.log(gradientText(`  ╔════════════════════════════════════════════════════════════════════════╗`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI                          ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  🤖 THE ELITE FLEET (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE          ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ╚════════════════════════════════════════════════════════════════════════╝`, gradientBottom, gradientTop));
     console.log("");
     
     await showSpinner("Đang khởi tạo Agentic System Monitor...", 400);
