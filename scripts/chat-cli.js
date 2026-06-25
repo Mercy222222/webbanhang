@@ -126,6 +126,14 @@ async function bootSequence() {
     console.log(`${colors.dim}  ├─ Knowledge Base : 23 SOC Categories | 817 CyberSecurity Rules${colors.reset}`);
     console.log(`${colors.dim}  └─ Memory Usage   : ${usedMem}GB / ${totalMem}GB (Apple Silicon Rapid-MLX mode)${colors.reset}\n`);
 
+    // Hacking Progress Bar Effect
+    process.stdout.write(`${colors.fg.green}  [`);
+    for(let i=0; i<60; i++) {
+        process.stdout.write(`█`);
+        await new Promise(r => setTimeout(r, Math.random() * 20 + 5));
+    }
+    console.log(`] 100% DECRYPTED${colors.reset}\n`);
+
     console.log(`${colors.dim}Commands: 'team', 'skills', 'learn <name>', 'support <task>', 'notebooklm <query>', '9router', 'clear', 'exit'${colors.reset}\n`);
 }
 
@@ -165,8 +173,13 @@ async function main() {
             
             const lines = formatMarkdown(response).split('\n');
             for(let line of lines) {
-                 console.log(`${colors.fg.cyan}│${colors.reset}  ${line}`);
-                 await new Promise(r => setTimeout(r, 10)); // tiny delay for visual effect
+                 process.stdout.write(`${colors.fg.cyan}│${colors.reset}  `);
+                 // Hiệu ứng gõ phím từng ký tự (Typewriter)
+                 for (let char of line) {
+                     process.stdout.write(char);
+                     await new Promise(r => setTimeout(r, 3 + Math.random() * 8)); 
+                 }
+                 process.stdout.write('\n');
             }
             
             process.stdout.write('\x07'); // Nháy beep nhẹ khi in xong
