@@ -83,11 +83,25 @@ async function typeWriter(text, speed = 10) {
     process.stdout.write('\n\n');
 }
 
+const availableModels = [
+    { id: 1, name: "Claude 3.5 Sonnet (Agentic Core)", icon: "🟣" },
+    { id: 2, name: "GPT-4o (OpenAI Omni)", icon: "🟢" },
+    { id: 3, name: "Gemini 1.5 Pro (Google)", icon: "🔵" },
+    { id: 4, name: "Llama 3 70B (Meta)", icon: "🦙" },
+    { id: 5, name: "Mistral Large (Mistral AI)", icon: "🌪️" },
+    { id: 6, name: "Claude 3 Opus (Anthropic)", icon: "💎" }
+];
+let currentModel = availableModels[0];
+
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
-    prompt: `${colors.fg.magenta}╭─[${colors.fg.cyan}HuuTri@Workspace${colors.fg.magenta}]─[${colors.fg.yellow}Agentic-Mode${colors.fg.magenta}]\n╰─❯ ${colors.reset}` 
+    output: process.stdout
 });
+
+function updatePrompt() {
+    rl.setPrompt(`${colors.fg.magenta}╭─[${colors.fg.cyan}HuuTri@Workspace${colors.fg.magenta}]─[${colors.fg.yellow}${currentModel.icon} ${currentModel.name}${colors.fg.magenta}]\n╰─❯ ${colors.reset}`);
+}
+updatePrompt();
 
 async function bootSequence() {
     console.clear();
@@ -194,7 +208,7 @@ async function bootSequence() {
     process.stdout.write(`\x1b[s\x1b[1G\x1b[65C${colors.fg.green}STATUS: SECURE   \x1b[u`);
     console.log(`] 100% DECRYPTED${colors.reset}\n`);
 
-    console.log(`${colors.dim}Commands: 'team', 'skills', 'learn <name>', 'support <task>', 'notebooklm <query>', '9router', 'clear', 'exit'${colors.reset}\n`);
+    console.log(`${colors.dim}Commands: 'models' (list all AIs), 'use <id>' (switch AI), 'team', 'skills', 'learn <name>', 'support <task>', 'notebooklm <query>', '9router', 'clear', 'exit'${colors.reset}\n`);
 }
 
 async function main() {
@@ -207,6 +221,33 @@ async function main() {
         if (input.toLowerCase() === 'exit' || input.toLowerCase() === 'quit') {
             console.log(`\n${colors.fg.yellow}Session terminated. Goodbye sir!${colors.reset}`);
             process.exit(0);
+        }
+        
+        if (input.toLowerCase() === 'models') {
+            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}AVAILABLE GOD-TIER AI MODELS${colors.reset}${colors.fg.cyan} ──────────────────────────────────┐${colors.reset}`);
+            availableModels.forEach(m => {
+                const active = m.id === currentModel.id ? `${colors.fg.green}*ACTIVE*${colors.reset}` : "";
+                console.log(`${colors.fg.cyan}│${colors.reset}  ${m.id}. ${m.icon} ${colors.bright}${m.name}${colors.reset} ${active}`);
+            });
+            console.log(`${colors.fg.cyan}└──────────────────────────────────────────────────────────────────┘${colors.reset}\n`);
+            console.log(`${colors.dim}Type 'use <id>' to switch AI (e.g., 'use 2')${colors.reset}\n`);
+            rl.prompt();
+            return;
+        }
+
+        if (input.toLowerCase().startsWith('use ')) {
+            const id = parseInt(input.split(' ')[1]);
+            const model = availableModels.find(m => m.id === id);
+            if (model) {
+                currentModel = model;
+                updatePrompt();
+                process.stdout.write('\x07');
+                console.log(`\n${colors.fg.green}✔ Switched core AI brain to: ${model.icon} ${model.name}${colors.reset}\n`);
+            } else {
+                console.log(`\n${colors.fg.red}✖ Model ID not found. Type 'models' to see available AIs.${colors.reset}\n`);
+            }
+            rl.prompt();
+            return;
         }
         
         if (input !== '') {
@@ -230,7 +271,7 @@ async function main() {
             
             // HUD Response Box
             console.log(`\n${colors.fg.cyan}┌── ${colors.bright}HUU TRI RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────────────┐${colors.reset}`);
-            console.log(`${colors.fg.cyan}│${colors.reset} ${colors.dim}Model Context: Codex/Claude Skills Active | Security: PASS${colors.reset}`);
+            console.log(`${colors.fg.cyan}│${colors.reset} ${colors.dim}Model Context: ${currentModel.icon} ${currentModel.name} | Security: PASS${colors.reset}`);
             console.log(`${colors.fg.cyan}├────────────────────────────────────────────────────────────────────────┤${colors.reset}`);
             
             const lines = formatMarkdown(response).split('\n');
