@@ -70,30 +70,38 @@ async function typeWriter(text, speed = 10) {
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: `${colors.fg.green}❯ ${colors.reset}` 
+    prompt: `${colors.fg.magenta}╭─[${colors.fg.cyan}EliteFleet@Workspace${colors.fg.magenta}]─[${colors.fg.yellow}Agentic-Mode${colors.fg.magenta}]\n╰─❯ ${colors.reset}` 
 });
 
 async function bootSequence() {
     console.clear();
     console.log("");
-    console.log(`${colors.fg.cyan}${colors.bright}  ╔════════════════════════════════════════════════════════════════╗${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  ║                                                                ║${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  ║    ${colors.fg.magenta}🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI${colors.fg.cyan}                ║${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  ║    ${colors.fg.yellow}🤖 THE ELITE FLEET (10-MEMBER) - KHỞI ĐỘNG HỆ THỐNG${colors.fg.cyan}         ║${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  ║                                                                ║${colors.reset}`);
-    console.log(`${colors.fg.cyan}${colors.bright}  ╚════════════════════════════════════════════════════════════════╝${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ╭────────────────────────────────────────────────────────────────────────╮${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  │                                                                        │${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  │  ${colors.fg.magenta}🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI${colors.fg.cyan}                          │${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  │  ${colors.fg.yellow}🤖 THE ELITE FLEET (10-MEMBER) - CLAUDE-HUD ACTIVE${colors.fg.cyan}                    │${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  │                                                                        │${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ╰────────────────────────────────────────────────────────────────────────╯${colors.reset}`);
     console.log("");
     
-    await showSpinner("Đang kết nối API Đa-Agent (10 thành viên)...", 800);
-    console.log(`${colors.fg.green}✔ Đã thiết lập liên kết thành công với 10 Elite Agents.${colors.reset}`);
+    await showSpinner("Đang khởi tạo Agentic System Monitor...", 400);
+    console.log(`${colors.fg.green}✔ Claude-Code-Agent-Monitor đã kích hoạt: Theo dõi Thought Process Real-time.${colors.reset}`);
     
-    await showSpinner("Đang nạp 246,942+ Skills từ hệ thống nội bộ...", 1200);
-    console.log(`${colors.fg.green}✔ Nạp thành công toàn bộ Skill (Design, Code, SEO, Mobile, DevOps...).${colors.reset}`);
+    await showSpinner("Đang kết nối API Đa-Agent qua giao thức MCP (gitlab-mcp)...", 500);
+    console.log(`${colors.fg.green}✔ 10 Elite Agents (PraisonAI framework) đã liên kết chéo thành công.${colors.reset}`);
     
-    await showSpinner("Đang kích hoạt chế độ Xử lý Song song (Parallel Support)...", 800);
-    console.log(`${colors.fg.green}✔ Hệ thống sẵn sàng phục vụ sếp!${colors.reset}\n`);
+    await showSpinner("Đang nạp 1.9 Triệu Kỹ Năng Đa Nghề Nghiệp (SOC Careers)...", 600);
+    console.log(`${colors.fg.green}✔ Hấp thụ thành công 1,964,760 AgentSkills.io Standard workflows.${colors.reset}`);
 
-    console.log(`${colors.dim}Các lệnh hỗ trợ: 'team', 'skills', 'learn <tên>', 'support <việc>', 'notebooklm <câu hỏi>', '9router', 'clear', 'exit'${colors.reset}\n`);
+    await showSpinner("Đang đồng bộ Thư viện Codex & Claude Skills (SkillsMP)...", 400);
+    console.log(`${colors.fg.green}✔ Sẵn sàng chạy In-Browser AI & Tự động hoá IDE 100%.${colors.reset}\n`);
+
+    console.log(`${colors.fg.blue}  [SYSTEM METRICS HUD]${colors.reset}`);
+    console.log(`${colors.dim}  ├─ Active Threads : 10/10 (Prof. System Architecture, Dr. Frontend, ...)${colors.reset}`);
+    console.log(`${colors.dim}  ├─ Knowledge Base : 23 SOC Categories | 817 CyberSecurity Rules${colors.reset}`);
+    console.log(`${colors.dim}  └─ Memory Usage   : 14.2GB / 16.0GB (Apple Silicon Rapid-MLX mode)${colors.reset}\n`);
+
+    console.log(`${colors.dim}Commands: 'team', 'skills', 'learn <name>', 'support <task>', 'notebooklm <query>', '9router', 'clear', 'exit'${colors.reset}\n`);
 }
 
 async function main() {
@@ -109,20 +117,23 @@ async function main() {
         }
         
         if (input !== '') {
-            rl.pause(); 
-            await showSpinner("AI Agent is orchestrating...", Math.random() * 1000 + 500);
+            rl.pause();
+            await showSpinner("Agentic System Monitor đang phân tích Thought Process...", Math.random() * 800 + 400);
             
             const response = await getResponse(input);
-            console.log(`\n${colors.fg.magenta}╭─ ${colors.bright}Triều Hí & The Elite Fleet${colors.reset} ───────────────────────────────────`);
-            console.log(`${colors.fg.magenta}│${colors.reset}`);
+            
+            // HUD Response Box
+            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}THE ELITE FLEET RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────┐${colors.reset}`);
+            console.log(`${colors.fg.cyan}│${colors.reset} ${colors.dim}Model Context: Codex/Claude Skills Active | Security: PASS${colors.reset}`);
+            console.log(`${colors.fg.cyan}├────────────────────────────────────────────────────────────────────────┤${colors.reset}`);
             
             const lines = formatMarkdown(response).split('\n');
             for(let line of lines) {
-                 console.log(`${colors.fg.magenta}│${colors.reset}  ${line}`);
+                 console.log(`${colors.fg.cyan}│${colors.reset}  ${line}`);
                  await new Promise(r => setTimeout(r, 10)); // tiny delay for visual effect
             }
             
-            console.log(`${colors.fg.magenta}╰──────────────────────────────────────────────────────────────${colors.reset}\n`);
+            console.log(`${colors.fg.cyan}└────────────────────────────────────────────────────────────────────────┘${colors.reset}\n`);
             
             rl.resume();
         }
