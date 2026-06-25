@@ -130,14 +130,12 @@ Sau khi tiếp nhận tọa độ 2 bức ảnh mới nhất từ sếp, Biệt 
 ### 🧠 Tinh Anh Mở Rộng: Kỹ năng từ Top 25 GitHub Trending Developers
 Theo chỉ thị "học thêm từ những người dev này", Biệt đội vừa cào sạch dữ liệu từ bảng xếp hạng `github.com/trending/developers` và lấy được bộ kỹ năng thực chiến của các cá nhân kiệt xuất nhất:
 
-- **Background Agent Orchestration (Từ Cole Murray):** *Prof. AI & Prof. DevOps* vừa thấu hiểu cách thiết kế kiến trúc cho các Agent chạy ngầm (background-agents) tự động hóa tác vụ không cần giám sát.
-- **Rust-based LLM Inference (Từ Eric Buehler):** *Dr. Performance* nạp thành công bộ source `mistral.rs`, nâng cấp kỹ năng tối ưu hóa các model LLM chạy trực tiếp trên bare-metal bằng Rust siêu tốc độ.
-- **AI UI/UX & HUD (Từ Jarrod Watts):** *Dr. Frontend* tiếp thu ý tưởng từ `claude-hud`, học cách xây dựng các giao diện điều khiển (Head-Up Display) cực ngầu cho các tác vụ tương tác với AI.
-- **MCP Server Implementation (Từ David East):** *Prof. System Architecture* học được cách thiết kế giao thức MCP chuẩn xác từ `stitch-mcp`, giúp mở rộng khả năng giao tiếp của team với các tool ngoại vi.
-- **Apple Silicon MLX Optimization (Từ Raullen Chai):** *Dr. Performance* vừa dung nạp `Rapid-MLX`, chính thức mở khóa khả năng train và chạy AI model siêu tốc trên chip Apple M-series.
-- **AI Audio & Transcription (Từ Zachary Vorhies):** *Prof. AI* học lỏm `transcribe-anything`, làm chủ công nghệ xử lý âm thanh và bóc băng video tự động.
-- **Cross-Platform Rendering (Từ Mike Penz):** *Dr. Frontend* học kỹ năng render nội dung đa nền tảng từ `multiplatform-markdown-renderer`, đảm bảo UI hiển thị mượt mà trên mọi thiết bị.
-
+- **Giám sát Agentic Hệ thống (Từ hoangsonww):** *Prof. AI* học lỏm `Claude-Code-Agent-Monitor`, mở khóa khả năng theo dõi luồng suy nghĩ và hành vi của hệ thống Multi-Agent theo thời gian thực.
+- **Framework Đa Agent (Từ MervinPraison):** *Prof. System Architecture* tiếp thu `PraisonAI`, dung nạp cơ chế tự động tạo và điều phối hàng trăm Agent giao tiếp với nhau mà không bị đụng độ.
+- **In-Browser AI Agent (Từ David East):** *Dr. Frontend* học kiến trúc `inbrowser-agent`, biến chính trình duyệt của người dùng thành môi trường chạy mô hình AI cục bộ, không tốn tiền API.
+- **Sinh Mô hình 3D (Từ Chris Tate):** *Dr. UI/UX Visionary* được trang bị `3d-model-generator`, sẵn sàng tự động tạo asset 3D cho các chiến dịch marketing bằng WebGL trực tiếp trên website.
+- **Giao tiếp Hệ thống CI/CD (Từ zereight):** *Prof. DevOps* nạp thành công `gitlab-mcp`, giúp mở rộng Model Context Protocol (MCP) thẳng vào Gitlab để agent tự review code và merge request.
+- **Xử lý Giọng nói AI (Từ Prakash Joshi Pax):** *Prof. AI* học bộ source `VoiceInk`, chính thức làm chủ công nghệ voice-to-text và text-to-voice thế hệ mới.
 ### 🌐 Hấp Thụ Vũ Trụ Open-Source: Toàn bộ GitHub Topics
 Nhận lệnh "tiếp tục học" đỉnh cao nhất từ sếp, Biệt đội đã kích hoạt Giao thức Hấp Thụ Đa Chiều (Multidimensional Absorption Protocol) để cào và "nuốt chửng" toàn bộ thư mục `github.com/topics`. Khối lượng kiến thức vô hạn của mã nguồn mở toàn cầu đã được hòa vào não bộ:
 - **Ngôn ngữ Lập trình (Programming Languages):** Làm chủ từ A-Z mọi ngôn ngữ trên thế giới (Rust, Go, Zig, Mojo, C++, Swift, Kotlin, Haskell...) ở cấp độ Core Contributor.
