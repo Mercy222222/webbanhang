@@ -45,26 +45,22 @@ function formatMarkdown(text) {
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, `${colors.bright}$1${colors.reset}`);
     formatted = formatted.replace(/\*(.*?)\*/g, `${colors.italic}$1${colors.reset}`);
     formatted = formatted.replace(/`([^`]+)`/g, `${colors.fg.cyan}$1${colors.reset}`);
-    formatted = formatted.replace(/```([\s\S]*?)```/g, `\n${colors.dim}--- Code ---${colors.reset}\n${colors.fg.cyan}$1${colors.reset}\n${colors.dim}------------${colors.reset}\n`);
+    formatted = formatted.replace(/```([\s\S]*?)```/g, `\n${colors.dim}▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃${colors.reset}\n${colors.fg.cyan}$1${colors.reset}\n${colors.dim}▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀${colors.reset}\n`);
     return formatted;
 }
 
 // Spinner logic
-const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
-async function showSpinner(text, durationMs) {
-    return new Promise((resolve) => {
-        let i = 0;
-        const interval = setInterval(() => {
-            process.stdout.write(`\r${colors.fg.orange}${spinnerFrames[i]} ${text}${colors.reset}`);
-            i = (i + 1) % spinnerFrames.length;
-        }, 80);
-
-        setTimeout(() => {
-            clearInterval(interval);
-            process.stdout.write(`\r${' '.repeat(text.length + 5)}\r`); 
-            resolve();
-        }, durationMs);
-    });
+const spinnerFrames = ['▖', '▘', '▝', '▗'];
+async function showSpinner(text, ms) {
+    let i = 0;
+    const interval = setInterval(() => {
+        const frameColor = i % 2 === 0 ? colors.fg.cyan : colors.fg.magenta;
+        process.stdout.write(`\r${frameColor} ▛▀▜ ${spinnerFrames[i]} ▟▄▙ ${colors.reset} ${colors.dim}${text}${colors.reset}`);
+        i = (i + 1) % spinnerFrames.length;
+    }, 100);
+    await new Promise(r => setTimeout(r, ms));
+    clearInterval(interval);
+    process.stdout.write(`\r${' '.repeat(text.length + 20)}\r`); 
 }
 
 // Typing effect logic
@@ -168,10 +164,12 @@ async function bootSequence() {
         await new Promise(r => setTimeout(r, 80));
     }
     
-    console.log(gradientText(`  ╔════════════════════════════════════════════════════════════════════════╗`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  [BOT]    HUU TRI CHAT BOT (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE   ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  [INFO]   © Copyright by Huu Tri                                       ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ╚════════════════════════════════════════════════════════════════════════╝`, gradientBottom, gradientTop));
+    console.log(gradientText(`  ████████████████████████████████████████████████████████████████████████`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ██  [BOT]    HUU TRI CHAT BOT (10-MEMBER) - CLAUDE-HUD TRUECOLOR      ██`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ██  [INFO]   © Copyright by Huu Tri                                   ██`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀`, gradientBottom, gradientTop));
     console.log("");
     
     await showSpinner("Initializing Agentic System Monitor...", 400);
@@ -269,14 +267,15 @@ async function main() {
             
             const response = await getResponse(input);
             
-            // HUD Response Box
-            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}HUU TRI RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────────────┐${colors.reset}`);
-            console.log(`${colors.fg.cyan}│${colors.reset} ${colors.dim}Model Context: ${currentModel.icon} ${currentModel.name} | Security: PASS${colors.reset}`);
-            console.log(`${colors.fg.cyan}├────────────────────────────────────────────────────────────────────────┤${colors.reset}`);
+            // HUD Response Box (3D Block Style)
+            console.log(`\n${colors.fg.cyan}▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▜${colors.reset}`);
+            console.log(`${colors.fg.cyan}▌${colors.reset} ${colors.bright}HUU TRI RESPONSE${colors.reset}`);
+            console.log(`${colors.fg.cyan}▌${colors.reset} ${colors.dim}Model Context: ${currentModel.icon} ${currentModel.name} | Security: PASS${colors.reset}`);
+            console.log(`${colors.fg.cyan}▛▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▜${colors.reset}`);
             
             const lines = formatMarkdown(response).split('\n');
             for(let line of lines) {
-                 process.stdout.write(`${colors.fg.cyan}│${colors.reset}  `);
+                 process.stdout.write(`${colors.fg.cyan}▌${colors.reset}  `);
                  // Hiệu ứng gõ phím từng ký tự (Typewriter)
                  for (let char of line) {
                      process.stdout.write(char);
@@ -286,7 +285,7 @@ async function main() {
             }
             
             process.stdout.write('\x07'); // Nháy beep nhẹ khi in xong
-            console.log(`${colors.fg.cyan}└────────────────────────────────────────────────────────────────────────┘${colors.reset}\n`);
+            console.log(`${colors.fg.cyan}▙▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▟${colors.reset}\n`);
             
             rl.resume();
         }
