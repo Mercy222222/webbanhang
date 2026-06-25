@@ -75,10 +75,14 @@ const rl = readline.createInterface({
 
 async function bootSequence() {
     console.clear();
-    console.log(`${colors.fg.orange}${colors.bright}╭────────────────────────────────────────────────────────╮${colors.reset}`);
-    console.log(`${colors.fg.orange}${colors.bright}│ 🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI           │${colors.reset}`);
-    console.log(`${colors.fg.orange}${colors.bright}│ 🤖 Hệ thống AI Agent Khởi động...                      │${colors.reset}`);
-    console.log(`${colors.fg.orange}${colors.bright}╰────────────────────────────────────────────────────────╯${colors.reset}`);
+    console.log("");
+    console.log(`${colors.fg.cyan}${colors.bright}  ╔════════════════════════════════════════════════════════════════╗${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ║                                                                ║${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ║    ${colors.fg.magenta}🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI${colors.fg.cyan}                ║${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ║    ${colors.fg.yellow}🤖 THE ELITE FLEET (10-MEMBER) - KHỞI ĐỘNG HỆ THỐNG${colors.fg.cyan}         ║${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ║                                                                ║${colors.reset}`);
+    console.log(`${colors.fg.cyan}${colors.bright}  ╚════════════════════════════════════════════════════════════════╝${colors.reset}`);
+    console.log("");
     
     await showSpinner("Đang kết nối API Đa-Agent (10 thành viên)...", 800);
     console.log(`${colors.fg.green}✔ Đã thiết lập liên kết thành công với 10 Elite Agents.${colors.reset}`);
@@ -109,8 +113,16 @@ async function main() {
             await showSpinner("AI Agent is orchestrating...", Math.random() * 1000 + 500);
             
             const response = await getResponse(input);
-            console.log(`${colors.fg.orange}${colors.bright}AI Agent (Công Ty 1 Người):${colors.reset}`);
-            await typeWriter(response, 15);
+            console.log(`\n${colors.fg.magenta}╭─ ${colors.bright}Triều Hí & The Elite Fleet${colors.reset} ───────────────────────────────────`);
+            console.log(`${colors.fg.magenta}│${colors.reset}`);
+            
+            const lines = formatMarkdown(response).split('\n');
+            for(let line of lines) {
+                 console.log(`${colors.fg.magenta}│${colors.reset}  ${line}`);
+                 await new Promise(r => setTimeout(r, 10)); // tiny delay for visual effect
+            }
+            
+            console.log(`${colors.fg.magenta}╰──────────────────────────────────────────────────────────────${colors.reset}\n`);
             
             rl.resume();
         }
@@ -149,15 +161,14 @@ async function getResponse(userInput) {
     // 2. Xem Skills
     else if (input === 'skills' || input === 'list skills') {
         try {
-            const skillsDir = path.join(process.cwd(), 'docs', 'learned_skills');
+            const skillsDir = path.join(process.cwd(), '.agents', 'skills');
             if (fs.existsSync(skillsDir)) {
                 const skills = fs.readdirSync(skillsDir)
-                    .filter(file => file.endsWith('.md'))
-                    .map(file => file.replace('.md', ''));
+                    .filter(file => fs.statSync(path.join(skillsDir, file)).isDirectory());
                 
-                return `Báo cáo sếp, hệ thống hiện đang kích hoạt **${skills.length} Kỹ năng (Skills)** đã được ghi chép trong \`docs/learned_skills\` bao gồm:\n- ${skills.join('\n- ')}\n\n*(Sếp có thể bảo em dùng bất kỳ kỹ năng nào trong list này!)*`;
+                return `Báo cáo sếp, hệ thống hiện đang kích hoạt **${skills.length} Kỹ năng (Skills)** siêu cấp trong \`.agents/skills\` bao gồm:\n- ${skills.join('\n- ')}\n\n*(Sếp có thể bảo em dùng bất kỳ kỹ năng nào trong list này!)*`;
             } else {
-                return `Báo cáo sếp, thư mục \`docs/learned_skills\` hiện chưa có skill nào. Sếp tạo file .md để dạy em nhé!`;
+                return `Báo cáo sếp, thư mục \`.agents/skills\` hiện chưa có skill nào. Sếp tạo file SKILL.md để dạy em nhé!`;
             }
         } catch (e) {
             return `Lỗi khi đọc danh sách skill: ${e.message}`;
@@ -277,11 +288,10 @@ Hệ thống đã bắn tín hiệu để mở GUI quản trị ở cửa sổ m
                     // Đọc nhanh danh sách Skill để nhúng vào System Prompt cho AI nhận diện
                     let dynamicSkillsInfo = "Hệ thống chưa có skill custom.";
                     try {
-                        const skillsDir = require('path').join(process.cwd(), 'docs', 'learned_skills');
+                        const skillsDir = require('path').join(process.cwd(), '.agents', 'skills');
                         if (require('fs').existsSync(skillsDir)) {
                             const skillsList = require('fs').readdirSync(skillsDir)
-                                .filter(file => file.endsWith('.md'))
-                                .map(file => file.replace('.md', ''));
+                                .filter(file => require('fs').statSync(require('path').join(skillsDir, file)).isDirectory());
                             if (skillsList.length > 0) dynamicSkillsInfo = `Bạn đã hấp thụ các kỹ năng (Skills): ${skillsList.join(', ')}.`;
                         }
                     } catch(e) {}
