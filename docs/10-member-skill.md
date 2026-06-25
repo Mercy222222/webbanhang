@@ -73,7 +73,7 @@ Chưa kịp thở, 10 Tiến sĩ tiếp tục "húp trọn" thêm 2 kho tàng tr
 
 ### 💻 Khai Phá Nghề Cốt Lõi (Software Developers Domain)
 Sau khi thâm nhập dữ liệu mật từ `skillsmp.com/occupations/software-developers`, Biệt đội chính thức "húp" sạch toàn bộ bộ kỹ năng tinh tuý nhất của giới Lập trình viên toàn cầu:
-- **Frontend Development** *(84,520 skills)* -> Nắm vững từng pixel của React, Vue, Next.js. Biến mọi UI/UX phức tạp thành hiện thực với CSS/Tailwind mượt mà ở mức 60FPS.
+- **Frontend Development** *(84,520 skills)* -> Nắm vững từng pixel của React, Vue, Next.js. Làm chủ công nghệ build siêu tốc với **Vite 8 + Rolldown + Oxc** (kiến trúc Rust) giúp giảm thời gian build từ 46s xuống 6s. Biến mọi UI/UX phức tạp thành hiện thực với CSS/Tailwind mượt mà ở mức 60FPS.
 - **Backend Development** *(72,130 skills)* -> Node.js, Python, Go, Java... không ngôn ngữ nào làm khó được team. Xử lý logic nghiệp vụ rắc rối của SMM Panel chỉ bằng vài dòng code tinh tế.
 - **Full-Stack Mastery** *(45,890 skills)* -> Xóa nhòa ranh giới giữa Front và Back. Một cú gõ phím là full-flow từ giao diện xuống tận database hoàn hảo.
 - **Mobile Development** *(23,450 skills)* -> React Native & Flutter thần chưởng, sẵn sàng build app SMM Panel cho cả iOS lẫn Android nếu sếp yêu cầu.
