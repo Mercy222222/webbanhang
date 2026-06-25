@@ -76,6 +76,7 @@ const rl = readline.createInterface({
 
 async function bootSequence() {
     console.clear();
+    process.stdout.write('\x07'); // System Beep
     console.log("");
     console.log(`${colors.fg.cyan}${colors.bright}  ╭────────────────────────────────────────────────────────────────────────╮${colors.reset}`);
     console.log(`${colors.fg.cyan}${colors.bright}  │                                                                        │${colors.reset}`);
@@ -150,6 +151,7 @@ async function main() {
                  await new Promise(r => setTimeout(r, 10)); // tiny delay for visual effect
             }
             
+            process.stdout.write('\x07'); // Nháy beep nhẹ khi in xong
             console.log(`${colors.fg.cyan}└────────────────────────────────────────────────────────────────────────┘${colors.reset}\n`);
             
             rl.resume();
