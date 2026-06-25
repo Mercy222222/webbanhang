@@ -86,7 +86,7 @@ async function typeWriter(text, speed = 10) {
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: `${colors.fg.magenta}╭─[${colors.fg.cyan}EliteFleet@Workspace${colors.fg.magenta}]─[${colors.fg.yellow}Agentic-Mode${colors.fg.magenta}]\n╰─❯ ${colors.reset}` 
+    prompt: `${colors.fg.magenta}╭─[${colors.fg.cyan}HuuTri@Workspace${colors.fg.magenta}]─[${colors.fg.yellow}Agentic-Mode${colors.fg.magenta}]\n╰─❯ ${colors.reset}` 
 });
 
 async function bootSequence() {
@@ -98,8 +98,9 @@ async function bootSequence() {
     
     console.log(gradientText(`  ╔════════════════════════════════════════════════════════════════════════╗`, gradientTop, gradientBottom));
     console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  🚀 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI                          ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  🤖 THE ELITE FLEET (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE          ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  [SYSTEM] 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI                    ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  [BOT]    HỮU TRÍ CHAT BOT (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE   ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  [INFO]   © Mọi bản quyền thuộc về Hữu Trí                             ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ╚════════════════════════════════════════════════════════════════════════╝`, gradientBottom, gradientTop));
     console.log("");
@@ -167,7 +168,7 @@ async function main() {
             const response = await getResponse(input);
             
             // HUD Response Box
-            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}THE ELITE FLEET RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────┐${colors.reset}`);
+            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}HỮU TRÍ RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────────────┐${colors.reset}`);
             console.log(`${colors.fg.cyan}│${colors.reset} ${colors.dim}Model Context: Codex/Claude Skills Active | Security: PASS${colors.reset}`);
             console.log(`${colors.fg.cyan}├────────────────────────────────────────────────────────────────────────┤${colors.reset}`);
             
