@@ -104,15 +104,30 @@ async function bootSequence() {
     }
     console.clear();
     
+    // Welcome Voice Sound (Windows TTS)
+    if (os.platform() === 'win32') {
+        exec(`powershell -c "Add-Type -AssemblyName System.speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.SelectVoiceByHints('Female'); $synth.Speak('Welcome to Huu Tree Chat Bot');"`);
+    }
+    
     console.log("");
     const gradientTop = [0, 255, 255]; // Cyan
     const gradientBottom = [255, 0, 255]; // Magenta
     
+    const logo3D = [
+        "   _   _   _   _   _   _     _____   ____    ___  ",
+        "  | | | | | | | | | | | |   |_   _| |  _ \\  |_ _| ",
+        "  | |_| | | | | | | | | |     | |   | |_) |  | |  ",
+        "  |  _  | | |_| | | |_| |     | |   |  _ <   | |  ",
+        "  |_| |_|  \\___/   \\___/      |_|   |_| \\_\\ |___| "
+    ];
+    
+    for (let line of logo3D) {
+        console.log(gradientText(line, gradientTop, gradientBottom));
+    }
+    
     console.log(gradientText(`  ╔════════════════════════════════════════════════════════════════════════╗`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ║  [BOT]    HUU TRI CHAT BOT (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE   ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ║  [INFO]   © Copyright by Huu Tri                                       ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ╚════════════════════════════════════════════════════════════════════════╝`, gradientBottom, gradientTop));
     console.log("");
     
