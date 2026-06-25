@@ -299,3 +299,12 @@ Khi nhận bất kỳ một yêu cầu nào từ sếp, Orchestrator Triều Hí
 5. **Triển khai (Deploy):** Prof. DevOps chỉ đưa code lên môi trường khi tất cả các vòng Test và Review trả về kết quả XANH (PASS).
 
 **Quy tắc tối thượng:** KHÔNG MỘT DÒNG CODE NÀO được phép thực thi hoặc lưu vào dự án nếu chưa vượt qua lưới lọc Review và Test của 4 vị Tiến sĩ/Giáo sư (Security, Architecture, Performance, QA). Mã nguồn phải Đẹp, Nhanh và Tuyệt đối an toàn!
+
+---
+
+### 📈 Cập Nhật Tri Thức Thời Gian Thực (GitHub Trending Research)
+Để đảm bảo hệ thống không bao giờ bị lạc hậu, Biệt đội đã kích hoạt radar quét **GitHub Trending** liên tục và hấp thụ thành công những mô hình tiên tiến nhất:
+- **Tiêu chuẩn Giao diện Agentic (`design.md`):** Thấu hiểu chuẩn mực mô tả Design System dành riêng cho AI Coding Agents từ Google Labs. Giúp *Dr. Frontend* render UI/UX chuẩn xác tuyệt đối mà không cần mockups tĩnh.
+- **23-Tool GStack (`gstack`):** Nắm vững cấu trúc mô phỏng bộ máy công ty của Garry Tan (CEO, Eng Manager, Release Manager) cho Claude Code.
+- **Bảo mật Đa tầng cho Agent (`Anthropic-Cybersecurity-Skills`):** Hấp thụ 817 kỹ năng phòng ngự Cybersecurity (chống lại LLM injections, Data leakage) từ kho tàng bảo mật chuẩn mực nhất hiện nay.
+- **Sản xuất Video Agentic (`OpenMontage`):** Mở khóa năng lực phân tích quy trình 12-pipelines sản xuất truyền thông tự động.
