@@ -110,24 +110,23 @@ async function bootSequence() {
     
     console.log(gradientText(`  ╔════════════════════════════════════════════════════════════════════════╗`, gradientTop, gradientBottom));
     console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  [SYSTEM] 1 MAC MINI + 1 AI AGENT = CÔNG TY 1 NGƯỜI                    ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  [BOT]    HỮU TRÍ CHAT BOT (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE   ║`, gradientTop, gradientBottom));
-    console.log(gradientText(`  ║  [INFO]   © Mọi bản quyền thuộc về Hữu Trí                             ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  [BOT]    HUU TRI CHAT BOT (10-MEMBER) - CLAUDE-HUD TRUECOLOR ACTIVE   ║`, gradientTop, gradientBottom));
+    console.log(gradientText(`  ║  [INFO]   © Copyright by Huu Tri                                       ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ║                                                                        ║`, gradientTop, gradientBottom));
     console.log(gradientText(`  ╚════════════════════════════════════════════════════════════════════════╝`, gradientBottom, gradientTop));
     console.log("");
     
-    await showSpinner("Đang khởi tạo Agentic System Monitor...", 400);
-    console.log(`${colors.fg.green}✔ Claude-Code-Agent-Monitor đã kích hoạt: Theo dõi Thought Process Real-time.${colors.reset}`);
+    await showSpinner("Initializing Agentic System Monitor...", 400);
+    console.log(`${colors.fg.green}✔ Claude-Code-Agent-Monitor activated: Real-time Thought Process Tracking.${colors.reset}`);
     
-    await showSpinner("Đang kết nối API Đa-Agent qua giao thức MCP (gitlab-mcp)...", 500);
-    console.log(`${colors.fg.green}✔ 10 Elite Agents (PraisonAI framework) đã liên kết chéo thành công.${colors.reset}`);
+    await showSpinner("Connecting Multi-Agent API via MCP protocol (gitlab-mcp)...", 500);
+    console.log(`${colors.fg.green}✔ 10 Elite Agents (PraisonAI framework) cross-linked successfully.${colors.reset}`);
     
-    await showSpinner("Đang nạp 1.9 Triệu Kỹ Năng Đa Nghề Nghiệp (SOC Careers)...", 600);
-    console.log(`${colors.fg.green}✔ Hấp thụ thành công 1,964,760 AgentSkills.io Standard workflows.${colors.reset}`);
+    await showSpinner("Loading 1.9 Million Multi-Profession Skills (SOC Careers)...", 600);
+    console.log(`${colors.fg.green}✔ Successfully ingested 1,964,760 AgentSkills.io Standard workflows.${colors.reset}`);
 
-    await showSpinner("Đang đồng bộ Thư viện Codex & Claude Skills (SkillsMP)...", 400);
-    console.log(`${colors.fg.green}✔ Sẵn sàng chạy In-Browser AI & Tự động hoá IDE 100%.${colors.reset}\n`);
+    await showSpinner("Syncing Codex & Claude Skills Library (SkillsMP)...", 400);
+    console.log(`${colors.fg.green}✔ Ready to run In-Browser AI & 100% IDE Automation.${colors.reset}\n`);
 
     const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(1);
     const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(1);
@@ -162,7 +161,7 @@ async function main() {
         const input = line.trim();
         
         if (input.toLowerCase() === 'exit' || input.toLowerCase() === 'quit') {
-            console.log(`\n${colors.fg.yellow}Session terminated. Tạm biệt sếp!${colors.reset}`);
+            console.log(`\n${colors.fg.yellow}Session terminated. Goodbye sir!${colors.reset}`);
             process.exit(0);
         }
         
@@ -170,21 +169,23 @@ async function main() {
             rl.pause();
             
             // HUD: Agentic Thought Process Streaming
-            await showSpinner("Agentic System Monitor đang phân tích Thought Process...", 400);
+            await showSpinner("Agentic System Monitor is analyzing Thought Process...", 400);
             const agents = ["Prof. AI", "Prof. System Architecture", "Dr. Frontend", "Prof. DevOps", "Dr. QA"];
-            const actions = ["Phân tích Intent...", "Truy xuất Knowledge Base...", "Đối chiếu SOC Skills...", "Kiểm tra Security Protocol...", "Tổng hợp Response..."];
-            for (let i = 0; i < 3; i++) {
+            const actions = ["Analyzing Intent...", "Querying Knowledge Base...", "Matching SOC Skills...", "Verifying Security Protocol...", "Synthesizing Response..."];
+            for (let i = 0; i < 4; i++) {
                 const agent = agents[Math.floor(Math.random() * agents.length)];
                 const action = actions[Math.floor(Math.random() * actions.length)];
-                process.stdout.write(`\r${colors.dim}  [${agent}] ${action}${colors.reset}`);
+                
+                // Network Scan Glitch Effect
+                process.stdout.write(`\r${colors.fg.cyan}[${Math.random().toString(36).substring(2,8).toUpperCase()}]${colors.reset} ${colors.dim}[${agent}] ${action}${colors.reset}`);
                 await new Promise(r => setTimeout(r, Math.random() * 300 + 200));
             }
-            process.stdout.write(`\r${' '.repeat(60)}\r`); // clear thought line
+            process.stdout.write(`\r${' '.repeat(80)}\r`); // clear thought line
             
             const response = await getResponse(input);
             
             // HUD Response Box
-            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}HỮU TRÍ RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────────────┐${colors.reset}`);
+            console.log(`\n${colors.fg.cyan}┌── ${colors.bright}HUU TRI RESPONSE${colors.reset}${colors.fg.cyan} ──────────────────────────────────────────────────┐${colors.reset}`);
             console.log(`${colors.fg.cyan}│${colors.reset} ${colors.dim}Model Context: Codex/Claude Skills Active | Security: PASS${colors.reset}`);
             console.log(`${colors.fg.cyan}├────────────────────────────────────────────────────────────────────────┤${colors.reset}`);
             
