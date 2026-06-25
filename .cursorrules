@@ -1,0 +1,55 @@
+# Cursor Rules for webbanhang (PHP/MySQL/Vanilla JS E-commerce)
+
+Welcome to the `webbanhang` workspace! Follow these guidelines and architectural principles when writing or refactoring code in this repository.
+
+## 🛠️ Technology Stack
+- **Backend**: PHP (using PDO for database connection).
+- **Database**: MySQL (schema defined in `database.sql`, managed via incremental setup/migrations).
+- **Frontend**: Vanilla HTML5, CSS3, and ES6 Client-Side JavaScript.
+- **Styling**: Vanilla CSS. No TailwindCSS unless explicitly requested. Custom typography, spacious layouts, and smooth animations.
+
+---
+
+## 🔒 Coding & Security Standards
+
+### 1. PHP & SQL Security (PDO)
+- **ALWAYS** use prepared statements with PDO for all SQL queries. Never interpolate variables directly into SQL queries.
+  ```php
+  // Correct
+  $stmt = $pdo->prepare('SELECT * FROM products WHERE id = :id');
+  $stmt->execute(['id' => $productId]);
+  $product = $stmt->fetch();
+  ```
+- **ALWAYS** sanitize inputs using `htmlspecialchars($data, ENT_QUOTES, 'UTF-8')` before outputting values to the browser to prevent XSS.
+
+### 2. Frontend & Styling Guidelines
+- **Harmonious Palettes**: Avoid generic colors. Use CSS variables defined in `:root` with sophisticated HSL tones.
+- **Layouts**: Use CSS Grid or Flexbox. Avoid fixed pixel widths (`px`) for responsive content containers.
+- **Transitions**: Apply smooth transition timings (`0.3s cubic-bezier(0.4, 0, 0.2, 1)`) to interactive links, buttons, and hover cards.
+- **DOM Stability**: Ensure all interactive components have unique, descriptive `id` attributes to allow automated QA testing.
+
+---
+
+## 🧭 Vibe Coding Workflow
+Refer to the full guidelines at [.agents/vibe-coding/VIBE_CODING.md](file:///d:/webbanhang/.agents/vibe-coding/VIBE_CODING.md).
+1. **Plan Mode**: Present an implementation plan listing modified files, function signatures, assumptions, and risks before writing code.
+2. **Context Control**: Reset or clear conversation context between separate tasks to avoid context bleed.
+3. **Scoped Prompts**: Ensure prompts specify a clear goal, a list of file scopes, constraints, and verification steps.
+4. **Diff Review**: Before finishing a task, present a risk audit detailing deleted files, public API changes, and new dependencies.
+
+---
+
+## 🧠 Karpathy AI Coding Guidelines
+1. **Think Before Coding**: State assumptions explicitly. If there is ambiguity in requirements, present trade-offs before proceeding.
+2. **Simplicity First**: Write the minimum amount of code to solve the problem. Avoid speculative complexity or unused generic wrappers.
+3. **Surgical Changes**: Edit only the necessary files. Match the style of adjacent code exactly and remove imports/variables that your edits made unused.
+4. **Goal-Driven**: Define clear success criteria and verify changes locally before committing.
+
+---
+
+## 👥 Harness Agent Team
+For large modifications, tasks are divided among specialized agent definitions located under `.claude/agents/`:
+- **`backend-dev`**: Handles PHP endpoints, DB schema, and SQL migrations.
+- **`frontend-dev`**: Handles responsive HTML structure, interactive JS, and CSS styles.
+- **`qa-tester`**: Runs functional assertions, visual checks, and database updates validations.
+- **`ecom-dev-orchestrator`**: The team conductor (runs in Agent Team mode to coordinate tasks).

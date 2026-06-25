@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+
+        {
+            "label": "Start Elite Fleet Chatbot",
+            "type": "shell",
+            "command": "node scripts/chat-cli.js",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

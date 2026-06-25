@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --color-primary: var(--color-accent);
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    --bg-color: #000000;
+    --panel-bg: rgba(17, 17, 27, 0.75);
+    --panel-border: rgba(250, 179, 135, 0.2);
+    --color-text: #cdd6f4;
+    --color-accent: #fab387; /* Peach/Orange from the video */
+    --color-accent-blue: #89b4fa; /* Blue accent */
+    --bg-grad-1: rgba(250, 179, 135, 0.15);
+  }
+  
+  body {
+    background-color: var(--bg-color);
+    color: var(--color-text);
+    /* Interstellar Black hole proxy background */
+    background-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: var(--panel-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+  
+  .glass-panel-active {
+    border: 1px solid rgba(250, 179, 135, 0.5);
+    box-shadow: 0 0 20px rgba(250, 179, 135, 0.1);
+  }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+}

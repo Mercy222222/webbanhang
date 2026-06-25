@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "webbanhang",
+  "project_id": "e273b702-3c66-4dff-b502-d73de4043c5a"
+}

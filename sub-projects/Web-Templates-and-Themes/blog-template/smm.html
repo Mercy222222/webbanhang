@@ -1,0 +1,3214 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trí Star SMM | SMM Panel Giá Rẻ - Tăng Like, Follow, View Tự Động</title>
+  <meta name="description" content="Hệ thống cung cấp dịch vụ mạng xã hội chất lượng cao: Tăng like, follow, view Facebook, TikTok, Instagram, Youtube tự động, uy tín, nhanh chóng.">
+  <meta name="keywords" content="smm panel, tang like, tang follow, tang view, dich vu mang xa hoi, tri star smm">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- SweetAlert2 & Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Three.js for 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* ─── ULTIMATE GOD TIER CUSTOM CURSOR ─── */
+    @media (pointer: fine) {
+      * { cursor: none !important; }
+    }
+    .god-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      border: 2px solid var(--primary);
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 999999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+    }
+    .god-cursor.hovering {
+      width: 60px; height: 60px;
+      background-color: rgba(var(--secondary-rgb), 0.1);
+      border-color: var(--secondary);
+      backdrop-filter: blur(2px);
+    }
+    #cursor-trail-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 999998;
+    }
+
+    /* ─── Design Tokens & CSS Variables ─── */
+    :root {
+      --bg: transparent;
+      --bg-surface: rgba(19, 27, 46, 0.55);
+      --bg-surface-hover: rgba(30, 41, 59, 0.7);
+      --primary: #8b5cf6;
+      --primary-rgb: 139, 92, 246;
+      --primary-dark: #5c20d2;
+      --secondary: #06b6d4;
+      --secondary-rgb: 6, 182, 212;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.16);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-hover: #f1f5f9;
+      --primary: #6d28d9;
+      --primary-rgb: 109, 40, 217;
+      --primary-dark: #4c1d95;
+      --secondary: #0891b2;
+      --secondary-rgb: 8, 145, 178;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.16);
+    }
+
+    /* ─── Reset & Base Styles ─── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background-color: #020205 !important;
+      background: transparent;
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color var(--transition), color var(--transition);
+    }
+    #bg-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -2;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    #bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 15, 25, 0.75);
+      backdrop-filter: blur(10px) saturate(170%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 99px;
+    }
+
+    /* ─── Background Glows ─── */
+    .glow-container {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .glow-1 {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(circle, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+    .glow-2 {
+      position: absolute;
+      bottom: -10%;
+      right: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(var(--secondary-rgb), 0.12) 0%, transparent 70%);
+      filter: blur(100px);
+    }
+
+    /* ─── Layout Wrapper ─── */
+    .app-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Header / Navigation ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(var(--bg-surface), 0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .logo i {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-link {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .theme-toggle:hover {
+      color: var(--text);
+      transform: scale(1.1);
+    }
+    
+    /* ─── Auth Buttons in Header ─── */
+    .auth-header-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .btn-login-trigger {
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-login-trigger:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--text-muted);
+    }
+    .btn-register-trigger {
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.25);
+      transition: var(--transition);
+    }
+    .btn-register-trigger:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.35);
+    }
+
+    /* ─── User Profile Info in Header ─── */
+    .user-profile-widget {
+      display: none; /* Displayed when logged in */
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+    .user-balance-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(var(--primary-rgb), 0.1);
+      border: 1px solid rgba(var(--primary-rgb), 0.2);
+      padding: 0.4rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .btn-deposit-plus {
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+    }
+    .btn-deposit-plus:hover {
+      background: var(--secondary);
+      transform: scale(1.1);
+    }
+    .user-dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    .user-dropdown-btn:hover {
+      background: var(--bg-surface-hover);
+    }
+    .user-avatar-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .user-name-small {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .user-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 180px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-top: 0.5rem;
+    }
+    .user-dropdown-item {
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .user-dropdown-item:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text);
+    }
+
+    /* ─── Hero Section ─── */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .hero-badge {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: rgba(var(--primary-rgb), 0.1);
+      border: 1px solid rgba(var(--primary-rgb), 0.2);
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .hero-badge span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      background: linear-gradient(to right, var(--text), var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 540px;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+      will-change: transform;
+    }
+    .stat-card:hover {
+      border-color: var(--primary);
+    }
+    .stat-number {
+      font-size: 1.75rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 0.25rem;
+    }
+
+    /* ─── Social Proof Popup Notification ─── */
+    .purchase-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      background: rgba(19, 27, 46, 0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 998;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .purchase-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .purchase-toast-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(var(--primary-rgb), 0.15);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .purchase-toast-content {
+      font-size: 0.8rem;
+    }
+    .purchase-toast-content strong {
+      color: var(--secondary);
+    }
+
+    /* ─── Interactive Order Form ─── */
+    .order-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      position: relative;
+      backdrop-filter: blur(12px) saturate(180%);
+      will-change: transform;
+    }
+    .order-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--secondary-rgb), 0.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .form-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input-wrap {
+      position: relative;
+    }
+    .form-select, .form-input, .form-textarea {
+      width: 100%;
+      background: rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      padding: 0.85rem 1.25rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-select {
+      cursor: pointer;
+    }
+    .form-select-wrap::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    .form-select:focus, .form-input:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
+    }
+    .input-btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-paste {
+      background: var(--bg-surface-hover);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-md);
+      padding: 0 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-paste:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .form-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+    .comment-area {
+      display: none;
+    }
+    .price-box {
+      background: rgba(var(--primary-rgb), 0.05);
+      border: 1px dashed rgba(var(--primary-rgb), 0.25);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .price-total {
+      border-top: 1px solid rgba(var(--primary-rgb), 0.15);
+      padding-top: 0.5rem;
+      margin-top: 0.25rem;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 1.15rem;
+    }
+    .price-number {
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.25);
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.35);
+    }
+
+    /* ─── Platform & Channels Grid ─── */
+    .platforms-section {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1.5rem;
+    }
+    .platform-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+      will-change: transform;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .platform-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    .platform-icon {
+      font-size: 2.25rem;
+      transition: var(--transition);
+    }
+    .platform-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .platform-card.instagram .platform-icon { color: #e1306c; }
+    .platform-card.tiktok .platform-icon { color: #000000; }
+    [data-theme="dark"] .platform-card.tiktok .platform-icon { color: #ffffff; }
+    .platform-card.youtube .platform-icon { color: #ff0000; }
+    .platform-card.facebook .platform-icon { color: #1877f2; }
+    .platform-card.telegram .platform-icon { color: #0088cc; }
+    .platform-card.twitter .platform-icon { color: #1da1f2; }
+    .platform-card.spotify .platform-icon { color: #1db954; }
+
+    /* ─── Services Pricing List ─── */
+    .services-section {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      color: var(--text);
+      padding: 0.85rem 1.5rem 0.85rem 3rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+    .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .services-table-wrap {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    .services-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .services-table th, .services-table td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .services-table th {
+      background: rgba(0,0,0,0.1);
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+    .services-table tr:last-child td {
+      border-bottom: none;
+    }
+    .services-table tbody tr {
+      transition: var(--transition);
+    }
+    .services-table tbody tr:hover {
+      background: var(--bg-surface-hover);
+    }
+    .service-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(var(--primary-rgb), 0.1);
+      color: var(--primary);
+    }
+    .service-badge.tiktok {
+      background: rgba(0,0,0,0.1);
+      color: var(--text);
+    }
+    .service-badge.facebook {
+      background: rgba(24,119,242,0.1);
+      color: #1877f2;
+    }
+    .service-badge.instagram {
+      background: rgba(225,48,108,0.1);
+      color: #e1306c;
+    }
+    .service-badge.telegram {
+      background: rgba(0,136,204,0.1);
+      color: #0088cc;
+    }
+    .service-badge.youtube {
+      background: rgba(255,0,0,0.1);
+      color: #ff0000;
+    }
+    .btn-order-direct {
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.8rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-order-direct:hover {
+      background: var(--secondary);
+    }
+
+    /* ─── Contact Banner ─── */
+    .contact-banner-section {
+      max-width: 1200px;
+      margin: 4rem auto 6rem;
+      padding: 0 2rem;
+    }
+    .contact-banner {
+      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--secondary-rgb), 0.1));
+      border: 1px solid rgba(var(--primary-rgb), 0.25);
+      border-radius: var(--radius-lg);
+      padding: 3.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-banner-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+    }
+    .contact-banner-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+    .contact-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-tg-bot {
+      background: #0088cc;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+    }
+    .btn-tg-bot:hover {
+      background: #0077b5;
+      transform: translateY(-2px);
+    }
+    .btn-tg-admin {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-tg-admin:hover {
+      border-color: var(--primary);
+      background: rgba(var(--primary-rgb), 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ─── Auth Overlay Modals ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      perspective: 1200px;
+    }
+    .modal-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+    .auth-modal {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transform: perspective(1000px) rotateX(-70deg) translateY(-100px) scale(0.85);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+      transform-style: preserve-3d;
+      opacity: 0;
+    }
+    .modal-overlay.open .auth-modal {
+      transform: perspective(1000px) rotateX(0deg) translateY(0) scale(1);
+      opacity: 1;
+    }
+    .btn-close-modal {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-close-modal:hover {
+      color: var(--text);
+    }
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 0.75rem;
+      text-align: center;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .auth-tab-btn.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+    }
+    .auth-form-panel {
+      display: none;
+    }
+    .auth-form-panel.active {
+      display: block;
+    }
+
+    /* ─── Deposit/QR Modal Layout ─── */
+    .deposit-modal {
+      max-width: 480px !important;
+    }
+    .qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: rgba(0,0,0,0.25);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+    .qr-image {
+      width: 200px;
+      height: 200px;
+      border: 4px solid #fff;
+      border-radius: 8px;
+      background-color: #fff;
+    }
+    .qr-amount-selectors {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .btn-amount-select {
+      padding: 0.5rem;
+      background: var(--bg-surface-hover);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-amount-select:hover, .btn-amount-select.active {
+      border-color: var(--primary);
+      background: rgba(var(--primary-rgb), 0.1);
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg-surface);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-link {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+    .footer-link:hover {
+      color: var(--text);
+    }
+
+    /* ─── Responsive Media Queries ─── */
+    @media (max-width: 992px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+      }
+      .hero-content {
+        align-items: center;
+      }
+      .hero-desc {
+        margin: 0 auto;
+      }
+      .hero-stats {
+        justify-content: center;
+        max-width: 500px;
+        margin: 1.5rem auto 0;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      .hero {
+        padding: 3rem 1.5rem;
+      }
+      .order-card {
+        padding: 1.5rem;
+      }
+      .contact-banner {
+        padding: 2.5rem 1.5rem;
+      }
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+      .services-table th:nth-child(4),
+      .services-table td:nth-child(4) {
+        display: none;
+      }
+    }
+
+    /* Glassmorphism Layout Overrides */
+    .stat-card,
+    .platform-card,
+    .services-table-wrap,
+    .contact-banner,
+    .auth-modal,
+    .purchase-toast {
+      backdrop-filter: blur(12px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* ─── 3D Tilt Card Glare Effect ─── */
+    .card-glare {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+      mix-blend-mode: overlay;
+      border-radius: inherit;
+    }
+
+    /* ─── 3D Card Parallax Tilt Child Offsets ─── */
+    .stat-card,
+    .order-card,
+    .platform-card {
+      transform-style: preserve-3d;
+    }
+    .platform-card .platform-icon {
+      transform: translateZ(40px);
+      display: inline-block;
+    }
+    .platform-card .platform-name {
+      transform: translateZ(20px);
+      display: inline-block;
+    }
+    .stat-card .stat-number {
+      transform: translateZ(35px);
+      display: inline-block;
+    }
+    .stat-card .stat-label {
+      transform: translateZ(20px);
+      display: inline-block;
+    }
+    .order-card .form-title {
+      transform: translateZ(30px);
+    }
+    .order-card .form-group {
+      transform: translateZ(15px);
+    }
+    .order-card .btn-submit {
+      transform: translateZ(25px);
+    }
+    .order-card .price-box {
+      transform: translateZ(20px);
+    }
+
+    /* ─── 3D Page Load Entry Animation ─── */
+    @keyframes entry3D {
+      0% {
+        opacity: 0;
+        transform: perspective(1200px) rotateX(20deg) translateZ(-150px) translateY(60px);
+      }
+      100% {
+        opacity: 1;
+        transform: perspective(1200px) rotateX(0deg) translateZ(0) translateY(0);
+      }
+    }
+    .hero-content {
+      animation: entry3D 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .order-card {
+      animation: entry3D 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* ─── 3D Scroll Reveal ─── */
+    .reveal-3d {
+      opacity: 0;
+      transform: perspective(1200px) rotateX(15deg) translateZ(-80px) translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+    }
+    .reveal-3d.revealed {
+      opacity: 1;
+      transform: perspective(1200px) rotateX(0deg) translateZ(0) translateY(0);
+    }
+
+    /* ─── 3D Nav Link Flip ─── */
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      perspective: 300px;
+      overflow: hidden;
+      height: 1.5rem;
+    }
+    .nav-link-inner {
+      display: block;
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+      transform-origin: 50% 50% -12px;
+    }
+    .nav-link:hover .nav-link-inner {
+      transform: rotateX(90deg);
+    }
+    .nav-link-inner::after {
+      content: attr(data-hover);
+      position: absolute;
+      left: 0;
+      top: 100%;
+      width: 100%;
+      height: 100%;
+      color: var(--secondary) !important;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transform: rotateX(-90deg);
+      transform-origin: 50% 0%;
+    }
+
+    /* ─── 3D Push Button Styles ─── */
+    .btn-submit,
+    .btn-register-trigger,
+    .btn-tg-bot,
+    .btn-tg-admin {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.15s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0, 0, 0.2, 1) !important;
+    }
+    .btn-submit,
+    .btn-register-trigger {
+      box-shadow: 0 5px 0 var(--primary-dark), 0 8px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+    .btn-tg-bot {
+      box-shadow: 0 5px 0 #005f90, 0 8px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+    .btn-tg-admin {
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4), 0 8px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+    .btn-submit:hover,
+    .btn-register-trigger:hover {
+      transform: translateY(-2px) translateZ(10px);
+      box-shadow: 0 7px 0 var(--primary-dark), 0 12px 22px rgba(var(--primary-rgb), 0.35) !important;
+    }
+    .btn-tg-bot:hover {
+      transform: translateY(-2px) translateZ(10px);
+      box-shadow: 0 7px 0 #005f90, 0 12px 22px rgba(0, 136, 204, 0.35) !important;
+    }
+    .btn-tg-admin:hover {
+      transform: translateY(-2px) translateZ(10px);
+      box-shadow: 0 7px 0 rgba(0, 0, 0, 0.4), 0 12px 22px rgba(255, 255, 255, 0.1) !important;
+    }
+    .btn-submit:active,
+    .btn-register-trigger:active {
+      transform: translateY(4px) translateZ(-5px);
+      box-shadow: 0 2px 0 var(--primary-dark), 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    .btn-tg-bot:active {
+      transform: translateY(4px) translateZ(-5px);
+      box-shadow: 0 2px 0 #005f90, 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    .btn-tg-admin:active {
+      transform: translateY(4px) translateZ(-5px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+
+
+
+
+    /* ─── Banking API Simulator Console ─── */
+    .banking-console {
+      background: #060913 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: var(--radius-md);
+      margin-top: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-align: left;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9) !important;
+      width: 100%;
+    }
+    .console-header {
+      background: #0d1321;
+      padding: 0.6rem 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .console-status {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 700;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: currentColor;
+    }
+    .console-body {
+      padding: 0.85rem;
+      max-height: 160px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      color: #a7f3d0;
+      line-height: 1.45;
+    }
+    .console-log-row {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: log-slide-in 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    @keyframes log-slide-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .log-time {
+      color: #64748b;
+      margin-right: 0.4rem;
+      font-weight: 500;
+    }
+    .log-info {
+      color: #38bdf8;
+    }
+    .log-success {
+      color: #34d399;
+      font-weight: 600;
+    }
+    .log-warning {
+      color: #fbbf24;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Video Background & Overlay -->
+  <video autoplay loop muted playsinline id="bg-video">
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-1610-large.mp4" type="video/mp4">
+  </video>
+  <div id="bg-overlay"></div>
+
+  <!-- Interactive Cursor Glow & 3D Three.js Background -->
+  <div class="god-cursor"></div>
+  <canvas id="cursor-trail-canvas"></canvas>
+  <div id="three-bg-container" style="position:fixed; inset:0; pointer-events:none; z-index:0;"></div>
+
+  <div class="app-container">
+    
+    <!-- ─── HEADER / NAVIGATION ─── -->
+    <header>
+      <div class="nav-inner">
+        <a href="#" class="logo">
+          <i class="fa-solid fa-circle-nodes"></i> Trí Star SMM
+        </a>
+        <ul class="nav-menu">
+          <li><a href="#" class="nav-link active"><span class="nav-link-inner" data-hover="Đặt Hàng">Đặt Hàng</span></a></li>
+          <li><a href="#dich-vu" class="nav-link"><span class="nav-link-inner" data-hover="Bảng Giá">Bảng Giá</span></a></li>
+          <li><a href="#lien-he" class="nav-link"><span class="nav-link-inner" data-hover="Hỗ Trợ">Hỗ Trợ</span></a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="theme-toggle" id="theme-btn" aria-label="Toggle Theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          
+          <!-- Guest Navigation Actions -->
+          <div class="auth-header-wrap" id="guest-nav">
+            <button class="btn-login-trigger" onclick="openAuthModal('login')">Đăng nhập</button>
+            <button class="btn-register-trigger" onclick="openAuthModal('register')">Đăng ký</button>
+          </div>
+
+          <!-- Logged-in Profile Actions -->
+          <div class="user-profile-widget" id="user-nav">
+            <div class="user-balance-badge" title="Click để nạp thêm tiền" onclick="openDepositModal()">
+              <i class="fa-solid fa-wallet"></i> 
+              <span id="display-balance">0 đ</span>
+              <button class="btn-deposit-plus" onclick="event.stopPropagation(); openDepositModal()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div class="user-dropdown-btn" onclick="toggleUserDropdown()">
+              <div class="user-avatar-small" id="display-avatar">
+                <img src="avatar.jpg" onerror="this.style.display='none'; this.parentElement.innerText='U';" class="w-full h-full rounded-full object-cover">
+              </div>
+              <span class="user-name-small" id="display-username">Khách</span>
+              <i class="fa-solid fa-chevron-down" style="font-size:0.75rem; color:var(--text-muted)"></i>
+            </div>
+            <div class="user-dropdown-menu" id="user-dropdown">
+              <div class="user-dropdown-item" onclick="openDepositModal()"><i class="fa-solid fa-money-bill-transfer"></i> Nạp tiền</div>
+              <div class="user-dropdown-item" onclick="resetSimBalance()"><i class="fa-solid fa-gift"></i> Nhận quà 50k</div>
+              <div class="user-dropdown-item" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── HERO & ORDER FORM ─── -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span></span> Hệ thống hoạt động 24/7 tự động
+        </div>
+        <h1 class="hero-title">SMM Panel <span>Giá Rẻ Nhất</span> Tại Việt Nam</h1>
+        <p class="hero-desc" style="min-height: 48px;">
+          Hệ thống tự động cung cấp dịch vụ <span id="typed-text" style="color:var(--secondary); font-weight:700; border-right: 2px solid var(--secondary); padding-right: 3px;"></span>
+        </p>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Thời gian hoạt động</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">5M+</div>
+            <div class="stat-label">Đơn hàng hoàn thành</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">10k+</div>
+            <div class="stat-label">Khách hàng tin dùng</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Order Form Card -->
+      <div class="order-card">
+        <h2 class="form-title"><i class="fa-solid fa-cart-shopping" style="color:var(--primary)"></i> Đặt Hàng Dịch Vụ</h2>
+        <form id="smm-order-form" onsubmit="handleFormSubmit(event)">
+          
+          <div class="form-group">
+            <label class="form-label">Nền tảng mạng xã hội</label>
+            <div class="form-input-wrap form-select-wrap">
+              <select class="form-select" id="platform-select" onchange="updateCategories()">
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phân Loại Dịch Vụ</label>
+            <div class="form-input-wrap form-select-wrap">
+              <select class="form-select" id="category-select" onchange="updateServices()">
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Gói Dịch Vụ Cụ Thể</label>
+            <div class="form-input-wrap form-select-wrap">
+              <select class="form-select" id="service-select" onchange="calculatePrice()">
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Liên kết / Link cần tăng</label>
+            <div class="input-btn-group">
+              <input type="url" class="form-input" id="link-input" placeholder="Nhập link bài viết, profile, video..." required>
+              <button type="button" class="btn-paste" onclick="pasteLink()"><i class="fa-regular fa-clipboard"></i> Dán</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Số Lượng</label>
+            <input type="number" class="form-input" id="quantity-input" value="100" min="10" oninput="calculatePrice()" required>
+            <div class="form-text" id="quantity-limits">Tối thiểu: 100 - Tối đa: 100,000</div>
+          </div>
+
+          <div class="form-group comment-area" id="comment-group">
+            <label class="form-label">Nội dung bình luận (Mỗi dòng một bình luận)</label>
+            <textarea class="form-textarea" id="comment-input" rows="4" placeholder="Nhập bình luận tại đây..." oninput="updateCommentQuantity()"></textarea>
+          </div>
+
+          <!-- Dynamic Pricing Box -->
+          <div class="price-box">
+            <div class="price-row">
+              <span>Đơn giá trên 1,000 lượt:</span>
+              <span id="rate-price">0 đ</span>
+            </div>
+            <div class="price-row price-total">
+              <span>Tổng tiền tạm tính:</span>
+              <span class="price-number" id="total-price">0 đ</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <i class="fa-solid fa-paper-plane"></i> Đặt hàng ngay
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ─── PLATFORMS QUICK SELECT ─── -->
+    <section class="platforms-section reveal-3d">
+      <div class="section-header">
+        <div class="section-tag">Platforms</div>
+        <h2 class="section-title">Nền Tảng Hỗ Trợ</h2>
+      </div>
+      <div class="platforms-grid">
+        <div class="platform-card instagram" onclick="selectPlatformDirectly('instagram')">
+          <i class="fa-brands fa-instagram platform-icon"></i>
+          <span class="platform-name">Instagram</span>
+        </div>
+        <div class="platform-card tiktok" onclick="selectPlatformDirectly('tiktok')">
+          <i class="fa-brands fa-tiktok platform-icon"></i>
+          <span class="platform-name">TikTok</span>
+        </div>
+        <div class="platform-card youtube" onclick="selectPlatformDirectly('youtube')">
+          <i class="fa-brands fa-youtube platform-icon"></i>
+          <span class="platform-name">Youtube</span>
+        </div>
+        <div class="platform-card facebook" onclick="selectPlatformDirectly('facebook')">
+          <i class="fa-brands fa-facebook-f platform-icon"></i>
+          <span class="platform-name">Facebook</span>
+        </div>
+        <div class="platform-card telegram" onclick="selectPlatformDirectly('telegram')">
+          <i class="fa-brands fa-telegram platform-icon"></i>
+          <span class="platform-name">Telegram</span>
+        </div>
+        <div class="platform-card twitter" onclick="selectPlatformDirectly('twitter')">
+          <i class="fa-brands fa-x-twitter platform-icon"></i>
+          <span class="platform-name">X (Twitter)</span>
+        </div>
+        <div class="platform-card spotify" onclick="selectPlatformDirectly('spotify')">
+          <i class="fa-brands fa-spotify platform-icon"></i>
+          <span class="platform-name">Spotify</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PRICING TABLE SECTION ─── -->
+    <section class="services-section reveal-3d" id="dich-vu">
+      <div class="section-header">
+        <div class="section-tag">Services List</div>
+        <h2 class="section-title">Bảng Giá Dịch Vụ Chi Tiết</h2>
+      </div>
+      
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" class="search-input" id="search-service" placeholder="Tìm kiếm dịch vụ..." oninput="filterServicesTable()">
+      </div>
+
+      <div class="services-table-wrap">
+        <table class="services-table" id="services-table-el">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nền tảng</th>
+              <th>Tên gói dịch vụ</th>
+              <th>Giá trên 1,000 lượt</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Services will be populated dynamically by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── CONTACT & SUPPORT BANNER ─── -->
+    <section class="contact-banner-section reveal-3d" id="lien-he">
+      <div class="contact-banner">
+        <h2 class="contact-banner-title">Bạn cần hỗ trợ hoặc đặt số lượng lớn?</h2>
+        <p class="contact-banner-desc">
+          Hệ thống hiện tại đã chuyển sang tự động hóa hoàn toàn trên Telegram Bot và kênh hỗ trợ trực tiếp. Hãy kết nối để được giá chiết khấu đại lý tốt nhất.
+        </p>
+        <div class="contact-btns">
+          <a href="https://t.me/viesmmbot" target="_blank" class="btn btn-tg-bot">
+            <i class="fa-brands fa-telegram"></i> Telegram Bot
+          </a>
+          <a href="https://t.me/thanhbinhdev" target="_blank" class="btn btn-tg-admin">
+            <i class="fa-solid fa-user-shield"></i> Liên Hệ Admin
+          </a>
+          <a href="https://www.facebook.com/HUUTRI.USER" target="_blank" class="btn btn-tg-admin">
+            <i class="fa-brands fa-facebook"></i> Facebook Admin
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-info">
+          © 2026 <strong>Trí Star SMM</strong> · Bản quyền thuộc về Võ Hữu Trí.
+        </div>
+        <div class="footer-links">
+          <a href="index-portfolio.html" class="footer-link"><i class="fa-solid fa-user-tie"></i> Về Hữu Trí Portfolio</a>
+          <a href="https://t.me/viesmmbot" class="footer-link">Dịch Vụ</a>
+          <a href="https://t.me/thanhbinhdev" class="footer-link">Liên Hệ</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Social Proof Purchase Toast -->
+    <div class="purchase-toast" id="purchase-toast">
+      <div class="purchase-toast-icon"><i class="fa-solid fa-bell"></i></div>
+      <div class="purchase-toast-content" id="purchase-toast-text">
+        Khách hàng <strong>an***</strong> vừa mua <strong>1,000 Follow TikTok</strong>
+      </div>
+    </div>
+
+    <!-- ─── AUTHENTICATION MODAL OVERLAY ─── -->
+    <div class="modal-overlay" id="auth-modal-overlay" onclick="closeAuthModalOnOverlay(event)">
+      <div class="auth-modal">
+        <button class="btn-close-modal" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+        
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="login-tab-btn" onclick="switchAuthTab('login')">Đăng nhập</button>
+          <button class="auth-tab-btn" id="register-tab-btn" onclick="switchAuthTab('register')">Đăng ký</button>
+        </div>
+
+        <!-- Login Panel -->
+        <div class="auth-form-panel active" id="login-panel">
+          <form onsubmit="handleLoginSubmit(event)">
+            <div class="form-group">
+              <label class="form-label">Tên tài khoản / Email</label>
+              <input type="text" class="form-input" id="login-username" required placeholder="Nhập tài khoản của bạn">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mật khẩu</label>
+              <input type="password" class="form-input" id="login-password" required placeholder="Nhập mật khẩu">
+            </div>
+            <button type="submit" class="btn-submit" style="margin-top: 1.5rem;">Đăng Nhập</button>
+          </form>
+        </div>
+
+        <!-- Register Panel -->
+        <div class="auth-form-panel" id="register-panel">
+          <form onsubmit="handleRegisterSubmit(event)">
+            <div class="form-group">
+              <label class="form-label">Tên tài khoản</label>
+              <input type="text" class="form-input" id="reg-username" required placeholder="Tên tài khoản (viết liền không dấu)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Địa chỉ Email</label>
+              <input type="email" class="form-input" id="reg-email" required placeholder="Email của bạn">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mật khẩu</label>
+              <input type="password" class="form-input" id="reg-password" required placeholder="Tạo mật khẩu bảo mật">
+            </div>
+            <button type="submit" class="btn-submit" style="margin-top: 1.5rem;">Đăng Ký Tài Khoản</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── DEPOSIT MODAL WITH VIETQR DYNAMIC INTEGRATION ─── -->
+    <div class="modal-overlay" id="deposit-modal-overlay" onclick="closeDepositModalOnOverlay(event)">
+      <div class="auth-modal deposit-modal">
+        <button class="btn-close-modal" onclick="closeDepositModal()"><i class="fa-solid fa-xmark"></i></button>
+        
+        <h3 class="form-title" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-money-bill-transfer" style="color:var(--primary)"></i> Nạp Tiền Tài Khoản</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Số dư sẽ được cộng tự động sau khi chuyển khoản đúng nội dung.</p>
+        
+        <div class="form-group">
+          <label class="form-label">Số Tiền Nạp (VNĐ)</label>
+          <input type="number" class="form-input" id="deposit-amount-input" value="50000" min="10000" step="5000" oninput="updateVietQR()">
+        </div>
+
+        <div class="qr-amount-selectors">
+          <button class="btn-amount-select" onclick="selectDepositAmount(10000)">10.000</button>
+          <button class="btn-amount-select active" onclick="selectDepositAmount(50000)">50.000</button>
+          <button class="btn-amount-select" onclick="selectDepositAmount(100000)">100.000</button>
+          <button class="btn-amount-select" onclick="selectDepositAmount(200000)">200.000</button>
+          <button class="btn-amount-select" onclick="selectDepositAmount(500000)">500.000</button>
+          <button class="btn-amount-select" onclick="triggerDepositSimulation()">Demo Free</button>
+        </div>
+
+        <!-- VietQR Dynamic Image Display -->
+        <div class="qr-container">
+          <img class="qr-image" id="vietqr-image-el" src="" alt="VietQR BIDV Dynamic Code">
+          <div style="text-align: center; font-size: 0.85rem;">
+            <strong>Ngân hàng BIDV</strong><br>
+            STK: <strong style="color:var(--secondary)">0979324949</strong><br>
+            Nội dung: <strong style="color:var(--primary)" id="vietqr-memo-text">SMM KHACH</strong>
+          </div>
+        </div>
+
+        <!-- Simulated Banking Console -->
+        <div id="banking-console" class="banking-console" style="display: none; margin-top: 1rem;">
+          <div class="console-header">
+            <span class="console-title"><i class="fa-solid fa-terminal"></i> BIDV GATEWAY API SCANNER</span>
+            <span class="console-status"><span class="status-dot"></span> SCANNING</span>
+          </div>
+          <div class="console-body" id="console-logs">
+            <!-- Logs will appear here dynamically -->
+          </div>
+        </div>
+
+        <button onclick="triggerDepositSimulation()" class="btn-submit" style="background:linear-gradient(135deg, #10b981, #059669); font-size:0.9rem; margin-top:1.25rem;">
+          <i class="fa-solid fa-circle-check"></i> Xác nhận đã chuyển (Mô phỏng duyệt nhanh)
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ─── Web Owner Configuration Block (Telegram Fulfill Integration) ─── */
+    const CONFIG = {
+      TELEGRAM_BOT_TOKEN: "7820468940:AAGYqfFv7QG9M2p98d6j4g5h7k8", // Replace with your actual bot token to make it fully automatic
+      TELEGRAM_CHAT_ID: "5086884022", // Replace with your chat/channel ID
+      BANK_ID: "BIDV",
+      BANK_ACCOUNT: "0979324949",
+      ACCOUNT_NAME: "VO HUU TRI",
+      TELEGRAM_BOT_URL: "https://t.me/viesmmbot",
+      TELEGRAM_ADMIN_URL: "https://t.me/thanhbinhdev"
+    };
+
+    /* ─── Mock Data for SMM Services ─── */
+    const smmData = {
+      instagram: {
+        name: "Instagram",
+        categories: {
+          like: {
+            name: "Tăng Like Instagram",
+            services: [
+              { id: 101, name: "Like Instagram [Giá Rẻ] [Max 50K] [Tốc độ nhanh]", rate: 1200, min: 100, max: 50000, comment: false },
+              { id: 102, name: "Like Instagram [Chất Lượng Cao] [Không tụt] [Bảo hành 30 ngày]", rate: 2500, min: 100, max: 20000, comment: false }
+            ]
+          },
+          follow: {
+            name: "Tăng Follow Instagram",
+            services: [
+              { id: 103, name: "Follow Instagram [Tài khoản hoạt động] [Tốc độ trung bình]", rate: 15000, min: 100, max: 10000, comment: false },
+              { id: 104, name: "Follow Instagram [Bảo hành vĩnh viễn] [Avatar + Đăng bài]", rate: 28000, min: 200, max: 50000, comment: false }
+            ]
+          }
+        }
+      },
+      tiktok: {
+        name: "TikTok",
+        categories: {
+          like: {
+            name: "Tăng Tim / Like TikTok",
+            services: [
+              { id: 201, name: "Tim TikTok [Ổn định] [Lên ngay lập tức]", rate: 3500, min: 100, max: 100000, comment: false },
+              { id: 202, name: "Tim TikTok [Tài khoản thật VN] [An toàn cho kênh]", rate: 5800, min: 100, max: 20000, comment: false }
+            ]
+          },
+          follow: {
+            name: "Tăng Follow TikTok",
+            services: [
+              { id: 203, name: "Follow TikTok [Hỗ trợ bật Live] [Nhanh chóng]", rate: 18000, min: 100, max: 10000, comment: false },
+              { id: 204, name: "Follow TikTok [Bảo hành 30 ngày] [Giảm tụt]", rate: 25000, min: 200, max: 30000, comment: false }
+            ]
+          },
+          view: {
+            name: "Tăng View TikTok",
+            services: [
+              { id: 205, name: "View TikTok [Siêu Tốc] [Hỗ trợ lên xu hướng]", rate: 150, min: 1000, max: 1000000, comment: false },
+              { id: 206, name: "View TikTok [Tự động lặp lại] [Xem hết clip]", rate: 290, min: 1000, max: 500000, comment: false }
+            ]
+          },
+          comment: {
+            name: "Tăng Bình Luận TikTok",
+            services: [
+              { id: 207, name: "Bình luận TikTok [Nội dung tùy chỉnh]", rate: 25000, min: 5, max: 1000, comment: true }
+            ]
+          }
+        }
+      },
+      youtube: {
+        name: "Youtube",
+        categories: {
+          view: {
+            name: "Tăng View Youtube",
+            services: [
+              { id: 301, name: "View Youtube [Hợp lệ AdSense] [Thời gian giữ chân cao]", rate: 35000, min: 500, max: 100000, comment: false },
+              { id: 302, name: "View Youtube Shorts [Siêu Rẻ] [Max 10M]", rate: 12000, min: 1000, max: 1000000, comment: false }
+            ]
+          },
+          sub: {
+            name: "Tăng Subscribe Youtube",
+            services: [
+              { id: 303, name: "Subscribe Youtube [Bảo hành trọn đời] [Tài khoản thật]", rate: 280000, min: 50, max: 5000, comment: false }
+            ]
+          }
+        }
+      },
+      facebook: {
+        name: "Facebook",
+        categories: {
+          like: {
+            name: "Tăng Like Bài Viết",
+            services: [
+              { id: 401, name: "Like Bài Viết Facebook [Giá rẻ] [Lên nhanh]", rate: 2500, min: 100, max: 10000, comment: false },
+              { id: 402, name: "Cảm xúc Facebook (Thả tim, Haha, Wow) [Lựa chọn]", rate: 3800, min: 100, max: 10000, comment: false }
+            ]
+          },
+          follow: {
+            name: "Tăng Theo Dõi Profile / Fanpage",
+            services: [
+              { id: 403, name: "Sub Cá Nhân Facebook [Nick Thật VN]", rate: 32000, min: 500, max: 50000, comment: false },
+              { id: 404, name: "Follow Fanpage [Có nút Thích + Theo dõi]", rate: 45000, min: 500, max: 100000, comment: false }
+            ]
+          }
+        }
+      },
+      telegram: {
+        name: "Telegram",
+        categories: {
+          member: {
+            name: "Tăng Member Channel / Group",
+            services: [
+              { id: 501, name: "Telegram Member [Tài khoản quốc tế] [Giá tốt]", rate: 15000, min: 100, max: 50000, comment: false },
+              { id: 502, name: "Telegram Member [Bảo hành 30 ngày] [Nick Việt]", rate: 39000, min: 100, max: 20000, comment: false }
+            ]
+          },
+          view: {
+            name: "Tăng View Bài Viết Telegram",
+            services: [
+              { id: 503, name: "View Telegram [5 bài viết gần nhất]", rate: 800, min: 100, max: 10000, comment: false }
+            ]
+          }
+        }
+      }
+    };
+
+    /* ─── DOM Elements ─── */
+    const platformSelect = document.getElementById('platform-select');
+    const categorySelect = document.getElementById('category-select');
+    const serviceSelect = document.getElementById('service-select');
+    const linkInput = document.getElementById('link-input');
+    const quantityInput = document.getElementById('quantity-input');
+    const commentGroup = document.getElementById('comment-group');
+    const commentInput = document.getElementById('comment-input');
+    const ratePriceEl = document.getElementById('rate-price');
+    const totalPriceEl = document.getElementById('total-price');
+    const quantityLimitsEl = document.getElementById('quantity-limits');
+    const servicesTableBody = document.querySelector('#services-table-el tbody');
+
+    // Header State Elements
+    const guestNav = document.getElementById('guest-nav');
+    const userNav = document.getElementById('user-nav');
+    const displayBalance = document.getElementById('display-balance');
+    const displayAvatar = document.getElementById('display-avatar');
+    const displayUsername = document.getElementById('display-username');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    // Auth Overlay Elements
+    const authModalOverlay = document.getElementById('auth-modal-overlay');
+    const loginTabBtn = document.getElementById('login-tab-btn');
+    const registerTabBtn = document.getElementById('register-tab-btn');
+    const loginPanel = document.getElementById('login-panel');
+    const registerPanel = document.getElementById('register-panel');
+
+    // Deposit Overlay Elements
+    const depositModalOverlay = document.getElementById('deposit-modal-overlay');
+    const depositAmountInput = document.getElementById('deposit-amount-input');
+    const vietqrImageEl = document.getElementById('vietqr-image-el');
+    const vietqrMemoText = document.getElementById('vietqr-memo-text');
+
+    /* ─── State Management ─── */
+    let currentUser = null;
+    let tempCost = 0;
+
+    /* ─── Initialize Application ─── */
+    function init() {
+      // 1. Populate Platforms
+      platformSelect.innerHTML = Object.entries(smmData).map(([key, value]) => 
+        `<option value="${key}">${value.name}</option>`
+      ).join('');
+
+      updateCategories();
+      populateServicesTable();
+      initTheme();
+      initAuth();
+      
+      // Initialize Three.js 3D Background
+      initThreeJS();
+      animateThree();
+      
+      // 3D Tilt Card Effects initialization
+      init3DTilt();
+
+      // Initialize 3D Scroll Reveal
+      initScrollReveal3D();
+
+      // Start typewriter
+      setTimeout(typeText, newTextDelay);
+    }
+
+    function init3DTilt() {
+      const cards = document.querySelectorAll('.stat-card, .order-card, .platform-card');
+      
+      cards.forEach(card => {
+        const parent = card.parentElement;
+        if (parent) {
+          parent.style.perspective = '1500px';
+        }
+        
+        card.style.transformStyle = 'preserve-3d';
+        
+        let glare = card.querySelector('.card-glare');
+        if (!glare) {
+          glare = document.createElement('div');
+          glare.className = 'card-glare';
+          card.appendChild(glare);
+        }
+
+        let rect = card.getBoundingClientRect();
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        let isHovered = false;
+        let animFrameId = null;
+
+        function updateCardPosition() {
+          if (!isHovered) {
+            currentX += (0 - currentX) * 0.1;
+            currentY += (0 - currentY) * 0.1;
+            
+            // Fade out glare
+            let glareOpacity = parseFloat(glare.style.opacity) || 0;
+            glareOpacity += (0 - glareOpacity) * 0.1;
+            glare.style.opacity = glareOpacity;
+            
+            if (Math.abs(currentX) < 0.01 && Math.abs(currentY) < 0.01) {
+              card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+              glare.style.opacity = '0';
+              animFrameId = null;
+              return;
+            }
+          } else {
+            currentX += (targetX - currentX) * 0.15;
+            currentY += (targetY - currentY) * 0.15;
+            glare.style.opacity = '1';
+          }
+
+          card.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg) scale3d(1.03, 1.03, 1.03)`;
+          animFrameId = requestAnimationFrame(updateCardPosition);
+        }
+
+        card.addEventListener('mouseenter', () => {
+          isHovered = true;
+          rect = card.getBoundingClientRect();
+          if (!animFrameId) {
+            animFrameId = requestAnimationFrame(updateCardPosition);
+          }
+        });
+
+        card.addEventListener('mousemove', (e) => {
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const w = rect.width;
+          const h = rect.height;
+          
+          targetY = ((x / w) - 0.5) * 20; 
+          targetX = (0.5 - (y / h)) * 20;
+          
+          const glareX = (x / w) * 100;
+          const glareY = (y / h) * 100;
+          glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          isHovered = false;
+        });
+
+        window.addEventListener('resize', () => { rect = card.getBoundingClientRect(); });
+        window.addEventListener('scroll', () => { rect = card.getBoundingClientRect(); });
+      });
+    }
+
+    function initScrollReveal3D() {
+      const revealElements = document.querySelectorAll('.reveal-3d');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      revealElements.forEach(el => observer.observe(el));
+    }
+
+    /* ─── Dynamic Dropdown Cascading ─── */
+    function updateCategories() {
+      const selectedPlatform = platformSelect.value;
+      const categories = smmData[selectedPlatform].categories;
+      
+      categorySelect.innerHTML = Object.entries(categories).map(([key, value]) => 
+        `<option value="${key}">${value.name}</option>`
+      ).join('');
+
+      updateServices();
+    }
+
+    function updateServices() {
+      const selectedPlatform = platformSelect.value;
+      const selectedCategory = categorySelect.value;
+      const services = smmData[selectedPlatform].categories[selectedCategory].services;
+
+      serviceSelect.innerHTML = services.map(service => 
+        `<option value="${service.id}">${service.name}</option>`
+      ).join('');
+
+      calculatePrice();
+    }
+
+    /* ─── Form Math Calculations ─── */
+    function calculatePrice() {
+      const selectedPlatform = platformSelect.value;
+      const selectedCategory = categorySelect.value;
+      const selectedServiceId = parseInt(serviceSelect.value);
+      const services = smmData[selectedPlatform].categories[selectedCategory].services;
+      const service = services.find(s => s.id === selectedServiceId);
+
+      if (!service) return;
+
+      // Handle Comment mode inputs
+      if (service.comment) {
+        commentGroup.style.display = 'block';
+        quantityInput.disabled = true;
+        updateCommentQuantity();
+      } else {
+        commentGroup.style.display = 'none';
+        quantityInput.disabled = false;
+      }
+
+      // Update limits help text
+      quantityLimitsEl.innerText = `Tối thiểu: ${service.min.toLocaleString('vi-VN')} - Tối đa: ${service.max.toLocaleString('vi-VN')}`;
+      quantityInput.min = service.min;
+      quantityInput.max = service.max;
+
+      // Display Rate
+      ratePriceEl.innerText = `${service.rate.toLocaleString('vi-VN')} đ`;
+
+      // Calculate Total
+      const qty = parseInt(quantityInput.value) || 0;
+      tempCost = Math.ceil((qty / 1000) * service.rate);
+      totalPriceEl.innerText = `${tempCost.toLocaleString('vi-VN')} đ`;
+    }
+
+    function updateCommentQuantity() {
+      const text = commentInput.value;
+      const lines = text.split('\n').filter(line => line.trim() !== '');
+      const count = Math.max(1, lines.length);
+      quantityInput.value = count;
+      
+      // Calculate Price again based on new count
+      const selectedPlatform = platformSelect.value;
+      const selectedCategory = categorySelect.value;
+      const selectedServiceId = parseInt(serviceSelect.value);
+      const service = smmData[selectedPlatform].categories[selectedCategory].services.find(s => s.id === selectedServiceId);
+      
+      if (service) {
+        tempCost = Math.ceil((count / 1000) * service.rate);
+        totalPriceEl.innerText = `${tempCost.toLocaleString('vi-VN')} đ`;
+      }
+    }
+
+    /* ─── Quick Buttons ─── */
+    function selectPlatformDirectly(platformKey) {
+      if (smmData[platformKey]) {
+        platformSelect.value = platformKey;
+        updateCategories();
+        document.querySelector('.order-card').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    async function pasteLink() {
+      try {
+        const text = await navigator.clipboard.readText();
+        linkInput.value = text;
+        Swal.fire({
+          icon: 'success',
+          title: 'Đã dán!',
+          text: 'Đã dán link từ clipboard thành công.',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Không thể truy cập clipboard',
+          text: 'Vui lòng tự paste thủ công hoặc cấp quyền cho trình duyệt.',
+          confirmButtonText: 'Đồng ý'
+        });
+      }
+    }
+
+    /* ─── Table Populator ─── */
+    function populateServicesTable() {
+      let html = '';
+      Object.entries(smmData).forEach(([platformKey, platform]) => {
+        Object.entries(platform.categories).forEach(([catKey, category]) => {
+          category.services.forEach(service => {
+            html += `
+              <tr data-name="${platform.name.toLowerCase()} ${service.name.toLowerCase()}">
+                <td>#${service.id}</td>
+                <td><span class="service-badge ${platformKey}">${platform.name}</span></td>
+                <td>${service.name}</td>
+                <td><strong style="color:var(--primary)">${service.rate.toLocaleString('vi-VN')} đ</strong></td>
+                <td>
+                  <button class="btn-order-direct" onclick="quickOrder(${service.id}, '${platformKey}', '${catKey}')">Đặt mua</button>
+                </td>
+              </tr>
+            `;
+          });
+        });
+      });
+      servicesTableBody.innerHTML = html;
+    }
+
+    function quickOrder(serviceId, platformKey, categoryKey) {
+      platformSelect.value = platformKey;
+      updateCategories();
+      categorySelect.value = categoryKey;
+      updateServices();
+      serviceSelect.value = serviceId;
+      calculatePrice();
+      document.querySelector('.order-card').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function filterServicesTable() {
+      const q = document.getElementById('search-service').value.toLowerCase();
+      const rows = servicesTableBody.querySelectorAll('tr');
+      rows.forEach(row => {
+        const name = row.getAttribute('data-name');
+        if (name.includes(q)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    /* ─── Authentic Auth Logic (Simulated Backend) ─── */
+    function initAuth() {
+      let users = JSON.parse(localStorage.getItem('smm_users'));
+      if (!users) {
+        users = [
+          { username: 'admin', email: 'admin@tristar.vn', password: '123', balance: 500000 },
+          { username: 'huutri', email: 'huutri@gmail.com', password: '123', balance: 150000 }
+        ];
+        localStorage.setItem('smm_users', JSON.stringify(users));
+      }
+
+      const loggedUser = JSON.parse(localStorage.getItem('smm_current_user'));
+      if (loggedUser) {
+        currentUser = loggedUser;
+        updateUIForLogin();
+      } else {
+        updateUIForLogout();
+      }
+    }
+
+    function openAuthModal(tab = 'login') {
+      authModalOverlay.classList.add('open');
+      switchAuthTab(tab);
+    }
+
+    function closeAuthModal() {
+      authModalOverlay.classList.remove('open');
+    }
+
+    function closeAuthModalOnOverlay(e) {
+      if (e.target === authModalOverlay) {
+        closeAuthModal();
+      }
+    }
+
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        loginTabBtn.classList.add('active');
+        registerTabBtn.classList.remove('active');
+        loginPanel.classList.add('active');
+        registerPanel.classList.remove('active');
+      } else {
+        loginTabBtn.classList.remove('active');
+        registerTabBtn.classList.add('active');
+        loginPanel.classList.remove('active');
+        registerPanel.classList.add('active');
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const usernameInput = document.getElementById('reg-username').value.trim();
+      const emailInput = document.getElementById('reg-email').value.trim();
+      const passwordInput = document.getElementById('reg-password').value.trim();
+
+      let users = JSON.parse(localStorage.getItem('smm_users')) || [];
+
+      if (users.find(u => u.username.toLowerCase() === usernameInput.toLowerCase())) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Tài khoản tồn tại',
+          text: 'Tên tài khoản này đã được sử dụng. Vui lòng chọn tên khác!'
+        });
+        return;
+      }
+
+      const newUser = {
+        username: usernameInput,
+        email: emailInput,
+        password: passwordInput,
+        balance: 100000
+      };
+      
+      users.push(newUser);
+      localStorage.setItem('smm_users', JSON.stringify(users));
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Đăng ký thành công!',
+        html: 'Chào mừng bạn! Hệ thống đã <strong>tặng bạn 100.000 đ</strong> làm số dư dùng thử.',
+        confirmButtonText: 'Đăng nhập ngay'
+      }).then(() => {
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.8 } });
+        currentUser = newUser;
+        localStorage.setItem('smm_current_user', JSON.stringify(currentUser));
+        updateUIForLogin();
+        closeAuthModal();
+      });
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
+      const passwordInput = document.getElementById('login-password').value;
+
+      let users = JSON.parse(localStorage.getItem('smm_users')) || [];
+      const matched = users.find(u => u.username.toLowerCase() === usernameInput || u.email.toLowerCase() === usernameInput);
+
+      if (matched && matched.password === passwordInput) {
+        currentUser = matched;
+        localStorage.setItem('smm_current_user', JSON.stringify(currentUser));
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Đăng nhập thành công!',
+          text: `Chào mừng bạn quay lại, ${currentUser.username}!`,
+          timer: 1500,
+          showConfirmButton: false
+        }).then(() => {
+          confetti({ particleCount: 50, spread: 40, origin: { y: 0.8 } });
+          updateUIForLogin();
+          closeAuthModal();
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Đăng nhập thất bại',
+          text: 'Tên tài khoản hoặc mật khẩu không chính xác!'
+        });
+      }
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      localStorage.removeItem('smm_current_user');
+      updateUIForLogout();
+      Swal.fire({
+        icon: 'success',
+        title: 'Đã đăng xuất',
+        text: 'Bạn đã đăng xuất tài khoản thành công.',
+        timer: 1200,
+        showConfirmButton: false
+      });
+    }
+
+    function updateUIForLogin() {
+      guestNav.style.display = 'none';
+      userNav.style.display = 'flex';
+      displayBalance.innerText = `${currentUser.balance.toLocaleString('vi-VN')} đ`;
+      displayUsername.innerText = currentUser.username;
+      displayAvatar.innerHTML = `<img src="avatar.jpg" onerror="this.style.display='none'; this.parentElement.innerText='${currentUser.username.charAt(0).toUpperCase()}';" class="w-full h-full rounded-full object-cover">`;
+    }
+
+    function updateUIForLogout() {
+      guestNav.style.display = 'flex';
+      userNav.style.display = 'none';
+      userDropdown.style.display = 'none';
+    }
+
+    function toggleUserDropdown() {
+      userDropdown.style.display = userDropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = document.querySelector('.user-dropdown-btn');
+      if (btn && !btn.contains(e.target) && !userDropdown.contains(e.target)) {
+        userDropdown.style.display = 'none';
+      }
+    });
+
+    /* ─── Deposit/QR Modal Logic ─── */
+    function openDepositModal() {
+      if (!currentUser) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Yêu cầu đăng nhập',
+          text: 'Vui lòng đăng nhập trước khi thực hiện nạp tiền!'
+        });
+        return;
+      }
+      userDropdown.style.display = 'none';
+      depositModalOverlay.classList.add('open');
+      updateVietQR();
+    }
+
+    function closeDepositModal() {
+      depositModalOverlay.classList.remove('open');
+    }
+
+    function closeDepositModalOnOverlay(e) {
+      if (e.target === depositModalOverlay) {
+        closeDepositModal();
+      }
+    }
+
+    function selectDepositAmount(amount) {
+      depositAmountInput.value = amount;
+      
+      // Update active button styling
+      const buttons = document.querySelectorAll('.qr-amount-selectors button');
+      buttons.forEach(btn => {
+        if (btn.innerText.replace(/\./g, '') === amount.toString()) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      updateVietQR();
+    }
+
+    function updateVietQR() {
+      const amount = parseInt(depositAmountInput.value) || 10000;
+      const memo = `SMM ${currentUser ? currentUser.username.toUpperCase() : 'KHACH'}`;
+      
+      vietqrMemoText.innerText = memo;
+
+      // Construct dynamic VietQR image link via Official VietQR generator API
+      const qrUrl = `https://img.vietqr.io/image/${CONFIG.BANK_ID}-${CONFIG.BANK_ACCOUNT}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}&accountName=${encodeURIComponent(CONFIG.ACCOUNT_NAME)}`;
+      vietqrImageEl.src = qrUrl;
+    }
+
+    function playDepositSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const playTone = (freq, duration, startTime, type = 'sine') => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, startTime);
+          gain.gain.setValueAtTime(0.15, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + duration);
+        };
+        const now = audioCtx.currentTime;
+        playTone(523.25, 0.15, now, 'sine'); // C5
+        playTone(659.25, 0.15, now + 0.1, 'sine'); // E5
+        playTone(783.99, 0.3, now + 0.2, 'sine'); // G5
+      } catch (e) {
+        console.error("Audio failed to play:", e);
+      }
+    }
+
+    function speakNotification(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'vi-VN';
+        utterance.rate = 1.05;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    let isScanning = false;
+    function triggerDepositSimulation() {
+      if (isScanning) return;
+      if (!currentUser) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Yêu cầu đăng nhập',
+          text: 'Vui lòng đăng nhập trước khi thực hiện nạp tiền!'
+        });
+        return;
+      }
+      
+      const amount = parseInt(depositAmountInput.value) || 50000;
+      const username = currentUser.username;
+      
+      isScanning = true;
+      
+      // UI feedback: disable buttons and interactive elements in modal
+      const submitBtn = document.querySelector('.auth-modal.deposit-modal .btn-submit');
+      const amountBtns = document.querySelectorAll('.qr-amount-selectors button');
+      const closeBtn = document.querySelector('.auth-modal.deposit-modal .btn-close-modal');
+      
+      if (submitBtn) {
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.pointerEvents = 'none';
+      }
+      amountBtns.forEach(btn => {
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.5';
+      });
+      if (closeBtn) {
+        closeBtn.style.pointerEvents = 'none';
+        closeBtn.style.opacity = '0.5';
+      }
+      
+      // Get console elements
+      const consoleEl = document.getElementById('banking-console');
+      const logsContainer = document.getElementById('console-logs');
+      const statusText = consoleEl.querySelector('.console-status');
+      
+      consoleEl.style.display = 'block';
+      logsContainer.innerHTML = '';
+      
+      // Helper to append log rows
+      const addLogRow = (text, type = 'info') => {
+        const now = new Date();
+        const timeStr = now.toTimeString().split(' ')[0];
+        
+        let typeClass = 'log-info';
+        let typeLabel = '[INFO]';
+        if (type === 'success') {
+          typeClass = 'log-success';
+          typeLabel = '[SUCCESS]';
+        } else if (type === 'warn') {
+          typeClass = 'log-warning';
+          typeLabel = '[WARN]';
+        }
+        
+        const row = document.createElement('div');
+        row.className = 'console-log-row ' + typeClass;
+        row.innerHTML = `<span class="log-time">${timeStr}</span> ${typeLabel} ${text}`;
+        logsContainer.appendChild(row);
+        logsContainer.scrollTop = logsContainer.scrollHeight;
+      };
+      
+      // Update console status
+      statusText.innerHTML = '<span class="status-dot" style="background-color:#fbbf24; animation: pulse-dot 1s infinite;"></span> CONNECTING';
+      statusText.style.color = '#fbbf24';
+      
+      // Logs Timeline Sequence
+      setTimeout(() => {
+        addLogRow('Đang khởi tạo kết nối bảo mật tới cổng thanh toán BIDV API...', 'info');
+      }, 0);
+      
+      setTimeout(() => {
+        addLogRow('Kết nối thành công! Đang xác thực chứng chỉ API token [BIDV-LIVE-0979324949-SECURE]...', 'info');
+      }, 800);
+      
+      setTimeout(() => {
+        statusText.innerHTML = '<span class="status-dot" style="background-color:#34d399; animation: pulse-dot 1.5s infinite;"></span> SCANNING';
+        statusText.style.color = '#34d399';
+        addLogRow('Đang quét lịch sử biến động số dư tài khoản thụ hưởng: 0979324949 (VO HUU TRI)...', 'info');
+      }, 1600);
+      
+      setTimeout(() => {
+        addLogRow(`Đang kiểm tra giao dịch chuyển khoản trị giá ${amount.toLocaleString('vi-VN')} đ với nội dung khớp cú pháp: SMM ${username.toUpperCase()}`, 'warn');
+      }, 2400);
+      
+      setTimeout(() => {
+        addLogRow('PHÁT HIỆN GIAO DỊCH KHỚP LỆNH HOÀN TOÀN!', 'success');
+        addLogRow(`Nhận thành công +${amount.toLocaleString('vi-VN')} đ từ tài khoản đối tác liên kết.`, 'success');
+      }, 3200);
+      
+      setTimeout(() => {
+        addLogRow('Tiến hành ghi nhận số dư mới vào cơ sở dữ liệu hệ thống...', 'info');
+        
+        // Play retro chime sound
+        playDepositSound();
+        
+        // Play synthesized voice message
+        speakNotification(`Nạp tiền thành công! Đã cộng thêm ${amount} đồng vào tài khoản của bạn.`);
+        
+        // Credit SMM user balance in localstorage
+        let users = JSON.parse(localStorage.getItem('smm_users')) || [];
+        const idx = users.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
+        if (idx !== -1) {
+          users[idx].balance += amount;
+          currentUser.balance = users[idx].balance;
+          localStorage.setItem('smm_users', JSON.stringify(users));
+          localStorage.setItem('smm_current_user', JSON.stringify(currentUser));
+          updateUIForLogin();
+        }
+        
+        // Fireworks!
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#8b5cf6', '#06b6d4', '#10b981', '#ec4899']
+        });
+      }, 4000);
+      
+      setTimeout(() => {
+        addLogRow(`Đồng bộ dữ liệu thành công! Số dư tài khoản hiện tại: ${currentUser.balance.toLocaleString('vi-VN')} đ.`, 'success');
+      }, 4800);
+      
+      setTimeout(() => {
+        statusText.innerHTML = '<span class="status-dot" style="background-color:#64748b;"></span> DISCONNECTED';
+        statusText.style.color = '#64748b';
+        addLogRow('Cổng kết nối BIDV API đã đóng an toàn.', 'info');
+      }, 5400);
+      
+      setTimeout(() => {
+        // Reset console state and hide it
+        consoleEl.style.display = 'none';
+        
+        // Restore buttons
+        if (submitBtn) {
+          submitBtn.style.opacity = '1';
+          submitBtn.style.pointerEvents = 'auto';
+        }
+        amountBtns.forEach(btn => {
+          btn.style.pointerEvents = 'auto';
+          btn.style.opacity = '1';
+        });
+        if (closeBtn) {
+          closeBtn.style.pointerEvents = 'auto';
+          closeBtn.style.opacity = '1';
+        }
+        
+        isScanning = false;
+        closeDepositModal();
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Nạp tiền thành công!',
+          html: `Hệ thống VietQR nhận diện thành công giao dịch.<br>Đã cộng thêm <strong>+${amount.toLocaleString('vi-VN')} đ</strong> vào số dư tài khoản của bạn!`,
+          confirmButtonText: 'Tuyệt vời',
+          confirmButtonColor: '#10b981'
+        });
+      }, 6200);
+    }
+
+    function addBalanceSim(amount) {
+      if (!currentUser) return;
+      
+      let users = JSON.parse(localStorage.getItem('smm_users')) || [];
+      const idx = users.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+      if (idx !== -1) {
+        users[idx].balance += amount;
+        currentUser.balance = users[idx].balance;
+        localStorage.setItem('smm_users', JSON.stringify(users));
+        localStorage.setItem('smm_current_user', JSON.stringify(currentUser));
+        updateUIForLogin();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Nạp tiền thành công!',
+          text: `Hệ thống VietQR nhận diện thành công giao dịch. Đã cộng thêm +${amount.toLocaleString('vi-VN')} đ vào tài khoản của bạn!`,
+          confirmButtonText: 'Tuyệt vời'
+        });
+      }
+    }
+
+    function resetSimBalance() {
+      userDropdown.style.display = 'none';
+      if (!currentUser) return;
+      addBalanceSim(50000);
+    }
+
+    /* ─── Form Submission Handling (with Telegram API Integration) ─── */
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      if (!currentUser) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Yêu cầu đăng nhập',
+          text: 'Vui lòng đăng nhập hoặc đăng ký tài khoản dùng thử để thực hiện đặt hàng!',
+          showCancelButton: true,
+          confirmButtonText: 'Đăng nhập ngay',
+          cancelButtonText: 'Đóng'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            openAuthModal('login');
+          }
+        });
+        return;
+      }
+
+      const link = linkInput.value.trim();
+      const qty = parseInt(quantityInput.value);
+      const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+      
+      if (!link) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Thiếu thông tin',
+          text: 'Vui lòng nhập liên kết cần chạy dịch vụ!'
+        });
+        return;
+      }
+
+      // Check balance
+      if (currentUser.balance < tempCost) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Số dư không đủ',
+          html: `
+            Số dư tài khoản: <strong>${currentUser.balance.toLocaleString('vi-VN')} đ</strong><br>
+            Tổng thanh toán: <strong style="color:var(--primary)">${tempCost.toLocaleString('vi-VN')} đ</strong><br><br>
+            Vui lòng nạp thêm tiền để tiếp tục đặt hàng!
+          `,
+          showCancelButton: true,
+          confirmButtonText: 'Nạp thêm tiền',
+          cancelButtonText: 'Đóng',
+          confirmButtonColor: '#10b981'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            openDepositModal();
+          }
+        });
+        return;
+      }
+
+      // Deduct balance and update local database
+      let users = JSON.parse(localStorage.getItem('smm_users')) || [];
+      const idx = users.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+      if (idx !== -1) {
+        users[idx].balance -= tempCost;
+        currentUser.balance = users[idx].balance;
+        localStorage.setItem('smm_users', JSON.stringify(users));
+        localStorage.setItem('smm_current_user', JSON.stringify(currentUser));
+        updateUIForLogin();
+
+        // ─── Instant Telegram Webhook Dispatcher ───
+        const telegramMessage = `
+🔔 ĐƠN HÀNG SMM MỚI:
+👤 Người mua: ${currentUser.username} (${currentUser.email})
+📦 Dịch vụ: ${serviceText}
+🔗 Link chạy: ${link}
+🔢 Số lượng: ${qty.toLocaleString('vi-VN')}
+💰 Tổng tiền: ${tempCost.toLocaleString('vi-VN')} đ
+💵 Số dư còn lại: ${currentUser.balance.toLocaleString('vi-VN')} đ
+⏱ Thời gian: ${new Date().toLocaleString('vi-VN')}
+        `.trim();
+
+        // Send actual HTTP POST directly to the owner's Telegram channel/bot chat!
+        fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            chat_id: CONFIG.TELEGRAM_CHAT_ID,
+            text: telegramMessage
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log('Telegram dispatch success:', data);
+        })
+        .catch(err => {
+          console.error('Telegram dispatch error:', err);
+        });
+
+        // Trigger a gorgeous confetti burst!
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#8b5cf6', '#06b6d4', '#10b981', '#ec4899']
+        });
+
+        // Show elegant order success Alert
+        Swal.fire({
+          icon: 'success',
+          title: '🎉 Đặt hàng thành công!',
+          html: `
+            <div style="text-align: left;">
+              <p>Đơn hàng đã được ghi nhận trên hệ thống và gửi thông tin trực tiếp tới Admin để kích hoạt chạy:</p>
+              <hr style="margin: 8px 0; border:0; border-top:1px solid var(--border)">
+              <ul>
+                <li><strong>Dịch vụ:</strong> ${serviceText}</li>
+                <li><strong>Số lượng:</strong> ${qty.toLocaleString('vi-VN')}</li>
+                <li><strong>Đã trừ:</strong> -${tempCost.toLocaleString('vi-VN')} đ</li>
+                <li><strong>Số dư còn lại:</strong> ${currentUser.balance.toLocaleString('vi-VN')} đ</li>
+              </ul>
+              <br>
+              <p style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 10px; font-size: 0.85rem;">
+                ⚡ <strong>Thông báo:</strong> Đơn hàng đã được báo cáo qua Telegram. Bạn có thể kiểm tra hoặc liên hệ hỗ trợ trực tiếp tại Telegram: <a href="${CONFIG.TELEGRAM_ADMIN_URL}" target="_blank">@thanhbinhdev</a>.
+              </p>
+            </div>
+          `,
+          confirmButtonText: 'Đồng ý'
+        });
+      }
+    }
+
+    /* ─── Light / Dark Theme Toggle ─── */
+    const themeBtn = document.getElementById('theme-btn');
+    function initTheme() {
+      const stored = localStorage.getItem('smm-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', stored);
+      updateThemeIcon(stored);
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const target = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', target);
+      localStorage.setItem('smm-theme', target);
+      updateThemeIcon(target);
+    });
+
+    function updateThemeIcon(theme) {
+      if (theme === 'dark') {
+        themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+      } else {
+        themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+      }
+    }
+
+    /* ─── GOD TIER CURSOR SYSTEM ─── */
+    const cursor = document.querySelector('.god-cursor');
+    const canvas = document.getElementById('cursor-trail-canvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let trailParticles = [];
+    const codeSymbols = ["✦", "✨", "★", "🔥", "⚡", "::", "{}", "<>"];
+    let mouse = { x: null, y: null };
+
+    if (cursor) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+
+        if (window.innerWidth < 768) return;
+
+        if (trailParticles.length < 60) {
+          trailParticles.push({
+            x: e.clientX, y: e.clientY,
+            text: codeSymbols[Math.floor(Math.random() * codeSymbols.length)],
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5 - 0.4,
+            size: Math.floor(Math.random() * 5) + 10,
+            color: Math.random() > 0.5 ? '#8b5cf6' : '#06b6d4',
+            alpha: 1.0,
+            decay: Math.random() * 0.015 + 0.012,
+            angle: Math.random() * Math.PI * 2,
+            angularVelocity: (Math.random() - 0.5) * 0.06
+          });
+        }
+      });
+
+      document.querySelectorAll('a, button, input, select, .cursor-pointer').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+      });
+
+      if (canvas && ctx) {
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('click', (e) => {
+          const count = Math.min(12, 60 - trailParticles.length);
+          for (let i = 0; i < count; i++) {
+            const speed = Math.random() * 5 + 3;
+            const angle = Math.random() * Math.PI * 2;
+            trailParticles.push({
+              x: e.clientX, y: e.clientY,
+              text: codeSymbols[Math.floor(Math.random() * codeSymbols.length)],
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              size: Math.floor(Math.random() * 6) + 12,
+              color: Math.random() > 0.5 ? '#8b5cf6' : '#06b6d4',
+              alpha: 1.0,
+              decay: Math.random() * 0.02 + 0.015,
+              angle: Math.random() * Math.PI * 2,
+              angularVelocity: (Math.random() - 0.5) * 0.1
+            });
+          }
+        });
+
+        function animateCursorTrail() {
+          requestAnimationFrame(animateCursorTrail);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          for (let i = 0; i < trailParticles.length; i++) {
+            const p1 = trailParticles[i];
+            
+            if (mouse.x !== null && mouse.y !== null) {
+              const dx = p1.x - mouse.x;
+              const dy = p1.y - mouse.y;
+              const dist = Math.sqrt(dx*dx + dy*dy);
+              if (dist < 100) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = p1.color;
+                ctx.globalAlpha = (1 - dist / 100) * p1.alpha * 0.28;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+              }
+            }
+
+            for (let j = i + 1; j < trailParticles.length; j++) {
+              const p2 = trailParticles[j];
+              const dx = p1.x - p2.x;
+              const dy = p1.y - p2.y;
+              const dist = Math.sqrt(dx*dx + dy*dy);
+              if (dist < 80) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.strokeStyle = p1.color;
+                ctx.globalAlpha = (1 - dist / 80) * p1.alpha * p2.alpha * 0.2;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+
+            p1.x += p1.vx;
+            p1.y += p1.vy;
+            p1.angle += p1.angularVelocity;
+            p1.alpha -= p1.decay;
+
+            ctx.save();
+            ctx.translate(p1.x, p1.y);
+            ctx.rotate(p1.angle);
+            ctx.globalAlpha = p1.alpha;
+            ctx.fillStyle = p1.color;
+            ctx.font = `${p1.size}px monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(p1.text, 0, 0);
+            ctx.restore();
+          }
+          trailParticles = trailParticles.filter(p => p.alpha > 0);
+        }
+        animateCursorTrail();
+      }
+      if (cursor) {
+        document.querySelectorAll('a, button, input, select, .cursor-pointer').forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+      }
+    }
+
+    /* ─── Dynamic 3D Volumetric Star Nest + Planets & Spaceships ─── */
+    let bgScene, bgCamera, renderer, bgMaterial;
+    let mainScene, mainCamera;
+    let targetMouseParallax = new THREE.Vector2(0, 0);
+    let targetMouseShader = new THREE.Vector2(0, 0);
+    
+    // 3D Objects
+    let planets = [];
+    let spaceships = [];
+    
+    function initThreeJS() {
+      const container = document.getElementById('three-bg-container');
+      if (!container) return;
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.autoClear = false; // Important for multi-pass rendering
+      container.appendChild(renderer.domElement);
+
+      // --- Background Shader Setup ---
+      bgScene = new THREE.Scene();
+      bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      bgCamera.position.z = 1;
+
+      const bgGeometry = new THREE.PlaneGeometry(2, 2);
+      const vertexShader = `
+        varying vec2 vUv;
+        void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
+      `;
+      const fragmentShader = `
+        uniform float uTime;
+        uniform vec2 uResolution;
+        uniform vec2 uMouse;
+        varying vec2 vUv;
+
+        #define iterations 17
+        #define formuparam 0.53
+
+        #define volsteps 20
+        #define stepsize 0.1
+
+        #define zoom   0.800
+        #define tile   0.850
+        #define speed  0.010 
+
+        #define brightness 0.0015
+        #define darkmatter 0.300
+        #define distfading 0.730
+        #define saturation 0.850
+
+        void main() {
+            vec2 uv = (vUv - 0.5);
+            uv.y *= uResolution.y / uResolution.x;
+            vec3 dir = vec3(uv * zoom, 1.0);
+            float time = uTime * speed + 0.25;
+
+            // Mouse rotation
+            float a1 = 0.5 + (uMouse.x / uResolution.x) * 2.0;
+            float a2 = 0.8 + (uMouse.y / uResolution.y) * 2.0;
+            mat2 rot1 = mat2(cos(a1), sin(a1), -sin(a1), cos(a1));
+            mat2 rot2 = mat2(cos(a2), sin(a2), -sin(a2), cos(a2));
+            dir.xz *= rot1;
+            dir.xy *= rot2;
+            
+            vec3 from = vec3(1.0, 0.5, 0.5);
+            from += vec3(time * 2.0, time, -2.0);
+            from.xz *= rot1;
+            from.xy *= rot2;
+            
+            // Volumetric rendering
+            float s = 0.1, fade = 1.0;
+            vec3 v = vec3(0.0);
+            for (int r = 0; r < volsteps; r++) {
+                vec3 p = from + s * dir * 0.5;
+                p = abs(vec3(tile) - mod(p, vec3(tile * 2.0))); // tiling fold
+                float pa, a = pa = 0.0;
+                for (int i = 0; i < iterations; i++) { 
+                    p = abs(p) / dot(p, p) - formuparam;
+                    a += abs(length(p) - pa);
+                    pa = length(p);
+                }
+                float dm = max(0.0, darkmatter - a * a * 0.001); // dark matter
+                a *= a * a; // add contrast
+                if (r > 6) fade *= 1.0 - dm; // dark matter, don't render near
+                v += fade;
+                v += vec3(s, s * s, s * s * s * s) * a * brightness * fade; // coloring based on distance
+                fade *= distfading; // distance fading
+                s += stepsize;
+            }
+            v = mix(vec3(length(v)), v, saturation); // color adjust
+            
+            // Tweak color slightly to neon cyan/purple
+            vec3 finalColor = v * 0.01;
+            finalColor.r *= 1.2; // boost red/purple
+            finalColor.b *= 1.5; // boost blue
+            
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `;
+      bgMaterial = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTime: { value: 0 },
+          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uMouse: { value: new THREE.Vector2(0, 0) }
+        },
+        transparent: true
+      });
+      bgScene.add(new THREE.Mesh(bgGeometry, bgMaterial));
+
+      // --- Main 3D Scene Setup ---
+      mainScene = new THREE.Scene();
+      mainCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      mainCamera.position.z = 30;
+
+      // Lighting
+      mainScene.add(new THREE.AmbientLight(0x222233, 2.0));
+      const pLight1 = new THREE.PointLight(0x06b6d4, 5, 100);
+      pLight1.position.set(-20, 10, 20);
+      mainScene.add(pLight1);
+      const pLight2 = new THREE.PointLight(0x8b5cf6, 5, 100);
+      pLight2.position.set(20, -10, 20);
+      mainScene.add(pLight2);
+
+      // --- Planet 1: Cyberpunk Wireframe Planet ---
+      const planet1Grp = new THREE.Group();
+      const coreGeo = new THREE.IcosahedronGeometry(4.8, 2);
+      const coreMat = new THREE.MeshStandardMaterial({ color: 0x050814, roughness: 0.8 });
+      planet1Grp.add(new THREE.Mesh(coreGeo, coreMat));
+      
+      const wireGeo = new THREE.IcosahedronGeometry(5, 2);
+      const wireMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.3 });
+      planet1Grp.add(new THREE.Mesh(wireGeo, wireMat));
+      
+      const atmosGeo = new THREE.SphereGeometry(5.2, 32, 32);
+      const atmosMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending });
+      planet1Grp.add(new THREE.Mesh(atmosGeo, atmosMat));
+      
+      planet1Grp.position.set(-18, 8, -10);
+      mainScene.add(planet1Grp);
+      planets.push({ mesh: planet1Grp, rotSpeedX: 0.002, rotSpeedY: 0.003 });
+
+      // --- Planet 2: Ringed Gas Giant ---
+      const planet2Grp = new THREE.Group();
+      const p2Geo = new THREE.SphereGeometry(6, 32, 32);
+      const p2Mat = new THREE.MeshStandardMaterial({ color: 0x5c20d2, emissive: 0x220a4f, roughness: 0.5 });
+      planet2Grp.add(new THREE.Mesh(p2Geo, p2Mat));
+      
+      const ringGeo = new THREE.RingGeometry(8, 14, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, side: THREE.DoubleSide, transparent: true, opacity: 0.4, wireframe: true });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      ringMesh.rotation.x = Math.PI / 2.2;
+      planet2Grp.add(ringMesh);
+      
+      planet2Grp.position.set(22, -10, -25);
+      mainScene.add(planet2Grp);
+      planets.push({ mesh: planet2Grp, rotSpeedX: 0.001, rotSpeedY: -0.002 });
+
+      // --- Spaceships Fleet ---
+      const shipGeo = new THREE.ConeGeometry(0.4, 2.5, 4);
+      shipGeo.rotateX(Math.PI / 2); // point forward
+      const shipMat = new THREE.MeshStandardMaterial({ 
+        color: 0xffffff, 
+        emissive: 0x06b6d4, 
+        emissiveIntensity: 1.5,
+        wireframe: true
+      });
+
+      for(let i=0; i<12; i++) {
+        const ship = new THREE.Mesh(shipGeo, shipMat);
+        const radius = Math.random() * 25 + 15;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 0.015 + 0.005;
+        const yOffset = (Math.random() - 0.5) * 30;
+        
+        mainScene.add(ship);
+        spaceships.push({ mesh: ship, angle, radius, speed, yOffset });
+        
+        const engineLight = new THREE.PointLight(0x06b6d4, 1.5, 8);
+        engineLight.position.set(0, 0, -1);
+        ship.add(engineLight);
+      }
+
+      // --- Asteroid / Stardust Field ---
+      const dustGeo = new THREE.BufferGeometry();
+      const dustCount = 1500;
+      const dustPos = new Float32Array(dustCount * 3);
+      for(let i=0; i<dustCount*3; i++) {
+        dustPos[i] = (Math.random() - 0.5) * 120;
+      }
+      dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+      const dustMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.6 });
+      mainScene.add(new THREE.Points(dustGeo, dustMat));
+
+      document.addEventListener('mousemove', onThreeMouseMove);
+      window.addEventListener('resize', onThreeWindowResize);
+    }
+
+    function onThreeMouseMove(event) {
+      targetMouseParallax.x = (event.clientX / window.innerWidth) * 2 - 1;
+      targetMouseParallax.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      targetMouseShader.x = event.clientX;
+      targetMouseShader.y = event.clientY;
+    }
+
+    function onThreeWindowResize() {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      if(bgMaterial) {
+        bgMaterial.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+      }
+      mainCamera.aspect = window.innerWidth / window.innerHeight;
+      mainCamera.updateProjectionMatrix();
+    }
+
+    const clock = new THREE.Clock();
+
+    function animateThree() {
+      requestAnimationFrame(animateThree);
+      const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
+      
+      if(bgMaterial) {
+        bgMaterial.uniforms.uTime.value = elapsed;
+        bgMaterial.uniforms.uMouse.value.x += (targetMouseShader.x - bgMaterial.uniforms.uMouse.value.x) * 0.05;
+        bgMaterial.uniforms.uMouse.value.y += (targetMouseShader.y - bgMaterial.uniforms.uMouse.value.y) * 0.05;
+      }
+      
+      // Parallax Camera
+      mainCamera.position.x += (targetMouseParallax.x * 6 - mainCamera.position.x) * 0.05;
+      mainCamera.position.y += (targetMouseParallax.y * 6 - mainCamera.position.y) * 0.05;
+      mainCamera.lookAt(0, 0, 0);
+
+      // Rotate Planets
+      planets.forEach((p, index) => {
+        p.mesh.rotation.x += p.rotSpeedX;
+        p.mesh.rotation.y += p.rotSpeedY;
+        p.mesh.position.y += Math.sin(elapsed * 1.5 + index) * 0.015; // Floating effect
+      });
+
+      // Fly Spaceships
+      spaceships.forEach((s) => {
+        s.angle += s.speed * delta * 20;
+        const nextX = Math.cos(s.angle) * s.radius;
+        const nextZ = Math.sin(s.angle) * s.radius * 0.6 - 15;
+        const nextY = s.yOffset + Math.sin(s.angle * 3) * 8;
+        
+        const targetPos = new THREE.Vector3(nextX, nextY, nextZ);
+        s.mesh.lookAt(targetPos);
+        s.mesh.position.copy(targetPos);
+      });
+      
+      renderer.clear();
+      renderer.render(bgScene, bgCamera);
+      renderer.clearDepth();
+      renderer.render(mainScene, mainCamera);
+    }
+
+    /* ─── Dynamic Typewriter Effect for Hero Description ─── */
+    const typedTextSpan = document.getElementById("typed-text");
+    const textArray = [
+      "tăng like Facebook tự động, an toàn.",
+      "tăng follow TikTok siêu tốc, giá rẻ.",
+      "tăng view Youtube chất lượng cao.",
+      "tăng thành viên Telegram nhanh chóng.",
+      "tăng lượt nghe Spotify uy tín."
+    ];
+    let arrayIndex = 0;
+    let charIndex = 0;
+    const typingSpeed = 75;
+    const erasingSpeed = 40;
+    const newTextDelay = 2000;
+
+    function typeText() {
+      if (charIndex < textArray[arrayIndex].length) {
+        typedTextSpan.textContent += textArray[arrayIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, typingSpeed);
+      } else {
+        setTimeout(eraseText, newTextDelay);
+      }
+    }
+
+    function eraseText() {
+      if (charIndex > 0) {
+        typedTextSpan.textContent = textArray[arrayIndex].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(eraseText, erasingSpeed);
+      } else {
+        arrayIndex++;
+        if (arrayIndex >= textArray.length) arrayIndex = 0;
+        setTimeout(typeText, typingSpeed + 100);
+      }
+    }
+
+    /* ─── Social Proof Live Purchase Toasts ─── */
+    const purchaseToast = document.getElementById("purchase-toast");
+    const purchaseToastText = document.getElementById("purchase-toast-text");
+    
+    const randomPurchases = [
+      { name: "hieu_tri***", item: "1.000 Follow TikTok", price: "25.000đ" },
+      { name: "nguyen_an***", item: "200 Like Instagram", price: "400đ" },
+      { name: "quang_huy***", item: "nạp thành công 100.000đ", price: "" },
+      { name: "minh_thu***", item: "500 Member Telegram", price: "19.500đ" },
+      { name: "thanh_binh***", item: "2.000 View Youtube Shorts", price: "24.000đ" },
+      { name: "user_test***", item: "nạp thành công 50.000đ", price: "" },
+      { name: "tran_dat***", item: "5.000 View TikTok [Siêu Tốc]", price: "750đ" }
+    ];
+
+    function showRandomPurchaseToast() {
+      const item = randomPurchases[Math.floor(Math.random() * randomPurchases.length)];
+      if (item.price) {
+        purchaseToastText.innerHTML = `Khách hàng <strong>${item.name}</strong> vừa mua <strong>${item.item}</strong> (${item.price})`;
+      } else {
+        purchaseToastText.innerHTML = `Khách hàng <strong>${item.name}</strong> vừa <strong>${item.item}</strong>`;
+      }
+      
+      purchaseToast.classList.add("show");
+      
+      setTimeout(() => {
+        purchaseToast.classList.remove("show");
+      }, 4000);
+    }
+
+    // Loop toasts every 12 to 18 seconds
+    setInterval(showRandomPurchaseToast, 14000);
+    setTimeout(showRandomPurchaseToast, 3000); // Initial delay
+
+    // Launch!
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

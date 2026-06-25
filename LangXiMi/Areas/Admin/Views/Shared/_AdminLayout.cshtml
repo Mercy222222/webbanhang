@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | Admin – Làng Xì Mi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Overlay for mobile sidebar -->
+    <div class="admin-sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="admin-wrapper">
+        <!-- ══ SIDEBAR ══ -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <a class="admin-sidebar-brand" asp-area="" asp-controller="Product" asp-action="Index">
+                🍰 Làng Xì Mi
+            </a>
+            <ul class="admin-sidebar-nav">
+                <li class="nav-header">Tổng quan</li>
+                <li>
+                    <a class="admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+                       asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-header">Kinh doanh</li>
+                <li>
+                    <a class="admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")"
+                       asp-area="Admin" asp-controller="Order" asp-action="Index">
+                        <i class="bi bi-receipt-cutoff"></i> Đơn hàng
+                    </a>
+                </li>
+                <li>
+                    <a class="admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
+                       asp-area="Admin" asp-controller="Product" asp-action="Index">
+                        <i class="bi bi-box-seam"></i> Sản phẩm
+                    </a>
+                </li>
+                <li>
+                    <a class="admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Report" ? "active" : "")"
+                       asp-area="Admin" asp-controller="Report" asp-action="Index">
+                        <i class="bi bi-bar-chart-line"></i> Thống kê
+                    </a>
+                </li>
+
+                <li class="nav-header">Quản lý</li>
+                <li>
+                    <a class="admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Employee" ? "active" : "")"
+                       asp-area="Admin" asp-controller="Employee" asp-action="Index">
+                        <i class="bi bi-people"></i> Nhân viên
+                    </a>
+                </li>
+                <li>
+                    <a class="admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
+                       asp-area="Admin" asp-controller="User" asp-action="Index">
+                        <i class="bi bi-person-gear"></i> Người dùng
+                    </a>
+                </li>
+            </ul>
+            <div class="admin-sidebar-footer">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="small">@User.Identity?.Name</span>
+                </div>
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-sm btn-outline-light w-100">
+                        <i class="bi bi-box-arrow-left me-1"></i>Đăng xuất
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- ══ MAIN ══ -->
+        <div class="admin-main">
+            <!-- Topbar -->
+            <header class="admin-topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="admin-sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1 class="admin-topbar-title">@ViewData["Title"]</h1>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <a asp-area="" asp-controller="Product" asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-globe me-1"></i>Xem trang web
+                    </a>
+                </div>
+            </header>
+
+            <!-- Toast alerts -->
+            <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="toast show align-items-center text-bg-success border-0 shadow" role="alert">
+                        <div class="d-flex">
+                            <div class="toast-body"><i class="bi bi-check-circle me-2"></i>@TempData["Success"]</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                        </div>
+                    </div>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="toast show align-items-center text-bg-danger border-0 shadow" role="alert">
+                        <div class="d-flex">
+                            <div class="toast-body"><i class="bi bi-x-circle me-2"></i>@TempData["Error"]</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Content -->
+            <div class="admin-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar toggle for mobile
+        const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggle = document.getElementById('sidebarToggle');
+        toggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        });
+        overlay?.addEventListener('click', () => {
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+        // Auto-hide toasts
+        document.querySelectorAll('.toast.show').forEach(t => {
+            setTimeout(() => { t.classList.remove('show'); t.remove(); }, 4000);
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

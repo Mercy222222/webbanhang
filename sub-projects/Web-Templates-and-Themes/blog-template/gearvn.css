@@ -1,0 +1,53 @@
+/* Mobile responsiveness overrides */
+@media (max-width: 640px) {
+  /* Make modals full width on small screens */
+  #auth-modal .bg-white,
+  #auth-modal .dark\\:bg-gray-800 {
+    width: 90% !important;
+    max-width: 90% !important;
+  }
+  #detail-drawer,
+  #cart-drawer,
+  #checkout-drawer {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  /* Reduce padding on card components */
+  .glass-card {
+    padding: 0.75rem;
+  }
+  /* Ensure tables are scrollable */
+  table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+/* Additional mobile responsiveness */
+@media (max-width: 640px) {
+  /* Header layout: stack items vertically */
+  header > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+  /* Auth modal full width adjustment */
+  #auth-modal > div {
+    width: 95% !important;
+    max-width: 95% !important;
+  }
+} 
+/* Additional mobile fixes */
+body { overflow-x: hidden; }
+.max-w-7xl { max-width: 100% !important; }
+header > div { justify-content: flex-start !important; }
+header > div {
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+}
+
+/* Ensure body does not overflow horizontally */
+body { overflow-x: hidden; }
+
+/* Ensure max width container fills screen */
+.max-w-7xl { max-width: 100% !important; }

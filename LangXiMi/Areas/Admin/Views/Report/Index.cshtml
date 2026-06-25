@@ -1,0 +1,201 @@
+@model LangXiMi.Models.RevenueReportViewModel
+@{
+    ViewData["Title"] = "Thống kê doanh thu";
+}
+
+<!-- Filter Form -->
+<div class="admin-card p-4 mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Thống kê theo</label>
+            <select name="period" class="form-select">
+                <option value="day" selected="@(Model.Period == "day")">Theo ngày</option>
+                <option value="month" selected="@(Model.Period == "month")">Theo tháng</option>
+                <option value="quarter" selected="@(Model.Period == "quarter")">Theo quý</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Từ ngày</label>
+            <input type="date" name="from" class="form-control" value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Đến ngày</label>
+            <input type="date" name="to" class="form-control" value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel me-1"></i>Lọc</button>
+        </div>
+    </form>
+</div>
+
+<!-- Summary Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon revenue"><i class="bi bi-cash-coin"></i></div>
+            <div>
+                <div class="stat-value">@Model.TotalRevenue.ToString("N0")₫</div>
+                <div class="stat-label">Tổng doanh thu</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon orders"><i class="bi bi-receipt"></i></div>
+            <div>
+                <div class="stat-value">@Model.TotalOrders</div>
+                <div class="stat-label">Tổng đơn hàng</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Chart -->
+    <div class="col-lg-8">
+        <div class="admin-card p-4 h-100 shadow-sm">
+            <h6 class="fw-bold mb-4"><i class="bi bi-bar-chart-fill me-2" style="color: var(--lxm-primary)"></i>Biểu đồ doanh thu</h6>
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="col-lg-4">
+        <div class="admin-card p-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-trophy me-2 text-warning"></i>Top bánh bán chạy</h6>
+            @if (!Model.TopProducts.Any())
+            {
+                <p class="text-muted text-center">Không có dữ liệu.</p>
+            }
+            else
+            {
+                <div class="d-flex flex-column gap-2">
+                    @{ int rank = 1; }
+                    @foreach (var tp in Model.TopProducts)
+                    {
+                        <div class="d-flex align-items-center gap-2 py-1 border-bottom">
+                            <span class="badge rounded-pill @(rank <= 3 ? "bg-warning text-dark" : "bg-secondary")">@rank</span>
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold small">@tp.ProductName</div>
+                                <div class="text-muted" style="font-size:.72rem">@tp.TotalSold SP – @tp.TotalRevenue.ToString("N0")₫</div>
+                            </div>
+                        </div>
+                        rank++;
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script>
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartData.Select(d => d.Label)));
+        const revenues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartData.Select(d => d.Revenue)));
+        const orders = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartData.Select(d => d.OrderCount)));
+
+        // Gradient màu cho cột doanh thu
+        const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+        gradient.addColorStop(0, 'rgba(201, 112, 78, 0.85)'); // Màu chính
+        gradient.addColorStop(1, 'rgba(201, 112, 78, 0.15)'); // Màu nhạt
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Doanh thu (₫)',
+                        data: revenues,
+                        backgroundColor: gradient,
+                        borderColor: '#c9704e',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#b05c3e',
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Số đơn',
+                        data: orders,
+                        type: 'line',
+                        borderColor: '#1565c0',
+                        backgroundColor: '#1565c0',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#1565c0',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.4, // Đường cong mượt
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { 
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: { family: "'Inter', sans-serif", size: 13, weight: '500' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(45, 31, 26, 0.9)',
+                        titleFont: { family: "'Inter', sans-serif", size: 14 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 13 },
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.datasetIndex === 0) {
+                                    label += new Intl.NumberFormat('vi-VN').format(context.parsed.y) + '₫';
+                                } else {
+                                    label += context.parsed.y;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: "'Inter', sans-serif" } }
+                    },
+                    y: {
+                        type: 'linear', position: 'left',
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], color: '#e9ecef' },
+                        ticks: { 
+                            font: { family: "'Inter', sans-serif" },
+                            callback: v => v.toLocaleString('vi-VN') + '₫' 
+                        }
+                    },
+                    y1: {
+                        type: 'linear', position: 'right',
+                        beginAtZero: true,
+                        grid: { drawOnChartArea: false },
+                        ticks: { 
+                            stepSize: 1,
+                            font: { family: "'Inter', sans-serif" }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

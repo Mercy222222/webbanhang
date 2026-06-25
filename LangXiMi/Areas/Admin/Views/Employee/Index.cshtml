@@ -1,0 +1,77 @@
+@model List<LangXiMi.Models.Employee>
+@{
+    ViewData["Title"] = "Quản lý nhân viên";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted mb-0">Tổng: <strong>@Model.Count</strong> nhân viên</p>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>Thêm nhân viên</a>
+</div>
+
+<div class="admin-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table mb-0">
+            <thead>
+                <tr>
+                    <th>Mã NV</th>
+                    <th>Họ tên</th>
+                    <th>CCCD</th>
+                    <th>SĐT</th>
+                    <th class="text-center">Chức vụ</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Tài khoản</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
+                {
+                    var statusBadge = e.TrangThai switch {
+                        LangXiMi.Models.EmployeeStatus.DangLam => ("bg-success", "Đang làm"),
+                        LangXiMi.Models.EmployeeStatus.NghiPhep => ("bg-warning text-dark", "Nghỉ phép"),
+                        LangXiMi.Models.EmployeeStatus.DaNghi => ("bg-secondary", "Đã nghỉ"),
+                        _ => ("bg-secondary", "")
+                    };
+                    var posLabel = e.Position switch {
+                        LangXiMi.Models.EmployeePosition.QuanLy => "Quản lý",
+                        LangXiMi.Models.EmployeePosition.ThuNgan => "Thu ngân",
+                        LangXiMi.Models.EmployeePosition.ThoBanh => "Thợ bánh",
+                        _ => ""
+                    };
+                    <tr class="@(e.TrangThai == LangXiMi.Models.EmployeeStatus.DaNghi ? "table-secondary" : "")">
+                        <td class="fw-bold">@e.MaNhanVien</td>
+                        <td>@e.FullName</td>
+                        <td class="text-muted">@e.CCCD</td>
+                        <td class="text-muted">@e.Phone</td>
+                        <td class="text-center"><span class="badge bg-info text-dark">@posLabel</span></td>
+                        <td class="text-center"><span class="badge @statusBadge.Item1">@statusBadge.Item2</span></td>
+                        <td class="text-center">
+                            @if (e.UserId != null)
+                            {
+                                <i class="bi bi-check-circle text-success" title="Đã cấp TK"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-dash-circle text-muted" title="Chưa cấp"></i>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@e.EmployeeId" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+                            @if (e.TrangThai != LangXiMi.Models.EmployeeStatus.DaNghi)
+                            {
+                                <form asp-action="ToggleStatus" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@e.EmployeeId" />
+                                    <input type="hidden" name="status" value="@((int)LangXiMi.Models.EmployeeStatus.DaNghi)" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Cho nghỉ việc" onclick="return confirm('Xác nhận cho nhân viên này nghỉ việc?')">
+                                        <i class="bi bi-person-x"></i>
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

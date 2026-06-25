@@ -1,0 +1,212 @@
+@model List<LangXiMi.Models.Category>
+@{
+    ViewData["Title"] = "Trang chủ";
+    var featured = ViewBag.FeaturedProducts as List<LangXiMi.Models.Product> ?? new List<LangXiMi.Models.Product>();
+    // Icon mapping for categories
+    var categoryIcons = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "Bánh cupcake", "bi-flower1" },
+        { "Bánh macaron", "bi-circle-fill" },
+        { "Bánh mì ngọt", "bi-egg-fried" },
+        { "Bánh mousse", "bi-pentagon" },
+        { "Bánh sinh nhật", "bi-gift" },
+        { "Bánh kem", "bi-snow2" },
+        { "Bánh flan", "bi-star" }
+    };
+}
+
+<!-- HERO BANNER CAROUSEL -->
+<section class="lxm-hero-carousel-section py-4">
+    <div class="container">
+        <div id="heroCarousel" class="carousel slide lxm-hero-carousel shadow-sm" data-bs-ride="carousel">
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                @* 
+                Ví dụ render động từ Model (nếu có Model.Banners):
+                @for (int i = 0; i < Model.Banners.Count; i++)
+                {
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="@i" 
+                            class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" 
+                            aria-label="Slide @(i + 1)"></button>
+                }
+                *@
+                
+                <!-- Dữ liệu tĩnh mẫu -->
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <!-- Carousel Items -->
+            <div class="carousel-inner">
+                @*
+                Ví dụ render động từ Model:
+                @for (int i = 0; i < Model.Banners.Count; i++)
+                {
+                    var banner = Model.Banners[i];
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="@banner.ImageUrl" class="d-block w-100" alt="@banner.Title">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>@banner.Title</h5>
+                            <p>@banner.Description</p>
+                        </div>
+                    </div>
+                }
+                *@
+
+                <!-- Slide tĩnh mẫu 1 -->
+                <div class="carousel-item active" data-bs-interval="5000">
+                    <img src="/images/banner1.jpg" class="d-block w-100" alt="Banner 1" onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'">
+                    <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(45,31,26,0.6); padding: 20px; border-radius: 12px; bottom: 40px; right: auto; left: 10%; max-width: 500px;">
+                        <h2 class="fw-bold text-white mb-2" style="font-family: 'Playfair Display', serif;">Mùa Hè Ngọt Ngào</h2>
+                        <p class="text-white opacity-75 mb-3">Thưởng thức bộ sưu tập bánh kem mát lạnh cho những ngày oi bức.</p>
+                        <a href="/Product" class="btn btn-primary px-4 py-2">Khám phá ngay</a>
+                    </div>
+                </div>
+                
+                <!-- Slide tĩnh mẫu 2 -->
+                <div class="carousel-item" data-bs-interval="5000">
+                    <img src="/images/banner2.jpg" class="d-block w-100" alt="Banner 2" onerror="this.src='https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'">
+                    <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(45,31,26,0.6); padding: 20px; border-radius: 12px; bottom: 40px; right: auto; left: 10%; max-width: 500px;">
+                        <h2 class="fw-bold text-white mb-2" style="font-family: 'Playfair Display', serif;">Macaron Đủ Vị</h2>
+                        <p class="text-white opacity-75 mb-3">Hương vị tinh tế từ Pháp, giòn rụm bên ngoài, mềm mại bên trong.</p>
+                        <a href="/Product" class="btn btn-primary px-4 py-2">Đặt hàng ngay</a>
+                    </div>
+                </div>
+
+                <!-- Slide tĩnh mẫu 3 -->
+                <div class="carousel-item" data-bs-interval="5000">
+                    <img src="/images/banner3.jpg" class="d-block w-100" alt="Banner 3" onerror="this.src='https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'">
+                    <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(45,31,26,0.6); padding: 20px; border-radius: 12px; bottom: 40px; right: auto; left: 10%; max-width: 500px;">
+                        <h2 class="fw-bold text-white mb-2" style="font-family: 'Playfair Display', serif;">Tiệc Sinh Nhật</h2>
+                        <p class="text-white opacity-75 mb-3">Tạo bất ngờ cho người thương với những mẫu bánh độc đáo.</p>
+                        <a href="/Product" class="btn btn-primary px-4 py-2">Xem mẫu bánh</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- DANH MỤC -->
+<section id="categories" class="py-5">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h2 class="fw-bold mb-1" style="font-family:'Playfair Display',serif;">Danh mục</h2>
+                <p class="text-muted mb-0">Chọn loại bánh yêu thích của bạn</p>
+            </div>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary">
+                Xem tất cả <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var cat in Model)
+            {
+                var iconClass = categoryIcons.ContainsKey(cat.CategoryName) ? categoryIcons[cat.CategoryName] : "bi-box-seam";
+                var productCount = cat.Products.Count;
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a asp-controller="Product" asp-action="Index" asp-route-categoryId="@cat.CategoryId"
+                       class="lxm-category-card d-block text-center text-decoration-none">
+                        <div class="lxm-category-icon-wrap mb-3">
+                            <i class="bi @iconClass"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1">@cat.CategoryName</h6>
+                        <small class="text-muted">@productCount sản phẩm</small>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- SẢN PHẨM NỔI BẬT -->
+@if (featured.Any())
+{
+    <section class="py-5" style="background: linear-gradient(180deg, #fff 0%, var(--lxm-light) 100%);">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1" style="font-family:'Playfair Display',serif;">⭐ Nổi bật</h2>
+                    <p class="text-muted mb-0">Những chiếc bánh được yêu thích nhất</p>
+                </div>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary">
+                    Xem tất cả <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+
+            <div class="row g-4">
+                @foreach (var p in featured)
+                {
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="lxm-product-card h-100">
+                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@p.ProductId"
+                               class="d-block lxm-img-wrap">
+                                <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/no-image.jpg" : p.ImageUrl)"
+                                     alt="@p.ProductName" class="lxm-product-img" />
+                            </a>
+                            <div class="lxm-product-body">
+                                <span class="lxm-category-tag">@p.Category?.CategoryName</span>
+                                <h5 class="lxm-product-name mt-1">@p.ProductName</h5>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="lxm-price">@p.Price.ToString("N0")₫</span>
+                                    @if (p.StockQuantity > 0)
+                                    {
+                                        <form asp-controller="Order" asp-action="AddToCart" method="post" class="d-inline form-add-to-cart">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="productId" value="@p.ProductId" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn btn-primary btn-sm lxm-add-btn" title="Thêm vào giỏ">
+                                                <i class="bi bi-bag-plus"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- ĐIỂM NỔI BẬT -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="lxm-card p-4 h-100">
+                    <div class="mb-3" style="font-size:2.5rem;">🧁</div>
+                    <h5 class="fw-bold">Thủ công 100%</h5>
+                    <p class="text-muted mb-0">Mỗi chiếc bánh được làm hoàn toàn bằng tay với tình yêu và sự tỉ mỉ.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="lxm-card p-4 h-100">
+                    <div class="mb-3" style="font-size:2.5rem;">🌿</div>
+                    <h5 class="fw-bold">Nguyên liệu tươi</h5>
+                    <p class="text-muted mb-0">Chỉ sử dụng nguyên liệu nhập khẩu tươi ngon, không chất bảo quản.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="lxm-card p-4 h-100">
+                    <div class="mb-3" style="font-size:2.5rem;">🚚</div>
+                    <h5 class="fw-bold">Giao hàng nhanh</h5>
+                    <p class="text-muted mb-0">Giao hàng miễn phí trong nội thành TP.HCM trong 2 giờ.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

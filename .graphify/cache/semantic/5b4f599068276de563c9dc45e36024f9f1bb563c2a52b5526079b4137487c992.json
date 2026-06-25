@@ -1,0 +1,1 @@
+{"nodes":[{"id":"auth_js_auth_system","label":"User Authentication Module","file_type":"code","source_file":"auth.js","source_location":null,"source_url":null,"captured_at":null,"author":null,"contributor":null,"rationale":"Handles login/registration modal interactions and manages user credentials locally."}],"edges":[],"hyperedges":[]}

@@ -1,0 +1,15 @@
+# .understandignore
+
+# --- From .gitignore ---
+# .dolt/
+# *.db
+# .beads-credential-key
+# .beads/proxieddb/
+# .agent/
+# .gemini/
+# .agents/
+# get-shit-done/
+# taste-skill/
+# Understand-Anything/
+# andrej-karpathy-skills/
+

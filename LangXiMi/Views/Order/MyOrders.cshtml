@@ -1,0 +1,157 @@
+@model List<LangXiMi.Models.Order>
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+    string email = ViewBag.Email ?? "";
+}
+
+<div class="container my-5">
+    <h1 class="lxm-page-title mb-4"><i class="bi bi-clock-history me-2"></i>Đơn hàng của tôi</h1>
+
+    <!-- Form tra cứu theo email -->
+    <div class="lxm-card p-4 mb-4">
+        <form asp-action="MyOrders" method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Email đã đặt hàng</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" name="email" value="@email" class="form-control"
+                           placeholder="Nhập email để tra cứu đơn hàng..." id="emailLookup" required />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-1"></i>Tra cứu
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (!string.IsNullOrEmpty(email))
+    {
+        @if (Model == null || !Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-inbox display-1 text-muted opacity-25"></i>
+                <h5 class="text-muted mt-3">Không tìm thấy đơn hàng nào với email "@email"</h5>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mb-3">
+                Tìm thấy <strong>@Model.Count</strong> đơn hàng cho email <strong>@email</strong>
+            </p>
+
+            @foreach (var order in Model)
+            {
+                <!-- Xác định màu badge theo trạng thái -->
+                var badgeClass = order.Status switch {
+                    "Hoàn thành"     => "bg-success",
+                    "Đang giao hàng" => "bg-info",
+                    "Đang làm"       => "bg-primary",
+                    "Đã hủy"         => "bg-danger",
+                    _                => "bg-warning text-dark"  // Chờ xác nhận
+                };
+
+                <!-- Kiểm tra BR03/BR04 có được hủy không -->
+                bool canCancel = LangXiMi.Models.OrderStatus.CanCancel(order.Status);
+
+                <div class="lxm-card p-4 mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <span class="fw-bold fs-5 text-primary">#@order.OrderId</span>
+                                <span class="badge @badgeClass px-3 py-2">@order.Status</span>
+                                <span class="text-muted small">
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    @order.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+                            </div>
+                            <div class="mt-2">
+                                <span class="text-muted small me-3">
+                                    <i class="bi bi-box me-1"></i>@order.OrderDetails.Count sản phẩm
+                                </span>
+                                <span class="fw-semibold text-primary">
+                                    @order.TotalAmount.ToString("N0")₫
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            @if (canCancel)
+                            {
+                                <!-- BR03/BR04: Hiển thị nút hủy nếu đủ điều kiện -->
+                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal"
+                                        data-order-id="@order.OrderId"
+                                        data-order-status="@order.Status"
+                                        id="btnCancel_@order.OrderId">
+                                    <i class="bi bi-x-circle me-1"></i>Hủy đơn
+                                </button>
+                            }
+                            else
+                            {
+                                <!-- BR03/BR04: Không cho hủy → tooltip giải thích -->
+                                <span class="text-muted small" data-bs-toggle="tooltip"
+                                      title="Không thể hủy khi đơn đang ở trạng thái '@order.Status'">
+                                    <i class="bi bi-lock me-1"></i>Không thể hủy
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
+
+<!-- ── Modal xác nhận hủy đơn (BR04) ── -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="cancelModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Xác nhận hủy đơn
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <p>Bạn có chắc chắn muốn hủy đơn hàng <strong id="modalOrderId"></strong>?</p>
+                <div class="alert alert-warning py-2 small">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>BR03/BR04:</strong> Chỉ được hủy khi đơn ở trạng thái
+                    "<strong>Chờ xác nhận</strong>" hoặc "<strong>Đang làm</strong>".
+                    Đơn đang ở: <span id="modalOrderStatus" class="fw-semibold"></span>.
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không, giữ lại</button>
+                <form asp-action="Cancel" method="post" id="cancelForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="orderId" id="cancelOrderId" />
+                    <input type="hidden" name="returnEmail" value="@email" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-x-circle me-1"></i>Xác nhận hủy
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Truyền dữ liệu vào modal khi click nút hủy
+    document.getElementById('cancelModal').addEventListener('show.bs.modal', function (event) {
+        const btn = event.relatedTarget;
+        document.getElementById('cancelOrderId').value = btn.dataset.orderId;
+        document.getElementById('modalOrderId').textContent = '#' + btn.dataset.orderId;
+        document.getElementById('modalOrderStatus').textContent = btn.dataset.orderStatus;
+    });
+
+    // Kích hoạt tooltip Bootstrap
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+        new bootstrap.Tooltip(el);
+    });
+</script>
+}

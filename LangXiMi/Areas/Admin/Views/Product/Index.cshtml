@@ -1,0 +1,69 @@
+@model List<LangXiMi.Models.Product>
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted mb-0">Tổng: <strong>@Model.Count</strong> sản phẩm</p>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Thêm sản phẩm</a>
+</div>
+
+<div class="admin-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table mb-0">
+            <thead>
+                <tr>
+                    <th>Ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th class="text-end">Giá</th>
+                    <th class="text-center">Tồn kho</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr class="@(!p.IsActive ? "table-secondary" : "")">
+                        <td>
+                            <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/no-image.jpg" : p.ImageUrl)"
+                                 class="rounded" style="width:45px;height:45px;object-fit:cover" />
+                        </td>
+                        <td class="fw-semibold">@p.ProductName</td>
+                        <td class="text-muted">@p.Category?.CategoryName</td>
+                        <td class="text-end fw-semibold">@p.Price.ToString("N0")₫</td>
+                        <td class="text-center">
+                            @if (p.StockQuantity == 0)
+                            {
+                                <span class="badge bg-danger">Hết hàng</span>
+                            }
+                            else if (p.StockQuantity <= 5)
+                            {
+                                <span class="badge bg-warning text-dark">@p.StockQuantity</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@p.StockQuantity</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <form asp-action="ToggleActive" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.ProductId" />
+                                <button type="submit" class="btn btn-sm @(p.IsActive ? "btn-outline-success" : "btn-outline-secondary")" title="@(p.IsActive ? "Đang bán" : "Đã ẩn")">
+                                    <i class="bi @(p.IsActive ? "bi-eye" : "bi-eye-slash")"></i>
+                                </button>
+                            </form>
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@p.ProductId" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

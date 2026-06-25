@@ -1,0 +1,140 @@
+@model LangXiMi.Models.Order
+@{
+    ViewData["Title"] = $"Đơn hàng #{Model.OrderId}";
+    var badgeClass = Model.Status switch {
+        "Chờ xác nhận" => "badge-cho-xac-nhan",
+        "Đang làm" => "badge-dang-lam",
+        "Đang giao hàng" => "badge-dang-giao",
+        "Hoàn thành" => "badge-hoan-thanh",
+        "Đã hủy" => "badge-da-huy",
+        _ => ""
+    };
+    var statuses = new[] { "Chờ xác nhận", "Đang làm", "Đang giao hàng", "Hoàn thành" };
+    var currentIdx = Array.IndexOf(statuses, Model.Status);
+}
+
+<a asp-action="Index" class="btn btn-sm btn-outline-secondary mb-3"><i class="bi bi-arrow-left me-1"></i>Quay lại</a>
+
+<div class="row g-4">
+    <!-- Order Info -->
+    <div class="col-lg-8">
+        <!-- Status Stepper -->
+        <div class="admin-card p-4 mb-4">
+            <h6 class="fw-bold mb-3">Tiến trình đơn hàng</h6>
+            <div class="d-flex justify-content-between position-relative" style="padding:0 2rem">
+                <div style="position:absolute;top:15px;left:2rem;right:2rem;height:3px;background:#e5e7eb;z-index:0"></div>
+                @for (int i = 0; i < statuses.Length; i++)
+                {
+                    var done = i <= currentIdx && Model.Status != "Đã hủy";
+                    var isCurrent = i == currentIdx && Model.Status != "Đã hủy";
+                    <div class="text-center position-relative" style="z-index:1">
+                        <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:.8rem;font-weight:700;
+                            background:@(done ? "#2e7d32" : "#e5e7eb");color:@(done ? "#fff" : "#9ca3af");
+                            border:@(isCurrent ? "3px solid #66bb6a" : "none")">
+                            @if (done && !isCurrent) { <i class="bi bi-check"></i> } else { @(i+1) }
+                        </div>
+                        <div class="small mt-1 @(done ? "fw-semibold" : "text-muted")" style="font-size:.72rem">@statuses[i]</div>
+                    </div>
+                }
+            </div>
+            @if (Model.Status == "Đã hủy")
+            {
+                <div class="alert alert-danger mt-3 mb-0 text-center"><i class="bi bi-x-circle me-1"></i>Đơn hàng đã bị hủy</div>
+            }
+        </div>
+
+        <!-- Order Details Table -->
+        <div class="admin-card p-4">
+            <h6 class="fw-bold mb-3">Chi tiết sản phẩm</h6>
+            <div class="table-responsive">
+                <table class="table admin-table mb-0">
+                    <thead><tr><th>Sản phẩm</th><th class="text-center">SL</th><th class="text-end">Đơn giá</th><th class="text-end">Thành tiền</th></tr></thead>
+                    <tbody>
+                        @foreach (var d in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="@(d.Product?.ImageUrl ?? "/images/no-image.jpg")" class="rounded" style="width:40px;height:40px;object-fit:cover" />
+                                        <span>@d.Product?.ProductName</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">@d.Quantity</td>
+                                <td class="text-end">@d.UnitPrice.ToString("N0")₫</td>
+                                <td class="text-end fw-bold">@d.LineTotal.ToString("N0")₫</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-light">
+                            <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
+                            <td class="text-end fw-bold fs-5" style="color:#c9704e">@Model.TotalAmount.ToString("N0")₫</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar: Customer + Actions -->
+    <div class="col-lg-4">
+        <div class="admin-card p-4 mb-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-person me-2"></i>Khách hàng</h6>
+            <div class="mb-2"><strong>@Model.Customer?.FullName</strong></div>
+            <div class="small text-muted mb-1"><i class="bi bi-envelope me-1"></i>@Model.Customer?.Email</div>
+            <div class="small text-muted mb-1"><i class="bi bi-telephone me-1"></i>@Model.Customer?.Phone</div>
+            <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>@Model.Customer?.Address</div>
+        </div>
+
+        <div class="admin-card p-4 mb-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Thông tin đơn</h6>
+            <div class="d-flex justify-content-between mb-2 small">
+                <span class="text-muted">Mã đơn</span><span class="fw-bold">#@Model.OrderId</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 small">
+                <span class="text-muted">Ngày đặt</span><span>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+            <div class="d-flex justify-content-between small">
+                <span class="text-muted">Trạng thái</span><span class="badge-status @badgeClass">@Model.Status</span>
+            </div>
+        </div>
+
+        @if (Model.Status != "Hoàn thành" && Model.Status != "Đã hủy")
+        {
+            <div class="admin-card p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-gear me-2"></i>Cập nhật trạng thái</h6>
+                <form asp-action="UpdateStatus" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <div class="d-grid gap-2">
+                        @if (Model.Status == "Chờ xác nhận")
+                        {
+                            <button type="submit" name="status" value="Đang làm" class="btn btn-primary btn-sm">
+                                <i class="bi bi-play-circle me-1"></i>Xác nhận & Chế biến
+                            </button>
+                        }
+                        @if (Model.Status == "Đang làm")
+                        {
+                            <button type="submit" name="status" value="Đang giao hàng" class="btn btn-success btn-sm">
+                                <i class="bi bi-truck me-1"></i>Bắt đầu giao hàng
+                            </button>
+                        }
+                        @if (Model.Status == "Đang giao hàng")
+                        {
+                            <button type="submit" name="status" value="Hoàn thành" class="btn btn-info btn-sm text-white">
+                                <i class="bi bi-check-circle me-1"></i>Hoàn thành
+                            </button>
+                        }
+                        @if (Model.Status == "Chờ xác nhận" || Model.Status == "Đang làm")
+                        {
+                            <button type="submit" name="status" value="Đã hủy" class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('Bạn chắc chắn muốn hủy đơn này?')">
+                                <i class="bi bi-x-circle me-1"></i>Hủy đơn
+                            </button>
+                        }
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+</div>

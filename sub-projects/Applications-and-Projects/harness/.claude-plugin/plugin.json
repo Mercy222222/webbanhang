@@ -1,0 +1,11 @@
+{
+  "name": "harness",
+  "description": "Harness — Agent Team & Skill Architect meta-skill for defining agent roles, team configurations, and specialized skills.",
+  "author": {
+    "name": "Mercy222222"
+  },
+  "homepage": "https://github.com/gastownhall/webbanhang",
+  "repository": "https://github.com/gastownhall/webbanhang",
+  "license": "MIT",
+  "skills": "./skills"
+}

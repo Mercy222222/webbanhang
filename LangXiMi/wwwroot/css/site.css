@@ -1,0 +1,303 @@
+/* ============================================================
+   LangXiMi – Custom CSS (Bootstrap 5 overrides + custom theme)
+   Font: Playfair Display (headings) + Inter (body)
+   Palette:
+     Primary   : #c9704e (nâu bánh)
+     Accent    : #f4c2a1 (cam nhạt)
+     Dark      : #2d1f1a (nâu đậm)
+     Light BG  : #fdf8f4 (kem nhạt)
+   ============================================================ */
+
+:root {
+    --lxm-primary  : #c9704e;
+    --lxm-accent   : #f4c2a1;
+    --lxm-dark     : #2d1f1a;
+    --lxm-light    : #fdf8f4;
+    --lxm-border   : #e8d5c4;
+    --lxm-shadow   : 0 4px 24px rgba(201,112,78,.12);
+    --lxm-radius   : 16px;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--lxm-light);
+    color: var(--lxm-dark);
+}
+
+h1, h2, h3, .lxm-hero-title, .navbar-brand {
+    font-family: 'Playfair Display', serif;
+}
+
+/* ── Bootstrap Primary Override ──────────────────────────── */
+.btn-primary, .bg-primary { background-color: var(--lxm-primary) !important; border-color: var(--lxm-primary) !important; }
+.btn-primary:hover        { background-color: #b05c3e !important; border-color: #b05c3e !important; }
+.btn-outline-primary      { color: var(--lxm-primary) !important; border-color: var(--lxm-primary) !important; }
+.btn-outline-primary:hover{ background-color: var(--lxm-primary) !important; color: #fff !important; }
+.text-primary             { color: var(--lxm-primary) !important; }
+a                         { color: var(--lxm-primary); }
+a:hover                   { color: #b05c3e; }
+
+/* ── Navbar ───────────────────────────────────────────────── */
+.lxm-navbar {
+    background: linear-gradient(135deg, var(--lxm-dark) 0%, #4a2c20 100%);
+    box-shadow: 0 2px 20px rgba(0,0,0,.25);
+    padding: .9rem 0;
+}
+.lxm-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--lxm-accent) !important;
+}
+.lxm-navbar .nav-link {
+    color: rgba(255,255,255,.85) !important;
+    font-weight: 500;
+    transition: color .2s;
+}
+.lxm-navbar .nav-link:hover { color: var(--lxm-accent) !important; }
+.lxm-cart-btn {
+    border-color: rgba(255,255,255,.4) !important;
+    color: #fff !important;
+    transition: all .2s;
+}
+.lxm-cart-btn:hover {
+    background: var(--lxm-accent) !important;
+    border-color: var(--lxm-accent) !important;
+    color: var(--lxm-dark) !important;
+}
+
+/* ── Homepage Hero Carousel ────────────────────────────────── */
+.lxm-hero-carousel-section {
+    background-color: var(--lxm-light);
+}
+
+.lxm-hero-carousel {
+    border-radius: var(--lxm-radius);
+    overflow: hidden; /* Cắt phần ảnh thừa để giữ bo góc */
+}
+
+.lxm-hero-carousel .carousel-inner {
+    border-radius: var(--lxm-radius);
+}
+
+.lxm-hero-carousel .carousel-item img {
+    height: 400px;
+    object-fit: cover;
+    border-radius: var(--lxm-radius);
+}
+
+/* ── Carousel Indicators Override ─────────────────────────── */
+.lxm-hero-carousel .carousel-indicators {
+    margin-bottom: 1rem;
+    gap: 8px; /* Khoảng cách giữa các dấu chấm */
+    align-items: center;
+}
+
+.lxm-hero-carousel .carousel-indicators button {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important; /* Biến thành hình tròn */
+    background-color: #a0aec0 !important; /* Màu xanh/xám nhạt mặc định */
+    border: none !important;
+    opacity: 0.7;
+    transition: all 0.4s ease !important;
+    margin: 0 !important;
+    text-indent: -999px;
+}
+
+.lxm-hero-carousel .carousel-indicators button.active {
+    width: 30px !important; /* Kéo dài thành hình viên thuốc */
+    border-radius: 10px !important; /* Bo cong hình viên thuốc */
+    background-color: #2b8a3e !important; /* Màu xanh lá cây đậm */
+    opacity: 1;
+}
+
+/* ── Category Cards (Homepage) ───────────────────────────── */
+.lxm-category-card {
+    background: #fff;
+    border: 1px solid var(--lxm-border);
+    border-radius: var(--lxm-radius);
+    padding: 1.5rem 1rem;
+    transition: all .3s ease;
+    box-shadow: 0 2px 12px rgba(201,112,78,.06);
+}
+.lxm-category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(201,112,78,.18);
+    border-color: var(--lxm-primary);
+}
+.lxm-category-card h6 { color: var(--lxm-dark); }
+.lxm-category-icon-wrap {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--lxm-accent), #fde8d8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: transform .3s;
+}
+.lxm-category-card:hover .lxm-category-icon-wrap {
+    transform: scale(1.1);
+}
+.lxm-category-icon-wrap i {
+    font-size: 1.6rem;
+    color: var(--lxm-primary);
+}
+
+/* ── Product Hero Banner ─────────────────────────────────── */
+.lxm-hero {
+    background: linear-gradient(135deg, var(--lxm-dark) 0%, #8b4513 60%, var(--lxm-primary) 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.lxm-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.lxm-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,.3);
+    position: relative;
+}
+.lxm-hero-sub {
+    font-size: 1.1rem;
+    opacity: .85;
+    position: relative;
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+.lxm-card {
+    background: #fff;
+    border: 1px solid var(--lxm-border);
+    border-radius: var(--lxm-radius);
+    box-shadow: var(--lxm-shadow);
+}
+
+/* ── Product Card ─────────────────────────────────────────── */
+.lxm-product-card {
+    background: #fff;
+    border: 1px solid var(--lxm-border);
+    border-radius: var(--lxm-radius);
+    box-shadow: var(--lxm-shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.lxm-product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(201,112,78,.22);
+}
+.lxm-img-wrap {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    height: 200px;
+}
+.lxm-product-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+}
+.lxm-product-card:hover .lxm-product-img { transform: scale(1.06); }
+
+/* Stock badges */
+.lxm-badge-soldout, .lxm-badge-low {
+    position: absolute; top: 10px; left: 10px;
+    font-size: .75rem; font-weight: 600;
+    padding: .3em .7em; border-radius: 20px;
+}
+.lxm-badge-soldout { background: #dc3545; color: #fff; }
+.lxm-badge-low     { background: #ffc107; color: #333; }
+
+.lxm-product-body   { padding: 1rem 1.2rem 1.2rem; flex-grow: 1; display: flex; flex-direction: column; }
+.lxm-category-tag   { font-size: .75rem; font-weight: 600; color: var(--lxm-primary); text-transform: uppercase; letter-spacing: .5px; }
+.lxm-product-name   { font-size: 1rem; font-weight: 600; color: var(--lxm-dark); line-height: 1.4; flex-grow: 1; }
+.lxm-price          { font-size: 1.15rem; font-weight: 700; color: var(--lxm-primary); }
+.lxm-add-btn        { border-radius: 50% !important; width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; }
+
+/* ── Category Sidebar Links ───────────────────────────────── */
+.lxm-cat-link {
+    display: flex; align-items: center;
+    padding: .5rem .85rem; border-radius: 10px;
+    font-weight: 500; font-size: .9rem;
+    color: var(--lxm-dark);
+    text-decoration: none;
+    transition: background .2s, color .2s;
+    border: 1px solid transparent;
+}
+.lxm-cat-link:hover { background: var(--lxm-accent); color: var(--lxm-dark); border-color: var(--lxm-border); }
+.lxm-cat-link.active { background: var(--lxm-primary); color: #fff; border-color: var(--lxm-primary); }
+
+/* ── Page Titles ─────────────────────────────────────────── */
+.lxm-page-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--lxm-dark);
+    border-bottom: 3px solid var(--lxm-accent);
+    padding-bottom: .5rem;
+    display: inline-block;
+}
+
+/* ── Order Button ─────────────────────────────────────────── */
+.lxm-order-btn {
+    background: linear-gradient(135deg, var(--lxm-primary), #b05c3e) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    letter-spacing: .5px;
+    transition: opacity .2s, transform .15s !important;
+}
+.lxm-order-btn:hover { opacity: .9; transform: translateY(-2px); }
+
+/* ── Order Confirmation ───────────────────────────────────── */
+.lxm-confirm-box { background: var(--lxm-light); border: 1px solid var(--lxm-border); }
+@keyframes bounceIn {
+    0%   { transform: scale(.3); opacity: 0; }
+    50%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+/* ── Cart Drawer (Offcanvas) ─────────────────────────────── */
+.lxm-cart-drawer {
+    width: 400px !important;
+    max-width: 90vw;
+    border-left: 3px solid var(--lxm-accent) !important;
+}
+.lxm-cart-drawer .offcanvas-header {
+    background: var(--lxm-light);
+}
+.lxm-cart-drawer .offcanvas-body {
+    background: #fff;
+}
+.drawer-cart-item {
+    transition: background .2s;
+}
+.drawer-cart-item:hover {
+    background: var(--lxm-light);
+}
+#drawer-cart-footer {
+    background: var(--lxm-light);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.lxm-footer {
+    background: var(--lxm-dark);
+    color: rgba(255,255,255,.75);
+}
+.lxm-footer .fw-semibold { color: var(--lxm-accent); }
+
+/* ── Responsive Tweaks ───────────────────────────────────── */
+@media (max-width: 768px) {
+    .lxm-hero { padding: 2rem 0 !important; }
+    .lxm-hero-title { font-size: 1.7rem; }
+    .lxm-homepage-hero { min-height: auto; }
+    .lxm-hero-circle { width: 180px; height: 180px; }
+    .lxm-hero-circle span { font-size: 5rem !important; }
+    .lxm-cart-drawer { width: 100% !important; }
+}

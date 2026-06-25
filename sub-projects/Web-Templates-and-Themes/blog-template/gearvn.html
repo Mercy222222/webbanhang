@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEARVN | Hệ Thống Hi-End PC & Gaming Gear</title>
+  
+  <!-- CDNs -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="gearvn.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#e30019',
+            'brand-glow': 'rgba(227, 0, 25, 0.4)',
+            indigo: {
+              50: '#fff5f5',
+              100: '#ffe3e3',
+              200: '#ffc9c9',
+              300: '#ffa8a8',
+              400: '#ff8787',
+              500: '#ff6b6b',
+              600: '#e30019', // GearVN Red
+              700: '#c30013',
+              800: '#9f000f',
+              900: '#7e0009',
+              950: '#4a0003',
+            },
+            slate: {
+              50: '#fafafa',
+              100: '#f5f5f5',
+              200: '#e5e5e5',
+              300: '#d4d4d4',
+              400: '#a3a3a3',
+              500: '#737373',
+              600: '#525252',
+              700: '#404040',
+              800: '#1f1f23', // Dark grey surface
+              900: '#121214', // Very dark surface
+              950: '#0a0a0c', // Pure dark background
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    /* Smooth Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #e30019;
+      border-radius: 99px;
+    }
+    /* Neon glow effect on hover */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.45);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .tilt-effect:hover {
+      box-shadow: 0 0 25px rgba(227, 0, 25, 0.25);
+      border-color: #e30019;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0a0c] text-slate-200 min-h-screen font-sans flex flex-col">
+
+  <!-- ─── HEADER / NAVBAR ─── -->
+  <header class="sticky top-0 z-40 bg-[#0a0a0c]/70 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 h-16 flex justify-between items-center">
+      <!-- Logo -->
+      <a href="#" onclick="switchTab('store')" class="text-2xl font-black tracking-tight text-[#e30019] hover:text-[#ff3b4e] transition flex items-center gap-2">
+        <i class="fa-solid fa-gamepad"></i> GEARVN
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <button onclick="switchTab('store')" class="nav-btn-item text-indigo-600 dark:text-indigo-400">Cửa hàng</button>
+        <button onclick="switchTab('admin')" class="nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400">Trang quản trị (Mock)</button>
+        <a href="blog-template/index-portfolio.html" class="text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400 flex items-center gap-1">
+          <i class="fa-solid fa-arrow-left"></i> Portfolio
+        </a>
+      </nav>
+
+      <!-- Theme & Cart Controls -->
+      <div class="flex items-center gap-4">
+        <!-- Theme Toggle -->
+        <button id="theme-btn" onclick="toggleTheme()" class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition">
+          <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
+          <i class="fas fa-moon text-slate-500 block dark:hidden"></i>
+        </button>
+
+        <!-- Cart Button -->
+        <button onclick="openCart()" class="relative p-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20 transition flex items-center gap-2">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="cart-count" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-500 text-white rounded-full text-xs font-bold flex items-center justify-center">0</span>
+                  </button>
+          <div id="nav-auth-section" class="ml-4"></div>
+      </div>
+    </div>
+  </header>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/30 flex items-center justify-center hidden">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-80 relative">
+        <h2 id="auth-modal-title" class="text-xl font-bold mb-4">Đăng nhập</h2>
+        <div class="space-y-4">
+          <div id="auth-name-group" class="hidden">
+            <label class="block text-sm font-medium">Họ và Tên</label>
+            <input type="text" id="auth-name" class="w-full border rounded px-2 py-1" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Tên đăng nhập</label>
+            <input type="text" id="auth-username" class="w-full border rounded px-2 py-1" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Mật khẩu</label>
+            <input type="password" id="auth-password" class="w-full border rounded px-2 py-1" />
+          </div>
+        </div>
+        <div class="mt-4 flex justify-between items-center">
+          <button id="auth-submit-btn" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" onclick="handleAuthSubmit()">Đăng nhập</button>
+          <a href="javascript:void(0)" id="auth-toggle-link" class="text-sm text-indigo-600 hover:underline" data-mode="register">Chưa có tài khoản? Đăng ký</a>
+        </div>
+        <button class="absolute top-2 right-2 text-gray-500" onclick="hideAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <!-- Auth script -->
+    <script src="auth.js"></script>
+
+    <!-- ─── MAIN APP CONTENT ─── -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-8">
+
+    <!-- ========================================= -->
+    <!-- STORE TAB CONTENT                         -->
+    <!-- ========================================= -->
+    <div id="tab-store" class="space-y-8">
+      
+      <!-- Banner / Hero -->
+      <div class="relative rounded-2xl overflow-hidden glass-card p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border">
+        <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent pointer-events-none"></div>
+        <div class="space-y-4 max-w-lg text-center md:text-left z-10">
+          <span class="inline-block px-3 py-1 bg-red-100 dark:bg-red-950/30 text-[#e30019] text-xs font-bold uppercase tracking-wider rounded-full">Chào mừng đến với GEARVN</span>
+          <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-none">
+            Trải nghiệm Gaming <span class="bg-gradient-to-r from-red-500 to-amber-500 bg-clip-text text-transparent">Đỉnh Cao</span>
+          </h1>
+          <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base">
+            Hệ thống cửa hàng Hi-End Gaming Gear & Laptop hàng đầu Việt Nam. Cung cấp máy tính chơi game, linh kiện, màn hình cơ, chuột gaming chính hãng.
+          </p>
+        </div>
+        <div class="relative w-72 h-44 rounded-xl overflow-hidden shadow-2xl shadow-indigo-600/10 z-10">
+          <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="Hero" />
+        </div>
+      </div>
+
+      <!-- Search and Filter Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Filter Categories tabs -->
+        <div class="flex flex-wrap gap-2" id="category-filter-tabs">
+          <button onclick="filterCategory(0)" class="cat-tab-btn active px-4 py-2 rounded-xl border text-sm font-semibold bg-indigo-600 text-white border-indigo-600 shadow-md transition-all">Tất cả</button>
+          <button onclick="filterCategory(1)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Laptop Gaming</button>
+          <button onclick="filterCategory(2)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">PC GEARVN</button>
+          <button onclick="filterCategory(3)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Linh Kiện</button>
+          <button onclick="filterCategory(4)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Màn Hình</button>
+          <button onclick="filterCategory(5)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Bàn Phím Cơ</button>
+          <button onclick="filterCategory(6)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Chuột Gaming</button>
+          <button onclick="filterCategory(7)" class="cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all">Tai Nghe</button>
+        </div>
+
+        <!-- Search input -->
+        <div class="relative w-full md:w-80">
+          <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" id="search-input" oninput="handleSearch(this)" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl py-2 pl-10 pr-4 text-sm focus:border-indigo-500 focus:outline-none dark:text-white" placeholder="Tìm kiếm sản phẩm..." />
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Dynamic content filled by JS -->
+      </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- ADMIN TAB CONTENT                         -->
+    <!-- ========================================= -->
+    <div id="tab-admin" class="hidden space-y-8">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight">Mock Admin Dashboard</h2>
+        <span class="px-3 py-1 bg-rose-500 text-white rounded text-xs font-bold uppercase tracking-wider">Simulated Console</span>
+      </div>
+
+      <!-- Admin stats cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
+          <div class="space-y-1">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Doanh số</p>
+            <h3 id="admin-sales" class="text-2xl font-black">0 đ</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-xl"><i class="fa-solid fa-coins"></i></div>
+        </div>
+        <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
+          <div class="space-y-1">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Đơn hàng</p>
+            <h3 id="admin-orders-count" class="text-2xl font-black">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950/30 text-indigo-500 flex items-center justify-center text-xl"><i class="fa-solid fa-box"></i></div>
+        </div>
+        <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
+          <div class="space-y-1">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sản phẩm</p>
+            <h3 class="text-2xl font-black">9</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-950/30 text-cyan-500 flex items-center justify-center text-xl"><i class="fa-solid fa-cubes"></i></div>
+        </div>
+        <div class="glass-card border rounded-2xl p-6 shadow-sm flex items-center justify-between">
+          <div class="space-y-1">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Khách hàng</p>
+            <h3 class="text-2xl font-black">1</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-violet-100 dark:bg-violet-950/30 text-violet-500 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
+        </div>
+      </div>
+
+      <!-- Charts & Order Table -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Sales chart card -->
+        <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-1 space-y-4">
+          <h4 class="font-bold">Cơ cấu doanh mục sản phẩm</h4>
+          <div class="relative h-64">
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Orders Table Card -->
+        <div class="glass-card border rounded-2xl p-6 shadow-sm lg:col-span-2 space-y-4 overflow-hidden flex flex-col">
+          <h4 class="font-bold">Danh sách đơn hàng vừa đặt</h4>
+          <div class="flex-1 overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                  <th class="py-2.5">Mã ĐH</th>
+                  <th class="py-2.5">Thời gian</th>
+                  <th class="py-2.5">Họ tên / SĐT</th>
+                  <th class="py-2.5">Tổng tiền</th>
+                  <th class="py-2.5">Phương thức</th>
+                  <th class="py-2.5 text-center">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-list">
+                <!-- Dynamic rows filled by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-8 text-center text-sm text-slate-400 dark:text-slate-500 bg-white dark:bg-[#0f172a]">
+    <p>© 2026 GEARVN - Mock-SPA. Powered by HTML5 & Tailwind CSS.</p>
+  </footer>
+
+  <!-- ========================================= -->
+  <!-- MODAL / CART DRAWER OVERLAYS              -->
+  <!-- ========================================= -->
+
+  <!-- Cart Drawer -->
+  <div id="cart-drawer-overlay" onclick="closeCartOnOverlay(event)" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+    <div id="cart-drawer" class="absolute top-0 right-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <h3 class="text-lg font-bold"><i class="fa-solid fa-cart-shopping text-indigo-500"></i> Giỏ Hàng Của Bạn</h3>
+        <button onclick="closeCart()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Drawer Body (Items) -->
+      <div class="flex-1 overflow-y-auto py-4 space-y-4" id="cart-items-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-4">
+        <!-- Discount Section -->
+        <div class="flex gap-2">
+          <input type="text" id="coupon-input" class="flex-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs focus:outline-none dark:text-white" placeholder="Mã giảm giá (ví dụ: GIAM10)" />
+          <button onclick="applyCoupon()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs rounded-lg transition">Áp dụng</button>
+        </div>
+        <p id="coupon-feedback" class="text-xs font-semibold hidden"></p>
+
+        <!-- Summary -->
+        <div class="space-y-1.5 text-sm">
+          <div class="flex justify-between text-slate-500">
+            <span>Tạm tính:</span>
+            <span id="summary-subtotal">0 đ</span>
+          </div>
+          <div class="flex justify-between text-rose-500 font-semibold">
+            <span>Giảm giá:</span>
+            <span id="summary-discount">-0 đ</span>
+          </div>
+          <div class="flex justify-between text-lg font-bold">
+            <span>Tổng cộng:</span>
+            <span id="summary-total">0 đ</span>
+          </div>
+        </div>
+
+        <!-- Checkout Trigger -->
+        <button onclick="openCheckout()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 transition flex justify-center items-center gap-2">
+          <i class="fa-solid fa-credit-card"></i> Tiến Hành Đặt Hàng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Drawer -->
+  <div id="checkout-drawer-overlay" onclick="closeCheckoutOnOverlay(event)" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+    <div id="checkout-drawer" class="absolute top-0 right-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 overflow-y-auto">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
+        <h3 class="text-lg font-bold"><i class="fa-solid fa-circle-check text-indigo-500"></i> Hóa Đơn Đặt Hàng</h3>
+        <button onclick="closeCheckout()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl"><i class="fa-solid fa-arrow-left"></i></button>
+      </div>
+
+      <!-- Checkout Form -->
+      <form onsubmit="handlePlaceOrder(event)" class="space-y-4 flex-1">
+        <div class="space-y-1">
+          <label class="text-xs font-bold uppercase text-slate-500">Họ và Tên</label>
+          <input type="text" id="checkout-name" required class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2 text-sm focus:outline-none dark:text-white" placeholder="Họ tên người nhận" />
+        </div>
+        <div class="space-y-1">
+          <label class="text-xs font-bold uppercase text-slate-500">Số Điện Thoại</label>
+          <input type="tel" id="checkout-phone" required class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2 text-sm focus:outline-none dark:text-white" placeholder="Số điện thoại giao hàng" />
+        </div>
+        <div class="space-y-1">
+          <label class="text-xs font-bold uppercase text-slate-500">Địa Chỉ Giao Hàng</label>
+          <textarea id="checkout-address" required rows="2" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2 text-sm focus:outline-none dark:text-white resize-none" placeholder="Địa chỉ chi tiết nơi nhận"></textarea>
+        </div>
+        
+        <div class="space-y-2.5">
+          <label class="text-xs font-bold uppercase text-slate-500 block">Phương thức thanh toán</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex flex-col items-center justify-center border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 relative">
+              <input type="radio" name="payment" value="cod" checked onchange="togglePaymentUI()" class="absolute top-2 right-2 accent-indigo-600" />
+              <i class="fa-solid fa-truck text-lg mb-1.5 text-slate-400"></i>
+              <span class="text-xs font-bold">Thanh toán COD</span>
+            </label>
+            <label class="flex flex-col items-center justify-center border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 relative">
+              <input type="radio" name="payment" value="bank" onchange="togglePaymentUI()" class="absolute top-2 right-2 accent-indigo-600" />
+              <i class="fa-solid fa-building-columns text-lg mb-1.5 text-slate-400"></i>
+              <span class="text-xs font-bold">Chuyển khoản QR</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Bank Transfer View (Conditional) -->
+        <div id="bank-payment-details" class="hidden border border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-800/20 rounded-xl p-4 space-y-4">
+          <div class="flex flex-col items-center justify-center gap-3">
+            <img id="vietqr-checkout-img" src="" class="w-48 h-48 rounded-lg shadow-md border" alt="VietQR Checkout Code" />
+            <div class="text-center text-xs space-y-1 text-slate-600 dark:text-slate-400">
+              <p>Ngân hàng: <strong>BIDV (Ngân hàng Đầu tư và Phát triển VN)</strong></p>
+              <p>Chủ TK: <strong>VO HUU TRI</strong></p>
+              <p>Số TK: <strong class="text-indigo-600 dark:text-indigo-400">0979324949</strong></p>
+              <p>Nội dung CK: <strong class="text-rose-500 font-mono" id="vietqr-checkout-memo">TECH DH123</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-check"></i> Xác Nhận Đặt Hàng
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Product Detail Drawer -->
+  <div id="detail-drawer-overlay" onclick="closeDetailOnOverlay(event)" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+    <div id="detail-drawer" class="absolute top-0 right-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 overflow-y-auto">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
+        <h3 class="text-lg font-bold"><i class="fa-solid fa-circle-info text-indigo-500"></i> Chi Tiết Sản Phẩm</h3>
+        <button onclick="closeDetail()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Drawer Content -->
+      <div id="detail-content" class="flex-1 space-y-5">
+        <!-- Rendered dynamically -->
+      </div>
+      
+      <div class="border-t border-slate-200 dark:border-slate-800 pt-4 mt-6">
+        <button id="detail-add-btn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 transition flex justify-center items-center gap-2">
+          <i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── JAVASCRIPT LOGIC ─── -->
+  <script>
+    /* ─── MOCK DATABASE ─── */
+    const PRODUCTS = [
+      {
+        id: 1,
+        name: 'Laptop Gaming ASUS ROG Strix G16 (2024)',
+        desc: 'CPU Intel Core i7-13650HX, GPU RTX 4060 8GB, RAM 16GB DDR5, SSD 512GB PCIe, Màn hình 16" FHD+ IPS 165Hz.',
+        price: 35990000,
+        cat_id: 1,
+        image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=400&auto=format&fit=crop',
+        rating: 4.8,
+        reviews: 15,
+        specs: {
+          'Bộ vi xử lý': 'Intel Core i7-13650HX',
+          'Card màn hình': 'RTX 4060 8GB',
+          'RAM': '16GB DDR5',
+          'Bộ nhớ trong': '512GB PCIe SSD',
+          'Màn hình': '16" FHD+ IPS 165Hz'
+        }
+      },
+      {
+        id: 2,
+        name: 'Laptop Gaming Acer Predator Helios Neo 16',
+        desc: 'CPU Intel Core i7-14700HX, GPU RTX 4060 8GB, RAM 16GB DDR5, SSD 512GB PCIe, Màn hình 16" WQXGA 240Hz.',
+        price: 37490000,
+        cat_id: 1,
+        image: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=400&auto=format&fit=crop',
+        rating: 4.9,
+        reviews: 22,
+        specs: {
+          'Bộ vi xử lý': 'Intel Core i7-14700HX',
+          'Card màn hình': 'RTX 4060 8GB',
+          'RAM': '16GB DDR5',
+          'Bộ nhớ trong': '512GB PCIe SSD',
+          'Màn hình': '16" WQXGA 240Hz'
+        }
+      },
+      {
+        id: 3,
+        name: 'PC GEARVN G-Shield Intel (14th Gen)',
+        desc: 'Case máy tính GEARVN tối ưu hóa hiệu năng chơi game, Intel Core i5-14400F, RAM 16GB, SSD 512GB, RTX 4060.',
+        price: 19990000,
+        cat_id: 2,
+        image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?q=80&w=400&auto=format&fit=crop',
+        rating: 4.7,
+        reviews: 34,
+        specs: {
+          'Bộ vi xử lý': 'Intel Core i5-14400F',
+          'Card màn hình': 'GeForce RTX 4060',
+          'RAM': '16GB DDR5',
+          'Bộ nhớ trong': '512GB SSD',
+          'Vỏ case': 'GEARVN G-Shield Gaming'
+        }
+      },
+      {
+        id: 4,
+        name: 'Card Màn Hình ASUS ROG Strix GeForce RTX 4070 Ti Super 16GB',
+        desc: 'Card đồ họa đỉnh cao với thiết kế hầm hố triple-fan Axial-tech, led Aura Sync RGB, 16GB VRAM GDDR6X.',
+        price: 26890000,
+        cat_id: 3,
+        image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400&auto=format&fit=crop',
+        rating: 4.9,
+        reviews: 18,
+        specs: {
+          'VRAM': '16GB GDDR6X',
+          'Cổng kết nối': '3 x DisplayPort 1.4a, 2 x HDMI 2.1a',
+          'Tản nhiệt': '3 quạt Axial-tech',
+          'Đèn LED': 'Aura Sync RGB'
+        }
+      },
+      {
+        id: 5,
+        name: 'Bộ vi xử lý Intel Core i9-14900K',
+        desc: 'CPU cao cấp thế hệ 14 Raptor Lake Refresh, 24 Cores (8 P-cores + 16 E-cores), 32 Threads, Max Turbo 6.0 GHz.',
+        price: 15490000,
+        cat_id: 3,
+        image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400&auto=format&fit=crop', // Reusing matching core chip view image
+        rating: 4.8,
+        reviews: 25,
+        specs: {
+          'Số nhân/luồng': '24 Cores / 32 Threads',
+          'Xung nhịp': 'Max Turbo 6.0 GHz',
+          'Bộ nhớ đệm': '36MB Intel Smart Cache',
+          'Socket': 'LGA 1700'
+        }
+      },
+      {
+        id: 6,
+        name: 'Màn Hình Gaming ASUS ROG Swift PG27AQDM OLED 2K 240Hz',
+        desc: 'Màn hình chơi game OLED 27 inch sắc nét, độ phân giải 2K QHD (2560x1440), tần số quét siêu cao 240Hz, phản hồi 0.03ms.',
+        price: 21990000,
+        cat_id: 4,
+        image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=400&auto=format&fit=crop',
+        rating: 4.9,
+        reviews: 41,
+        specs: {
+          'Kích thước': '27 inches',
+          'Tấm nền': 'OLED QHD (2560x1440)',
+          'Tần số quét': '240Hz',
+          'Thời gian phản hồi': '0.03ms'
+        }
+      },
+      {
+        id: 7,
+        name: 'Bàn phím cơ không dây ASUS ROG Azoth OLED',
+        desc: 'Bàn phím cơ Custom 75% cao cấp, màn hình hiển thị OLED, núm xoay đa năng, Hotswap switch ROG NX, kết nối 3 chế độ.',
+        price: 5990000,
+        cat_id: 5,
+        image: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop',
+        rating: 4.8,
+        reviews: 29,
+        specs: {
+          'Layout': '75%',
+          'Switch': 'ROG NX Mechanical (Hotswap)',
+          'Kết nối': 'Bluetooth, 2.4GHz Wireless, Type-C',
+          'Tính năng': 'Màn hình OLED, Núm xoay'
+        }
+      },
+      {
+        id: 8,
+        name: 'Chuột chơi game không dây Logitech G502 X Plus Wireless',
+        desc: 'Chuột chơi game huyền thoại nâng cấp, công nghệ switch lai LIGHTFORCE, cảm biến HERO 25K cực nhạy, led LIGHTSYNC RGB.',
+        price: 3590000,
+        cat_id: 6,
+        image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=400&auto=format&fit=crop',
+        rating: 4.8,
+        reviews: 56,
+        specs: {
+          'Cảm biến': 'HERO 25K',
+          'Độ phân giải': '100 - 25,600 DPI',
+          'Switch': 'LIGHTFORCE Hybrid',
+          'Tính năng': 'LIGHTSYNC RGB, POWERPLAY'
+        }
+      },
+      {
+        id: 9,
+        name: 'Tai nghe chơi game không dây Razer BlackShark V2 Pro (2023)',
+        desc: 'Tai nghe Esports chụp tai, kết nối HyperSpeed Wireless, màng loa TriForce Titanium 50mm, mic tháo rời Super Wideband.',
+        price: 4690000,
+        cat_id: 7,
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop',
+        rating: 4.7,
+        reviews: 38,
+        specs: {
+          'Màng loa': 'TriForce Titanium 50mm',
+          'Kết nối': 'HyperSpeed Wireless, Bluetooth, 3.5mm',
+          'Micro': 'Razer HyperClear Super Wideband',
+          'Tính năng': 'Âm thanh vòm THX Spatial Audio'
+        }
+      }
+    ];
+
+    /* ─── STATE MANAGEMENT ─── */
+    let cart = JSON.parse(localStorage.getItem('gearvn_cart')) || [];
+    let orders = JSON.parse(localStorage.getItem('gearvn_orders')) || [
+      {
+        id: 'DH9842',
+        name: 'Lê Minh Quân',
+        phone: '0912345678',
+        address: 'Bình Tân, TP. HCM',
+        subtotal: 54900000,
+        discount: 5490000,
+        total: 49410000,
+        payment: 'bank',
+        status: 'completed',
+        date: new Date(Date.now() - 3600000 * 24 * 2).toISOString()
+      },
+      {
+        id: 'DH1054',
+        name: 'Phan Thảo Vy',
+        phone: '0988776655',
+        address: 'Quận 3, TP. HCM',
+        subtotal: 2490000,
+        discount: 0,
+        total: 2490000,
+        payment: 'cod',
+        status: 'shipping',
+        date: new Date(Date.now() - 3600000 * 6).toISOString()
+      }
+    ];
+
+    let currentTab = 'store';
+    let currentCategory = 0;
+    let currentSearch = '';
+    let currentTheme = localStorage.getItem('gearvn_theme') || 'dark';
+    let activeCoupon = null;
+    let currentDetailProduct = null;
+
+    /* ─── GLOBAL CONFIG ─── */
+    const CONFIG = {
+      BANK_ID: "BIDV",
+      BANK_ACCOUNT: "0979324949",
+      ACCOUNT_NAME: "VO HUU TRI"
+    };
+
+    /* ─── THEME MANAGER ─── */
+    function initTheme() {
+      if (currentTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('gearvn_theme', currentTheme);
+      initTheme();
+    }
+
+    /* ─── RENDERERS ─── */
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const filtered = PRODUCTS.filter(p => {
+        const matchCat = currentCategory === 0 || p.cat_id === currentCategory;
+        const matchSearch = p.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                            p.desc.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-16 text-slate-400">
+            <i class="fa-solid fa-circle-question text-5xl mb-4 text-slate-300 dark:text-slate-700"></i>
+            <p class="font-semibold text-lg">Không tìm thấy sản phẩm phù hợp</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = `glass-card border rounded-2xl p-4 flex flex-col justify-between hover:scale-[1.02] transition-all duration-300 tilt-effect hover:shadow-xl cursor-pointer`;
+        card.onclick = () => openDetail(p.id);
+
+        card.innerHTML = `
+          <div class="space-y-4">
+            <div class="relative h-44 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+              <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" alt="${p.name}" />
+              <span class="absolute top-2 right-2 px-2 py-0.5 bg-indigo-600 text-white rounded text-[10px] font-bold uppercase">Hot</span>
+            </div>
+            
+            <div class="space-y-2">
+              <h4 class="font-bold line-clamp-1 leading-tight tracking-tight text-slate-900 dark:text-white">${p.name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">${p.desc}</p>
+            </div>
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div class="space-y-0.5">
+              <p class="text-xs text-slate-400 font-semibold uppercase">Đơn giá</p>
+              <p class="text-sm font-extrabold text-indigo-600 dark:text-indigo-400">${p.price.toLocaleString('vi-VN')} đ</p>
+            </div>
+            <button onclick="event.stopPropagation(); addToCart(${p.id});" class="p-2 rounded-lg bg-indigo-50 hover:bg-indigo-600 dark:bg-slate-800 dark:hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white dark:hover:text-white transition">
+              <i class="fa-solid fa-cart-plus text-sm"></i>
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 py-16">
+            <i class="fa-solid fa-basket-shopping text-5xl mb-4 text-slate-300 dark:text-slate-700 animate-pulse"></i>
+            <p class="font-semibold text-sm">Giỏ hàng của bạn đang trống</p>
+          </div>
+        `;
+        updateCartSummary();
+        return;
+      }
+
+      cart.forEach(item => {
+        const prod = PRODUCTS.find(p => p.id === item.product_id);
+        if (!prod) return;
+
+        const row = document.createElement('div');
+        row.className = `flex items-center gap-4 bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800`;
+        
+        row.innerHTML = `
+          <img src="${prod.image}" class="w-16 h-16 rounded-lg object-cover" alt="${prod.name}" />
+          <div class="flex-1 space-y-1.5">
+            <h4 class="font-bold text-xs line-clamp-1 leading-tight">${prod.name}</h4>
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold text-indigo-500">${prod.price.toLocaleString('vi-VN')} đ</p>
+              <div class="flex items-center border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-white dark:bg-slate-900">
+                <button onclick="updateQty(${prod.id}, -1)" class="px-2 py-0.5 text-xs hover:bg-slate-100 dark:hover:bg-slate-800"><i class="fa-solid fa-minus"></i></button>
+                <span class="px-3 text-xs font-bold text-slate-700 dark:text-slate-300">${item.quantity}</span>
+                <button onclick="updateQty(${prod.id}, 1)" class="px-2 py-0.5 text-xs hover:bg-slate-100 dark:hover:bg-slate-800"><i class="fa-solid fa-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(row);
+      });
+
+      updateCartSummary();
+    }
+
+    function updateCartSummary() {
+      let subtotal = 0;
+      cart.forEach(item => {
+        const prod = PRODUCTS.find(p => p.id === item.product_id);
+        if (prod) subtotal += prod.price * item.quantity;
+      });
+
+      let discount = 0;
+      if (activeCoupon) {
+        if (activeCoupon.type === 'percentage') {
+          discount = subtotal * (activeCoupon.value / 100);
+        } else if (activeCoupon.type === 'fixed') {
+          discount = activeCoupon.value;
+        }
+      }
+
+      const total = Math.max(0, subtotal - discount);
+
+      document.getElementById('summary-subtotal').innerText = `${subtotal.toLocaleString('vi-VN')} đ`;
+      document.getElementById('summary-discount').innerText = `-${discount.toLocaleString('vi-VN')} đ`;
+      document.getElementById('summary-total').innerText = `${total.toLocaleString('vi-VN')} đ`;
+      document.getElementById('cart-count').innerText = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+    }
+
+    /* ─── INTERACTIVE CART LOGIC ─── */
+    function addToCart(productId) {
+      const idx = cart.findIndex(c => c.product_id === productId);
+      if (idx !== -1) {
+        cart[idx].quantity += 1;
+      } else {
+        cart.push({ product_id: productId, quantity: 1 });
+      }
+      localStorage.setItem('gearvn_cart', JSON.stringify(cart));
+      renderCart();
+
+      // Show tiny success alert
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Đã thêm vào giỏ hàng!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+
+    function updateQty(productId, change) {
+      const idx = cart.findIndex(c => c.product_id === productId);
+      if (idx === -1) return;
+
+      cart[idx].quantity += change;
+      if (cart[idx].quantity <= 0) {
+        cart.splice(idx, 1);
+      }
+      localStorage.setItem('gearvn_cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+      const feedback = document.getElementById('coupon-feedback');
+      
+      if (!code) {
+        activeCoupon = null;
+        feedback.classList.add('hidden');
+        updateCartSummary();
+        return;
+      }
+
+      if (code === 'GIAM10') {
+        activeCoupon = { code: 'GIAM10', type: 'percentage', value: 10 };
+        feedback.innerText = 'Áp dụng mã giảm 10% thành công!';
+        feedback.className = 'text-xs font-semibold text-emerald-500 block';
+      } else if (code === 'TECH50K') {
+        activeCoupon = { code: 'TECH50K', type: 'fixed', value: 50000 };
+        feedback.innerText = 'Áp dụng mã giảm 50.000 đ thành công!';
+        feedback.className = 'text-xs font-semibold text-emerald-500 block';
+      } else {
+        activeCoupon = null;
+        feedback.innerText = 'Mã giảm giá không hợp lệ.';
+        feedback.className = 'text-xs font-semibold text-rose-500 block';
+      }
+
+      updateCartSummary();
+    }
+
+    /* ─── DRAWERS CONTROLS ─── */
+    function openCart() {
+      const overlay = document.getElementById('cart-drawer-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      overlay.classList.remove('hidden');
+      setTimeout(() => {
+        drawer.classList.remove('translate-x-full');
+      }, 50);
+    }
+
+    function closeCart() {
+      const overlay = document.getElementById('cart-drawer-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      drawer.classList.add('translate-x-full');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+      }, 300);
+    }
+
+    function closeCartOnOverlay(e) {
+      if (e.target.id === 'cart-drawer-overlay') closeCart();
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Giỏ hàng trống',
+          text: 'Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng!'
+        });
+        return;
+      }
+      closeCart();
+
+      // Setup initial payment info
+      togglePaymentUI();
+
+      const overlay = document.getElementById('checkout-drawer-overlay');
+      const drawer = document.getElementById('checkout-drawer');
+      overlay.classList.remove('hidden');
+      setTimeout(() => {
+        drawer.classList.remove('translate-x-full');
+      }, 50);
+    }
+
+    function closeCheckout() {
+      const overlay = document.getElementById('checkout-drawer-overlay');
+      const drawer = document.getElementById('checkout-drawer');
+      drawer.classList.add('translate-x-full');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+      }, 300);
+    }
+
+    function closeCheckoutOnOverlay(e) {
+      if (e.target.id === 'checkout-drawer-overlay') closeCheckout();
+    }
+
+    function togglePaymentUI() {
+      const method = document.querySelector('input[name="payment"]:checked').value;
+      const bankDetails = document.getElementById('bank-payment-details');
+      
+      if (method === 'bank') {
+        bankDetails.classList.remove('hidden');
+        
+        // Compute total billing
+        let subtotal = 0;
+        cart.forEach(item => {
+          const prod = PRODUCTS.find(p => p.id === item.product_id);
+          if (prod) subtotal += prod.price * item.quantity;
+        });
+        let discount = 0;
+        if (activeCoupon) {
+          if (activeCoupon.type === 'percentage') discount = subtotal * (activeCoupon.value / 100);
+          else if (activeCoupon.type === 'fixed') discount = activeCoupon.value;
+        }
+        const total = Math.max(0, subtotal - discount);
+
+        // Generate memo code and QR
+        const randomCode = 'TECH' + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('vietqr-checkout-memo').innerText = randomCode;
+
+        const qrUrl = `https://img.vietqr.io/image/${CONFIG.BANK_ID}-${CONFIG.BANK_ACCOUNT}-compact2.png?amount=${total}&addInfo=${encodeURIComponent(randomCode)}&accountName=${encodeURIComponent(CONFIG.ACCOUNT_NAME)}`;
+        document.getElementById('vietqr-checkout-img').src = qrUrl;
+      } else {
+        bankDetails.classList.add('hidden');
+      }
+    }
+
+    function openDetail(productId) {
+      const p = PRODUCTS.find(prod => prod.id === productId);
+      if (!p) return;
+
+      currentDetailProduct = p;
+      const container = document.getElementById('detail-content');
+      container.innerHTML = '';
+
+      let specsHTML = '';
+      for (const [key, value] of Object.entries(p.specs)) {
+        specsHTML += `
+          <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 text-xs">
+            <span class="text-slate-400 font-semibold">${key}</span>
+            <span class="font-bold text-right">${value}</span>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="relative h-56 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border">
+          <img src="${p.image}" class="w-full h-full object-cover" alt="${p.name}" />
+        </div>
+        
+        <div class="space-y-2">
+          <h2 class="text-xl font-bold tracking-tight">${p.name}</h2>
+          <div class="flex items-center gap-2 text-xs">
+            <div class="flex text-yellow-400 text-sm">
+              <i class="fa-solid fa-star"></i>
+              <span class="font-bold text-slate-800 dark:text-slate-300 ml-1">${p.rating}</span>
+            </div>
+            <span class="text-slate-400 font-semibold">• (${p.reviews} Đánh giá)</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">${p.desc}</p>
+        </div>
+
+        <div class="space-y-2.5">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-indigo-500"><i class="fa-solid fa-sliders"></i> Thông số kỹ thuật</h4>
+          <div class="space-y-1">${specsHTML}</div>
+        </div>
+
+        <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+          <span class="text-xs uppercase font-bold text-slate-400">Đơn giá sản phẩm:</span>
+          <span class="text-lg font-black text-indigo-600 dark:text-indigo-400">${p.price.toLocaleString('vi-VN')} đ</span>
+        </div>
+      `;
+
+      // Set event for button
+      document.getElementById('detail-add-btn').onclick = () => {
+        addToCart(p.id);
+        closeDetail();
+      };
+
+      const overlay = document.getElementById('detail-drawer-overlay');
+      const drawer = document.getElementById('detail-drawer');
+      overlay.classList.remove('hidden');
+      setTimeout(() => {
+        drawer.classList.remove('translate-x-full');
+      }, 50);
+    }
+
+    function closeDetail() {
+      const overlay = document.getElementById('detail-drawer-overlay');
+      const drawer = document.getElementById('detail-drawer');
+      drawer.classList.add('translate-x-full');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+      }, 300);
+    }
+
+    function closeDetailOnOverlay(e) {
+      if (e.target.id === 'detail-drawer-overlay') closeDetail();
+    }
+
+    /* ─── PLACE ORDER HANDLER ─── */
+    function handlePlaceOrder(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('checkout-name').value.trim();
+      const phone = document.getElementById('checkout-phone').value.trim();
+      const address = document.getElementById('checkout-address').value.trim();
+      const payment = document.querySelector('input[name="payment"]:checked').value;
+      const memo = payment === 'bank' ? document.getElementById('vietqr-checkout-memo').innerText : '';
+
+      // Compute total billing
+      let subtotal = 0;
+      cart.forEach(item => {
+        const prod = PRODUCTS.find(p => p.id === item.product_id);
+        if (prod) subtotal += prod.price * item.quantity;
+      });
+      let discount = 0;
+      if (activeCoupon) {
+        if (activeCoupon.type === 'percentage') discount = subtotal * (activeCoupon.value / 100);
+        else if (activeCoupon.type === 'fixed') discount = activeCoupon.value;
+      }
+      const total = Math.max(0, subtotal - discount);
+
+      // Create new order record
+      const orderId = 'DH' + Math.floor(1000 + Math.random() * 9000);
+      const newOrder = {
+        id: orderId,
+        name,
+        phone,
+        address,
+        subtotal,
+        discount,
+        total,
+        payment,
+        memo,
+        status: 'pending',
+        date: new Date().toISOString()
+      };
+
+      orders.unshift(newOrder);
+      localStorage.setItem('gearvn_orders', JSON.stringify(orders));
+
+      // Reset cart
+      cart = [];
+      activeCoupon = null;
+      document.getElementById('coupon-input').value = '';
+      localStorage.setItem('gearvn_cart', JSON.stringify(cart));
+      renderCart();
+
+      // Close drawers
+      closeCheckout();
+
+      // Celebration Confetti
+      confetti({
+        particleCount: 150,
+        spread: 85,
+        origin: { y: 0.6 }
+      });
+
+      // Show Invoice modal
+      let billingDetails = '';
+      if (payment === 'bank') {
+        billingDetails = `
+          <div class="mt-4 border border-dashed border-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20 p-4 rounded-xl text-xs space-y-1 text-left">
+            <p class="font-bold text-center text-sm text-indigo-500 mb-2">Thông tin chuyển khoản hóa đơn</p>
+            <p>Ngân hàng: <strong>BIDV</strong></p>
+            <p>Chủ TK: <strong>VO HUU TRI</strong></p>
+            <p>Số TK: <strong>0979324949</strong></p>
+            <p>Số tiền: <strong>${total.toLocaleString('vi-VN')} đ</strong></p>
+            <p>Nội dung CK: <strong class="text-rose-500 font-mono text-sm">${memo}</strong></p>
+            <p class="text-[10px] text-slate-500 italic mt-2 text-center">* Hệ thống sẽ tự động quét và duyệt giao dịch sau khi nhận được tiền.</p>
+          </div>
+        `;
+      } else {
+        billingDetails = `
+          <div class="mt-4 bg-emerald-50 dark:bg-emerald-950/20 p-4 rounded-xl text-xs text-left">
+            <p class="font-bold text-emerald-500 text-center text-sm mb-1">Thanh toán COD thành công!</p>
+            <p class="text-center text-slate-500 text-[10px]">Nhân viên sẽ liên hệ và giao hàng tới địa chỉ của bạn trong 2-3 ngày làm việc.</p>
+          </div>
+        `;
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: '🎉 Đặt hàng thành công!',
+        html: `
+          <div class="space-y-2.5 text-sm">
+            <p>Cảm ơn bạn đã lựa chọn mua hàng tại <strong>GEARVN</strong>.</p>
+            <p>Mã đơn hàng của bạn là: <strong class="bg-indigo-100 dark:bg-slate-800 px-2 py-0.5 rounded font-mono text-indigo-500">${orderId}</strong></p>
+            ${billingDetails}
+          </div>
+        `,
+        confirmButtonText: 'Đồng ý',
+        confirmButtonColor: '#4f46e5'
+      });
+
+      // Trigger automatic simulated scan and complete if bank
+      if (payment === 'bank') {
+        setTimeout(() => {
+          completeSimulatedOrder(orderId);
+        }, 12000);
+      }
+    }
+
+    function completeSimulatedOrder(orderId) {
+      const idx = orders.findIndex(o => o.id === orderId);
+      if (idx !== -1) {
+        orders[idx].status = 'completed';
+        localStorage.setItem('gearvn_orders', JSON.stringify(orders));
+        renderAdmin();
+
+        // Broadcast a simulated payment alert
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'info',
+          title: `Hệ thống VietQR: Nhận thành công thanh toán ĐH ${orderId}. Đơn hàng đã tự động phê duyệt!`,
+          showConfirmButton: false,
+          timer: 5000
+        });
+      }
+    }
+
+    /* ─── TAB NAVIGATION ─── */
+    function switchTab(tab) {
+      currentTab = tab;
+      
+      const tabStore = document.getElementById('tab-store');
+      const tabAdmin = document.getElementById('tab-admin');
+      const buttons = document.querySelectorAll('.nav-btn-item');
+
+      buttons.forEach(btn => {
+        if (btn.innerText.toLowerCase().includes(tab === 'store' ? 'cửa hàng' : 'quản trị')) {
+          btn.className = "nav-btn-item text-indigo-600 dark:text-indigo-400";
+        } else {
+          btn.className = "nav-btn-item text-slate-500 hover:text-indigo-500 dark:text-slate-400 dark:hover:text-indigo-400";
+        }
+      });
+
+      if (tab === 'store') {
+        tabStore.classList.remove('hidden');
+        tabAdmin.classList.add('hidden');
+        renderProducts();
+      } else {
+        tabStore.classList.add('hidden');
+        tabAdmin.classList.remove('hidden');
+        renderAdmin();
+      }
+    }
+
+    function filterCategory(catId) {
+      currentCategory = catId;
+      
+      const buttons = document.querySelectorAll('#category-filter-tabs button');
+      buttons.forEach((btn, idx) => {
+        if (idx === catId) {
+          btn.className = "cat-tab-btn active px-4 py-2 rounded-xl border text-sm font-semibold bg-indigo-600 text-white border-indigo-600 shadow-md transition-all";
+        } else {
+          btn.className = "cat-tab-btn px-4 py-2 rounded-xl border text-sm font-semibold border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all text-slate-600 dark:text-slate-400";
+        }
+      });
+
+      renderProducts();
+    }
+
+    function handleSearch(el) {
+      currentSearch = el.value;
+      renderProducts();
+    }
+
+    /* ─── ADMIN DASHBOARD LOGIC ─── */
+    let categoryChart = null;
+    function renderAdmin() {
+      // 1. Compute totals
+      let totalSales = 0;
+      orders.forEach(o => {
+        if (o.status === 'completed') totalSales += o.total;
+      });
+
+      document.getElementById('admin-sales').innerText = `${totalSales.toLocaleString('vi-VN')} đ`;
+      document.getElementById('admin-orders-count').innerText = orders.length;
+
+      // 2. Render Order List Table
+      const container = document.getElementById('admin-orders-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      orders.forEach(o => {
+        const row = document.createElement('tr');
+        row.className = `border-b border-slate-100 dark:border-slate-850 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 text-xs text-slate-600 dark:text-slate-300`;
+        
+        let statusBadge = '';
+        if (o.status === 'completed') statusBadge = '<span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600 rounded text-[10px] font-bold">Thành công</span>';
+        else if (o.status === 'shipping') statusBadge = '<span class="px-2 py-0.5 bg-cyan-100 dark:bg-cyan-950/30 text-cyan-600 rounded text-[10px] font-bold">Giao hàng</span>';
+        else if (o.status === 'pending') statusBadge = '<span class="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-600 rounded text-[10px] font-bold">Đang chờ</span>';
+        else statusBadge = '<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded text-[10px]">Hủy bỏ</span>';
+
+        const dateStr = new Date(o.date).toLocaleTimeString('vi-VN') + ' ' + new Date(o.date).toLocaleDateString('vi-VN');
+
+        row.innerHTML = `
+          <td class="py-3 font-mono font-bold text-indigo-500">${o.id}</td>
+          <td class="py-3 opacity-60">${dateStr}</td>
+          <td class="py-3">
+            <p class="font-bold">${o.name}</p>
+            <p class="text-[10px] opacity-75">${o.phone}</p>
+          </td>
+          <td class="py-3 font-bold text-indigo-600 dark:text-indigo-400">${o.total.toLocaleString('vi-VN')} đ</td>
+          <td class="py-3 uppercase font-semibold text-[10px]">${o.payment === 'bank' ? 'Chuyển khoản (QR)' : 'Thanh toán COD'}</td>
+          <td class="py-3 text-center">${statusBadge}</td>
+        `;
+
+        container.appendChild(row);
+      });
+
+      // 3. Render Chart.js categories structural report
+      renderAdminCharts();
+    }
+
+    function renderAdminCharts() {
+      // Compute categories distribution
+      const catCount = [0, 0, 0, 0, 0]; // phones, laptops, mice, keyb, headph
+      orders.forEach(o => {
+        // Just mock some categories distribution representing realistic purchases structure
+        if (o.total > 30000000) catCount[1]++; // laptop
+        else if (o.total > 15000000) catCount[0]++; // phone
+        else if (o.total > 5000000) catCount[4]++; // headph
+        else if (o.total > 2000000) catCount[3]++; // keyboard
+        else catCount[2]++; // mice
+      });
+
+      const ctx = document.getElementById('categoryChart');
+      if (!ctx) return;
+
+      if (categoryChart) {
+        categoryChart.destroy();
+      }
+
+      categoryChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Điện thoại', 'Laptop', 'Chuột', 'Bàn phím', 'Tai nghe'],
+          datasets: [{
+            data: catCount.map(v => v === 0 ? 1 : v), // ensure drawing is solid mock data
+            backgroundColor: [
+              '#6366f1', // Indigo
+              '#06b6d4', // Cyan
+              '#10b981', // Emerald
+              '#eab308', // Amber
+              '#a855f7'  // Purple
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: currentTheme === 'dark' ? '#94a3b8' : '#64748b',
+                font: { family: 'Inter', size: 10 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    /* ─── INITIALIZATION ─── */
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderProducts();
+      updateCartSummary();
+    });
+  </script>
+</body>
+</html>

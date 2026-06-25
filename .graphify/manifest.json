@@ -1,0 +1,442 @@
+{
+  "D:\\webbanhang\\app\\config\\database.php": {
+    "mtime": 1780584685478.5356,
+    "hash": "2d8dd9f2445143c62d8c623ae8e84dfd"
+  },
+  "D:\\webbanhang\\app\\controllers\\AdminController.php": {
+    "mtime": 1780567671174.563,
+    "hash": "1d7cf2b572d71780931b38d29f04e388"
+  },
+  "D:\\webbanhang\\app\\controllers\\AuthController.php": {
+    "mtime": 1780583424189.219,
+    "hash": "af371261d0f8da2fc68a7ad64d78c278"
+  },
+  "D:\\webbanhang\\app\\controllers\\CartController.php": {
+    "mtime": 1780567924641.8816,
+    "hash": "14a1c21c38a1c59f96b60d43be305a4b"
+  },
+  "D:\\webbanhang\\app\\controllers\\CategoryController.php": {
+    "mtime": 1780567661861.5037,
+    "hash": "27041a42d0efddf19d50e13d94cfbc4a"
+  },
+  "D:\\webbanhang\\app\\controllers\\CheckoutController.php": {
+    "mtime": 1780584235930.1804,
+    "hash": "5d68288d96b27cc375205a3e04cffc99"
+  },
+  "D:\\webbanhang\\app\\controllers\\DefaultController.php": {
+    "mtime": 1780585559476.792,
+    "hash": "e8ddaccef4526405673439374f0fd724"
+  },
+  "D:\\webbanhang\\app\\controllers\\ProductController.php": {
+    "mtime": 1780567811962.4329,
+    "hash": "2086a2916b8f7161dbea69f74acbcccb"
+  },
+  "D:\\webbanhang\\app\\models\\CategoryModel.php": {
+    "mtime": 1780037655760.2292,
+    "hash": "0d8cefeec75138dfa81e5a331483325c"
+  },
+  "D:\\webbanhang\\app\\models\\CouponModel.php": {
+    "mtime": 1780583355282.7678,
+    "hash": "6e178f2eed8c88eac39dbc67fdd2f959"
+  },
+  "D:\\webbanhang\\app\\models\\OrderModel.php": {
+    "mtime": 1780583368184.9653,
+    "hash": "e157054a728fdcacefb17a3ef8bea2b9"
+  },
+  "D:\\webbanhang\\app\\models\\ProductModel.php": {
+    "mtime": 1780037657787.6758,
+    "hash": "453e68661a4f59ac8933984d6c742a83"
+  },
+  "D:\\webbanhang\\app\\models\\UserModel.php": {
+    "mtime": 1780567949571.6653,
+    "hash": "820ec0b8635c42eb6069d95bb8da3131"
+  },
+  "D:\\webbanhang\\app\\views\\admin\\categories.php": {
+    "mtime": 1780567743106.3806,
+    "hash": "52a2728e09efeb030a2c3efc38b0ea07"
+  },
+  "D:\\webbanhang\\app\\views\\admin\\dashboard.php": {
+    "mtime": 1780567800215.6812,
+    "hash": "658df3593ae9d95be0d68c821b11ae70"
+  },
+  "D:\\webbanhang\\app\\views\\admin\\orders.php": {
+    "mtime": 1780584770096.353,
+    "hash": "51904fb58dee17fde6a98c6c39e02ef2"
+  },
+  "D:\\webbanhang\\app\\views\\admin\\products.php": {
+    "mtime": 1780568017619.094,
+    "hash": "78ba731a8d8e9cb436b0cedc030fe1d0"
+  },
+  "D:\\webbanhang\\app\\views\\auth\\login.php": {
+    "mtime": 1780567878566.4756,
+    "hash": "0d56acd8567edad4c2919be673328e71"
+  },
+  "D:\\webbanhang\\app\\views\\auth\\profile.php": {
+    "mtime": 1780584760238.1785,
+    "hash": "b745b5494921d233128735759364f5dd"
+  },
+  "D:\\webbanhang\\app\\views\\auth\\register.php": {
+    "mtime": 1780567886180.4536,
+    "hash": "fc418a55ec48e44f8a3b5cba1d97b076"
+  },
+  "D:\\webbanhang\\app\\views\\cart\\index.php": {
+    "mtime": 1780584218661.4434,
+    "hash": "94f04f9089ae37fdd0f68fec8acaebe8"
+  },
+  "D:\\webbanhang\\app\\views\\category\\add.php": {
+    "mtime": 1780567760363.1277,
+    "hash": "c5b9eea823d113b806ef14900c1339af"
+  },
+  "D:\\webbanhang\\app\\views\\category\\edit.php": {
+    "mtime": 1780567768086.2773,
+    "hash": "1b5d34b00da1ecfacf6c6bad90976237"
+  },
+  "D:\\webbanhang\\app\\views\\checkout\\index.php": {
+    "mtime": 1780586580152.6055,
+    "hash": "5e5879826d01abb6fc86ba341215f3e2"
+  },
+  "D:\\webbanhang\\app\\views\\checkout\\success.php": {
+    "mtime": 1780585363666.0444,
+    "hash": "0045b454ca729e920947f4f5fb030097"
+  },
+  "D:\\webbanhang\\app\\views\\home\\detail.php": {
+    "mtime": 1780586609622.1504,
+    "hash": "2d46d134c8aaf67544cbf7227e6e921f"
+  },
+  "D:\\webbanhang\\app\\views\\home\\explore.php": {
+    "mtime": 1780585568383.08,
+    "hash": "83b6f68cec9078f6a506cead981f1a79"
+  },
+  "D:\\webbanhang\\app\\views\\home\\explore_setup.php": {
+    "mtime": 1780585589495.4326,
+    "hash": "2c344c11c67319f35e055c4da62a1ee8"
+  },
+  "D:\\webbanhang\\app\\views\\home\\explore_trend.php": {
+    "mtime": 1780585580941.2786,
+    "hash": "74039cf07db1e729cd63995a5c9b7103"
+  },
+  "D:\\webbanhang\\app\\views\\home\\index.php": {
+    "mtime": 1780583509386.0222,
+    "hash": "431cbd4a1ee047f32413ed8f323d9d6b"
+  },
+  "D:\\webbanhang\\app\\views\\home\\support.php": {
+    "mtime": 1780583391043.0825,
+    "hash": "ebd9a6164d336bb63042534a4bdf032f"
+  },
+  "D:\\webbanhang\\app\\views\\product\\add.php": {
+    "mtime": 1780567822174.0242,
+    "hash": "148b8c80fd5f94f4edc15c1c07aec9d5"
+  },
+  "D:\\webbanhang\\app\\views\\product\\edit.php": {
+    "mtime": 1780567832519.1287,
+    "hash": "ada09f47b52d41e11f0528b9e528a0c2"
+  },
+  "D:\\webbanhang\\app\\views\\product\\list.php": {
+    "mtime": 1778835541800.4082,
+    "hash": "12e0cd12bd892d9f10715d6f5df12345"
+  },
+  "D:\\webbanhang\\app\\views\\shares\\footer.php": {
+    "mtime": 1780586594803.065,
+    "hash": "8077eb0ef24c05b8577b940e126fa265"
+  },
+  "D:\\webbanhang\\app\\views\\shares\\header.php": {
+    "mtime": 1780586552986.004,
+    "hash": "00eafeee0b498c68ed3922c6c682522c"
+  },
+  "D:\\webbanhang\\auth.js": {
+    "mtime": 1780892106491.2942,
+    "hash": "50b84d13a49b541a4e5400958ce0e2de"
+  },
+  "D:\\webbanhang\\database.sql": {
+    "mtime": 1780584721787.6138,
+    "hash": "eaf44d14839062fca359d838c9f76be8"
+  },
+  "D:\\webbanhang\\download_images.php": {
+    "mtime": 1780581345326.291,
+    "hash": "0f321558549d1223456fcf9deea0ee8d"
+  },
+  "D:\\webbanhang\\fix_db.php": {
+    "mtime": 1780585182522.0762,
+    "hash": "e5b4011c6b7396452a6ae18221d19da8"
+  },
+  "D:\\webbanhang\\index.php": {
+    "mtime": 1778833685829.4453,
+    "hash": "55a70f09064bb21637416e012da91695"
+  },
+  "D:\\webbanhang\\setup_db.php": {
+    "mtime": 1780585170560.7566,
+    "hash": "c12bdcc140811380f76035732db28dbc"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\config\\database.php": {
+    "mtime": 1780584685478.5356,
+    "hash": "2d8dd9f2445143c62d8c623ae8e84dfd"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\AdminController.php": {
+    "mtime": 1780037733001.3044,
+    "hash": "7b296bf1cb17280c7a4982e1f52afbd8"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\AuthController.php": {
+    "mtime": 1780037679648.298,
+    "hash": "936989beaeda9004ee5cb6bb64189549"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\CartController.php": {
+    "mtime": 1780037681668.4348,
+    "hash": "b5e8ddda0cbd9e2c3887c6ec75541fdf"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\CategoryController.php": {
+    "mtime": 1778833223437.1963,
+    "hash": "0264c9bd840a2df357272a8a96acdabe"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\CheckoutController.php": {
+    "mtime": 1780044169072.5723,
+    "hash": "3657839075ecfbc217b32c8ce4b15780"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\DefaultController.php": {
+    "mtime": 1780585559476.792,
+    "hash": "e8ddaccef4526405673439374f0fd724"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\controllers\\ProductController.php": {
+    "mtime": 1778834681413.938,
+    "hash": "3bf8860674b9acffa748305c5755d230"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\models\\CategoryModel.php": {
+    "mtime": 1780037655760.2292,
+    "hash": "0d8cefeec75138dfa81e5a331483325c"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\models\\OrderModel.php": {
+    "mtime": 1780043815872.2412,
+    "hash": "ce0cb7cbab44732a3e7307a48cb1862a"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\models\\ProductModel.php": {
+    "mtime": 1780037657787.6758,
+    "hash": "453e68661a4f59ac8933984d6c742a83"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\models\\UserModel.php": {
+    "mtime": 1780043830641.446,
+    "hash": "5a76e805f2120337b0acfadc3b52b762"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\admin\\dashboard.php": {
+    "mtime": 1780037853249.4277,
+    "hash": "7b9c48c7254cc8735dc9abf77ee84bd6"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\admin\\orders.php": {
+    "mtime": 1780584770096.353,
+    "hash": "51904fb58dee17fde6a98c6c39e02ef2"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\auth\\login.php": {
+    "mtime": 1780037784334.198,
+    "hash": "5e52ea17fbf4a3410737aab191d0a4b6"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\auth\\profile.php": {
+    "mtime": 1780584760238.1785,
+    "hash": "b745b5494921d233128735759364f5dd"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\auth\\register.php": {
+    "mtime": 1780037786361.643,
+    "hash": "a4de9b0c19237c4ca8ff0d5061201e83"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\cart\\index.php": {
+    "mtime": 1780043840522.356,
+    "hash": "b02e3ee39beb2619c0856b19cb9509bf"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\checkout\\index.php": {
+    "mtime": 1780586588375.8008,
+    "hash": "5e5879826d01abb6fc86ba341215f3e2"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\checkout\\success.php": {
+    "mtime": 1780585363666.0444,
+    "hash": "0045b454ca729e920947f4f5fb030097"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\home\\detail.php": {
+    "mtime": 1780586614503.6975,
+    "hash": "3605796dd91fabc32fe0b73d444c32e3"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\home\\explore.php": {
+    "mtime": 1780585568383.08,
+    "hash": "83b6f68cec9078f6a506cead981f1a79"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\home\\explore_setup.php": {
+    "mtime": 1780585589495.4326,
+    "hash": "2c344c11c67319f35e055c4da62a1ee8"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\home\\explore_trend.php": {
+    "mtime": 1780585580941.2786,
+    "hash": "74039cf07db1e729cd63995a5c9b7103"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\home\\index.php": {
+    "mtime": 1780037762550.5725,
+    "hash": "d376a8a4074e304964b8ed89df9ca7b3"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\product\\add.php": {
+    "mtime": 1780568364669.212,
+    "hash": "79898acdbe55c15965591f12cad75a6a"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\product\\edit.php": {
+    "mtime": 1778835263753.7537,
+    "hash": "c870da4050bac23fe32bba03cdebd057"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\product\\list.php": {
+    "mtime": 1778835541800.4082,
+    "hash": "12e0cd12bd892d9f10715d6f5df12345"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\shares\\footer.php": {
+    "mtime": 1780586603195.7998,
+    "hash": "8077eb0ef24c05b8577b940e126fa265"
+  },
+  "D:\\webbanhang\\webbanhang\\app\\views\\shares\\header.php": {
+    "mtime": 1780586558927.8384,
+    "hash": "322eada30a7e3e08581dd4333698a169"
+  },
+  "D:\\webbanhang\\webbanhang\\database.sql": {
+    "mtime": 1780584721787.6138,
+    "hash": "eaf44d14839062fca359d838c9f76be8"
+  },
+  "D:\\webbanhang\\webbanhang\\download_images.php": {
+    "mtime": 1780581349753.6682,
+    "hash": "0f321558549d1223456fcf9deea0ee8d"
+  },
+  "D:\\webbanhang\\webbanhang\\fix_db.php": {
+    "mtime": 1780585182522.0762,
+    "hash": "e5b4011c6b7396452a6ae18221d19da8"
+  },
+  "D:\\webbanhang\\webbanhang\\index.php": {
+    "mtime": 1778833685829.4453,
+    "hash": "55a70f09064bb21637416e012da91695"
+  },
+  "D:\\webbanhang\\webbanhang\\setup_db.php": {
+    "mtime": 1780585170560.7566,
+    "hash": "c12bdcc140811380f76035732db28dbc"
+  },
+  "D:\\webbanhang\\AGENTS.md": {
+    "mtime": 1780891281318.3225,
+    "hash": "f560abcc9eddc9775a5099a1596698cb"
+  },
+  "D:\\webbanhang\\blog-template\\index-portfolio.html": {
+    "mtime": 1780891428000.2883,
+    "hash": "ecfecd0dc3373f4a59c796b7afe82ba5"
+  },
+  "D:\\webbanhang\\blog-template\\index.html": {
+    "mtime": 1780889816352.6514,
+    "hash": "33997e8eaee4dd02691457ee69928c78"
+  },
+  "D:\\webbanhang\\CLAUDE.md": {
+    "mtime": 1780891281315.2097,
+    "hash": "6e3c092ad818b965525089a33a0924d0"
+  },
+  "D:\\webbanhang\\index.html": {
+    "mtime": 1780892714178.0947,
+    "hash": "877016eb1a7df3a383a55ef3e7736d81"
+  },
+  "D:\\webbanhang\\blog-template\\astronaut.png": {
+    "mtime": 1780685614113.667,
+    "hash": "9f25ad46064b6812da79b73a9329b472"
+  },
+  "D:\\webbanhang\\blog-template\\avatar.jpg": {
+    "mtime": 1780888278277.7424,
+    "hash": "b7bb1a487fe056b5df25b6d7b3eef2f4"
+  },
+  "D:\\webbanhang\\blog-template\\project_blogs.png": {
+    "mtime": 1780888540968.4968,
+    "hash": "e2e3fdda03d8ec33a03b00bc6dc1abc5"
+  },
+  "D:\\webbanhang\\blog-template\\project_smmpanel.png": {
+    "mtime": 1780888526017.694,
+    "hash": "2d464b1d1f5b11b9362cb094e26c63ed"
+  },
+  "D:\\webbanhang\\blog-template\\project_techstore.png": {
+    "mtime": 1780888512476.4424,
+    "hash": "699ec748972ec6dc0b9e453d7f9de7e2"
+  },
+  "D:\\webbanhang\\uploads\\1-7-510x510.png": {
+    "mtime": 1779439962198.4329,
+    "hash": "9ee364de123266bfb8a853fc80453cd4"
+  },
+  "D:\\webbanhang\\uploads\\92300-laptop-asus-gaming-rog-strix-g615jhr-s5069w-0009-layer-3-800x.jpg": {
+    "mtime": 1779439997149.4346,
+    "hash": "77345ab7aae4ce7c43ffdb3b597805f9"
+  },
+  "D:\\webbanhang\\uploads\\apple-magic-mouse-2-2021-silver3-min-eb2149809ba-600x600.jpg": {
+    "mtime": 1779440059013.4656,
+    "hash": "4eca9da5bd62286e0311c4d46c351c1c"
+  },
+  "D:\\webbanhang\\uploads\\iphone-15-pro-vs-iphone-15-pro-max-256gb-512gb-1tb-mau-titan-xanh-duong-600x600.jpg": {
+    "mtime": 1779439823498.61,
+    "hash": "e3d2c981bd1bd89611b420b77bfb3cc9"
+  },
+  "D:\\webbanhang\\uploads\\iphone-16-pro-bhstore_3_1731641286.png": {
+    "mtime": 1778836650139.9434,
+    "hash": "02ccce4faaa3d08a34c1cc8180648be9"
+  },
+  "D:\\webbanhang\\uploads\\mbp142024silver-1-640x640.jpg": {
+    "mtime": 1779440032154.417,
+    "hash": "44d35e2725e620236bac942c51806aea"
+  },
+  "D:\\webbanhang\\uploads\\tai-nghe-chup-tai-marshall-major-5_2_.png": {
+    "mtime": 1779440259542.0168,
+    "hash": "ac4d328f7c969a0d0e6500758c1278dc"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\1-7-510x510.png": {
+    "mtime": 1779439962198.4329,
+    "hash": "9ee364de123266bfb8a853fc80453cd4"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\92300-laptop-asus-gaming-rog-strix-g615jhr-s5069w-0009-layer-3-800x.jpg": {
+    "mtime": 1779439997149.4346,
+    "hash": "77345ab7aae4ce7c43ffdb3b597805f9"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\apple-magic-mouse-2-2021-silver3-min-eb2149809ba-600x600.jpg": {
+    "mtime": 1779440059013.4656,
+    "hash": "4eca9da5bd62286e0311c4d46c351c1c"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\iphone-15-pro-vs-iphone-15-pro-max-256gb-512gb-1tb-mau-titan-xanh-duong-600x600.jpg": {
+    "mtime": 1779439823498.61,
+    "hash": "e3d2c981bd1bd89611b420b77bfb3cc9"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\iphone-16-pro-bhstore_3_1731641286.png": {
+    "mtime": 1778836650139.9434,
+    "hash": "02ccce4faaa3d08a34c1cc8180648be9"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\mbp142024silver-1-640x640.jpg": {
+    "mtime": 1779440032154.417,
+    "hash": "44d35e2725e620236bac942c51806aea"
+  },
+  "D:\\webbanhang\\webbanhang\\uploads\\tai-nghe-chup-tai-marshall-major-5_2_.png": {
+    "mtime": 1779440259542.0168,
+    "hash": "ac4d328f7c969a0d0e6500758c1278dc"
+  },
+  "D:\\webbanhang\\.beads\\hooks\\post-checkout": {
+    "mtime": 1780891281228.507,
+    "hash": "ec9f973effebba888ad292cab6dcc2d0"
+  },
+  "D:\\webbanhang\\.beads\\hooks\\post-merge": {
+    "mtime": 1780891281227.994,
+    "hash": "47d05d345c7d6c602d32524f65fc2a86"
+  },
+  "D:\\webbanhang\\.beads\\hooks\\pre-commit": {
+    "mtime": 1780891281227.994,
+    "hash": "4b31cb204e7954d42a9ecb9020ff52f7"
+  },
+  "D:\\webbanhang\\.beads\\hooks\\pre-push": {
+    "mtime": 1780891281228.507,
+    "hash": "83bea7ceffad7369d390fcf3a6347d63"
+  },
+  "D:\\webbanhang\\.beads\\hooks\\prepare-commit-msg": {
+    "mtime": 1780891281228.507,
+    "hash": "f9acf190971bc9e990db2f67c5270599"
+  },
+  "D:\\webbanhang\\.agents\\skills\\beads\\SKILL.md": {
+    "mtime": 1780891281316.23,
+    "hash": "4eba59bd27c18667fbbed3d5942b40ef"
+  },
+  "D:\\webbanhang\\.agents\\skills\\beads\\agents\\openai.yaml": {
+    "mtime": 1780891281316.7437,
+    "hash": "075f32133b20f796e271f03cd50cd03e"
+  },
+  "D:\\webbanhang\\.beads\\README.md": {
+    "mtime": 1780891280844.0757,
+    "hash": "7b562344dfbbf12388c3032ba0aa4d4e"
+  },
+  "D:\\webbanhang\\.beads\\config.yaml": {
+    "mtime": 1780891280843.558,
+    "hash": "f3b545bd9087d2b9d1e4388fa9c06cde"
+  }
+}

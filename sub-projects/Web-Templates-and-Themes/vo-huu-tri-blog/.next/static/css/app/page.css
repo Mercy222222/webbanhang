@@ -1,0 +1,364 @@
+/*!*******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/app/page.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************/
+.page_wrapper__xDBJh {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Apple HIG System Font Stack */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f5f5f7; /* Apple Off-white */
+  overflow-x: hidden;
+}
+
+/* APPLE HIG - VISION OS GLASSMORPHISM */
+.page_islandNav__g_AOh {
+  margin: 32px auto 0;
+  width: max-content;
+  max-width: 90vw;
+  /* Ultimate Vibrancy effect */
+  background: rgba(20, 20, 22, 0.45);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 40px;
+  padding: 6px 10px 6px 32px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  box-shadow: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.5), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 32px;
+  z-index: 100;
+  transition: background 0.3s ease;
+}
+
+.page_logo__7fc9l {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.page_navLinks__3Mchl {
+  display: flex;
+  gap: 32px;
+}
+
+.page_navLinks__3Mchl a {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.page_navLinks__3Mchl a:hover {
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.page_navBtn__A40Un {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 32px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+}
+
+.page_navBtn__A40Un:hover {
+  transform: scale(1.03);
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* HERO SECTION - MASSIVE TYPOGRAPHY */
+.page_heroSection___mcj9 {
+  padding: 180px 0 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.page_heroContent__2lPR8 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.page_heroBadge__K9MQV {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(25, 147, 134, 0.15);
+  border: 0.5px solid rgba(25, 147, 134, 0.4);
+  color: #29d1c0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  -webkit-backdrop-filter: blur(16px);
+          backdrop-filter: blur(16px);
+  box-shadow: 0 0 20px rgba(25, 147, 134, 0.2);
+}
+
+.page_heroTitle__Gfler {
+  font-size: clamp(4rem, 10vw, 8.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  max-width: 1200px;
+  color: #ffffff;
+  text-wrap: balance;
+  margin: 0;
+  text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.page_textAccent__Me0wF {
+  background: linear-gradient(135deg, #29d1c0 0%, #106b60 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page_heroSubtitle__RTAw0 {
+  margin-top: 32px;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 650px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+/* SHADCN + APPLE HIG BUTTON */
+.page_ctaWrapper__fxbJU {
+  margin-top: 56px;
+}
+
+.page_btnPrimary__2McYJ {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+          backdrop-filter: blur(24px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 6px 6px 6px 32px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.page_btnIconWrapper__ESY_T {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.page_btnPrimary__2McYJ:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.page_btnPrimary__2McYJ:hover .page_btnIconWrapper__ESY_T {
+  transform: scale(1.05) translateX(4px);
+}
+
+/* THE BENTO GRID - UI/UX PRO MAX */
+.page_bentoSection__ygOzn {
+  padding: 80px 40px 160px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page_bentoGrid__HOtT7 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 320px;
+  grid-auto-flow: dense;
+  grid-gap: 32px;
+  gap: 32px;
+}
+
+/* APPLE VISION OS MULTI-LAYER CARD */
+.page_cardInner__1kanf {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 36px; /* Huge border radius */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 48px;
+  overflow: hidden;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2), 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05); /* Soft outer border */
+}
+
+/* Subtle inner glow */
+.page_cardInner__1kanf::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.1) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Figma-level Gradients & Images */
+.page_bgAbstractGlass__1WPQh {
+  background: linear-gradient(to bottom, rgba(10,10,12,0.2) 0%, rgba(10,10,12,0.95) 100%), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200') center/cover no-repeat;
+}
+
+.page_bgDarkHologram__ODXEX {
+  background: linear-gradient(to bottom, rgba(10,10,12,0.4) 0%, rgba(10,10,12,0.95) 100%), url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=80&w=800') center/cover no-repeat;
+}
+
+.page_bgTypography__xYdhJ {
+  background: linear-gradient(to bottom, rgba(10,10,12,0.5) 0%, rgba(10,10,12,0.95) 100%), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800') center/cover no-repeat;
+}
+
+.page_bgSoftware__Qn4zE {
+  background: linear-gradient(to top right, #1a1a1f 0%, #0a0a0c 100%);
+  /* A beautiful dark gradient instead of image for variety */
+}
+
+/* Variants */
+.page_cardLarge__mtcp6 { grid-column: span 2; grid-row: span 2; }
+.page_cardTall__XFH_F { grid-column: span 1; grid-row: span 2; }
+.page_cardStandard__jt_C8 { grid-column: span 1; grid-row: span 1; }
+.page_cardDark__Fxs_f { grid-column: span 2; grid-row: span 1; }
+
+/* Card Content Typography */
+.page_cardContent__aU4Di {
+  position: relative;
+  z-index: 10;
+  transform: translateY(20px);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cardHoverTrigger:hover .page_cardContent__aU4Di {
+  transform: translateY(0);
+}
+
+.page_tag__lW6GL {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.page_cardTitle__wyNTT {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.page_cardLarge__mtcp6 .page_cardTitle__wyNTT {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.page_cardHoverData__L2B59 {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.cardHoverTrigger:hover .page_cardHoverData__L2B59 {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.page_cardHoverData__L2B59 p {
+  overflow: hidden;
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+
+/* Footer */
+.page_footer__sHKi3 {
+  margin-top: auto;
+  padding: 80px 40px 40px;
+}
+
+.page_footerInner__rvzEu {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 1024px) {
+  .page_bentoGrid__HOtT7 { grid-template-columns: repeat(2, 1fr); }
+  .page_cardTall__XFH_F { grid-column: span 2; grid-row: span 1; }
+}
+
+@media (max-width: 768px) {
+  .page_heroTitle__Gfler { font-size: clamp(3.5rem, 12vw, 5rem); }
+  .page_bentoGrid__HOtT7 {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .page_cardLarge__mtcp6, .page_cardTall__XFH_F, .page_cardStandard__jt_C8, .page_cardDark__Fxs_f {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 400px;
+  }
+  .page_islandNav__g_AOh {
+    padding: 12px;
+    gap: 16px;
+    border-radius: 24px;
+  }
+  .page_navLinks__3Mchl { display: none; }
+}
+

@@ -1,0 +1,2955 @@
+{
+  "name": "openmed",
+  "description": "A Python-based toolkit for healthcare AI and clinical natural language processing.",
+  "readmeHead": "OpenMed is a toolkit for clinical NLP, PII anonymization, and safety sweeps on medical texts.",
+  "languages": [
+    "python",
+    "markdown",
+    "swift",
+    "yaml",
+    "html",
+    "css",
+    "json",
+    "makefile"
+  ],
+  "frameworks": [
+    "FastAPI",
+    "Typer",
+    "CoreML",
+    "MLX"
+  ],
+  "files": [
+    {
+      "path": ".claude/launch.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".dockerignore",
+      "language": "unknown",
+      "sizeLines": 21,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "language": "markdown",
+      "sizeLines": 50,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 137,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/convert-models.yml",
+      "language": "yaml",
+      "sizeLines": 91,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/manifest-refresh.yml",
+      "language": "yaml",
+      "sizeLines": 38,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/mlx-test.yml",
+      "language": "yaml",
+      "sizeLines": 98,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/pages.yml",
+      "language": "yaml",
+      "sizeLines": 44,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/publish.yml",
+      "language": "yaml",
+      "sizeLines": 63,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "language": "yaml",
+      "sizeLines": 48,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/swift-test.yml",
+      "language": "yaml",
+      "sizeLines": 52,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "language": "yaml",
+      "sizeLines": 35,
+      "fileCategory": "config"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "sizeLines": 800,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "Dockerfile",
+      "language": "dockerfile",
+      "sizeLines": 21,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "docs/_hooks.py",
+      "language": "python",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/analyze-text.md",
+      "language": "markdown",
+      "sizeLines": 136,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/anonymization.md",
+      "language": "markdown",
+      "sizeLines": 188,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/batch-processing.md",
+      "language": "markdown",
+      "sizeLines": 251,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/brand/MASCOT_BRIEF.md",
+      "language": "markdown",
+      "sizeLines": 234,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/brand/mascot-image-prompts.md",
+      "language": "markdown",
+      "sizeLines": 186,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/configuration.md",
+      "language": "markdown",
+      "sizeLines": 82,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/contributing.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/coreml-export.md",
+      "language": "markdown",
+      "sizeLines": 63,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples.md",
+      "language": "markdown",
+      "sizeLines": 77,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/feature-map.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/getting-started.md",
+      "language": "markdown",
+      "sizeLines": 80,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/index.md",
+      "language": "markdown",
+      "sizeLines": 81,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/medical-tokenizer.md",
+      "language": "markdown",
+      "sizeLines": 68,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/mlx-backend.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/model-loader.md",
+      "language": "markdown",
+      "sizeLines": 131,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/model-registry.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/output-formatting.md",
+      "language": "markdown",
+      "sizeLines": 96,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/pii-smart-merging.md",
+      "language": "markdown",
+      "sizeLines": 453,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/profiles.md",
+      "language": "markdown",
+      "sizeLines": 175,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/profiling.md",
+      "language": "markdown",
+      "sizeLines": 293,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/rest-service.md",
+      "language": "markdown",
+      "sizeLines": 244,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/swift-openmedkit.md",
+      "language": "markdown",
+      "sizeLines": 275,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/testing.md",
+      "language": "markdown",
+      "sizeLines": 55,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/website/assets/script.js",
+      "language": "javascript",
+      "sizeLines": 468,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/website/assets/style.css",
+      "language": "css",
+      "sizeLines": 1306,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "docs/website/CNAME",
+      "language": "unknown",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/website/index.html",
+      "language": "html",
+      "sizeLines": 1015,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "docs/zero-shot-ner.md",
+      "language": "markdown",
+      "sizeLines": 115,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/__init__.py",
+      "language": "python",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/custom_tokenizer/compare_medical_remap.py",
+      "language": "python",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/custom_tokenizer/custom_tokenize_alignment.py",
+      "language": "python",
+      "sizeLines": 135,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/custom_tokenizer/eval_tokenization_comparison.py",
+      "language": "python",
+      "sizeLines": 281,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/custom_tokenizer/README.md",
+      "language": "markdown",
+      "sizeLines": 34,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/custom_tokenizer/requirements.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/notebooks/getting_started.ipynb",
+      "language": "ipynb",
+      "sizeLines": 387,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/notebooks/Medical_Tokenizer_Benchmark.ipynb",
+      "language": "ipynb",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/notebooks/Medical_Tokenizer_Demo.ipynb",
+      "language": "ipynb",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/notebooks/Multilingual_PII_Detection_Guide.ipynb",
+      "language": "ipynb",
+      "sizeLines": 791,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/notebooks/PII_Detection_Complete_Guide.ipynb",
+      "language": "ipynb",
+      "sizeLines": 2430,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/notebooks/README.md",
+      "language": "markdown",
+      "sizeLines": 314,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/notebooks/Sentence_Detection_Batching.ipynb",
+      "language": "ipynb",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/notebooks/ZeroShot_NER_Tour.ipynb",
+      "language": "ipynb",
+      "sizeLines": 163,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/obfuscation_demo.py",
+      "language": "python",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/pii_batch_processing.py",
+      "language": "python",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/pii_model_comparison.py",
+      "language": "python",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/pii_multilingual_new_languages.py",
+      "language": "python",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_book/__init__.py",
+      "language": "python",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_book/app.py",
+      "language": "python",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_book/README.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/privacy_filter_book/static/app.js",
+      "language": "javascript",
+      "sizeLines": 281,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_book/static/index.html",
+      "language": "html",
+      "sizeLines": 149,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/privacy_filter_book/static/styles.css",
+      "language": "css",
+      "sizeLines": 804,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/app.py",
+      "language": "python",
+      "sizeLines": 373,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/examples.py",
+      "language": "python",
+      "sizeLines": 454,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/README.md",
+      "language": "markdown",
+      "sizeLines": 79,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/static/app.js",
+      "language": "javascript",
+      "sizeLines": 441,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/static/index.html",
+      "language": "html",
+      "sizeLines": 168,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/privacy_filter_multilingual_studio/static/styles.css",
+      "language": "css",
+      "sizeLines": 616,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/privacy_filter_studio/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_studio/app.py",
+      "language": "python",
+      "sizeLines": 397,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_studio/README.md",
+      "language": "markdown",
+      "sizeLines": 45,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "examples/privacy_filter_studio/static/app.js",
+      "language": "javascript",
+      "sizeLines": 450,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/privacy_filter_studio/static/index.html",
+      "language": "html",
+      "sizeLines": 144,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/privacy_filter_studio/static/styles.css",
+      "language": "css",
+      "sizeLines": 983,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/privacy_filter_unified.py",
+      "language": "python",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "Makefile",
+      "language": "makefile",
+      "sizeLines": 63,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "mkdocs.yml",
+      "language": "yaml",
+      "sizeLines": 130,
+      "fileCategory": "config"
+    },
+    {
+      "path": "models.jsonl",
+      "language": "jsonl",
+      "sizeLines": 1518,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/__about__.py",
+      "language": "python",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/__init__.py",
+      "language": "python",
+      "sizeLines": 597,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/cli/__init__.py",
+      "language": "python",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/cli/main.py",
+      "language": "python",
+      "sizeLines": 1083,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/cli/typer_app.py",
+      "language": "python",
+      "sizeLines": 282,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/clinical/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/__init__.py",
+      "language": "python",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/__init__.py",
+      "language": "python",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/engine.py",
+      "language": "python",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/format_preserve.py",
+      "language": "python",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/locales.py",
+      "language": "python",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/providers/__init__.py",
+      "language": "python",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/providers/clinical_ids.py",
+      "language": "python",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/anonymizer/registry.py",
+      "language": "python",
+      "sizeLines": 408,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/backends.py",
+      "language": "python",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/config.py",
+      "language": "python",
+      "sizeLines": 438,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/decoding/__init__.py",
+      "language": "python",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/decoding/spans.py",
+      "language": "python",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/decoding/viterbi.py",
+      "language": "python",
+      "sizeLines": 356,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/labels.py",
+      "language": "python",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/model_registry.py",
+      "language": "python",
+      "sizeLines": 723,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/models.py",
+      "language": "python",
+      "sizeLines": 582,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/pii_entity_merger.py",
+      "language": "python",
+      "sizeLines": 795,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/pii_i18n.py",
+      "language": "python",
+      "sizeLines": 1684,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/pii.py",
+      "language": "python",
+      "sizeLines": 1427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/quality_gates.py",
+      "language": "python",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/core/safety_sweep.py",
+      "language": "python",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/coreml/__init__.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/coreml/convert.py",
+      "language": "python",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/eval/__init__.py",
+      "language": "python",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/eval/harness.py",
+      "language": "python",
+      "sizeLines": 242,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/eval/metrics.py",
+      "language": "python",
+      "sizeLines": 902,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/eval/report.py",
+      "language": "python",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/eval/suites/__init__.py",
+      "language": "python",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/interop/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/interop/bridges/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mcp/__init__.py",
+      "language": "python",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mcp/server.py",
+      "language": "python",
+      "sizeLines": 588,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/__init__.py",
+      "language": "python",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/artifact.py",
+      "language": "python",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/convert.py",
+      "language": "python",
+      "sizeLines": 615,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/inference.py",
+      "language": "python",
+      "sizeLines": 1150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/__init__.py",
+      "language": "python",
+      "sizeLines": 359,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/bert_tc.py",
+      "language": "python",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/deberta_v2_tc.py",
+      "language": "python",
+      "sizeLines": 559,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/gliclass_uni.py",
+      "language": "python",
+      "sizeLines": 243,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/gliner_common.py",
+      "language": "python",
+      "sizeLines": 378,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/gliner_relex.py",
+      "language": "python",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/gliner_span.py",
+      "language": "python",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/mlx/models/privacy_filter.py",
+      "language": "python",
+      "sizeLines": 487,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/multimodal/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/__init__.py",
+      "language": "python",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/adapter.py",
+      "language": "python",
+      "sizeLines": 222,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/exceptions.py",
+      "language": "python",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/families/__init__.py",
+      "language": "python",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/families/base.py",
+      "language": "python",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/families/gliner.py",
+      "language": "python",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/families/gliner2.py",
+      "language": "python",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/indexing.py",
+      "language": "python",
+      "sizeLines": 403,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/infer.py",
+      "language": "python",
+      "sizeLines": 295,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/ner/labels.py",
+      "language": "python",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/__init__.py",
+      "language": "python",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/advanced_ner.py",
+      "language": "python",
+      "sizeLines": 418,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/batch.py",
+      "language": "python",
+      "sizeLines": 675,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/outputs.py",
+      "language": "python",
+      "sizeLines": 592,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/sentences.py",
+      "language": "python",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/text.py",
+      "language": "python",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/processing/tokenization.py",
+      "language": "python",
+      "sizeLines": 431,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/risk/__init__.py",
+      "language": "python",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/risk/reid.py",
+      "language": "python",
+      "sizeLines": 685,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/service/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/service/app.py",
+      "language": "python",
+      "sizeLines": 334,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/service/keep_alive.py",
+      "language": "python",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/service/runtime.py",
+      "language": "python",
+      "sizeLines": 288,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/service/schemas.py",
+      "language": "python",
+      "sizeLines": 341,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/structured/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/torch/__init__.py",
+      "language": "python",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/torch/privacy_filter.py",
+      "language": "python",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/utils/__init__.py",
+      "language": "python",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/utils/logging.py",
+      "language": "python",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/utils/profiling.py",
+      "language": "python",
+      "sizeLines": 474,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/utils/validation.py",
+      "language": "python",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/zero_shot/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/zero_shot/data/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/zero_shot/data/label_maps/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openmed/zero_shot/data/label_maps/defaults.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "Package.resolved",
+      "language": "resolved",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "Package.swift",
+      "language": "swift",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "sizeLines": 126,
+      "fileCategory": "config"
+    },
+    {
+      "path": "README.ar.md",
+      "language": "markdown",
+      "sizeLines": 501,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.de.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.es.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.fa.md",
+      "language": "markdown",
+      "sizeLines": 505,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.fr.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.hi.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.it.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.ja.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 448,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.nl.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.pt.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.te.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.tr.md",
+      "language": "markdown",
+      "sizeLines": 420,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 418,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "scripts/README.md",
+      "language": "markdown",
+      "sizeLines": 73,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "scripts/release/check_release_version.py",
+      "language": "python",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/release/check_repo_policy.py",
+      "language": "python",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/release/release.py",
+      "language": "python",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/release/release.sh",
+      "language": "shell",
+      "sizeLines": 47,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/reset_uv_env_and_run_tests.sh",
+      "language": "shell",
+      "sizeLines": 39,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/smoke_gliner.py",
+      "language": "python",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo.xcodeproj/project.pbxproj",
+      "language": "pbxproj",
+      "sizeLines": 288,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved",
+      "language": "resolved",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo/Assets.xcassets/AccentColor.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "language": "json",
+      "sizeLines": 63,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo/Assets.xcassets/Contents.json",
+      "language": "json",
+      "sizeLines": 6,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo/ContentView.swift",
+      "language": "swift",
+      "sizeLines": 1579,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo/Info.plist",
+      "language": "xml",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedDemo/OpenMedDemo/OpenMedDemoApp.swift",
+      "language": "swift",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedDemo/README.md",
+      "language": "markdown",
+      "sizeLines": 117,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "swift/OpenMedKit/Package.swift",
+      "language": "swift",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/EntityPrediction.swift",
+      "language": "swift",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/NERPipeline.swift",
+      "language": "swift",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedBackend.swift",
+      "language": "swift",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedGLiNERModels.swift",
+      "language": "swift",
+      "sizeLines": 768,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedKit.swift",
+      "language": "swift",
+      "sizeLines": 921,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXArtifact.swift",
+      "language": "swift",
+      "sizeLines": 647,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXDeberta.swift",
+      "language": "swift",
+      "sizeLines": 621,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXModel.swift",
+      "language": "swift",
+      "sizeLines": 252,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXPipeline.swift",
+      "language": "swift",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXWeights.swift",
+      "language": "swift",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedModelStore.swift",
+      "language": "swift",
+      "sizeLines": 393,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedPrivacyFilterModel.swift",
+      "language": "swift",
+      "sizeLines": 605,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedPrivacyFilterPipeline.swift",
+      "language": "swift",
+      "sizeLines": 914,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/OpenMedZeroShot.swift",
+      "language": "swift",
+      "sizeLines": 695,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Sources/OpenMedKit/PostProcessing.swift",
+      "language": "swift",
+      "sizeLines": 1347,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Tests/OpenMedKitTests/OpenMedMLXTests.swift",
+      "language": "swift",
+      "sizeLines": 1404,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedKit/Tests/OpenMedKitTests/PostProcessingTests.swift",
+      "language": "swift",
+      "sizeLines": 380,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo.xcodeproj/project.pbxproj",
+      "language": "pbxproj",
+      "sizeLines": 568,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved",
+      "language": "resolved",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/AccentColor.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/BgElevated.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Border.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/BorderStrong.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Contents.json",
+      "language": "json",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/FgMuted.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/FgSubtle.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Highlight.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Ink.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Ink2.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Paper.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Paper2.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Signal.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/SignalSoft.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone100.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone200.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone300.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone400.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone50.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone500.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone600.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone700.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone800.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone900.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/TealAccent.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/TealHover.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/TealSoft.colorset/Contents.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Contents.json",
+      "language": "json",
+      "sizeLines": 6,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/SampleClinicalDocument.imageset/Contents.json",
+      "language": "json",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/SampleClinicalDocumentArabic.imageset/Contents.json",
+      "language": "json",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/SampleClinicalDocumentFrench.imageset/Contents.json",
+      "language": "json",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMBadge.swift",
+      "language": "swift",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMCard.swift",
+      "language": "swift",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMChip.swift",
+      "language": "swift",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMDisplayHeadline.swift",
+      "language": "swift",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMDownloadRow.swift",
+      "language": "swift",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMEnginePickerCard.swift",
+      "language": "swift",
+      "sizeLines": 270,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMEntityHighlight.swift",
+      "language": "swift",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMGhostButtonStyle.swift",
+      "language": "swift",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMLabelChipGrid.swift",
+      "language": "swift",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMLogoMark.swift",
+      "language": "swift",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMPhaseIndicator.swift",
+      "language": "swift",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMPrimaryButtonStyle.swift",
+      "language": "swift",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMProgressBar.swift",
+      "language": "swift",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMRule.swift",
+      "language": "swift",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMSecondaryButtonStyle.swift",
+      "language": "swift",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMWorkflowIndicator.swift",
+      "language": "swift",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ContentView.swift",
+      "language": "swift",
+      "sizeLines": 235,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/DesignTokens.swift",
+      "language": "swift",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMColor.swift",
+      "language": "swift",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMMotion.swift",
+      "language": "swift",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMShadow.swift",
+      "language": "swift",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMTypography.swift",
+      "language": "swift",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Fonts/LICENSES/InterTight-OFL.txt",
+      "language": "txt",
+      "sizeLines": 93,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Fonts/LICENSES/JetBrainsMono-OFL.txt",
+      "language": "txt",
+      "sizeLines": 93,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Fonts/LICENSES/Newsreader-OFL.txt",
+      "language": "txt",
+      "sizeLines": 92,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Info.plist",
+      "language": "xml",
+      "sizeLines": 33,
+      "fileCategory": "config"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Model/ClinicalPreset.swift",
+      "language": "swift",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Model/DetectedEntity.swift",
+      "language": "swift",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Model/ModelDownloadEvent.swift",
+      "language": "swift",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Model/PipelinePhase.swift",
+      "language": "swift",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Model/ScanStage.swift",
+      "language": "swift",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/OpenMedScanDemoApp.swift",
+      "language": "swift",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/PrivacyInfo.xcprivacy",
+      "language": "xcprivacy",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/ClinicalScreen.swift",
+      "language": "swift",
+      "sizeLines": 166,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/DeIDScreen.swift",
+      "language": "swift",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/InputScreen.swift",
+      "language": "swift",
+      "sizeLines": 297,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/ReviewScreen.swift",
+      "language": "swift",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/SampleClinicalText.swift",
+      "language": "swift",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/ScanScreenChrome.swift",
+      "language": "swift",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/SummaryScreen.swift",
+      "language": "swift",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/LabelEditorSheet.swift",
+      "language": "swift",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/ModelDownloadSheet.swift",
+      "language": "swift",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/PIIComparisonSheet.swift",
+      "language": "swift",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/ScannerSheet.swift",
+      "language": "swift",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Utilities/ByteFormatter.swift",
+      "language": "swift",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Utilities/EngineDiff.swift",
+      "language": "swift",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/Utilities/EntityGrouping.swift",
+      "language": "swift",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/ClinicalPresetsStore.swift",
+      "language": "swift",
+      "sizeLines": 123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/HapticsCenter.swift",
+      "language": "swift",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/ModelDownloadManager.swift",
+      "language": "swift",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/OMPipelineRuntime.swift",
+      "language": "swift",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/ScanFlowViewModel.swift",
+      "language": "swift",
+      "sizeLines": 367,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/StreamingModelDownloader.swift",
+      "language": "swift",
+      "sizeLines": 311,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/README.md",
+      "language": "markdown",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/Scripts/download_fonts.sh",
+      "language": "shell",
+      "sizeLines": 80,
+      "fileCategory": "script"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/Scripts/generate_clinical_document.swift",
+      "language": "swift",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/Scripts/generate_multilingual_sample_documents.swift",
+      "language": "swift",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "swift/OpenMedScanDemo/Scripts/generate_sample_document.swift",
+      "language": "swift",
+      "sizeLines": 334,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/conftest.py",
+      "language": "python",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/fixtures/clinical_note.txt",
+      "language": "txt",
+      "sizeLines": 321,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/long_clinical_note.txt",
+      "language": "txt",
+      "sizeLines": 100,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/sample_medical_texts.py",
+      "language": "python",
+      "sizeLines": 210,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/integration/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/integration/test_end_to_end.py",
+      "language": "python",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/integration/test_sentence_detection_real.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/README.md",
+      "language": "markdown",
+      "sizeLines": 69,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/run-tests.sh",
+      "language": "shell",
+      "sizeLines": 14,
+      "fileCategory": "script"
+    },
+    {
+      "path": "tests/test_medical_remap.py",
+      "language": "python",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/cli/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/cli/test_cli_smoke.py",
+      "language": "python",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/core/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/core/test_anonymizer.py",
+      "language": "python",
+      "sizeLines": 309,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/core/test_labels.py",
+      "language": "python",
+      "sizeLines": 224,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/core/test_manifest_schema.py",
+      "language": "python",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/core/test_safety_sweep.py",
+      "language": "python",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/coreml/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/coreml/test_coreml_convert.py",
+      "language": "python",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/eval/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/eval/test_metrics.py",
+      "language": "python",
+      "sizeLines": 150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/mlx/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/mlx/test_mlx_convert.py",
+      "language": "python",
+      "sizeLines": 530,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/mlx/test_mlx_inference.py",
+      "language": "python",
+      "sizeLines": 455,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/mlx/test_privacy_filter_mlx.py",
+      "language": "python",
+      "sizeLines": 383,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_adapter.py",
+      "language": "python",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_deps.py",
+      "language": "python",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_gliner_loader.py",
+      "language": "python",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_indexing.py",
+      "language": "python",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_infer.py",
+      "language": "python",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_label_map_consistency.py",
+      "language": "python",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_labels.py",
+      "language": "python",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ner/test_smoke.py",
+      "language": "python",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/risk/test_reid.py",
+      "language": "python",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/service/test_api.py",
+      "language": "python",
+      "sizeLines": 737,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_backends.py",
+      "language": "python",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_batch.py",
+      "language": "python",
+      "sizeLines": 807,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_core.py",
+      "language": "python",
+      "sizeLines": 714,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_model_registry_multilingual.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_model_registry.py",
+      "language": "python",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_package_scaffold.py",
+      "language": "python",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_pii_accuracy.py",
+      "language": "python",
+      "sizeLines": 241,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_pii_entity_merger.py",
+      "language": "python",
+      "sizeLines": 506,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_pii_i18n.py",
+      "language": "python",
+      "sizeLines": 888,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_pii_multilingual_regression.py",
+      "language": "python",
+      "sizeLines": 710,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_pii.py",
+      "language": "python",
+      "sizeLines": 1349,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_privacy_filter_routing.py",
+      "language": "python",
+      "sizeLines": 334,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_privacy_filter_security.py",
+      "language": "python",
+      "sizeLines": 278,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_processing.py",
+      "language": "python",
+      "sizeLines": 566,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_profiles.py",
+      "language": "python",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_profiling.py",
+      "language": "python",
+      "sizeLines": 442,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_publish_workflow_version.py",
+      "language": "python",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_quality_gates.py",
+      "language": "python",
+      "sizeLines": 258,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/test_utils.py",
+      "language": "python",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 372,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "large",
+  "stats": {
+    "filesScanned": 372,
+    "byCategory": {
+      "config": 42,
+      "infra": 11,
+      "docs": 57,
+      "code": 250,
+      "markup": 8,
+      "script": 4
+    },
+    "byLanguage": {
+      "json": 37,
+      "unknown": 2,
+      "markdown": 51,
+      "yaml": 10,
+      "dockerfile": 1,
+      "python": 159,
+      "javascript": 4,
+      "css": 4,
+      "html": 4,
+      "txt": 6,
+      "ipynb": 7,
+      "makefile": 1,
+      "jsonl": 1,
+      "resolved": 3,
+      "swift": 72,
+      "toml": 1,
+      "shell": 4,
+      "pbxproj": 2,
+      "xml": 2,
+      "xcprivacy": 1
+    }
+  },
+  "importMap": {
+    ".claude/launch.json": [],
+    ".dockerignore": [],
+    ".github/ISSUE_TEMPLATE/bug_report.md": [],
+    ".github/ISSUE_TEMPLATE/feature_request.md": [],
+    ".github/PULL_REQUEST_TEMPLATE.md": [],
+    ".github/workflows/ci.yml": [],
+    ".github/workflows/convert-models.yml": [],
+    ".github/workflows/manifest-refresh.yml": [],
+    ".github/workflows/mlx-test.yml": [],
+    ".github/workflows/pages.yml": [],
+    ".github/workflows/publish.yml": [],
+    ".github/workflows/release.yml": [],
+    ".github/workflows/swift-test.yml": [],
+    ".pre-commit-config.yaml": [],
+    "CHANGELOG.md": [],
+    "Dockerfile": [],
+    "docs/_hooks.py": [],
+    "docs/analyze-text.md": [],
+    "docs/anonymization.md": [],
+    "docs/batch-processing.md": [],
+    "docs/brand/MASCOT_BRIEF.md": [],
+    "docs/brand/mascot-image-prompts.md": [],
+    "docs/configuration.md": [],
+    "docs/contributing.md": [],
+    "docs/coreml-export.md": [],
+    "docs/examples.md": [],
+    "docs/feature-map.md": [],
+    "docs/getting-started.md": [],
+    "docs/index.md": [],
+    "docs/medical-tokenizer.md": [],
+    "docs/mlx-backend.md": [],
+    "docs/model-loader.md": [],
+    "docs/model-registry.md": [],
+    "docs/output-formatting.md": [],
+    "docs/pii-smart-merging.md": [],
+    "docs/profiles.md": [],
+    "docs/profiling.md": [],
+    "docs/rest-service.md": [],
+    "docs/swift-openmedkit.md": [],
+    "docs/testing.md": [],
+    "docs/website/assets/script.js": [],
+    "docs/website/assets/style.css": [],
+    "docs/website/CNAME": [],
+    "docs/website/index.html": [],
+    "docs/zero-shot-ner.md": [],
+    "examples/__init__.py": [],
+    "examples/custom_tokenizer/compare_medical_remap.py": [
+      "openmed/__init__.py",
+      "openmed/core/__init__.py"
+    ],
+    "examples/custom_tokenizer/custom_tokenize_alignment.py": [
+      "openmed/core/models.py"
+    ],
+    "examples/custom_tokenizer/eval_tokenization_comparison.py": [
+      "openmed/core/models.py"
+    ],
+    "examples/custom_tokenizer/README.md": [],
+    "examples/custom_tokenizer/requirements.txt": [],
+    "examples/notebooks/getting_started.ipynb": [],
+    "examples/notebooks/Medical_Tokenizer_Benchmark.ipynb": [],
+    "examples/notebooks/Medical_Tokenizer_Demo.ipynb": [],
+    "examples/notebooks/Multilingual_PII_Detection_Guide.ipynb": [],
+    "examples/notebooks/PII_Detection_Complete_Guide.ipynb": [],
+    "examples/notebooks/README.md": [],
+    "examples/notebooks/Sentence_Detection_Batching.ipynb": [],
+    "examples/notebooks/ZeroShot_NER_Tour.ipynb": [],
+    "examples/obfuscation_demo.py": [
+      "openmed/__init__.py",
+      "openmed/core/anonymizer/__init__.py",
+      "openmed/processing/outputs.py"
+    ],
+    "examples/pii_batch_processing.py": [
+      "openmed/__init__.py"
+    ],
+    "examples/pii_model_comparison.py": [
+      "openmed/__init__.py",
+      "openmed/core/model_registry.py"
+    ],
+    "examples/pii_multilingual_new_languages.py": [
+      "openmed/__init__.py",
+      "openmed/core/pii_i18n.py"
+    ],
+    "examples/privacy_filter_book/__init__.py": [],
+    "examples/privacy_filter_book/app.py": [],
+    "examples/privacy_filter_book/README.md": [],
+    "examples/privacy_filter_book/static/app.js": [],
+    "examples/privacy_filter_book/static/index.html": [],
+    "examples/privacy_filter_book/static/styles.css": [],
+    "examples/privacy_filter_multilingual_studio/__init__.py": [
+      "examples/privacy_filter_multilingual_studio/app.py"
+    ],
+    "examples/privacy_filter_multilingual_studio/app.py": [
+      "examples/privacy_filter_multilingual_studio/examples.py"
+    ],
+    "examples/privacy_filter_multilingual_studio/examples.py": [],
+    "examples/privacy_filter_multilingual_studio/README.md": [],
+    "examples/privacy_filter_multilingual_studio/static/app.js": [],
+    "examples/privacy_filter_multilingual_studio/static/index.html": [],
+    "examples/privacy_filter_multilingual_studio/static/styles.css": [],
+    "examples/privacy_filter_studio/__init__.py": [],
+    "examples/privacy_filter_studio/app.py": [],
+    "examples/privacy_filter_studio/README.md": [],
+    "examples/privacy_filter_studio/static/app.js": [],
+    "examples/privacy_filter_studio/static/index.html": [],
+    "examples/privacy_filter_studio/static/styles.css": [],
+    "examples/privacy_filter_unified.py": [
+      "openmed/__init__.py",
+      "openmed/core/backends.py"
+    ],
+    "Makefile": [],
+    "mkdocs.yml": [],
+    "models.jsonl": [],
+    "openmed/__about__.py": [],
+    "openmed/__init__.py": [
+      "openmed/__about__.py",
+      "openmed/core/__init__.py",
+      "openmed/core/anonymizer/__init__.py",
+      "openmed/core/labels.py",
+      "openmed/core/model_registry.py",
+      "openmed/core/pii_entity_merger.py",
+      "openmed/core/pii_i18n.py",
+      "openmed/core/pii.py",
+      "openmed/processing/__init__.py",
+      "openmed/processing/advanced_ner.py",
+      "openmed/processing/outputs.py",
+      "openmed/utils/__init__.py",
+      "openmed/utils/validation.py"
+    ],
+    "openmed/cli/__init__.py": [],
+    "openmed/cli/main.py": [
+      "openmed/__about__.py",
+      "openmed/core/config.py",
+      "openmed/core/model_registry.py"
+    ],
+    "openmed/cli/typer_app.py": [
+      "openmed/__init__.py",
+      "openmed/core/config.py",
+      "openmed/ner/__init__.py"
+    ],
+    "openmed/clinical/__init__.py": [],
+    "openmed/core/__init__.py": [
+      "openmed/core/config.py",
+      "openmed/core/models.py"
+    ],
+    "openmed/core/anonymizer/__init__.py": [
+      "openmed/core/anonymizer/engine.py",
+      "openmed/core/anonymizer/locales.py",
+      "openmed/core/anonymizer/registry.py"
+    ],
+    "openmed/core/anonymizer/engine.py": [
+      "openmed/core/anonymizer/locales.py",
+      "openmed/core/anonymizer/providers/__init__.py",
+      "openmed/core/anonymizer/registry.py",
+      "openmed/core/labels.py"
+    ],
+    "openmed/core/anonymizer/format_preserve.py": [],
+    "openmed/core/anonymizer/locales.py": [],
+    "openmed/core/anonymizer/providers/__init__.py": [
+      "openmed/core/anonymizer/providers/clinical_ids.py"
+    ],
+    "openmed/core/anonymizer/providers/clinical_ids.py": [],
+    "openmed/core/anonymizer/registry.py": [
+      "openmed/core/anonymizer/format_preserve.py"
+    ],
+    "openmed/core/backends.py": [],
+    "openmed/core/config.py": [],
+    "openmed/core/decoding/__init__.py": [
+      "openmed/core/decoding/spans.py",
+      "openmed/core/decoding/viterbi.py"
+    ],
+    "openmed/core/decoding/spans.py": [],
+    "openmed/core/decoding/viterbi.py": [],
+    "openmed/core/labels.py": [],
+    "openmed/core/model_registry.py": [],
+    "openmed/core/models.py": [
+      "openmed/core/config.py",
+      "openmed/core/model_registry.py"
+    ],
+    "openmed/core/pii_entity_merger.py": [],
+    "openmed/core/pii_i18n.py": [
+      "openmed/core/pii_entity_merger.py"
+    ],
+    "openmed/core/pii.py": [
+      "openmed/core/config.py",
+      "openmed/processing/outputs.py"
+    ],
+    "openmed/core/quality_gates.py": [],
+    "openmed/core/safety_sweep.py": [
+      "openmed/core/pii_entity_merger.py",
+      "openmed/processing/outputs.py"
+    ],
+    "openmed/coreml/__init__.py": [],
+    "openmed/coreml/convert.py": [],
+    "openmed/eval/__init__.py": [
+      "openmed/eval/harness.py",
+      "openmed/eval/metrics.py",
+      "openmed/eval/report.py"
+    ],
+    "openmed/eval/harness.py": [
+      "openmed/core/quality_gates.py",
+      "openmed/eval/metrics.py",
+      "openmed/eval/report.py"
+    ],
+    "openmed/eval/metrics.py": [
+      "openmed/core/labels.py",
+      "openmed/core/pii_i18n.py",
+      "openmed/core/quality_gates.py",
+      "openmed/processing/outputs.py"
+    ],
+    "openmed/eval/report.py": [],
+    "openmed/eval/suites/__init__.py": [],
+    "openmed/interop/__init__.py": [],
+    "openmed/interop/bridges/__init__.py": [],
+    "openmed/mcp/__init__.py": [],
+    "openmed/mcp/server.py": [
+      "openmed/__init__.py",
+      "openmed/core/model_registry.py",
+      "openmed/core/pii_i18n.py",
+      "openmed/service/runtime.py",
+      "openmed/utils/validation.py"
+    ],
+    "openmed/mlx/__init__.py": [
+      "openmed/mlx/inference.py"
+    ],
+    "openmed/mlx/artifact.py": [],
+    "openmed/mlx/convert.py": [
+      "openmed/mlx/artifact.py",
+      "openmed/mlx/models/__init__.py"
+    ],
+    "openmed/mlx/inference.py": [
+      "openmed/core/decoding/__init__.py",
+      "openmed/mlx/artifact.py"
+    ],
+    "openmed/mlx/models/__init__.py": [
+      "openmed/mlx/artifact.py"
+    ],
+    "openmed/mlx/models/bert_tc.py": [],
+    "openmed/mlx/models/deberta_v2_tc.py": [],
+    "openmed/mlx/models/gliclass_uni.py": [
+      "openmed/mlx/models/deberta_v2_tc.py"
+    ],
+    "openmed/mlx/models/gliner_common.py": [],
+    "openmed/mlx/models/gliner_relex.py": [
+      "openmed/mlx/models/deberta_v2_tc.py",
+      "openmed/mlx/models/gliner_common.py",
+      "openmed/mlx/models/gliner_span.py"
+    ],
+    "openmed/mlx/models/gliner_span.py": [
+      "openmed/mlx/models/deberta_v2_tc.py",
+      "openmed/mlx/models/gliner_common.py"
+    ],
+    "openmed/mlx/models/privacy_filter.py": [],
+    "openmed/multimodal/__init__.py": [],
+    "openmed/ner/__init__.py": [
+      "openmed/ner/adapter.py",
+      "openmed/ner/exceptions.py",
+      "openmed/ner/families/__init__.py",
+      "openmed/ner/indexing.py",
+      "openmed/ner/infer.py",
+      "openmed/ner/labels.py"
+    ],
+    "openmed/ner/adapter.py": [
+      "openmed/ner/infer.py"
+    ],
+    "openmed/ner/exceptions.py": [],
+    "openmed/ner/families/__init__.py": [
+      "openmed/ner/families/base.py",
+      "openmed/ner/families/gliner.py",
+      "openmed/ner/families/gliner2.py"
+    ],
+    "openmed/ner/families/base.py": [],
+    "openmed/ner/families/gliner.py": [
+      "openmed/ner/exceptions.py"
+    ],
+    "openmed/ner/families/gliner2.py": [
+      "openmed/ner/exceptions.py"
+    ],
+    "openmed/ner/indexing.py": [
+      "openmed/ner/families/base.py"
+    ],
+    "openmed/ner/infer.py": [
+      "openmed/core/config.py",
+      "openmed/core/models.py",
+      "openmed/ner/exceptions.py",
+      "openmed/ner/families/__init__.py",
+      "openmed/ner/families/gliner.py",
+      "openmed/ner/indexing.py",
+      "openmed/ner/labels.py"
+    ],
+    "openmed/ner/labels.py": [],
+    "openmed/processing/__init__.py": [
+      "openmed/processing/batch.py",
+      "openmed/processing/outputs.py",
+      "openmed/processing/sentences.py",
+      "openmed/processing/text.py",
+      "openmed/processing/tokenization.py"
+    ],
+    "openmed/processing/advanced_ner.py": [],
+    "openmed/processing/batch.py": [
+      "openmed/processing/outputs.py"
+    ],
+    "openmed/processing/outputs.py": [],
+    "openmed/processing/sentences.py": [],
+    "openmed/processing/text.py": [],
+    "openmed/processing/tokenization.py": [],
+    "openmed/risk/__init__.py": [
+      "openmed/risk/reid.py"
+    ],
+    "openmed/risk/reid.py": [
+      "openmed/core/decoding/spans.py",
+      "openmed/core/labels.py"
+    ],
+    "openmed/service/__init__.py": [
+      "openmed/service/app.py"
+    ],
+    "openmed/service/app.py": [
+      "openmed/__init__.py",
+      "openmed/service/runtime.py",
+      "openmed/service/schemas.py"
+    ],
+    "openmed/service/keep_alive.py": [],
+    "openmed/service/runtime.py": [
+      "openmed/core/config.py",
+      "openmed/core/models.py",
+      "openmed/service/keep_alive.py",
+      "openmed/utils/validation.py"
+    ],
+    "openmed/service/schemas.py": [
+      "openmed/service/keep_alive.py",
+      "openmed/utils/validation.py"
+    ],
+    "openmed/structured/__init__.py": [],
+    "openmed/torch/__init__.py": [
+      "openmed/torch/privacy_filter.py"
+    ],
+    "openmed/torch/privacy_filter.py": [
+      "openmed/core/decoding/__init__.py"
+    ],
+    "openmed/utils/__init__.py": [
+      "openmed/utils/logging.py",
+      "openmed/utils/profiling.py",
+      "openmed/utils/validation.py"
+    ],
+    "openmed/utils/logging.py": [
+      "openmed/utils/logging.py"
+    ],
+    "openmed/utils/profiling.py": [
+      "openmed/utils/logging.py"
+    ],
+    "openmed/utils/validation.py": [],
+    "openmed/zero_shot/__init__.py": [],
+    "openmed/zero_shot/data/__init__.py": [],
+    "openmed/zero_shot/data/label_maps/__init__.py": [],
+    "openmed/zero_shot/data/label_maps/defaults.json": [],
+    "Package.resolved": [],
+    "Package.swift": [],
+    "pyproject.toml": [],
+    "README.ar.md": [],
+    "README.de.md": [],
+    "README.es.md": [],
+    "README.fa.md": [],
+    "README.fr.md": [],
+    "README.hi.md": [],
+    "README.it.md": [],
+    "README.ja.md": [],
+    "README.md": [],
+    "README.nl.md": [],
+    "README.pt.md": [],
+    "README.te.md": [],
+    "README.tr.md": [],
+    "README.zh-CN.md": [],
+    "scripts/README.md": [],
+    "scripts/release/check_release_version.py": [],
+    "scripts/release/check_repo_policy.py": [],
+    "scripts/release/release.py": [],
+    "scripts/release/release.sh": [],
+    "scripts/reset_uv_env_and_run_tests.sh": [],
+    "scripts/smoke_gliner.py": [
+      "openmed/ner/__init__.py",
+      "openmed/ner/families/__init__.py",
+      "openmed/ner/infer.py"
+    ],
+    "swift/OpenMedDemo/OpenMedDemo.xcodeproj/project.pbxproj": [],
+    "swift/OpenMedDemo/OpenMedDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved": [],
+    "swift/OpenMedDemo/OpenMedDemo/Assets.xcassets/AccentColor.colorset/Contents.json": [],
+    "swift/OpenMedDemo/OpenMedDemo/Assets.xcassets/AppIcon.appiconset/Contents.json": [],
+    "swift/OpenMedDemo/OpenMedDemo/Assets.xcassets/Contents.json": [],
+    "swift/OpenMedDemo/OpenMedDemo/ContentView.swift": [],
+    "swift/OpenMedDemo/OpenMedDemo/Info.plist": [],
+    "swift/OpenMedDemo/OpenMedDemo/OpenMedDemoApp.swift": [],
+    "swift/OpenMedDemo/README.md": [],
+    "swift/OpenMedKit/Package.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/EntityPrediction.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/NERPipeline.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedBackend.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedGLiNERModels.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedKit.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXArtifact.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXDeberta.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXModel.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXPipeline.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedMLXWeights.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedModelStore.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedPrivacyFilterModel.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedPrivacyFilterPipeline.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/OpenMedZeroShot.swift": [],
+    "swift/OpenMedKit/Sources/OpenMedKit/PostProcessing.swift": [],
+    "swift/OpenMedKit/Tests/OpenMedKitTests/OpenMedMLXTests.swift": [],
+    "swift/OpenMedKit/Tests/OpenMedKitTests/PostProcessingTests.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo.xcodeproj/project.pbxproj": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/AccentColor.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/AppIcon.appiconset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/BgElevated.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Border.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/BorderStrong.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/FgMuted.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/FgSubtle.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Highlight.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Ink.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Ink2.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Paper.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Paper2.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Signal.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/SignalSoft.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone100.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone200.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone300.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone400.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone50.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone500.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone600.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone700.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone800.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/Stone900.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/TealAccent.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/TealHover.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Colors/TealSoft.colorset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/SampleClinicalDocument.imageset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/SampleClinicalDocumentArabic.imageset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Assets.xcassets/SampleClinicalDocumentFrench.imageset/Contents.json": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMBadge.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMCard.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMChip.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMDisplayHeadline.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMDownloadRow.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMEnginePickerCard.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMEntityHighlight.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMGhostButtonStyle.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMLabelChipGrid.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMLogoMark.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMPhaseIndicator.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMPrimaryButtonStyle.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMProgressBar.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMRule.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMSecondaryButtonStyle.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Components/OMWorkflowIndicator.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ContentView.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/DesignTokens.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMColor.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMMotion.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMShadow.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/DesignSystem/OMTypography.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Fonts/LICENSES/InterTight-OFL.txt": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Fonts/LICENSES/JetBrainsMono-OFL.txt": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Fonts/LICENSES/Newsreader-OFL.txt": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Info.plist": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Model/ClinicalPreset.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Model/DetectedEntity.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Model/ModelDownloadEvent.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Model/PipelinePhase.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Model/ScanStage.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/OpenMedScanDemoApp.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/PrivacyInfo.xcprivacy": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/ClinicalScreen.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/DeIDScreen.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/InputScreen.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/ReviewScreen.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/SampleClinicalText.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/ScanScreenChrome.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Screens/SummaryScreen.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/LabelEditorSheet.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/ModelDownloadSheet.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/PIIComparisonSheet.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Sheets/ScannerSheet.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Utilities/ByteFormatter.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Utilities/EngineDiff.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/Utilities/EntityGrouping.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/ClinicalPresetsStore.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/HapticsCenter.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/ModelDownloadManager.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/OMPipelineRuntime.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/ScanFlowViewModel.swift": [],
+    "swift/OpenMedScanDemo/OpenMedScanDemo/ViewModel/StreamingModelDownloader.swift": [],
+    "swift/OpenMedScanDemo/README.md": [],
+    "swift/OpenMedScanDemo/Scripts/download_fonts.sh": [],
+    "swift/OpenMedScanDemo/Scripts/generate_clinical_document.swift": [],
+    "swift/OpenMedScanDemo/Scripts/generate_multilingual_sample_documents.swift": [],
+    "swift/OpenMedScanDemo/Scripts/generate_sample_document.swift": [],
+    "tests/__init__.py": [],
+    "tests/conftest.py": [
+      "openmed/__init__.py",
+      "openmed/core/config.py"
+    ],
+    "tests/fixtures/clinical_note.txt": [],
+    "tests/fixtures/long_clinical_note.txt": [],
+    "tests/fixtures/sample_medical_texts.py": [],
+    "tests/integration/__init__.py": [],
+    "tests/integration/test_end_to_end.py": [
+      "openmed/__init__.py"
+    ],
+    "tests/integration/test_sentence_detection_real.py": [],
+    "tests/README.md": [],
+    "tests/run-tests.sh": [],
+    "tests/test_medical_remap.py": [
+      "openmed/processing/tokenization.py"
+    ],
+    "tests/unit/__init__.py": [],
+    "tests/unit/cli/__init__.py": [],
+    "tests/unit/cli/test_cli_smoke.py": [
+      "openmed/__init__.py",
+      "openmed/cli/__init__.py"
+    ],
+    "tests/unit/core/__init__.py": [],
+    "tests/unit/core/test_anonymizer.py": [
+      "openmed/core/anonymizer/__init__.py",
+      "openmed/core/anonymizer/format_preserve.py",
+      "openmed/core/labels.py"
+    ],
+    "tests/unit/core/test_labels.py": [
+      "openmed/core/labels.py"
+    ],
+    "tests/unit/core/test_manifest_schema.py": [
+      "openmed/core/__init__.py",
+      "openmed/core/model_registry.py"
+    ],
+    "tests/unit/core/test_safety_sweep.py": [
+      "openmed/core/anonymizer/providers/__init__.py",
+      "openmed/core/anonymizer/providers/clinical_ids.py",
+      "openmed/core/pii.py",
+      "openmed/core/safety_sweep.py",
+      "openmed/processing/outputs.py"
+    ],
+    "tests/unit/coreml/__init__.py": [],
+    "tests/unit/coreml/test_coreml_convert.py": [],
+    "tests/unit/eval/__init__.py": [],
+    "tests/unit/eval/test_metrics.py": [
+      "openmed/eval/harness.py",
+      "openmed/eval/metrics.py",
+      "openmed/eval/report.py"
+    ],
+    "tests/unit/mlx/__init__.py": [],
+    "tests/unit/mlx/test_mlx_convert.py": [
+      "openmed/mlx/convert.py"
+    ],
+    "tests/unit/mlx/test_mlx_inference.py": [],
+    "tests/unit/mlx/test_privacy_filter_mlx.py": [],
+    "tests/unit/ner/__init__.py": [],
+    "tests/unit/ner/test_adapter.py": [
+      "openmed/ner/adapter.py",
+      "openmed/ner/infer.py"
+    ],
+    "tests/unit/ner/test_deps.py": [
+      "openmed/ner/exceptions.py",
+      "openmed/ner/families/__init__.py"
+    ],
+    "tests/unit/ner/test_gliner_loader.py": [
+      "openmed/ner/families/__init__.py"
+    ],
+    "tests/unit/ner/test_indexing.py": [
+      "openmed/ner/indexing.py"
+    ],
+    "tests/unit/ner/test_infer.py": [
+      "openmed/ner/indexing.py",
+      "openmed/ner/infer.py"
+    ],
+    "tests/unit/ner/test_label_map_consistency.py": [
+      "openmed/core/model_registry.py",
+      "openmed/core/pii_entity_merger.py"
+    ],
+    "tests/unit/ner/test_labels.py": [
+      "openmed/ner/labels.py"
+    ],
+    "tests/unit/ner/test_smoke.py": [
+      "scripts/smoke_gliner.py"
+    ],
+    "tests/unit/risk/test_reid.py": [
+      "openmed/risk/__init__.py"
+    ],
+    "tests/unit/service/test_api.py": [
+      "openmed/__init__.py",
+      "openmed/core/pii.py",
+      "openmed/processing/outputs.py",
+      "openmed/service/__init__.py",
+      "openmed/service/app.py"
+    ],
+    "tests/unit/test_backends.py": [
+      "openmed/core/backends.py"
+    ],
+    "tests/unit/test_batch.py": [
+      "openmed/core/pii.py",
+      "openmed/processing/batch.py",
+      "openmed/processing/outputs.py"
+    ],
+    "tests/unit/test_core.py": [
+      "openmed/core/config.py",
+      "openmed/core/models.py",
+      "openmed/processing/sentences.py"
+    ],
+    "tests/unit/test_model_registry_multilingual.py": [
+      "openmed/core/model_registry.py",
+      "openmed/core/pii_i18n.py"
+    ],
+    "tests/unit/test_model_registry.py": [
+      "openmed/core/__init__.py",
+      "openmed/core/model_registry.py"
+    ],
+    "tests/unit/test_package_scaffold.py": [],
+    "tests/unit/test_pii_accuracy.py": [
+      "openmed/core/pii_entity_merger.py",
+      "openmed/core/pii_i18n.py"
+    ],
+    "tests/unit/test_pii_entity_merger.py": [
+      "openmed/core/pii_entity_merger.py"
+    ],
+    "tests/unit/test_pii_i18n.py": [
+      "openmed/core/pii_entity_merger.py",
+      "openmed/core/pii_i18n.py"
+    ],
+    "tests/unit/test_pii_multilingual_regression.py": [
+      "openmed/core/pii.py",
+      "openmed/processing/outputs.py"
+    ],
+    "tests/unit/test_pii.py": [
+      "openmed/core/pii.py",
+      "openmed/processing/outputs.py"
+    ],
+    "tests/unit/test_privacy_filter_routing.py": [],
+    "tests/unit/test_privacy_filter_security.py": [],
+    "tests/unit/test_processing.py": [
+      "openmed/processing/outputs.py",
+      "openmed/processing/text.py",
+      "openmed/processing/tokenization.py"
+    ],
+    "tests/unit/test_profiles.py": [
+      "openmed/core/config.py"
+    ],
+    "tests/unit/test_profiling.py": [
+      "openmed/utils/profiling.py"
+    ],
+    "tests/unit/test_publish_workflow_version.py": [],
+    "tests/unit/test_quality_gates.py": [
+      "openmed/core/quality_gates.py",
+      "openmed/processing/outputs.py"
+    ],
+    "tests/unit/test_utils.py": [
+      "openmed/utils/logging.py",
+      "openmed/utils/validation.py"
+    ]
+  },
+  "scriptCompleted": true
+}

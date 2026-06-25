@@ -1,0 +1,64 @@
+@model LangXiMi.Models.AdminEmployeeViewModel
+@{
+    ViewData["Title"] = "Sửa nhân viên";
+}
+
+<a asp-action="Index" class="btn btn-sm btn-outline-secondary mb-3"><i class="bi bi-arrow-left me-1"></i>Quay lại</a>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="admin-card p-4">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="EmployeeId" />
+
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label asp-for="MaNhanVien" class="form-label fw-semibold"></label>
+                        <input asp-for="MaNhanVien" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-8">
+                        <label asp-for="FullName" class="form-label fw-semibold"></label>
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="CCCD" class="form-label fw-semibold"></label>
+                        <input asp-for="CCCD" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Phone" class="form-label fw-semibold"></label>
+                        <input asp-for="Phone" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Email" class="form-label fw-semibold"></label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Address" class="form-label fw-semibold"></label>
+                        <input asp-for="Address" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Position" class="form-label fw-semibold"></label>
+                        <select asp-for="Position" asp-items="Html.GetEnumSelectList<LangXiMi.Models.EmployeePosition>()" class="form-select"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="TrangThai" class="form-label fw-semibold"></label>
+                        <select asp-for="TrangThai" asp-items="Html.GetEnumSelectList<LangXiMi.Models.EmployeeStatus>()" class="form-select"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="NgayVaoLam" class="form-label fw-semibold"></label>
+                        <input asp-for="NgayVaoLam" class="form-control" type="date" />
+                    </div>
+                </div>
+
+                <hr />
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i>Lưu thay đổi</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

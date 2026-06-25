@@ -1,0 +1,744 @@
+{
+	"info": {
+		"_postman_id": "8c5ab237-7729-4d69-b593-01878b2737ea",
+		"name": "GearVN RESTful API",
+		"description": "Collection of API requests with automated test scripts to verify GearVN RESTful endpoints (Products, Categories, Orders, and Stats).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products (Sản phẩm)",
+			"item": [
+				{
+					"name": "GET List Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Array is not empty\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Each product has id, name, price\", function () {",
+									"    const json = pm.response.json();",
+									"    json.data.forEach(function(p) {",
+									"        pm.expect(p).to.have.property('id');",
+									"        pm.expect(p).to.have.property('name');",
+									"        pm.expect(p).to.have.property('price');",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [
+								{"key": "url", "value": "api/products"},
+								{"key": "category_id", "value": "1", "description": "Optional category filter", "disabled": true}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Single Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Data is an object with id\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.be.an('object');",
+									"    pm.expect(json.data.id).to.eql(1);",
+									"});",
+									"",
+									"pm.test(\"Product has required fields\", function () {",
+									"    const p = pm.response.json().data;",
+									"    pm.expect(p).to.have.property('name');",
+									"    pm.expect(p).to.have.property('price');",
+									"    pm.expect(p).to.have.property('description');",
+									"    pm.expect(p).to.have.property('category_id');",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products/1",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/products/1"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Product (JSON)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Created product has id\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.have.property('id');",
+									"    pm.expect(parseInt(json.data.id)).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Name matches input\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.name).to.eql('Ban Phim Custom Akko Mod007');",
+									"});",
+									"",
+									"pm.test(\"Success message exists\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.message).to.be.a('string');",
+									"    pm.expect(json.message).to.not.be.empty;",
+									"});",
+									"",
+									"// Save new product ID for later requests",
+									"if (pm.response.code === 201) {",
+									"    const json = pm.response.json();",
+									"    pm.environment.set('created_product_id', json.data.id);",
+									"    console.log('Saved created_product_id =', json.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Ban Phim Custom Akko Mod007\",\n  \"price\": 3200000,\n  \"description\": \"Ban phim co nhom nguyen khoi hotswap mach xuoi\",\n  \"category_id\": 5,\n  \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}",
+							"options": {"raw": {"language": "json"}}
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/products"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Product (JSON)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Updated product id matches\", function () {",
+									"    const json = pm.response.json();",
+									"    const expectedId = pm.environment.get('created_product_id');",
+									"    pm.expect(String(json.data.id)).to.eql(String(expectedId));",
+									"});",
+									"",
+									"pm.test(\"Name was updated correctly\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.name).to.eql('Ban Phim Akko Mod007 v2');",
+									"});",
+									"",
+									"pm.test(\"Price was updated correctly\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(parseFloat(json.data.price)).to.eql(3400000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Ban Phim Akko Mod007 v2\",\n  \"price\": 3400000,\n  \"description\": \"Ban phim co nhom nguyen khoi v2\",\n  \"category_id\": 5,\n  \"image\": \"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=400&auto=format&fit=crop\"\n}",
+							"options": {"raw": {"language": "json"}}
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/products/{{created_product_id}}"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Deletion message exists\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.message).to.be.a('string');",
+									"    pm.expect(json.message).to.not.be.empty;",
+									"});",
+									"",
+									"// Clean up env variable",
+									"pm.environment.unset('created_product_id');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/products/{{created_product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/products/{{created_product_id}}"}]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories (Danh mục)",
+			"item": [
+				{
+					"name": "GET List Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"At least 7 categories exist\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.length).to.be.at.least(7);",
+									"});",
+									"",
+									"pm.test(\"Each category has id and name\", function () {",
+									"    const json = pm.response.json();",
+									"    json.data.forEach(function(c) {",
+									"        pm.expect(c).to.have.property('id');",
+									"        pm.expect(c).to.have.property('name');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/categories"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Single Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Category id is 1\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.id).to.eql(1);",
+									"});",
+									"",
+									"pm.test(\"Category name is Laptop Gaming\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.name).to.eql('Laptop Gaming');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories/1",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/categories/1"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Category (JSON)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Created category has id\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.have.property('id');",
+									"    pm.expect(parseInt(json.data.id)).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Name matches input\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.name).to.eql('Custom Accessories');",
+									"});",
+									"",
+									"// Save new category ID for later requests",
+									"if (pm.response.code === 201) {",
+									"    const json = pm.response.json();",
+									"    pm.environment.set('created_category_id', json.data.id);",
+									"    console.log('Saved created_category_id =', json.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Custom Accessories\",\n  \"description\": \"Custom cases, keycaps, cables and accessories\"\n}",
+							"options": {"raw": {"language": "json"}}
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/categories"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Category (JSON)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Updated category id matches\", function () {",
+									"    const json = pm.response.json();",
+									"    const expectedId = pm.environment.get('created_category_id');",
+									"    pm.expect(String(json.data.id)).to.eql(String(expectedId));",
+									"});",
+									"",
+									"pm.test(\"Name was updated correctly\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.name).to.eql('Custom Accessories v2');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Custom Accessories v2\",\n  \"description\": \"Upgraded custom gear and accessories\"\n}",
+							"options": {"raw": {"language": "json"}}
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/categories/{{created_category_id}}"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Deletion message exists\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.message).to.be.a('string');",
+									"    pm.expect(json.message).to.not.be.empty;",
+									"});",
+									"",
+									"// Clean up env variable",
+									"pm.environment.unset('created_category_id');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/categories/{{created_category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/categories/{{created_category_id}}"}]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders (Đơn hàng)",
+			"item": [
+				{
+					"name": "GET List Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Orders exist in database\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data.length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Each order has id and status\", function () {",
+									"    const json = pm.response.json();",
+									"    json.data.forEach(function(o) {",
+									"        pm.expect(o).to.have.property('id');",
+									"        pm.expect(o).to.have.property('status');",
+									"        pm.expect(o).to.have.property('total_price');",
+									"    });",
+									"});",
+									"",
+									"// Save first order id for detail test",
+									"const json = pm.response.json();",
+									"if (json.data && json.data.length > 0) {",
+									"    pm.environment.set('first_order_id', json.data[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/orders",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/orders"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Order Detail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Order data exists\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.be.an('object');",
+									"});",
+									"",
+									"pm.test(\"Order has items array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.have.property('items');",
+									"    pm.expect(json.data.items).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Order id is 1\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(parseInt(json.data.id)).to.eql(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/orderDetail/1",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/orderDetail/1"}]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Update Order Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Message mentions completed\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.message).to.include('completed');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"completed\"\n}",
+							"options": {"raw": {"language": "json"}}
+						},
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/updateOrderStatus/1",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/updateOrderStatus/1"}]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stats (Thống kê)",
+			"item": [
+				{
+					"name": "GET API Stats",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success true\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Stats has total_revenue\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.have.property('total_revenue');",
+									"});",
+									"",
+									"pm.test(\"Stats has total_orders\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.have.property('total_orders');",
+									"});",
+									"",
+									"pm.test(\"Stats has status_breakdown\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.data).to.have.property('status_breakdown');",
+									"    pm.expect(json.data.status_breakdown).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Total orders is greater than 0\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(parseInt(json.data.total_orders)).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Total revenue is greater than 0\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(parseFloat(json.data.total_revenue)).to.be.greaterThan(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/index.php?url=api/stats",
+							"host": ["{{base_url}}"],
+							"path": ["index.php"],
+							"query": [{"key": "url", "value": "api/stats"}]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

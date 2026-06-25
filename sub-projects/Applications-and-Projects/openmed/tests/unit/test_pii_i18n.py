@@ -1,0 +1,888 @@
+"""Tests for multilingual PII detection support (pii_i18n module)."""
+
+import pytest
+import re
+
+from openmed.core.pii_i18n import (
+    SUPPORTED_LANGUAGES,
+    LANGUAGE_NAMES,
+    LANGUAGE_MODEL_PREFIX,
+    DEFAULT_PII_MODELS,
+    LANGUAGE_MONTH_NAMES,
+    LANGUAGE_PII_PATTERNS,
+    LANGUAGE_FAKE_DATA,
+    validate_dutch_bsn,
+    validate_french_nir,
+    validate_german_steuer_id,
+    validate_italian_codice_fiscale,
+    validate_portuguese_cnpj,
+    validate_portuguese_cpf,
+    validate_spanish_dni,
+    validate_spanish_nie,
+    validate_turkish_tckn,
+    get_patterns_for_language,
+)
+from openmed.core.pii_entity_merger import PIIPattern, PII_PATTERNS
+
+
+# ---------------------------------------------------------------------------
+# Constants Tests
+# ---------------------------------------------------------------------------
+
+
+class TestConstants:
+    """Test module-level constants."""
+
+    def test_supported_languages(self):
+        assert SUPPORTED_LANGUAGES == {
+            "en", "fr", "de", "it", "es", "nl", "hi", "te", "pt",
+            "ar", "ja", "tr",
+        }
+
+    def test_language_names_keys(self):
+        assert set(LANGUAGE_NAMES.keys()) == SUPPORTED_LANGUAGES
+
+    def test_language_model_prefix(self):
+        assert LANGUAGE_MODEL_PREFIX["en"] == ""
+        assert LANGUAGE_MODEL_PREFIX["fr"] == "French-"
+        assert LANGUAGE_MODEL_PREFIX["de"] == "German-"
+        assert LANGUAGE_MODEL_PREFIX["it"] == "Italian-"
+        assert LANGUAGE_MODEL_PREFIX["es"] == "Spanish-"
+        assert LANGUAGE_MODEL_PREFIX["nl"] == "Dutch-"
+        assert LANGUAGE_MODEL_PREFIX["hi"] == "Hindi-"
+        assert LANGUAGE_MODEL_PREFIX["te"] == "Telugu-"
+        assert LANGUAGE_MODEL_PREFIX["pt"] == "Portuguese-"
+        assert LANGUAGE_MODEL_PREFIX["ar"] == "Arabic-"
+        assert LANGUAGE_MODEL_PREFIX["ja"] == "Japanese-"
+        assert LANGUAGE_MODEL_PREFIX["tr"] == "Turkish-"
+
+    def test_default_pii_models_all_languages(self):
+        assert set(DEFAULT_PII_MODELS.keys()) == SUPPORTED_LANGUAGES
+
+    def test_default_pii_models_naming(self):
+        assert "French" in DEFAULT_PII_MODELS["fr"]
+        assert "German" in DEFAULT_PII_MODELS["de"]
+        assert "Italian" in DEFAULT_PII_MODELS["it"]
+        assert "Spanish" in DEFAULT_PII_MODELS["es"]
+        assert "Dutch" in DEFAULT_PII_MODELS["nl"]
+        assert "Hindi" in DEFAULT_PII_MODELS["hi"]
+        assert "Telugu" in DEFAULT_PII_MODELS["te"]
+        assert "Portuguese" in DEFAULT_PII_MODELS["pt"]
+        assert "Arabic" in DEFAULT_PII_MODELS["ar"]
+        assert "Japanese" in DEFAULT_PII_MODELS["ja"]
+        assert "Turkish" in DEFAULT_PII_MODELS["tr"]
+        # English has no language prefix
+        assert "French" not in DEFAULT_PII_MODELS["en"]
+        assert "German" not in DEFAULT_PII_MODELS["en"]
+
+    def test_month_names_all_languages(self):
+        for lang in SUPPORTED_LANGUAGES:
+            assert lang in LANGUAGE_MONTH_NAMES
+            assert len(LANGUAGE_MONTH_NAMES[lang]) == 12
+
+
+# ---------------------------------------------------------------------------
+# French NIR Validator Tests
+# ---------------------------------------------------------------------------
+
+
+class TestValidateDutchBSN:
+    """Tests for validate_dutch_bsn()."""
+
+    def test_valid_bsn(self):
+        assert validate_dutch_bsn("123456782") is True
+
+    def test_valid_bsn_with_spaces(self):
+        assert validate_dutch_bsn("123 456 782") is True
+
+    def test_invalid_bsn_wrong_checksum(self):
+        assert validate_dutch_bsn("123456789") is False
+
+    def test_invalid_bsn_wrong_length(self):
+        assert validate_dutch_bsn("1234567") is False
+
+
+# ---------------------------------------------------------------------------
+# French NIR Validator Tests
+# ---------------------------------------------------------------------------
+
+
+class TestValidateFrenchNIR:
+    """Tests for validate_french_nir()."""
+
+    def test_valid_nir(self):
+        # number = 1000000000000, key = 97 - (1000000000000 % 97) = 47
+        valid_nir = "1000000000000" + "47"
+        assert validate_french_nir(valid_nir) is True
+
+    def test_valid_nir_with_spaces(self):
+        assert validate_french_nir("1 00 00 00 000 000 47") is True
+
+    def test_invalid_nir_wrong_length(self):
+        assert validate_french_nir("12345") is False
+
+    def test_invalid_nir_bad_first_digit(self):
+        assert validate_french_nir("300000000000047") is False
+
+    def test_invalid_nir_wrong_checksum(self):
+        assert validate_french_nir("100000000000048") is False
+
+    def test_valid_nir_female(self):
+        # number = 2000000000000, key = 97 - (2000000000000 % 97) = 94
+        assert validate_french_nir("200000000000094") is True
+
+    def test_valid_nir_corsica_departments(self):
+        assert validate_french_nir("291032A03396109") is True
+        assert validate_french_nir("291032B03396136") is True
+
+    def test_invalid_nir_corsica_wrong_checksum(self):
+        assert validate_french_nir("291032B03396137") is False
+
+
+# ---------------------------------------------------------------------------
+# German Steuer-ID Validator Tests
+# ---------------------------------------------------------------------------
+
+
+class TestValidateGermanSteuerId:
+    """Tests for validate_german_steuer_id()."""
+
+    def test_valid_steuer_id(self):
+        assert validate_german_steuer_id("12345678912") is True
+
+    def test_valid_steuer_id_with_spaces(self):
+        assert validate_german_steuer_id("1234 5678 912") is True
+
+    def test_invalid_steuer_id_first_digit_zero(self):
+        assert validate_german_steuer_id("01234567891") is False
+
+    def test_invalid_steuer_id_wrong_length(self):
+        assert validate_german_steuer_id("123456789") is False
+
+    def test_invalid_steuer_id_too_many_repeats(self):
+        assert validate_german_steuer_id("11223344556") is False
+
+    def test_invalid_steuer_id_no_repeats(self):
+        assert validate_german_steuer_id("12345678900") is False
+
+
+# ---------------------------------------------------------------------------
+# Italian Codice Fiscale Validator Tests
+# ---------------------------------------------------------------------------
+
+
+class TestValidateItalianCodiceFiscale:
+    """Tests for validate_italian_codice_fiscale()."""
+
+    def test_valid_codice_fiscale(self):
+        assert validate_italian_codice_fiscale("RSSMRA85M01H501Z") is True
+
+    def test_valid_codice_fiscale_lowercase(self):
+        assert validate_italian_codice_fiscale("rssmra85m01h501z") is True
+
+    def test_valid_codice_fiscale_with_spaces(self):
+        assert validate_italian_codice_fiscale("RSS MRA 85M01 H501Z") is True
+
+    def test_invalid_codice_fiscale_wrong_length(self):
+        assert validate_italian_codice_fiscale("RSSMRA85M01H50") is False
+
+    def test_invalid_codice_fiscale_wrong_format(self):
+        assert validate_italian_codice_fiscale("1234567890123456") is False
+
+    def test_invalid_codice_fiscale_wrong_pattern(self):
+        assert validate_italian_codice_fiscale("12SMRA85M01H501Z") is False
+
+
+# ---------------------------------------------------------------------------
+# Spanish DNI Validator Tests
+# ---------------------------------------------------------------------------
+
+
+class TestValidateSpanishDNI:
+    """Tests for validate_spanish_dni()."""
+
+    def test_valid_dni(self):
+        # 12345678 % 23 = 14 -> letter 'Z'
+        assert validate_spanish_dni("12345678Z") is True
+
+    def test_valid_dni_with_spaces(self):
+        assert validate_spanish_dni("1234 5678 Z") is True
+
+    def test_invalid_dni_wrong_length(self):
+        assert validate_spanish_dni("1234567Z") is False
+
+    def test_invalid_dni_wrong_letter(self):
+        assert validate_spanish_dni("12345678A") is False
+
+    def test_invalid_dni_no_letter(self):
+        assert validate_spanish_dni("123456789") is False
+
+    def test_valid_dni_another(self):
+        # 00000000 % 23 = 0 -> letter 'T'
+        assert validate_spanish_dni("00000000T") is True
+
+
+# ---------------------------------------------------------------------------
+# Spanish NIE Validator Tests
+# ---------------------------------------------------------------------------
+
+
+class TestValidateSpanishNIE:
+    """Tests for validate_spanish_nie()."""
+
+    def test_valid_nie_x(self):
+        # X prefix -> 0, number = 01234567, 1234567 % 23 = 1234567 mod 23
+        # 1234567 / 23 = 53676.8..., 53676 * 23 = 1234548, 1234567 - 1234548 = 19
+        # letter at index 19 = 'L'
+        assert validate_spanish_nie("X1234567L") is True
+
+    def test_valid_nie_y(self):
+        # Y prefix -> 1, number = 11234567, 11234567 % 23
+        # 11234567 / 23 = 488459.4..., 488459 * 23 = 11234557, 11234567 - 11234557 = 10
+        # letter at index 10 = 'X'
+        assert validate_spanish_nie("Y1234567X") is True
+
+    def test_valid_nie_z(self):
+        # Z prefix -> 2, number = 21234567, 21234567 % 23
+        # 21234567 / 23 = 923242.0..., 923042 * 23 = 21229966
+        # Actually: 21234567 // 23 = 923242, 923242 * 23 = 21234566
+        # 21234567 - 21234566 = 1 -> letter at index 1 = 'R'
+        assert validate_spanish_nie("Z1234567R") is True
+
+    def test_invalid_nie_wrong_prefix(self):
+        assert validate_spanish_nie("A1234567L") is False
+
+    def test_invalid_nie_wrong_length(self):
+        assert validate_spanish_nie("X123456L") is False
+
+    def test_invalid_nie_wrong_letter(self):
+        assert validate_spanish_nie("X1234567A") is False
+
+
+class TestValidatePortugueseCPF:
+    """Tests for validate_portuguese_cpf()."""
+
+    def test_valid_cpf(self):
+        assert validate_portuguese_cpf("123.456.789-09") is True
+
+    def test_valid_cpf_without_punctuation(self):
+        assert validate_portuguese_cpf("93541134780") is True
+
+    def test_invalid_cpf_wrong_checksum(self):
+        assert validate_portuguese_cpf("123.456.789-00") is False
+
+    def test_invalid_cpf_repeated_digits(self):
+        assert validate_portuguese_cpf("111.111.111-11") is False
+
+    def test_invalid_cpf_wrong_length(self):
+        assert validate_portuguese_cpf("123456789") is False
+
+
+class TestValidatePortugueseCNPJ:
+    """Tests for validate_portuguese_cnpj()."""
+
+    def test_valid_cnpj(self):
+        assert validate_portuguese_cnpj("11.222.333/0001-81") is True
+
+    def test_valid_cnpj_without_punctuation(self):
+        assert validate_portuguese_cnpj("04252011000110") is True
+
+    def test_invalid_cnpj_wrong_checksum(self):
+        assert validate_portuguese_cnpj("11.222.333/0001-80") is False
+
+    def test_invalid_cnpj_repeated_digits(self):
+        assert validate_portuguese_cnpj("11.111.111/1111-11") is False
+
+    def test_invalid_cnpj_wrong_length(self):
+        assert validate_portuguese_cnpj("112223330001") is False
+
+
+class TestValidateTurkishTCKN:
+    """Tests for validate_turkish_tckn()."""
+
+    def test_valid_tckn(self):
+        assert validate_turkish_tckn("10000000146") is True
+
+    def test_valid_tckn_with_spaces(self):
+        assert validate_turkish_tckn("100 000 001 46") is True
+
+    def test_invalid_tckn_first_digit_zero(self):
+        assert validate_turkish_tckn("00000000146") is False
+
+    def test_invalid_tckn_wrong_checksum(self):
+        assert validate_turkish_tckn("10000000147") is False
+
+    def test_invalid_tckn_wrong_length(self):
+        assert validate_turkish_tckn("1000000014") is False
+
+
+# ---------------------------------------------------------------------------
+# Language-specific PII Patterns Tests
+# ---------------------------------------------------------------------------
+
+
+class TestLanguagePIIPatterns:
+    """Tests for language-specific PII patterns."""
+
+    def test_french_patterns_exist(self):
+        assert "fr" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["fr"]) > 0
+
+    def test_german_patterns_exist(self):
+        assert "de" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["de"]) > 0
+
+    def test_italian_patterns_exist(self):
+        assert "it" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["it"]) > 0
+
+    def test_spanish_patterns_exist(self):
+        assert "es" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["es"]) > 0
+
+    def test_portuguese_patterns_exist(self):
+        assert "pt" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["pt"]) > 0
+
+    def test_dutch_patterns_exist(self):
+        assert "nl" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["nl"]) > 0
+
+    def test_hindi_patterns_exist(self):
+        assert "hi" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["hi"]) > 0
+
+    def test_telugu_patterns_exist(self):
+        assert "te" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["te"]) > 0
+
+    def test_arabic_patterns_exist(self):
+        assert "ar" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["ar"]) > 0
+
+    def test_japanese_patterns_exist(self):
+        assert "ja" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["ja"]) > 0
+
+    def test_turkish_patterns_exist(self):
+        assert "tr" in LANGUAGE_PII_PATTERNS
+        assert len(LANGUAGE_PII_PATTERNS["tr"]) > 0
+
+    def test_all_patterns_are_pii_pattern(self):
+        for lang, patterns in LANGUAGE_PII_PATTERNS.items():
+            for p in patterns:
+                assert isinstance(p, PIIPattern), f"Pattern in {lang} is not PIIPattern"
+
+    # French date patterns
+    def test_french_date_slash(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["fr"] if p.entity_type == "date"]
+        texts = ["15/01/1970", "1/1/2020"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"French date pattern should match '{text}'"
+
+    def test_french_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["fr"] if p.entity_type == "date"]
+        text = "15 janvier 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"French date pattern should match '{text}'"
+
+    # German date patterns
+    def test_german_date_dot(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["de"] if p.entity_type == "date"]
+        texts = ["15.01.1970", "1.1.2020"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"German date pattern should match '{text}'"
+
+    def test_german_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["de"] if p.entity_type == "date"]
+        text = "15 Januar 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"German date pattern should match '{text}'"
+
+    # Italian date patterns
+    def test_italian_date_slash(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["it"] if p.entity_type == "date"]
+        texts = ["15/01/1970", "1/1/2020"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Italian date pattern should match '{text}'"
+
+    def test_italian_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["it"] if p.entity_type == "date"]
+        text = "15 gennaio 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Italian date pattern should match '{text}'"
+
+    # Spanish date patterns
+    def test_spanish_date_slash(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["es"] if p.entity_type == "date"]
+        texts = ["15/01/1970", "1/1/2020"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Spanish date pattern should match '{text}'"
+
+    def test_spanish_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["es"] if p.entity_type == "date"]
+        text = "15 de enero de 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Spanish date pattern should match '{text}'"
+
+    # Portuguese date patterns
+    def test_portuguese_date_slash_or_dash(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "date"]
+        texts = ["15/03/1985", "15-03-1985"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Portuguese date pattern should match '{text}'"
+
+    def test_portuguese_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "date"]
+        text = "15 de mar\u00e7o de 1985"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Portuguese date pattern should match '{text}'"
+
+    # French phone patterns
+    def test_french_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["fr"] if p.entity_type == "phone_number"]
+        texts = ["+33 6 12 34 56 78", "06 12 34 56 78"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"French phone pattern should match '{text}'"
+
+    # German phone patterns
+    def test_german_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["de"] if p.entity_type == "phone_number"]
+        texts = ["+49 30 1234567", "030 1234567"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"German phone pattern should match '{text}'"
+
+    # Italian phone patterns
+    def test_italian_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["it"] if p.entity_type == "phone_number"]
+        texts = ["+39 333 123 4567", "333 123 4567"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Italian phone pattern should match '{text}'"
+
+    # Spanish phone patterns
+    def test_spanish_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["es"] if p.entity_type == "phone_number"]
+        texts = ["+34 612 345 678", "612 345 678"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Spanish phone pattern should match '{text}'"
+
+    # Portuguese phone patterns
+    def test_portuguese_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "phone_number"]
+        texts = ["+351 912 345 678", "+55 11 91234-5678"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Portuguese phone pattern should match '{text}'"
+
+    # National ID patterns
+    def test_french_nir_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["fr"] if p.entity_type == "national_id"]
+        assert len(patterns) >= 1
+        text = "1 85 05 78 006 084 36"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "French NIR pattern should match"
+
+    def test_german_steuer_id_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["de"] if p.entity_type == "national_id"]
+        assert len(patterns) >= 1
+
+    def test_italian_codice_fiscale_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["it"] if p.entity_type == "national_id"]
+        assert len(patterns) >= 1
+        text = "RSSMRA85M01H501Z"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Italian Codice Fiscale pattern should match"
+
+    def test_spanish_dni_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["es"] if p.entity_type == "national_id"]
+        assert len(patterns) >= 1
+        text = "12345678Z"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Spanish DNI pattern should match"
+
+    def test_spanish_nie_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["es"] if p.entity_type == "national_id"]
+        text = "X1234567L"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Spanish NIE pattern should match"
+
+    def test_portuguese_cpf_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "national_id"]
+        text = "123.456.789-09"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Portuguese CPF pattern should match"
+
+    def test_portuguese_cnpj_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "national_id"]
+        text = "11.222.333/0001-81"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Portuguese CNPJ pattern should match"
+
+    def test_portuguese_address_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "street_address"]
+        text = "Rua das Flores 25"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Portuguese address pattern should match"
+
+    def test_portuguese_postcode_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["pt"] if p.entity_type == "postcode"]
+        texts = ["1200-195", "01310-100"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Portuguese postcode pattern should match '{text}'"
+
+    def test_dutch_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["nl"] if p.entity_type == "date"]
+        text = "15 januari 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Dutch date pattern should match '{text}'"
+
+    def test_hindi_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["hi"] if p.entity_type == "date"]
+        text = "15 जनवरी 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Hindi date pattern should match '{text}'"
+
+    def test_telugu_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["te"] if p.entity_type == "date"]
+        text = "15 జనవరి 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Telugu date pattern should match '{text}'"
+
+    def test_dutch_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["nl"] if p.entity_type == "phone_number"]
+        texts = ["+31 6 12345678", "06 12345678"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Dutch phone pattern should match '{text}'"
+
+    def test_hindi_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["hi"] if p.entity_type == "phone_number"]
+        texts = ["+91 9876543210", "9876543210"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Hindi phone pattern should match '{text}'"
+
+    def test_telugu_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["te"] if p.entity_type == "phone_number"]
+        texts = ["+91 9876543210", "9988776655"]
+        for text in texts:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Telugu phone pattern should match '{text}'"
+
+    def test_dutch_bsn_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["nl"] if p.entity_type == "national_id"]
+        text = "123456782"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Dutch BSN pattern should match"
+
+    def test_hindi_pin_code_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["hi"] if p.entity_type == "postcode"]
+        text = "110001"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Hindi PIN code pattern should match"
+
+    def test_telugu_pin_code_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["te"] if p.entity_type == "postcode"]
+        text = "500001"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Telugu PIN code pattern should match"
+
+    def test_arabic_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ar"] if p.entity_type == "date"]
+        text = "15 \u064a\u0646\u0627\u064a\u0631 2020"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Arabic date pattern should match '{text}'"
+
+    def test_japanese_date_kanji(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ja"] if p.entity_type == "date"]
+        text = "1985\u5e743\u670815\u65e5"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Japanese date pattern should match '{text}'"
+
+    def test_turkish_date_month_name(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["tr"] if p.entity_type == "date"]
+        text = "15 Mart 1985"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Turkish date pattern should match '{text}'"
+
+    def test_arabic_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ar"] if p.entity_type == "phone_number"]
+        text = "+20 10 1234 5678"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Arabic phone pattern should match '{text}'"
+
+    def test_japanese_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ja"] if p.entity_type == "phone_number"]
+        text = "+81 90 1234 5678"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Japanese phone pattern should match '{text}'"
+
+    def test_turkish_phone(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["tr"] if p.entity_type == "phone_number"]
+        text = "+90 532 123 45 67"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Turkish phone pattern should match '{text}'"
+
+    def test_arabic_national_id_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ar"] if p.entity_type == "national_id"]
+        text = "29801011234567"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Arabic national ID pattern should match"
+
+    def test_japanese_my_number_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ja"] if p.entity_type == "national_id"]
+        text = "1234 5678 9012"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Japanese My Number pattern should match"
+
+    def test_turkish_tckn_pattern(self):
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["tr"] if p.entity_type == "national_id"]
+        text = "10000000146"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, "Turkish TCKN pattern should match"
+
+    def test_turkish_address_with_turkish_letters(self):
+        # Ş, ı, İ, ğ live in Latin Extended-A; the regex must accept them
+        # or real Turkish street names won't match.
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["tr"] if p.entity_type == "street_address"]
+        samples = [
+            "Cadde Şehit Pilot 5",   # "Şehit"
+            "Sokak İnönü 12",  # "İnönü"
+            "Mahalle Yıldız 3",  # "Yıldız"
+            "Atatürk Caddesi 12",
+            "İstiklal Sokak 45",
+        ]
+        for text in samples:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert matched, f"Turkish address pattern should match '{text}'"
+
+    def test_arabic_phone_rejects_bare_digit_strings(self):
+        # The old pattern would match the 14-digit national-ID and any other
+        # 5–13-digit number. The tightened pattern requires +CC or a leading 0.
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ar"] if p.entity_type == "phone_number"]
+        non_phone_samples = [
+            "29801011234567",   # Egyptian national_id format
+            "1234567890",       # generic 10-digit string
+            "20101234 5678",    # missing the required '+'
+        ]
+        for text in non_phone_samples:
+            matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+            assert not matched, f"Arabic phone pattern should NOT match '{text}'"
+
+    def test_arabic_phone_accepts_local_leading_zero(self):
+        # Egyptian local mobile format starts with 0 (no +20 prefix).
+        patterns = [p for p in LANGUAGE_PII_PATTERNS["ar"] if p.entity_type == "phone_number"]
+        text = "010 1234 5678"
+        matched = any(re.search(p.pattern, text, p.flags) for p in patterns)
+        assert matched, f"Arabic phone pattern should match local format '{text}'"
+
+
+# ---------------------------------------------------------------------------
+# get_patterns_for_language Tests
+# ---------------------------------------------------------------------------
+
+
+class TestGetPatternsForLanguage:
+    """Tests for get_patterns_for_language()."""
+
+    def test_english_returns_base_patterns(self):
+        patterns = get_patterns_for_language("en")
+        assert len(patterns) == len(PII_PATTERNS)
+
+    def test_french_includes_base_and_language(self):
+        fr_patterns = get_patterns_for_language("fr")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["fr"])
+        assert len(fr_patterns) == base_count + lang_count
+
+    def test_german_includes_base_and_language(self):
+        de_patterns = get_patterns_for_language("de")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["de"])
+        assert len(de_patterns) == base_count + lang_count
+
+    def test_italian_includes_base_and_language(self):
+        it_patterns = get_patterns_for_language("it")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["it"])
+        assert len(it_patterns) == base_count + lang_count
+
+    def test_spanish_includes_base_and_language(self):
+        es_patterns = get_patterns_for_language("es")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["es"])
+        assert len(es_patterns) == base_count + lang_count
+
+    def test_portuguese_includes_base_and_language(self):
+        pt_patterns = get_patterns_for_language("pt")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["pt"])
+        assert len(pt_patterns) == base_count + lang_count
+
+    def test_dutch_includes_base_and_language(self):
+        nl_patterns = get_patterns_for_language("nl")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["nl"])
+        assert len(nl_patterns) == base_count + lang_count
+
+    def test_hindi_includes_base_and_language(self):
+        hi_patterns = get_patterns_for_language("hi")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["hi"])
+        assert len(hi_patterns) == base_count + lang_count
+
+    def test_telugu_includes_base_and_language(self):
+        te_patterns = get_patterns_for_language("te")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["te"])
+        assert len(te_patterns) == base_count + lang_count
+
+    def test_arabic_includes_base_and_language(self):
+        ar_patterns = get_patterns_for_language("ar")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["ar"])
+        assert len(ar_patterns) == base_count + lang_count
+
+    def test_japanese_includes_base_and_language(self):
+        ja_patterns = get_patterns_for_language("ja")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["ja"])
+        assert len(ja_patterns) == base_count + lang_count
+
+    def test_turkish_includes_base_and_language(self):
+        tr_patterns = get_patterns_for_language("tr")
+        base_count = len(PII_PATTERNS)
+        lang_count = len(LANGUAGE_PII_PATTERNS["tr"])
+        assert len(tr_patterns) == base_count + lang_count
+
+    def test_unsupported_language_raises(self):
+        with pytest.raises(ValueError, match="Unsupported language"):
+            get_patterns_for_language("ko")
+
+    def test_all_returned_patterns_are_pii_pattern(self):
+        for lang in SUPPORTED_LANGUAGES:
+            patterns = get_patterns_for_language(lang)
+            for p in patterns:
+                assert isinstance(p, PIIPattern)
+
+
+# ---------------------------------------------------------------------------
+# Language Fake Data Tests
+# ---------------------------------------------------------------------------
+
+
+class TestLanguageFakeData:
+    """Tests for LANGUAGE_FAKE_DATA."""
+
+    def test_all_languages_have_fake_data(self):
+        for lang in SUPPORTED_LANGUAGES:
+            assert lang in LANGUAGE_FAKE_DATA
+
+    def test_required_keys_present(self):
+        required_keys = {"NAME", "EMAIL", "PHONE", "DATE", "LOCATION"}
+        for lang in SUPPORTED_LANGUAGES:
+            data = LANGUAGE_FAKE_DATA[lang]
+            for key in required_keys:
+                assert key in data, f"Missing '{key}' in LANGUAGE_FAKE_DATA['{lang}']"
+
+    def test_french_names_are_french(self):
+        names = LANGUAGE_FAKE_DATA["fr"]["NAME"]
+        assert any("Dupont" in n or "Martin" in n for n in names)
+
+    def test_german_names_are_german(self):
+        names = LANGUAGE_FAKE_DATA["de"]["NAME"]
+        assert any("M\u00fcller" in n or "Schmidt" in n for n in names)
+
+    def test_italian_names_are_italian(self):
+        names = LANGUAGE_FAKE_DATA["it"]["NAME"]
+        assert any("Rossi" in n or "Bianchi" in n for n in names)
+
+    def test_spanish_names_are_spanish(self):
+        names = LANGUAGE_FAKE_DATA["es"]["NAME"]
+        assert any("L\u00f3pez" in n or "Garc\u00eda" in n for n in names)
+
+    def test_portuguese_names_are_portuguese(self):
+        names = LANGUAGE_FAKE_DATA["pt"]["NAME"]
+        assert any("Silva" in n or "Almeida" in n for n in names)
+
+    def test_dutch_names_are_dutch(self):
+        names = LANGUAGE_FAKE_DATA["nl"]["NAME"]
+        assert any("de Vries" in n or "Jansen" in n for n in names)
+
+    def test_hindi_names_are_hindi(self):
+        names = LANGUAGE_FAKE_DATA["hi"]["NAME"]
+        assert any("\u0936\u0930\u094d\u092e\u093e" in n or "\u0915\u0941\u092e\u093e\u0930" in n for n in names)
+
+    def test_telugu_names_are_telugu(self):
+        names = LANGUAGE_FAKE_DATA["te"]["NAME"]
+        assert any("\u0c30\u0c46\u0c21\u0c4d\u0c21\u0c3f" in n or "\u0c15\u0c41\u0c2e\u0c3e\u0c30\u0c4d" in n for n in names)
+
+    def test_arabic_names_are_arabic(self):
+        names = LANGUAGE_FAKE_DATA["ar"]["NAME"]
+        assert any("\u062d\u0633\u0646" in n or "\u0639\u0644\u064a" in n for n in names)
+
+    def test_japanese_names_are_japanese(self):
+        names = LANGUAGE_FAKE_DATA["ja"]["NAME"]
+        assert any("\u4f50\u85e4" in n or "\u7530\u4e2d" in n for n in names)
+
+    def test_turkish_names_are_turkish(self):
+        names = LANGUAGE_FAKE_DATA["tr"]["NAME"]
+        assert any("Y\u0131lmaz" in n or "Kaya" in n for n in names)
+
+    def test_french_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["fr"]["PHONE"]
+        assert any("+33" in p or p.startswith("0") for p in phones)
+
+    def test_german_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["de"]["PHONE"]
+        assert any("+49" in p for p in phones)
+
+    def test_italian_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["it"]["PHONE"]
+        assert any("+39" in p for p in phones)
+
+    def test_spanish_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["es"]["PHONE"]
+        assert any("+34" in p for p in phones)
+
+    def test_portuguese_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["pt"]["PHONE"]
+        assert any("+351" in p or "+55" in p for p in phones)
+
+    def test_dutch_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["nl"]["PHONE"]
+        assert any("+31" in p or p.startswith("06") for p in phones)
+
+    def test_hindi_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["hi"]["PHONE"]
+        assert any("+91" in p or len(p) == 10 for p in phones)
+
+    def test_telugu_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["te"]["PHONE"]
+        assert any("+91" in p or len(p) == 10 for p in phones)
+
+    def test_arabic_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["ar"]["PHONE"]
+        assert any("+20" in p or "+966" in p for p in phones)
+
+    def test_japanese_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["ja"]["PHONE"]
+        assert any("+81" in p or p.startswith("03") for p in phones)
+
+    def test_turkish_phones_have_country_code(self):
+        phones = LANGUAGE_FAKE_DATA["tr"]["PHONE"]
+        assert any("+90" in p or p.startswith("0") for p in phones)
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

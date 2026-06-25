@@ -1,0 +1,61 @@
+@model LangXiMi.Models.AdminProductViewModel
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+}
+
+<a asp-action="Index" class="btn btn-sm btn-outline-secondary mb-3"><i class="bi bi-arrow-left me-1"></i>Quay lại</a>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="admin-card p-4">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label asp-for="ProductName" class="form-label fw-semibold"></label>
+                        <input asp-for="ProductName" class="form-control" placeholder="Tên bánh..." />
+                        <span asp-validation-for="ProductName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="CategoryId" class="form-label fw-semibold"></label>
+                        <select asp-for="CategoryId" asp-items="@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList(Model.Categories, "CategoryId", "CategoryName"))" class="form-select">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Price" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="Price" class="form-control" />
+                            <span class="input-group-text">₫</span>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="StockQuantity" class="form-label fw-semibold"></label>
+                        <input asp-for="StockQuantity" class="form-control" />
+                        <span asp-validation-for="StockQuantity" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="ImageFile" class="form-label fw-semibold"></label>
+                        <input asp-for="ImageFile" class="form-control" accept="image/*" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">Hiển thị trên trang web</label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-plus-circle me-1"></i>Thêm sản phẩm</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

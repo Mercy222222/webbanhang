@@ -1,0 +1,59 @@
+@model List<LangXiMi.Models.UserManagementItem>
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<div class="admin-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table mb-0">
+            <thead>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th class="text-center">Vai trò</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr class="@(u.IsLockedOut ? "table-danger" : "")">
+                        <td class="fw-semibold">@u.FullName</td>
+                        <td class="text-muted">@u.Email</td>
+                        <td class="text-center"><span class="badge bg-info text-dark">@u.Role</span></td>
+                        <td class="text-center">
+                            @if (u.IsLockedOut)
+                            {
+                                <span class="badge bg-danger"><i class="bi bi-lock-fill me-1"></i>Đã khóa</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success"><i class="bi bi-unlock me-1"></i>Hoạt động</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <form asp-action="ToggleLock" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@u.UserId" />
+                                @if (u.IsLockedOut)
+                                {
+                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Mở khóa">
+                                        <i class="bi bi-unlock"></i> Mở khóa
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Khóa tài khoản"
+                                            onclick="return confirm('Khóa tài khoản @u.Email?')">
+                                        <i class="bi bi-lock"></i> Khóa
+                                    </button>
+                                }
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
